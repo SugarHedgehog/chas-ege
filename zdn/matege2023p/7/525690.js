@@ -10,12 +10,9 @@
 			return k * x + b;
 		}
 
-		function f2(x) {
-			return a * x + c;
-		}
 		NAinfo.requireApiVersion(0, 2);
-		let a = sl(1, 10).pm();
-		let c = sl(1, 20).pm();
+		let a = slKrome(1, 0.5, 10, 0.5).pm();
+		let c = sl(0.5, 20, 0.5).pm();
 		let d = sl(10, 500) / sl(100, 500);
 		let maxX = sl(0, 10);
 		let minX = maxX - sl(8, 10);
@@ -43,30 +40,30 @@
 				extremum.push(i);
 			}
 		}
-		let masK = [];
-		let masB = [];
+		let variantsOfK = [];
+		let variantsOfB = [];
 		for (let i = 0; i < extremum.length; i++) {
 			let step = sl(minX + 1, maxX - 1).pm();
 			let stepY = (0.5, 2, 0.5).pm();
-			masK.push((stepY / step).okrugldo(0.01));
-			masB.push((f(extremum[i]) - masK[i] * extremum[i]).okrugldo(0.01));
+			variantsOfK.push((stepY / step).okrugldo(0.01));
+			variantsOfB.push((f(extremum[i]) - variantsOfK[i] * extremum[i]).okrugldo(0.01));
 		}
-		genAssertNonempty(masK, 'Пусто');
+		genAssertNonempty(variantsOfK, 'Пусто');
 		let points;
 		let xk, yk;
 		let k;
 		let b;
-		for (let i = 0; i < masK.length; i++) {
-			if (masK[i].abs() != Infinity) {
-				k = masK[i];
-				b = masB[i];
+		for (let i = 0; i < variantsOfK.length; i++) {
+			if (variantsOfK[i].abs() != Infinity) {
+				k = variantsOfK[i];
+				b = variantsOfB[i];
 				points = intPoints(f1, {
 					minX: -9.5,
 					maxX: 9.5,
 					minY: -6.5,
 					maxY: 6.5
 				});
-				if (points.length < 1 || extremum[i] == 0) {
+				if (points.length < 1 || extremum[i] == 0 || k == 1) {
 					k = undefined;
 				} else {
 					xk = extremum[i];
@@ -75,15 +72,28 @@
 				}
 			}
 		}
-		genAssert(k != undefined || k.abs() != 1, 'Не нашлось коэффициентов');
-		genAssert((f2(k) * 100).isZ(), 'Плохой ответ');
+		genAssert(k != undefined, 'Не нашлось коэффициентов');
+
 		genAssert(yk.abs() > 1, 'Слишком близко к оси Ох');
-		if (xk.isZ())
-			xk += (sl(0.2, 0.7, 0.1)).pm();
 		let letter;
 		do {
 			letter = slLetter();
 		} while (['x', 'y', 'f', 'g'].includes(letter));
+
+		let text = [
+			['производной функции $g(x) = ' + (a.ts(1) + 'f(x)+' + c.ts(1) + 'x+' + d.texrndfrac(1)).plusminus() +
+				'$ в точке $' + letter + '$.',
+				a * k + c,
+				a.ts(1) + ' \\cdot f\'(' + letter + ')+' + c.ts(1) + '=' + a.ts(1) + ' \\cdot' + k.negativeBrackets().ts(1) +
+				'+' + c.ts(1)
+			],
+			['функции $g(x) = ' + (a.ts(1) + '\\cdot(f\'(x)+' + c.ts(1) + ')').plusminus() + '$ в точке $' + letter + '$.',
+				a * (k + c),
+				a.ts(1) + ' \\cdot( f\'(' + letter + ')+' + c.ts(1) + ')=' + a.ts(1) + ' \\cdot(' + k.ts(1) + '+' + c.ts(1) +
+				')'
+			]
+		].iz();
+		genAssert((text[1] * 1000).isZ(), 'Плохой ответ');
 		let paint1 = function(ct) {
 			let h = 380;
 			let w = 500;
@@ -126,7 +136,10 @@
 			graph9AmarkCircles(ct, [
 				[xk, 0]
 			], 2, 0.15);
-
+			ct.drawLine(xk, 0, xk, yk);
+			graph9AmarkCircles(ct, [
+				[xk, f(xk)]
+			], 1, 0.15);
 			ct.font = "15px liberation_sans";
 			ct.scale(1 / 20, -1 / 20);
 			if (yk > 0)
@@ -137,15 +150,16 @@
 		NAtask.setTask({
 			text: 'На рисунке изображены график функции $y=f(x)$ и касательная к этому графику, проведённая в точке $' +
 				letter + '$. ' +
-				'Уравнение касательной имеет вид: $f\'(x)=' + (k.ts(1) + ' x+' + b.ts(1)).plusminus() +
-				'$. Найдите значение производной функции ' +
-				'$g(x) = ' + (a + 'f(x)+' + c + 'x+' + d.texrndfrac(1)).plusminus() + '$ в точке $' + letter + '$.',
-			answers: f2(k),
+				'Уравнение касательной имеет вид $f\'(x)=' + (k.ts(1) + ' x+' + b.ts(1)).plusminus() +
+				'$. Найдите значение ' + text[0],
+			answers: text[1],
 			analys: 'Значение производной в точке касания равно угловому коэффициенту касательной <br>' +
-				'$k=' + k + '$<br>' +
-				'Уравнение производной функции $g\'(x)=' + (a + 'f\'(x)+' + c).plusminus() + '$<br>' +
-				'Тогда ответом будет ' + '$g\'(' + letter + ')= ' +( a + ' f\'(' + letter + ')+' + c + '=' + a + ' \\cdot(' + k +
-					')+' + c + '=' + f2(k).ts() + '$').plusminus()
+				'$k=' + k.ts(1) + '$<br>' +
+				('Уравнение производной функции $g\'(x)=' + (a.ts(1) + ' \\cdot f\'(x)+' + c.ts(1)).plusminus() + '$<br>').esli(
+					text[0]
+					.includes('производной')) +
+				'Тогда ответом будет ' + '$g' + ('\'').esli(text[0].includes('производной')) + '(' + letter + ')= ' + (text[2] +
+					'=' + text[1].ts() + '$').plusminus()
 		});
 		chas2.task.modifiers.addCanvasIllustration({
 			width: 500,
@@ -155,4 +169,4 @@
 	});
 })();
 //SugarHedgehog
-//525690 525702
+//525690 525702 525703 525691
