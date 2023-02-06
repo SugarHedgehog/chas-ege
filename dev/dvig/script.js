@@ -22,7 +22,7 @@ for (let i = 0; i < filenames.length; i++) {
 	text = fs.readFileSync('./dvig/number/' + filenames[i], 'utf8')
 	text = lib.makeTemplateFromPlainText(text);
 	try {
-		fs.writeFileSync('./dvig/number/' + i + filenames[i].replace('txt', 'js') + '', text);
+		fs.writeFileSync('./rez/number/' + i + filenames[i].replace('txt', 'js') + '', text);
 		// file written successfully
 	} catch (err) {
 		console.error(err);
