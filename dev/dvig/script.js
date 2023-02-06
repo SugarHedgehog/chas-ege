@@ -7,27 +7,24 @@ String.prototype.isNumeric = function () {
 	/**Является ли строка числом, возможно, с десятичной точкой или запятой?*/
 	return /^-?[0-9]+([.,][0-9])?$/.test(this);
 }
-let lib2 = require('../../lib/sklon.js');
-let lib = require('../../lib/dvig_lz.js');
-let lib1 = require('../../lib/func.js');
-let lib3 = require('../../lib/lxskl.js');
-const fs = require('fs');
-const filenames = fs.readdirSync('./dvig/number');
+const prompt = require('prompt-sync')();
+
+const pathP = prompt('Path from Path to:  ');
+let path=pathP.split(' ');
+const fs = require('fs')
+const filenames = fs.readdirSync(path[0]);
 let text;
 for (let i = 0; i < filenames.length; i++) {
-	let lib2 = require('../../lib/sklon.js');
 	let lib = require('../../lib/dvig_lz.js');
-	let lib1 = require('../../lib/func.js');
-	let lib3 = require('../../lib/lxskl.js');
-	text = fs.readFileSync('./dvig/number/' + filenames[i], 'utf8')
+	text = fs.readFileSync(path[0] + filenames[i], 'utf8')
 	text = lib.makeTemplateFromPlainText(text);
 	try {
-		fs.writeFileSync('./dvig/rez/' + filenames[i].replace('txt', 'js') + '', text);
-		// file written successfully
+		fs.writeFileSync(path[1] + filenames[i].replace('txt', 'js') + '', text);
 	} catch (err) {
 		console.error(err);
 	}
 }
-
+//Path from Path to: ../dev/dvig/number/ matege2023p/1/
+ 
 
 
