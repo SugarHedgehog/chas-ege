@@ -495,7 +495,7 @@ function createLaTeXbunch(variantN){
 		}
 
 	}
-	return bunchText + '\n\\newpage\n Ответы\n\n' + getAnswersTableLaTeX(variantN) + '\n\\newpage\n';
+	return bunchText;
 }
 
 function refreshLaTeXarchive(){
@@ -505,13 +505,17 @@ function refreshLaTeXarchive(){
 	var zip = new JSZip();
 	for(var variantN of variantsGenerated){
 	var bunch =
-			'\\begin{document}'
+			'\\begin{document}'+
 			'\\def\examvart{Вариант ' + variantN + '}' +
-			'\\normalsize\n\\input{instruction.tex}\\large' +
+			'\normalsize\n\\input{instruction.tex}\\large' +
 			'\n\n\n\n' +
-			createLaTeXbunch(variantN)+
-			'\\end{document}';
-			zip.file("variant_"+variantN+".tex", bunch);
+			createLaTeXbunch(variantN);
+
+			zip.file("variant_"+variantN+"_no_answers.tex", preambula+bunch+'\\end{document}');
+
+			zip.file("variant_"+variantN+".tex", preambula+hyperref+bunch+ '\n\newpage\n Ответы\n\n' + getAnswersTableLaTeX(variantN) + '\n\newpage\n'+'\\end{document}');
+
+			zip.file("variant_"+variantN+"_watermark.tex", preambula+watermark+hyperref+bunch+'\\end{document}');
 	}
 	var img = zip.folder("images");
 	for(var i in preparedImages){
@@ -522,3 +526,9 @@ function refreshLaTeXarchive(){
 		$('#latex-archive-placeholder')[0].href="data:application/zip;base64," + base64;
 	});
 }
+
+var preambula = ['\\documentclass[twocolumn]{article}\n\\usepackage{dashbox}\n\\setlength{\\columnsep}{40pt}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{graphicx}\n\\graphicspath{{pictures/}}\n\\DeclareGraphicsExtensions{.pdf,.png,.jpg}\n\n\\linespread{1.15}\n\n\\usepackage{egetask}\n\\usepackage{egetask-math-11-2022}\n\n\\def\\examyear{2023}\n\\usepackage[colorlinks,linkcolor=blue]{hyperref}']
+
+var hyperref = '\\def\\rfoottext{Разрешается свободное копирование в некоммерческих целях с указанием источника }\n\\def\\lfoottext{Источник \\href{https://vk.com/egemathika}{https://vk.com/egemathika}}';
+
+var watermark='\\usepackage{draftwatermark}\n\\SetWatermarkLightness{0.9}\n\\SetWatermarkText{https://vk.com/egemathika}\n\\SetWatermarkScale{ 0.4 }\n';
