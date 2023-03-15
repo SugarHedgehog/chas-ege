@@ -23,8 +23,8 @@
 			ct.scale(15, 15);
 			ct.lineWidth = 2 / 15;
 			let cubeEdge = 12;
-			ct.strokeStyle = "#8080ff";
 			if (question.includes('площадь поверхности') || question.includes('объём')) {
+				ct.strokeStyle = "#8080ff";
 				ct.setLineDash([1, 0.5]);
 				ct.translate(44 / 15, 71 / 15);
 				ct.drawParallelepiped({
