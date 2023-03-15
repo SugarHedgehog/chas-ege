@@ -30,7 +30,7 @@
 				height: cubeEdge / 1.5,
 				depth: cubeEdge / (2.5 * 1.5),
 				angle: 40
-			}, [0, 2, 3, 4, 6]);
+			}, [0, 2, 3, 4, 6], false, [0.5,0.2]);
 			ct.translate(-44 / 15, -71 / 15);
 
 			ct.strokeStyle = "black";
