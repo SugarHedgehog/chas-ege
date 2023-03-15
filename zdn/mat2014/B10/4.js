@@ -25,7 +25,7 @@
 			ct.strokeStyle = "#8080ff";
 
 			ct.translate(44 / 15, 71 / 15);
-			ct.parallelepiped({
+			ct.drawParallelepiped({
 				width: cubeEdge / 1.5,
 				height: cubeEdge / 1.5,
 				depth: cubeEdge / (2.5 * 1.5),
@@ -34,7 +34,7 @@
 			ct.translate(-44 / 15, -71 / 15);
 
 			ct.strokeStyle = "black";
-			ct.parallelepiped({
+			ct.drawParallelepiped({
 				width: cubeEdge,
 				height: cubeEdge,
 				depth: cubeEdge / (2.5),
