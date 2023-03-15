@@ -52,8 +52,8 @@
 			answers: answ,
 		});
 		chas2.task.modifiers.addCanvasIllustration({
-			width: 300,
-			height: 300,
+			width: 240,
+			height: 240,
 			paint: paint1,
 		});
 	});
