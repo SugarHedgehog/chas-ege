@@ -39,7 +39,7 @@
 				height: cubeEdge,
 				depth: cubeEdge / (2.5),
 				angle: 40
-			}, [0, 3, 4], [m[0], m[1], m[v2]].includes('квадрат диагонали'));
+			}, [0, 3, 4], [m[0], m[1], m[v2]].includes('квадрат диагонали'),[0.5,0.2]);
 
 		};
 		NAtask.setTask({
