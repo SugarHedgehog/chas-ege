@@ -119,9 +119,9 @@ function konecSozd() {
 				getTaskTextContainerByTaskId(id),
 				generatedTasks[id].txt
 			).
-			 // Escape LaTeX comments,
-			 // but don't ruin if they've been already escaped!
-			replace(/\\?%/g,'\\%').replace(/<br>/g,'\\\\').replace(/<br\/>/g,'\\\\');
+				// Escape LaTeX comments,
+				// but don't ruin if they've been already escaped!
+				replace(/\\?%/g, '\\%').replace(/<br>/g, '\\\\').replace(/<br\/>/g, '\\\\');
 		}
 	}
 
@@ -446,12 +446,12 @@ function removeGridFields() {
 function getAnswersSubtableLaTeX(cellsInFirstRow, answersParsedToTeX) {
 	var hline = '\n\\hline\n';
 	return (
-		'\n\\begin{tabular}{llll}' +//TODO: надо как-то узнать количество всех заданий и сколько оно делится на 50(тк 50 ответов обычно влазит на страницу(вообще в идеале 47)) и только l поставить
-			'\n\\begin{tabular}[t]{' + (new Array(cellsInFirstRow)).fill('|l').join('')+ '|' + '}' +
-			'\n\\hline\n' +
-				answersParsedToTeX.join(hline) +
-				hline +
-			'\\end{tabular}' +
+		'\n\\begin{tabular}{*{' + (kZ / 50).ceil() + '}l}' +//TODO: надо как-то узнать количество всех заданий и сколько оно делится на 50(тк 50 ответов обычно влазит на страницу(вообще в идеале 47)) и только l поставить
+		'\n\\begin{tabular}[t]{' + (new Array(cellsInFirstRow)).fill('|l').join('') + '|' + '}' +
+		'\n\\hline\n' +
+		answersParsedToTeX.join(hline) +
+		hline +
+		'\\end{tabular}' +
 		'\\end{tabular}' +
 		'\n\n\n'
 	);
@@ -464,16 +464,16 @@ function getAnswersTableLaTeX(variantN) {
 	var answersParsedToTeX = [];
 	// The first row may be the caption, so...
 	var cellsInFirstRow = (answerRows[2] || answerRows[1] || answerRows[0]).getElementsByTagName('td').length;
-	let count=0;
-	for(var row of Array.from(answerRows)){
+	let count = 0;
+	for (var row of Array.from(answerRows)) {
 		count++;
 		var tdCells = row.getElementsByTagName('td');
 		if (tdCells.length) {
 			//TODO: reverse-decode LaTeX from MathJax
-			answersParsedToTeX.push(Array.from(tdCells).map(x => x.innerHTML).join(' & '));
-			if(count%50==0)
-			answersParsedToTeX.push('\\end{tabular}&\\begin{tabular}{|l|l|}')
-				}
+			answersParsedToTeX.push(Array.from(tdCells).map(x => x.innerHTML).join(' & ')+'\\\\');
+			if (count % 50 == 0&&count<kZ)
+				answersParsedToTeX.push('\\end{tabular}&\\begin{tabular}[t]{'+ (new Array(cellsInFirstRow)).fill('|l').join('') + '|' +'}')
+		}
 	}
 	return getAnswersSubtableLaTeX(cellsInFirstRow, answersParsedToTeX);
 }
@@ -520,11 +520,11 @@ function refreshLaTeXarchive() {
 
 	//zip.file("task.tex", preambula+'\n\n\\begin{document}'+bunch+'\n\\end{document}');
 
-	zip.file("task"+variantsGenerated[0]+".tex", preambula+'\n\n\\begin{document}'+ getAnswersTableLaTeX(variantN)+bunch+ '\n\\newpage\n Ответы\n\n' + '\n'+'\\end{document}');
-	
+	zip.file("task"+ ".tex", preambula + '\n\n\\begin{document}' + bunch + '\n\\newpage\n '+ getAnswersTableLaTeX(variantN) + '\n' + '\\end{document}');
 
-	zip.file("task_watermark.tex", preambula+watermark+hyperref+'\n\n\\begin{document}'+bunch+'\\end{document}');
-	
+
+	zip.file("task_watermark.tex", preambula + watermark + hyperref + '\n\n\\begin{document}' + bunch + '\\end{document}');
+
 	var img = zip.folder("images");
 	for (var i in preparedImages) {
 		img.file(i + ".png", preparedImages[i], { base64: true });
@@ -535,8 +535,8 @@ function refreshLaTeXarchive() {
 	});
 }
 
-var preambula = ['\\documentclass[4apaper]{article}\n\\usepackage{pdfpages}\n\\usepackage{dashbox}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{graphicx}\n\\graphicspath{{pictures/}}\n\\DeclareGraphicsExtensions{.pdf,.png,.jpg}\n\n\\linespread{1.15}\n\n\\usepackage{../egetask_ver}\n\n\\def\\examyear{2023}\n\\usepackage[colorlinks,linkcolor=blue]{hyperref}']
+var preambula = ['\\documentclass[4apaper]{article}\n\\usepackage{dashbox}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{graphicx}\n\\DeclareGraphicsExtensions{.pdf,.png,.jpg}\n\n\\linespread{1.15}\n\n\\usepackage{../egetask_ver}\n\n\\def\\examyear{2023}\n\\usepackage[colorlinks,linkcolor=blue]{hyperref}\n\\usepackage{indentfirst}']
 
 var hyperref = '\\def\\lfoottext{Источник \\href{https://vk.com/egemathika}{https://vk.com/egemathika}}';
 
-var watermark='\\usepackage{draftwatermark}\n\\SetWatermarkLightness{0.9}\n\\SetWatermarkText{https://vk.com/egemathika}\n\\SetWatermarkScale{ 0.4 }\n';
+var watermark = '\\usepackage{draftwatermark}\n\\SetWatermarkLightness{0.9}\n\\SetWatermarkText{https://vk.com/egemathika}\n\\SetWatermarkScale{ 0.4 }\n';
