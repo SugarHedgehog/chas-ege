@@ -119,9 +119,9 @@ function konecSozd() {
 				getTaskTextContainerByTaskId(id),
 				generatedTasks[id].txt
 			).
-				// Escape LaTeX comments,
-				// but don't ruin if they've been already escaped!
-				replace(/\\?%/g, '\\%').replace(/<br>/g, '\\\\').replace(/<br\/>/g, '\\\\');
+			 // Escape LaTeX comments,
+			 // but don't ruin if they've been already escaped!
+			replace(/\\?%/g,'\\%').replace(/<br>/g,'\\\\').replace(/<br\/>/g,'\\\\');
 		}
 	}
 
@@ -446,12 +446,12 @@ function removeGridFields() {
 function getAnswersSubtableLaTeX(cellsInFirstRow, answersParsedToTeX) {
 	var hline = '\n\\hline\n';
 	return (
-		'\n\\begin{tabular}{*{' + (kZ / 50).ceil() + '}l}' +//TODO: надо как-то узнать количество всех заданий и сколько оно делится на 50(тк 50 ответов обычно влазит на страницу(вообще в идеале 47)) и только l поставить
-		'\n\\begin{tabular}[t]{' + (new Array(cellsInFirstRow)).fill('|l').join('') + '|' + '}' +
-		'\n\\hline\n' +
-		answersParsedToTeX.join(hline) +
-		hline +
-		'\\end{tabular}' +
+		'\n\\begin{tabular}{llll}' +//TODO: надо как-то узнать количество всех заданий и сколько оно делится на 50(тк 50 ответов обычно влазит на страницу(вообще в идеале 47)) и только l поставить
+			'\n\\begin{tabular}[t]{' + (new Array(cellsInFirstRow)).fill('|l').join('')+ '|' + '}' +
+			'\n\\hline\n' +
+				answersParsedToTeX.join(hline) +
+				hline +
+			'\\end{tabular}' +
 		'\\end{tabular}' +
 		'\n\n\n'
 	);
@@ -488,7 +488,7 @@ function replaceCanvasWithImgInTask(element, text) {
 	for (var i = 0; i < canvases.length; i++) {
 		var imageName = canvases[i].getAttribute('data-nonce').substr(3) + "n" + i;
 		preparedImages[imageName] = canvases[i].toDataURL().replace('data:image/png;base64,','');
-		text = text.replace(/<canvas.*?<\/canvas>/, '\\addpictoright[0.22\\textwidth]{images/'+imageName+'}');
+		text = text.replace(/<canvas.*?<\/canvas>/, '\\addpictoright[0.4\\textwidth]{images/'+imageName+'}');
 	}
 	return text;
 }
@@ -520,10 +520,9 @@ function refreshLaTeXarchive() {
 
 	//zip.file("task.tex", preambula+'\n\n\\begin{document}'+bunch+'\n\\end{document}');
 
-	zip.file("task"+ ".tex", preambula + '\n\n\\begin{document}' + bunch + '\n\\newpage\n '+ getAnswersTableLaTeX(variantN) + '\n' + '\\end{document}');
+	zip.file("stereometry"+ ".tex", preambula + '\n\n\\begin{document}' + bunch + '\n\\newpage\n '+ getAnswersTableLaTeX(variantN) + '\n' + '\\end{document}');
 
-
-	zip.file("task_watermark.tex", preambula + watermark + hyperref + '\n\n\\begin{document}' + bunch + '\\end{document}');
+	zip.file("stereometry_watermark.tex", preambula + watermark + hyperref + '\n\n\\begin{document}' + bunch + '\\end{document}');
 
 	var img = zip.folder("images");
 	for (var i in preparedImages) {
@@ -535,8 +534,8 @@ function refreshLaTeXarchive() {
 	});
 }
 
-var preambula = ['\\documentclass[4apaper]{article}\n\\usepackage{dashbox}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{graphicx}\n\\DeclareGraphicsExtensions{.pdf,.png,.jpg}\n\n\\linespread{1.15}\n\n\\usepackage{../egetask_ver}\n\n\\def\\examyear{2023}\n\\usepackage[colorlinks,linkcolor=blue]{hyperref}\n\\usepackage{indentfirst}']
+var preambula = ['\\documentclass[4apaper]{article}\n\\usepackage{pdfpages}\n\\usepackage{dashbox}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{graphicx}\n\\graphicspath{{pictures/}}\n\\DeclareGraphicsExtensions{.pdf,.png,.jpg}\n\n\\linespread{1.15}\n\n\\usepackage{../egetask_ver}\n\n\\def\\examyear{2023}\n\\usepackage[colorlinks,linkcolor=blue]{hyperref}']
 
 var hyperref = '\\def\\lfoottext{Источник \\href{https://vk.com/egemathika}{https://vk.com/egemathika}}';
 
-var watermark = '\\usepackage{draftwatermark}\n\\SetWatermarkLightness{0.9}\n\\SetWatermarkText{https://vk.com/egemathika}\n\\SetWatermarkScale{ 0.4 }\n';
+var watermark='\\usepackage{draftwatermark}\n\\SetWatermarkLightness{0.9}\n\\SetWatermarkText{https://vk.com/egemathika}\n\\SetWatermarkScale{ 0.4 }\n';
