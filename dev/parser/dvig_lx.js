@@ -1,20 +1,21 @@
-//node dvig_lx.js ../dev/dvig/number/ matege2023p/1/
-
 'use strict';
+String.prototype.isSpace = function () {
+	/**Состоит ли строка только из пробельных символов?*/
+	return (/^\s+$/).test(this);
+};
+String.prototype.isNumeric = function () {
+	/**Является ли строка числом, возможно, с десятичной точкой или запятой?*/
+	return /^-?[0-9]+([.,][0-9])?$/.test(this);
+}
+const prompt = require('prompt-sync')();
 
-// Костылинг. Но - нам нужна вся мощь наших библиотек.
-// Причём именно так, одним куском - чтобы они видели друг друга...
-global.document = {};
-global.CanvasRenderingContext2D = {prototype:{}};
-require('../../dist/lib/chas-lib.min.js');
-require('../../dist/lib/decorations.js'); // Не входит в сборку
-
-let path = process.argv.slice(2,4);
+const pathP = prompt('Path from Path to:  ');
+let path=pathP.split(' ');
 const fs = require('fs')
 const filenames = fs.readdirSync(path[0]);
 let text;
 for (let i = 0; i < filenames.length; i++) {
-	let lib = require('../../sh/dvig_lz.js');
+	let lib = require('../../lib/dvig_lz.js');
 	text = fs.readFileSync(path[0] + filenames[i], 'utf8')
 	text = lib.makeTemplateFromPlainText(text);
 	try {
@@ -23,3 +24,8 @@ for (let i = 0; i < filenames.length; i++) {
 		console.error(err);
 	}
 }
+//node dvig_lx.js
+//Path from Path to: ../dev/dvig/number/ matege2023p/1/
+ 
+
+
