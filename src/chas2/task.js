@@ -66,7 +66,6 @@ chas2.task = {
 			o.answers = chaslib.toStringsArray('answers' in o ? o.answers : []);
 			o.wrongAnswers = chaslib.toStringsArray((('wrongAnswers' in o) && (o.wrongAnswers !== undefined)) ? o.wrongAnswers : []);
 			// Просто o.answers || [] нельзя - ноль не будет передаваться
-			o.authors = chaslib.toStringsArray(o.authors || o.author || []);
 		},
 
 
@@ -120,7 +119,6 @@ chas2.task = {
 	 * @param {String} analys текст разбора задания
 	 * @param {String|Number|String[]|Number[]} answers правильные ответы
 	 * @param {String|Number|String[]|Number[]} wrongAnswers неправильные ответы
-	 * @param {String|String[]} authors авторы шаблона
 	 * @param {String[]} tags теги
 	 * @param {Function} checkAnswer функция проверки ответа
 	 * @param {Function} draw функция отрисовки
@@ -134,7 +132,6 @@ chas2.task = {
 		window.vopr.rsh = o.analys;
 		window.vopr.ver = o.answers;
 		window.vopr.nev = o.wrongAnswers;
-		window.vopr.authors = o.authors;
 		if (o.checkAnswer) {
 			window.vopr.vrn = o.checkAnswer;
 		}
@@ -162,7 +159,6 @@ chas2.task = {
 			checkAnswer : window.vopr.vrn,
 			draw : window.vopr.dey,
 			tags : {},
-			authors : window.vopr.authors,
 		};
 		chas2.task._.normalizeTask(o);
 		chas2.task._.validateTask(o);
@@ -446,65 +442,6 @@ chas2.task = {
 	},
 
 
-	/** @function NApi.task.setDilationTask
-	 * Составить задание о растяжении геометрической фигуры
-	 */
-	setDilationTask : function(o) {
-		let dilationCoefficient = o.dilationCoefficient || sl(2,10);
-		let figureName = sklonlxkand(o.figureName);
-		let action = ['увелич','уменьш'].iz();
-		o.measurements[0].name = sklonlxkand(o.measurements[0].name);
-		o.measurements[1].name = sklonlxkand(o.measurements[1].name);
-
-		let first  = ['первого', 'первой', 'первого', 'первых'][figureName.rod];
-		let second = ['второго', 'второй', 'второго', 'вторых'][figureName.rod];
-		let bigger = ['больше','меньше'].iz(); // TODO: 'превосходит' ?
-
-		//TODO: разнонаправленное больше-меньше
-		let phrase1 =
-			'во сколько раз ' + o.measurements[0].name.ie + ' ' + first + ' ' + figureName.re + ' ' + bigger + ' ' +
-			o.measurements[0].name.re + ' ' + second + ' ' + figureName.re;
-		let phrase2 =
-			o.measurements[1].name.ie + ' ' + first + ' ' + figureName.re + ' в ' + chislitlx(dilationCoefficient.pow(o.measurements[1].power), 'раз', 'v') + ' ' +
-			bigger + ', чем ' + o.measurements[1].name.ie + ' ' + second + ' ' + figureName.re;
-
-		let textOptions = [
-			phrase1.toZagl() + ', если ' + phrase2 + '?',
-			phrase2.toZagl() + '. ' + phrase1.toZagl() + '?',
-		];
-
-		if (o.measurements[1].primary) {
-			textOptions.push(
-				'Во сколько раз ' + action + 'ится ' + o.measurements[0].name.ie + ' ' +
-				figureName.re + ', если ' +
-				['его','её','его','их'][figureName.rod] + ' ' + o.measurements[1].name.ve + ' ' + action + 'ить в '+
-				chislitlx(dilationCoefficient.pow(o.measurements[1].power), 'раз', 'v')+'?'
-			);
-		}
-		else {
-			textOptions.push(
-				'Во сколько раз ' + action + 'или ' + o.measurements[0].name.ie + ' ' +
-				figureName.re + ', если ' +
-				['его','её','его','их'][figureName.rod] + ' ' + o.measurements[1].name.ie + ' ' +
-				action + ['ился','илась','илось','ились'][o.measurements[1].name.rod] + ' в '+
-				chislitlx(dilationCoefficient.pow(o.measurements[1].power), 'раз', 'v')+'?'
-			);
-		}
-
-		let task = o.clone();
-		task.text = textOptions.iz();
-
-		if (!o.forbidDirectReplacements) {
-			task.text = task.text.
-				replace(' его площадь поверхности ',' площадь его поверхности ').
-				replace( ' её площадь поверхности ',' площадь её поверхности ');
-		}
-
-		task.answers = [dilationCoefficient.pow(o.measurements[0].power)];
-		NAtask.setTask(task);
-	},
-
-
 	/** @function NApi.task.setTwoStatementTask
 	 * Составить задание о двух утверждениях
 	 * @param {String|Object[]} stA первое утверждение (или массив утверждений)
@@ -629,21 +566,17 @@ chas2.task = {
 			};
 		})(),
 
-		/** @function chas2.task.modifiers.multiplyAnswerBySqrt
+		/** @function chas2.task.modifiers.roundUpTo
 		 * Добавить фразу "Ответ умножьте на $\sqrt{..}$." и домножить сам ответ.
 		 * @param {Number} n Максимальное число, до которого можно домножать на корень
-		 * @param {Boolean} opts.useMultiples Можно ли умножать/делить на конструкции вида 2\sqrt{3}
 		 */
-		multiplyAnswerBySqrt : function(n, opts) {
+		multiplyAnswerBySqrt : function(n) {
 			var o = chas2.task.getTask();
 			if (o.answers.length != 1){
 				throw new TypeError('Fixme: cannot apply multiplyAnswerBySqrt() to multiple answers')
 			}
 			//Меняем запятую на точку для корректной работы Number
 			var ans = Number(o.answers[0].replace(',', '.'));
-
-			opts = opts || {};
-			opts.useMultiples = opts.useMultiples || false;
 
 			if ((ans*1000).isAlmostInteger()){
 				//Ответ и так хорош!
@@ -660,12 +593,12 @@ chas2.task = {
 			console.log(possibleMultipliers);
 			for (var i of possibleMultipliers){
 				if(sl1() && (ans/i.sqrt()*1000).isAlmostInteger()){
-					o.text += ' Ответ разделите на $' + i.texsqrt(opts.useMultiples) + '$.';
+					o.text += ' Ответ разделите на $' + i.texsqrt() + '$.';
 					o.answers = [(ans / i.sqrt()).okrugldo((10).pow(-6)).ts()]
 					chas2.task.setTask(o);
 					return;
 				} else if((ans*i.sqrt()*1000).isAlmostInteger()){
-					o.text += ' Ответ умножьте на $' + i.texsqrt(opts.useMultiples) + '$.';
+					o.text += ' Ответ умножьте на $' + i.texsqrt() + '$.';
 					o.answers = [(ans * i.sqrt()).okrugldo((10).pow(-6)).ts()]
 					chas2.task.setTask(o);
 					return;
