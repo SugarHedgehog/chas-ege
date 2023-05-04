@@ -8,7 +8,7 @@ chas2.task = {
 	 * Функционал, используемый только внутри модуля chas2.task
 	 * @private
 	 */
-	_ : {
+	_: {
 		/** @function chas2.task._.validateTask
 		 * Проверить корректность объекта-задания
 		 * @param {String} text текст задания
@@ -19,7 +19,7 @@ chas2.task = {
 		 * @param {Function} checkAnswer функция проверки ответа
 		 * @param {Function} draw функция отрисовки
 		 */
-		validateTask : function(o) {
+		validateTask: function (o) {
 			if (chaslib.getTypeOf(o.text) != '[object String]') {
 				throw TypeError('Параметр text должен быть строкой');
 			}
@@ -60,7 +60,7 @@ chas2.task = {
 		 * @param {Function} checkAnswer функция проверки ответа
 		 * @param {Function} draw функция отрисовки
 		 */
-		normalizeTask : function(o) {
+		normalizeTask: function (o) {
 			o.text = o.text || '';
 			o.analys = o.analys || '';
 			o.answers = chaslib.toStringsArray('answers' in o ? o.answers : []);
@@ -75,7 +75,7 @@ chas2.task = {
 		 * @param {Number} o.height высота canvas
 		 * @param {String} o.style стиль canvas
 		 */
-		normalizeCanvasOptions : function(o) {
+		normalizeCanvasOptions: function (o) {
 			o.importNonExistingFrom({
 				width: 600,
 				height: 400,
@@ -90,7 +90,7 @@ chas2.task = {
 		 * @param {Number} o.height высота canvas
 		 * @param {String} o.style стиль canvas
 		 */
-		normalizeCanvasOptionsDisplay : function(o) {
+		normalizeCanvasOptionsDisplay: function (o) {
 			o.importNonExistingFrom({
 				width: 600,
 				height: 400,
@@ -106,7 +106,7 @@ chas2.task = {
 		 * @param {String} o.style стиль canvas
 		 * @param {Number} randomId случайный идентификатор canvas
 		 */
-		generateCanvasTag : function(o, randomId) {
+		generateCanvasTag: function (o, randomId) {
 			return '<canvas style="' + o.style + '" width="' + o.width + '" height="' + o.height + '" id="canvas' + randomId + '" data-nonce="' + Math.random() + '"></canvas>';
 		},
 
@@ -123,7 +123,7 @@ chas2.task = {
 	 * @param {Function} checkAnswer функция проверки ответа
 	 * @param {Function} draw функция отрисовки
 	 */
-	setTask : function(o) {
+	setTask: function (o) {
 		chas2.task._.normalizeTask(o);
 		chas2.task._.validateTask(o);
 
@@ -150,15 +150,15 @@ chas2.task = {
 	/** @function chas2.task.getTask
 	 * Получить задание - то же, что setTask, только наоборот
 	 */
-	getTask : function() {
+	getTask: function () {
 		var o = {
-			text : window.vopr.txt,
-			analys : window.vopr.rsh,
-			answers : window.vopr.ver,
-			wrongAnswers : window.vopr.nev,
-			checkAnswer : window.vopr.vrn,
-			draw : window.vopr.dey,
-			tags : {},
+			text: window.vopr.txt,
+			analys: window.vopr.rsh,
+			answers: window.vopr.ver,
+			wrongAnswers: window.vopr.nev,
+			checkAnswer: window.vopr.vrn,
+			draw: window.vopr.dey,
+			tags: {},
 		};
 		chas2.task._.normalizeTask(o);
 		chas2.task._.validateTask(o);
@@ -194,7 +194,7 @@ chas2.task = {
 	 * @param {String} options.conclusion то, что пишется в вопросе после задачи
 	 * @param {Object} taskOptions: дополнительные опции, передаваемые setTask
 	 */
-	setCountableTask : function(mainList, options, taskOptions) {
+	setCountableTask: function (mainList, options, taskOptions) {
 		var tmpObject = svVel(mainList);
 		if (options) {
 			if (options.preambula) {
@@ -213,13 +213,13 @@ chas2.task = {
 	 * Установить задание из кода на C++, используя JSCPP
 	 * @param {String} code
 	 */
-	setJscppTask : function(code) {
+	setJscppTask: function (code) {
 
 		var input = '';
 		var output = '';
 		var config = {
 			stdio: {
-				write: function(s) {
+				write: function (s) {
 					output += s;
 				}
 			}
@@ -235,11 +235,11 @@ chas2.task = {
 	 * Установить задание из человекочитаемого формата
 	 * @param {String} output
 	 */
-	setHumanReadableTask : function(output) {
+	setHumanReadableTask: function (output) {
 		var parsedOptions = output.parseHumanReadableToJSON();
 		if (parsedOptions[0]) {
 			parsedOptions['Задание'] = 'Необходимо указать ключевые слова! <br/> Текущий вывод: ' +
-			                            output.vTag('pre') + '<br/>' + (parsedOptions['Задание'] || ' ');
+				output.vTag('pre') + '<br/>' + (parsedOptions['Задание'] || ' ');
 		}
 		chas2.task.setTask({
 			text: parsedOptions['Задание'],
@@ -263,7 +263,7 @@ chas2.task = {
 	 * @param {String[]} o.wrapper обёртка для частей - иногда возникает
 	 * @param {Object} taskOptions - то, что будет передано setTask (тэги, решение и т. д.)
 	 */
-	setEquationTask : function(o, taskOptions) {
+	setEquationTask: function (o, taskOptions) {
 		function exchangeParts() {
 			//Функция обмена частей уравнения местами. Если, конечно, можно!
 			if (o.enablePartsExchange == 0) {
@@ -371,28 +371,28 @@ chas2.task = {
 			case 'sum':
 				taskOptions.answers = o.roots.sum();
 				multipleRootsPhrase = 'их сумму';
-			break;
+				break;
 			case 'production':
 				taskOptions.answers = o.roots.production();
 				multipleRootsPhrase = 'их произведение';
-			break;
+				break;
 			case 'min':
 				taskOptions.answers = o.roots.minE();
 				multipleRootsPhrase = 'меньший из них';
-			break;
+				break;
 			case 'max':
 				taskOptions.answers = o.roots.maxE();
 				multipleRootsPhrase = 'больший из них';
-			break;
+				break;
 			case 'any':
 				taskOptions.answers = o.roots;
 				multipleRootsPhrase = 'любой из них';
-			break;
+				break;
 			case 'list':
 				taskOptions.answers = o.roots.join(';');
 				multipleRootsPhrase = 'перечислите их через точку с запятой (;) в любом порядке';
 				taskOptions.checkAnswer = vopr.vrn_list;
-			break;
+				break;
 		}
 
 		var preamble = o.customPreamble || 'Найдите корень уравнения';
@@ -421,7 +421,7 @@ chas2.task = {
 	 * @param {String[]} o.wrapper обёртка для частей - иногда возникает
 	 * @param {Object} taskOptions - то, что будет передано setTask (тэги, решение и т. д.)
 	 */
-	setAdditiveEquationTask : function(o, taskOptions) {
+	setAdditiveEquationTask: function (o, taskOptions) {
 		//Сами всё, что нужно, вычтем!
 		o.enablePartsSubtraction = 0;
 
@@ -445,16 +445,36 @@ chas2.task = {
 	/** @function NApi.task.setDilationTask
 	 * Составить задание о растяжении геометрической фигуры
 	 */
-	setDilationTask : function(o) {
-		let dilationCoefficient = o.dilationCoefficient || sl(2,10);
+	setDilationTask: function (o) {
+		let dilationCoefficient = o.dilationCoefficient || sl(2, 10);
 		let figureName = sklonlxkand(o.figureName);
-		let action = ['увелич','уменьш'].iz();
-		o.measurements[0].name = sklonlxkand(o.measurements[0].name);
-		o.measurements[1].name = sklonlxkand(o.measurements[1].name);
+		let action = ['увелич', 'уменьш'].iz();
 
-		let first  = ['первого', 'первой', 'первого', 'первых'][figureName.rod];
+		//выберем вариант задачи
+		let choosePhrase = o.choosePhrase || sl(0,2);
+
+		//перемешаем ещё разок! А то вдруг положили не перемешанный
+		o.measurements = o.measurements.shuffle();
+
+		//подготовка к 3м переменным
+		o.measurements.forEach(element => element.name = sklonlxkand(element.name));
+
+		//Будет ли дополнение?
+		let PS = o.PS || undefined;
+		let figureInPS;
+
+		if (PS != undefined)
+			for (let i = 0; i < o.measurements.length; i++) {
+				if (o.measurements[i].wordToClarify) {
+					figureInPS = o.measurements[i];
+					o.measurements.splice(i, 1);
+					break;
+				}
+			}
+
+		let first = ['первого', 'первой', 'первого', 'первых'][figureName.rod];
 		let second = ['второго', 'второй', 'второго', 'вторых'][figureName.rod];
-		let bigger = ['больше','меньше'].iz(); // TODO: 'превосходит' ?
+		let bigger = ['больше', 'меньше'].iz(); // TODO: 'превосходит' ?
 
 		//TODO: разнонаправленное больше-меньше
 		let phrase1 =
@@ -473,27 +493,37 @@ chas2.task = {
 			textOptions.push(
 				'Во сколько раз ' + action + 'ится ' + o.measurements[0].name.ie + ' ' +
 				figureName.re + ', если ' +
-				['его','её','его','их'][figureName.rod] + ' ' + o.measurements[1].name.ve + ' ' + action + 'ить в '+
-				chislitlx(dilationCoefficient.pow(o.measurements[1].power), 'раз', 'v')+'?'
+				['его', 'её', 'его', 'их'][figureName.rod] + ' ' + o.measurements[1].name.ve + ' ' + action + 'ить в ' +
+				chislitlx(dilationCoefficient.pow(o.measurements[1].power), 'раз', 'v') + '?'
 			);
 		}
 		else {
 			textOptions.push(
 				'Во сколько раз ' + action + 'или ' + o.measurements[0].name.ie + ' ' +
 				figureName.re + ', если ' +
-				['его','её','его','их'][figureName.rod] + ' ' + o.measurements[1].name.ie + ' ' +
-				action + ['ился','илась','илось','ились'][o.measurements[1].name.rod] + ' в '+
-				chislitlx(dilationCoefficient.pow(o.measurements[1].power), 'раз', 'v')+'?'
+				['его', 'её', 'его', 'их'][figureName.rod] + ' ' + o.measurements[1].name.ie + ' ' +
+				action + ['ился', 'илась', 'илось', 'ились'][o.measurements[1].name.rod] + ' в ' +
+				chislitlx(dilationCoefficient.pow(o.measurements[1].power), 'раз', 'v') + '?'
 			);
 		}
 
 		let task = o.clone();
-		task.text = textOptions.iz();
+		task.text = textOptions[choosePhrase];
+
+		if (figureInPS != undefined) {
+
+			if (PS.verb.isArray)
+				PS.verb = PS.verb[figureInPS.name.rod];
+
+			let mass = [figureInPS.name.ie + ' ' + PS.verb,''];
+			for (let i = 0; i < PS.proposal.length; i++)
+				task.text += PS.proposal[i] + mass[i];
+		}
 
 		if (!o.forbidDirectReplacements) {
 			task.text = task.text.
-				replace(' его площадь поверхности ',' площадь его поверхности ').
-				replace( ' её площадь поверхности ',' площадь её поверхности ');
+				replace(' его площадь поверхности ', ' площадь его поверхности ').
+				replace(' её площадь поверхности ', ' площадь её поверхности ');
 		}
 
 		task.answers = [dilationCoefficient.pow(o.measurements[0].power)];
@@ -509,7 +539,7 @@ chas2.task = {
 	 * @param {Boolean} trueB истинность второго утверждения
 	 * @param {String|String[]} pre префикс задания
 	 */
-	setTwoStatementTask : function(stA, trueA, stB, trueB, pre) {
+	setTwoStatementTask: function (stA, trueA, stB, trueB, pre) {
 		if (stA.isArray) {
 			var two = stA.iz(2);
 			chas2.task.setTwoStatementTask(two[0][0], two[0][1], two[1][0], two[1][1], trueA);
@@ -517,13 +547,13 @@ chas2.task = {
 		}
 		if (!pre) {
 			pre = [[
-					'Какое утверждение является истинным?',
-					'Какое утверждение верно?',
-				], [
-					'Какое утверждение не является истинным?',
-					'Какое утверждение является ложным?',
-					'Какое утверждение неверно?',
-				]];
+				'Какое утверждение является истинным?',
+				'Какое утверждение верно?',
+			], [
+				'Какое утверждение не является истинным?',
+				'Какое утверждение является ложным?',
+				'Какое утверждение неверно?',
+			]];
 		}
 		if (pre.isArray && pre[1] && sl1()) {
 			if (pre[1].isArray) {
@@ -535,7 +565,7 @@ chas2.task = {
 			trueB = !trueB;
 		} else if (pre.isArray) {
 			if (pre[0].isArray) {
-					pre = pre[0].iz();
+				pre = pre[0].iz();
 			} else {
 				pre = pre[0];
 			}
@@ -563,16 +593,16 @@ chas2.task = {
 	 * @param {String} code код
 	 * @param {String|String[]} explanations пояснения
 	 */
-	replaceCodeInText : function(code, explanations) {
+	replaceCodeInText: function (code, explanations) {
 		vopr.txt = vopr.txt.replaceCode(code, explanations[i]);
 	},
 
 
-	modifiers : {
+	modifiers: {
 		/** @function chas2.task.modifiers.beautifyAlgebraicNotation
 		 * Превращает (1x+-1) в (x-1) и тому подобное
 		 */
-		beautifyAlgebraicNotation : function(m) {
+		beautifyAlgebraicNotation: function (m) {
 			var o = chas2.task.getTask();
 			o.text = o.text.plusminus();
 			o.analys = o.analys.plusminus();
@@ -588,17 +618,17 @@ chas2.task = {
 		 * @param {String} height высота иллюстрации в единицах CSS либо пикселях
 		 * @param {String} width ширина иллюстрации в единицах CSS либо пикселях
 		 */
-		addJqplot : function(m) {
+		addJqplot: function (m) {
 			var o = chas2.task.getTask();
 			var randomDivId = 'jqplotTarget' + sl(1000000);
 			var height = m.height || '320px';
 			var width = m.width || 'auto';
-			typeof(height) == 'string' || (height += 'px');
-			typeof(width) == 'string' || (width += 'px');
+			typeof (height) == 'string' || (height += 'px');
+			typeof (width) == 'string' || (width += 'px');
 			o.text = '<div id="' + randomDivId + '" style="text-align:center;height:' + height + ';width:' + width +
 				'" data-html-differentiator="' + Math.random() + '"></div>' + o.text;
 			var previousDraw = o.draw;
-			o.draw = function() {
+			o.draw = function () {
 				//Замыкание же!
 				previousDraw();
 				$.jqplot(randomDivId, m.dataArray, m.options);
@@ -610,14 +640,14 @@ chas2.task = {
 		/** @function chas2.task.modifiers.variativeABC
 		 * Перемешать буквы латинского алфавита в заданиях, например, на геометрию
 		 */
-		variativeABC : (function() {
+		variativeABC: (function () {
 			var alph = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-			return function() {
+			return function () {
 				var alph2 = alph.slice().shuffle();
 				chas2.task.setTask(
 					mapRecursive(
 						chas2.task.getTask(),
-						function(str) {
+						function (str) {
 							return ('' + str).cepZamena(alph, alph2);
 						}
 					)
@@ -629,7 +659,7 @@ chas2.task = {
 		 * Добавить фразу "Округлить до ..." и округлить сам ответ.
 		 * @param {Number} n степень 10 (округлить до 10^n)
 		 */
-		roundUpTo : function(n) {
+		roundUpTo: function (n) {
 			var rndInt = [
 				'десятков',
 				'сотен',
@@ -656,13 +686,13 @@ chas2.task = {
 			var ans = Number(o.answers[0].replace(',', '.')); //меняем запятую на точку для корректной работы Number
 			var cntFrac = String(ans).includes('.') ? String(ans).split('.')[1].length : 0;
 			var cntInt = String(ans).includes('.') ? String(ans).split('.')[0].length : String(ans).length;
-			if(n < 0){
+			if (n < 0) {
 				var nAuto = (cntFrac < -n) || ((-n - 1) > 8) ? cntFrac : -n;
 				nAuto = Math.min(nAuto, rndFrac.length);
 				o.text += ' Ответ округлите до ' + (nAuto ? rndFrac[nAuto - 1] : 'целого') + '.';
 				o.answers = Math.round(ans * Math.pow(10, nAuto)) / Math.pow(10, nAuto);
 			}
-			else if(n > 0) {
+			else if (n > 0) {
 				var nAuto = (cntInt < n) || ((n - 1) > 8) ? cntInt : n;
 				nAuto = Math.min(nAuto, rndInt.length);
 				o.text += ' Ответ округлите до ' + (nAuto ? rndInt[nAuto - 1] : 'целого') + '.';
@@ -683,7 +713,7 @@ chas2.task = {
 		 * @param {String} o.style стиль canvas
 		 * @param {Function} o.paint функция отрисовки
 		 */
-		addCanvasIllustration : function(o) {
+		addCanvasIllustration: function (o) {
 			var currentTask = chas2.task.getTask();
 			var randomId = getRandomInt(1, 1000000000); // Случайный идентификатор canvas (на случай, если их окажется несколько).
 			// Math.random() использовать нельзя - в id тэга не должно быть точки
@@ -698,7 +728,7 @@ chas2.task = {
 			var savedDrawFunction = currentTask.draw;
 			var paint = o.paint; // На всякий случай сохраняем ссылку прямо на свойство объекта
 
-			currentTask.draw = function() {
+			currentTask.draw = function () {
 				if (savedDrawFunction instanceof Function) {
 					savedDrawFunction();
 				}
@@ -717,20 +747,20 @@ chas2.task = {
 		 * @param {String} название точки
 		 * @param {Array} координаты точки
 		 */
-		askAboutPoint : function(name, coordinates) {
+		askAboutPoint: function (name, coordinates) {
 			var currentTask = chas2.task.getTask();
 			var what;
 			var coord = sl(coordinates.length - 1);
-			switch(coord){
+			switch (coord) {
 				case 0:
 					what = 'абсциссу';
-				break;
+					break;
 				case 1:
 					what = 'ординату';
-				break;
+					break;
 				case 2:
 					what = 'аппликату';
-				break;
+					break;
 
 			}
 			var answ = coordinates[coord];
