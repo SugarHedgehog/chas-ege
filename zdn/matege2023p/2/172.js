@@ -13,89 +13,19 @@
 	lx_declareClarifiedPhrase('площадь', 'основания');
 	lx_declareClarifiedPhrase('длина', 'окружности основания');
 	retryWhileError(function() {
-		let measurements = [
-			[
-				[{
+		let measurements =[
+				{
 					name: 'радиус основания',
 					power: 1,
-				}, {
-					name: 'длина окружности основания',
-					power: 1,
-				}, ].iz(), {
+				}, 
+				{
 					name: 'объём',
 					power: 2,
 				}, {
 					name: 'высоты',
 					wordToClarify: true,
 				},
-			],
-			[
-				[{
-					name: 'радиус основания',
-					power: 1,
-				}, {
-					name: 'длина окружности основания',
-					power: 1,
-				}, ].iz(), {
-					name: 'площадь основания',
-					power: 2,
-				}
-			],
-			[
-				[{
-					name: 'площади оснований',
-					wordToClarify: true,
-				}, {
-					name: 'радиусы оснований',
-					wordToClarify: true,
-				}].iz(), [{
-					name: 'высота',
-					power: 1,
-				}, {
-					name: 'образующая',
-					power: 1,
-				}, ].iz(), {
-					name: 'объём',
-					power: 1,
-				}
-			],
-			[
-				[{
-					name: 'радиус основания',
-					power: 1,
-				}, {
-					name: 'длина окружности основания',
-					power: 1,
-				}, {
-					name: 'площадь основания',
-					power: 2
-				}, ].iz(), {
-					name: 'площадь боковой поверхности',
-					power: 1,
-				}, {
-					name: 'образующие',
-					wordToClarify: true,
-				}
-			],
-			[
-				[{
-					name: 'радиусы оснований',
-					wordToClarify: true,
-				}, {
-					name: 'длины окружностей основания',
-					wordToClarify: true,
-				}, {
-					name: 'площади оснований',
-					wordToClarify: true,
-				}, ].iz(), {
-					name: 'площадь боковой поверхности',
-					power: 1,
-				}, {
-					name: 'образующая',
-					power: 1,
-				}
-			]
-		].iz();
+			];
 
 		let copy = measurements.map((num) => num);
 		let paint1 = function(ctx) {
