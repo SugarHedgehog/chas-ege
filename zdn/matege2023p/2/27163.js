@@ -21,7 +21,7 @@
 		console.log(radiusNew);
 
 		let paint1 = function(ctx) {
-			ctx.translate(-10, 0);
+			ctx.translate(-10, -40);
 			ctx.lineWidth = 2;
 
 
@@ -94,8 +94,8 @@
 		});
 		NAtask.modifiers.multiplyAnswerBySqrt(7);
 		chas2.task.modifiers.addCanvasIllustration({
-			width: 500,
-			height: 300,
+			width: 400,
+			height: 250,
 			paint: paint1,
 		});
 	}, 1000);
