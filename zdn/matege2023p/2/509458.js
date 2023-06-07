@@ -47,14 +47,14 @@
 			ct.scale(10, -10);
 			ct.lineWidth = 2 / 15;
 			
-			ct.rightPyramid4({
+			ct.drawRightPyramid4({
 				edge: 12,
 				angle: Math.PI / 5,
 				height: 13,
 			}, [1, 3, 6], [0.5, 0.2], name.includes('высота'));
 
 			ct.translate(23, 2);
-			ct.rightPyramid4({
+			ct.drawRightPyramid4({
 				edge: 14,
 				angle: Math.PI / 5,
 				height: 16,

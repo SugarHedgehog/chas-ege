@@ -28,14 +28,14 @@
 			ct.lineWidth = 2 / 15;
 			switch (numberOfEdge) {
 			case 3:
-				ct.rightPyramid3({
+				ct.drawRightPyramid3({
 					edge: 17,
 					angle: Math.PI / 8,
 					height: 13,
 				}, [1], [0.5, 0.2], name.includes('высота'), name.includes('апофема'));
 				break;
 			case 4:
-				ct.rightPyramid4({
+				ct.drawRightPyramid4({
 					edge: 12,
 					angle: Math.PI / 4,
 					height: 14,
@@ -43,7 +43,7 @@
 				break;
 			case 6:
 				ct.translate(1, -13);
-				ct.rightPyramid6({
+				ct.drawRightPyramid6({
 					edge: 7,
 					angle: Math.PI / 3,
 					height: 14,

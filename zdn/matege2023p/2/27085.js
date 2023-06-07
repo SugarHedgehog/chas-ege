@@ -23,7 +23,7 @@
 			ct.translate(10, 20);
 			ct.scale(10, -10);
 			ct.lineWidth = 2 / 15;
-			ct.rightPyramid3({
+			ct.drawRightPyramid3({
 				edge: 17,
 				angle: Math.PI / 8,
 				height: 11,
