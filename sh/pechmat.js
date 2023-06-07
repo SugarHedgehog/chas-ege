@@ -488,13 +488,13 @@ function replaceCanvasWithImgInTask(element, text) {
 	for (var i = 0; i < canvases.length; i++) {
 		var imageName = canvases[i].getAttribute('data-nonce').substr(3) + "n" + i;
 		preparedImages[imageName] = canvases[i].toDataURL().replace('data:image/png;base64,','');
-		text = text.replace(/<canvas.*?<\/canvas>/, '\\addpictoright[0.3\\textwidth]{images/'+imageName+'}');
+		text = text.replace(/<canvas.*?<\/canvas>/, '\\addpictoright[0.22\\textwidth]{images/'+imageName+'}');
 	}
 	return text;
 }
 
 function createLaTeXbunch(variantN) {
-	var bunchText = '';
+	var bunchText = '\\newpage \n \\section*{Вариант №' + variantN+'}\\\\';
 	for (var taskId in tasksInLaTeX) {
 		if (generatedTasks[taskId].variantNumber == variantN) {
 			bunchText +=
@@ -520,9 +520,9 @@ function refreshLaTeXarchive() {
 
 	//zip.file("task.tex", preambula+'\n\n\\begin{document}'+bunch+'\n\\end{document}');
 
-	zip.file("task"+ ".tex", preambula + '\n\n\\begin{document}' + bunch + '\n\\newpage\n '+ getAnswersTableLaTeX(variantN) + '\n' + '\\end{document}');
+	zip.file("stereometry"+ ".tex", preambula + '\n\n\\begin{document}' + bunch + '\n\\newpage\n '+ getAnswersTableLaTeX(variantN) + '\n' + '\\end{document}');
 
-	zip.file("task_watermark.tex", preambula + watermark + hyperref + '\n\n\\begin{document}' + bunch + '\\end{document}');
+	zip.file("stereometry_watermark.tex", preambula + watermark + hyperref + '\n\n\\begin{document}' + bunch + '\\end{document}');
 
 	var img = zip.folder("images");
 	for (var i in preparedImages) {
