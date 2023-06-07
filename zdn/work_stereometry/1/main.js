@@ -1,7 +1,8 @@
 window.nomer=[
-	3,
-	4,
-	9,
-	27130,
+	1,
+	2,
+	6,
+	11,
+	13,
 ].iz()
-window.comment='Куб';
+window.comment='Параллелепипед';
