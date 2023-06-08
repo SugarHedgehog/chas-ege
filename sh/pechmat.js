@@ -494,7 +494,7 @@ function replaceCanvasWithImgInTask(element, text) {
 }
 
 function createLaTeXbunch(variantN) {
-	var bunchText = '\\newpage \n \\section*{Вариант №' + variantN+'}\\\\';
+	var bunchText = '\\section*{Вариант'+variantN+'}\n';
 	for (var taskId in tasksInLaTeX) {
 		if (generatedTasks[taskId].variantNumber == variantN) {
 			bunchText +=
