@@ -470,9 +470,9 @@ function getAnswersTableLaTeX(variantN) {
 		var tdCells = row.getElementsByTagName('td');
 		if (tdCells.length) {
 			//TODO: reverse-decode LaTeX from MathJax
-			answersParsedToTeX.push(Array.from(tdCells).map(x => x.innerHTML).join(' & ')+'\\\\');
-			if (count % 50 == 0&&count<kZ)
-				answersParsedToTeX.push('\\end{tabular}&\\begin{tabular}[t]{'+ (new Array(cellsInFirstRow)).fill('|l').join('') + '|' +'}')
+			answersParsedToTeX.push(Array.from(tdCells).map(x => x.innerHTML).join(' & ') + '\\\\');
+			if (count % 50 == 0 && count < kZ)
+				answersParsedToTeX.push('\\end{tabular}&\\begin{tabular}[t]{' + (new Array(cellsInFirstRow)).fill('|l').join('') + '|' + '}')
 		}
 	}
 	return getAnswersSubtableLaTeX(cellsInFirstRow, answersParsedToTeX);
@@ -487,14 +487,15 @@ function replaceCanvasWithImgInTask(element, text) {
 	console.log(canvases);
 	for (var i = 0; i < canvases.length; i++) {
 		var imageName = canvases[i].getAttribute('data-nonce').substr(3) + "n" + i;
-		preparedImages[imageName] = canvases[i].toDataURL().replace('data:image/png;base64,','');
-		text = text.replace(/<canvas.*?<\/canvas>/, '\\addpictoright[0.25\\textwidth]{images/'+imageName+'}');
+		preparedImages[imageName] = canvases[i].toDataURL().replace('data:image/png;base64,', '');
+		text = text.replace(/<canvas.*?<\/canvas>/, '\\addpictoright[0.4\\textwidth]{images/' + imageName + '}');
 	}
 	return text;
 }
 
 function createLaTeXbunch(variantN) {
 	var bunchText = '';
+	var count=0;
 	for (var taskId in tasksInLaTeX) {
 		if (generatedTasks[taskId].variantNumber == variantN) {
 			bunchText +=
@@ -502,6 +503,11 @@ function createLaTeXbunch(variantN) {
 				'\\begin{taskBN}{' + generatedTasks[taskId].taskCategory + '}' + '\n' +
 				tasksInLaTeX[taskId] + '\n' +
 				'\\end{taskBN}' + '\n';
+				count++;
+			if (count==3){
+				bunchText += '\n\\tikz[remember picture,overlay] \\node[opacity=0.3,inner sep=0pt] at (current page.center){\\includegraphics[width=\\paperwidth,height=\\paperheight]{' + sl(1, 52) + '}};\n';
+				count=0;
+			}
 		}
 
 	}
@@ -514,13 +520,17 @@ function refreshLaTeXarchive() {
 	}
 	var zip = new JSZip();
 	var bunch = "";
+	var answ = "";
 	for (var variantN of variantsGenerated) {
-		bunch += createLaTeXbunch(variantN);
+		bunch += '\n\n\\section{Рабочая тетрадь}\n'+createLaTeXbunch(variantN);
+		answ += '\n\n\\section{Рабочая тетрадь}\n'+getAnswersTableLaTeX(variantN);
 	}
 
 	//zip.file("task.tex", preambula+'\n\n\\begin{document}'+bunch+'\n\\end{document}');
 
-	zip.file("task"+ ".tex", preambula + '\n\n\\begin{document}' + bunch + '\n\\newpage\n '+ getAnswersTableLaTeX(variantN) + '\n' + '\\end{document}');
+	zip.file("task" + ".tex", preambula + '\n\n\\begin{document}' + bunch + '\n\\newpage\n ' + '\n' + '\\end{document}');
+
+	zip.file("answers" + ".tex", preambula + '\n\n\\begin{document}'+  + '\n' + answ + '\\end{document}');
 
 
 	zip.file("task_watermark.tex", preambula + watermark + hyperref + '\n\n\\begin{document}' + bunch + '\\end{document}');
@@ -535,7 +545,7 @@ function refreshLaTeXarchive() {
 	});
 }
 
-var preambula = ['\\documentclass[4apaper]{article}\n\\usepackage{dashbox}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{graphicx}\n\\DeclareGraphicsExtensions{.pdf,.png,.jpg}\n\n\\linespread{1.15}\n\n\\usepackage{../egetask_ver}\n\n\\def\\examyear{2023}\n\\usepackage[colorlinks,linkcolor=blue]{hyperref}']
+var preambula = ['\\documentclass[a4paper]{article}\n\\usepackage{dashbox}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{graphicx}\n\\DeclareGraphicsExtensions{.pdf,.png,.jpg}\n\\graphicspath{{../../animal/}}\n\n\\linespread{1.15}\n\n\\usepackage{egetask_alternative}\n\n\\def\\examyear{2023}\n\\usepackage[colorlinks,linkcolor=blue]{hyperref}\n\n\\usepackage{tikz}\n\\usepackage{transparent}']
 
 var hyperref = '\\def\\lfoottext{Источник \\href{https://vk.com/egemathika}{https://vk.com/egemathika}}';
 
