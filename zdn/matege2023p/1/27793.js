@@ -33,10 +33,8 @@
 
 		NAtask.setTask({
 			text: 'В равностороннем треугольнике $' + vertices.slice(0, 3).shuffle().join('') +
-				'$ высота $' + [vertices[0], vertices[3]].shuffle().join('') + '$ равна $' + a.texsqrt(sl1()) + '$. Найдите $' + [
-					vertices[1],
-					vertices[2]
-				].shuffle().join('') + '$.',
+				'$ высота $' + [vertices[0], vertices[3]].shuffle().join('') + '$ равна $' + a.texsqrt(sl1()) + '$. Найдите $' +
+				vertices.slice(0, 3).iz(2).join('') + '$.',
 			answers: (4 * a / 3).sqrt(),
 			analys: '',
 		});
