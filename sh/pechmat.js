@@ -523,7 +523,7 @@ function refreshLaTeXarchive() {
 	var bunch = "";
 	var answ = "";
 	for (var variantN of variantsGenerated) {
-		bunch += '\n\n\\section{Рабочая тетрадь}\n'+createLaTeXbunch(variantN);
+		bunch += '\\newpage\\section{Рабочая тетрадь}\n'+createLaTeXbunch(variantN);
 		answ += '\n\n\\section{Рабочая тетрадь}\n'+getAnswersTableLaTeX(variantN);
 	}
 
