@@ -529,11 +529,11 @@ function refreshLaTeXarchive() {
 
 	//zip.file("task.tex", preambula+'\n\n\\begin{document}'+bunch+'\n\\end{document}');
 
-	zip.file("noteProbability" + ".tex", preambula + '\n\n\\begin{document}' + bunch + '\n\\newpage\n ' + '\n' + '\\end{document}');
+	zip.file("notePlan" + ".tex", preambula + '\n\n\\begin{document}' + bunch + '\n\\newpage\n ' + '\n' + '\\end{document}');
 
 	zip.file("answers" + ".tex", preambula + '\n\n\\begin{document}' + answ + '\\end{document}');
 
-	zip.file("noteProbability_watermark.tex", preambula + watermark + hyperref + '\n\n\\begin{document}' + bunch + '\\end{document}');
+	zip.file("notePlan_watermark.tex", preambula + watermark + hyperref + '\n\n\\begin{document}' + bunch + '\\end{document}');
 
 	var img = zip.folder("images");
 	for (var i in preparedImages) {
