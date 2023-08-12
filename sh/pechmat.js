@@ -545,7 +545,7 @@ function refreshLaTeXarchive() {
 	});
 }
 
-var preambula = ['\\documentclass[a4paper]{article}\n\\usepackage{dashbox}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{graphicx}\n\\DeclareGraphicsExtensions{.pdf,.png,.jpg}\n\\graphicspath{{../../animal/}}\n\n\\linespread{1.15}\n\n\\usepackage{egetask_alternative}\n\n\\def\\examyear{2023}\n\\usepackage[colorlinks,linkcolor=blue]{hyperref}\n\n\\usepackage{tikz}\n\\usepackage{transparent}']
+var preambula = ['\\documentclass[a4paper]{article}\n\\usepackage{dashbox}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{graphicx}\n\\DeclareGraphicsExtensions{.pdf,.png,.jpg}\n\n\\linespread{1.15}\n\n\\usepackage{egetask_alternative}\n\n\\def\\examyear{2023}\n\\usepackage[colorlinks,linkcolor=blue]{hyperref}\n\n\\usepackage{tikz}']
 
 var hyperref = '\\def\\lfoottext{Источник \\href{https://vk.com/egemathika}{https://vk.com/egemathika}}';
 
