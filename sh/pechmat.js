@@ -118,10 +118,7 @@ function konecSozd() {
 			tasksInLaTeX[id] = replaceCanvasWithImgInTask(
 				getTaskTextContainerByTaskId(id),
 				generatedTasks[id].txt
-			).
-				// Escape LaTeX comments,
-				// but don't ruin if they've been already escaped!
-				replace(/\\?%/g, '\\%').replace(/<br>/g, '\\\\').replace(/<br\/>/g, '\\\\').replace(/<b>/g, '\\textbf{').replace(/<\/b>/g, '}');
+			).replace(/\\?%/g, '\\%').replace(/<br>/g, '\\\\').replace(/<br\/>/g, '\\\\').replace(/<b>/g, '\\textbf{').replace(/<\/b>/g, '}');
 		}
 	}
 
@@ -444,16 +441,16 @@ function removeGridFields() {
 
 
 function getAnswersSubtableLaTeX(cellsInFirstRow, answersParsedToTeX) {
-	var hline = '\n\\\\\n\\hline\n';
+	var hline = "\n\\\\\n\\hline\n";
 	return (
-		'\\begin{table}[h]' +
-		'\\begin{tabular}{' + (new Array(cellsInFirstRow)).fill('|l').join('') + '|' + '}' +
-		'\n\\hline\n' +
+		"\\begin{table}[h]" +
+		"\\begin{tabular}{" + (new Array(cellsInFirstRow)).fill("|l").join("") + "|" + "}" +
+		"\n\\hline\n" +
 		answersParsedToTeX.join(hline) +
 		hline +
-		'\\end{tabular}' +
-		'\\end{table}' +
-		'\n\n\n'
+		"\\end{tabular}" +
+		"\\end{table}" +
+		"\n\n\n"
 	);
 }
 
@@ -480,39 +477,40 @@ function replaceCanvasWithImgInTask(element, text) {
 		return text;
 	}
 	var canvases = Array.from(element.getElementsByTagName('canvas'));
-	console.log(canvases);
 	for (var i = 0; i < canvases.length; i++) {
-		var imageName = canvases[i].getAttribute('data-nonce').substr(3) + "n" + i;
-		preparedImages[imageName] = canvases[i].toDataURL().replace('data:image/png;base64,', '');
-		text = text.replace(/<canvas.*?<\/canvas>/, '\\addpictoright[]{' + imageName + '}');
+		var imageName = canvases[i].getAttribute("data-nonce").substr(3) + "n" + i;
+		preparedImages[imageName] = canvases[i].toDataURL().replace("data:image/png;base64,", "");
+		text = text.replace(/<canvas.*?<\/canvas>/, "\\addpictoright[0.4\\linewidth]{" + imageName + "}");
+		text += "\\vspace{2.5cm}";
 	}
 	return text;
 }
 
 function createLaTeXbunch(variantN) {
-	var bunchText = '';
+	var bunchText = "";
 	for (var taskId in tasksInLaTeX) {
 		if (generatedTasks[taskId].variantNumber == variantN) {
 			bunchText +=
-				'\n' +
-				'\\begin{taskBN}{' + generatedTasks[taskId].taskCategory + '}' + '\n' +
-				tasksInLaTeX[taskId] + '\n' +
-				'\\end{taskBN}' + '\n';
+				"\n" +
+				"\\begin{taskBN}{" + generatedTasks[taskId].taskCategory + "}" + "\n" +
+				tasksInLaTeX[taskId] + "\n" +
+				"\\end{taskBN}\n\n";
 		}
 
 	}
-	return bunchText + '\n\\newpage\n Ответы\n\n' + getAnswersTableLaTeX(variantN) + '\n\\newpage\n';
-}
+	return bunchText;
 
+}
+//replace "sometext" with tasks
 function createLaTeXbunchTab(variantN) {
-	var bunchTextTab = '\\begin{tabular}{*{4}{|p{0.23\\textwidth}}|}\n' + '\\hline\n' + 'sometext &\n' + 'sometext &\n' + 'sometext &\n' + 'sometext \\\\\n' + '\\answersTable\n' + 'sometext &\n' + 'sometext &\n' + 'sometext &\n' + 'sometext\\\\\n' + '\\answersTable\n' + 'sometext &\n' + 'sometext &\n' + 'sometext &\n' + '\\addpictocenter[scale=0.3]{../../logo.png}\\\\\n' + '\\answersTable\n' + '\\end{tabular}\n';
+	var bunchTextTab = "\\begin{tabular}{*{4}{|p{0.23\\textwidth}}|}\n" + "\\hline\n" + "sometext &\n" + "sometext &\n" + "sometext &\n" + "sometext \\\\\n" + "\\answersTable\n" + "sometext &\n" + "sometext &\n" + "sometext &\n" + "sometext\\\\\n" + "\\answersTable\n" + "sometext &\n" + "sometext &\n" + "sometext &\n" + "picture" + "\\answersTableScore\n" + "\\end{tabular}\n\n\n";
 	for (var taskId in tasksInLaTeX) {
 		if (generatedTasks[taskId].variantNumber == variantN) {
-			bunchTextTab = bunchTextTab.replace('sometext', '\\textbf{'+generatedTasks[taskId].taskCategory+') }'+tasksInLaTeX[taskId]);
+			bunchTextTab = bunchTextTab.replace("sometext", "\\textbf{" + generatedTasks[taskId].taskCategory + ") }" + tasksInLaTeX[taskId]);
 		}
 
 	}
-	return bunchTextTab + '\n\\newpage\n Ответы\n\n' + getAnswersTableLaTeX(variantN) + '\n\\newpage\n';
+	return bunchTextTab;
 }
 
 
@@ -521,27 +519,47 @@ function refreshLaTeXarchive() {
 		return;
 	}
 	var zip = new JSZip();
-	var bunch = "";
-	var bunchTab = "";
+	var bunch = "\\begin{document}\n\n\\";
+	var bunchAnsw = "\\begin{document}\n\n";
+	var bunchTab = "\\begin{document}\n\n";
+	var bunchTabAnsw = "\\begin{document}\n\n";
+	var answersForTab = "\\begin{document}\n\n\\begin{tabular}{*{"+variantsGenerated.length+"}{l}\n\\\\hline}";
+	let answers=[];
 	for (var variantN of variantsGenerated) {
 		bunch +=
-			'\n\n\n\n' +
-			'\\cleardoublepage\n' +
-			'\\def\\examvart{Вариант ' + variantN + '}\n' +
-			'\\normalsize\n\\input{instruction.tex}\n\\startpartone\n\\large' +
-			'\n\n\n\n' +
-			createLaTeXbunch(variantN);
-
+			"\n\\def\\examvart{Вариант " + variantsGenerated[0] + "." + variantN + "}" +
+			"\\normalsize\n\\input{../instruction.tex}\n\\large" +
+			"\n\n\n\n" +
+			createLaTeXbunch(variantN) + "\\clearpage\n\n";
+		bunchAnsw +=
+			"\n\\def\\examvart{Вариант " + variantsGenerated[0] + "." + variantN + "}" +
+			"\n\\normalsize\n\\input{../instruction.tex}\n\\large" +
+			"\n\n\n\n" +
+			createLaTeXbunch(variantN) + "\n\\newpage\n Ответы\n\n" + getAnswersTableLaTeX(variantN) + "\\clearpage\n\n";
 		bunchTab +=
-			'\n\n\n\n' +
-			'\\cleardoublepage\n' +
-			'\\def\\examvart{Вариант ' + variantN + '}\n' +
-			'\\normalsize\n\\input{instruction.tex}\n\\startpartone\n\\large' +
-			'\n\n\n\n' +
-			createLaTeXbunchTab(variantN);
+			createLaTeXbunchTab(variantN).replaceAll("\\vspace{2.5cm}", "").replaceAll("[0.4\\linewidth]", "");
+		bunchTabAnsw +=
+			createLaTeXbunchTab(variantN).replaceAll("\\vspace{2.5cm}", "").replaceAll("[0.4\\linewidth]", "") + "\\clearpage\n\n";
+		answers.push(getAnswersTableLaTeX(variantN));
 	}
-	zip.file("tasks.tex", bunch);
-	zip.file("tasksTab.tex", bunchTab);
+	bunch += "\\end{document}";
+	bunchAnsw += "\\end{document}";
+	bunchTab += "\\end{document}";
+	bunchTabAnsw += "\\end{document}";
+	answersForTab += answers.join(" & ")+"\\\\\n\\end{tabular}\n\n\\end{document}";
+
+	zip.file("variant_" + variantsGenerated[0] + "_no_answers.tex", preambula + bunch);
+
+	zip.file("variant_" + variantsGenerated[0] + ".tex", preambula + hyperref + bunchAnsw);
+
+	zip.file("variant_" + variantsGenerated[0] + "_watermark.tex", preambula + watermark + hyperref + bunch);
+
+	zip.file("ecoKIM_" + variantsGenerated[0] + "_watermark.tex", preambulaForTab + bunchTab.replaceAll("picture","\\addpictocenter[scale=0.3]{../logo.png}\\\\\n"));
+
+	zip.file("ecoKIM_" + variantsGenerated[0] + ".tex", preambulaForTab + bunchTabAnsw.replaceAll("picture","\\form\\\\\n"));
+
+	zip.file("answers.tex", preambula + answersForTab);
+
 	var img = zip.folder("images");
 	for (var i in preparedImages) {
 		img.file(i + ".png", preparedImages[i], { base64: true });
@@ -551,3 +569,11 @@ function refreshLaTeXarchive() {
 		$('#latex-archive-placeholder')[0].href = "data:application/zip;base64," + base64;
 	});
 }
+
+var preambula = "\\documentclass[twocolumn]{article}\n\\usepackage{dashbox}\n\\setlength{\\columnsep}{40pt}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{graphicx}\n\\graphicspath{{images/}}\n\\DeclareGraphicsExtensions{.pdf,.png,.jpg}\n\n\\linespread{1.15}\n\n\\usepackage{../../egetask}\n\\usepackage{../../egetask-math-11-2022}\n\n\\def\\examyear{2023}\n\\usepackage[colorlinks,linkcolor=blue]{hyperref}";
+
+var hyperref = "\\def\\rfoottext{Разрешается свободное копирование в некоммерческих целях с указанием источника }\n\\def\\0.4lfoottext{Источник \\href{https://vk.com/egemathika}{https://vk.com/egemathika}}";
+
+var watermark = "\\usepackage{draftwatermark}\n\\SetWatermarkLightness{0.9}\n\\SetWatermarkText{https://vk.com/egemathika}\n\\SetWatermarkScale{ 0.4 }\n";
+
+var preambulaForTab = "\\documentclass[a4paper,landscape,9pt]{extarticle}" + "\\usepackage{dashbox}\n" + "\\setlength{\\columnsep}{40pt}\n" + "\\usepackage[T2A]{fontenc}\n" + "\\usepackage[utf8]{inputenc}\n" + "\\usepackage[english,russian]{babel}\n" + "\\usepackage{graphicx}\n" + "\\usepackage{multirow}\n\n" + "\\graphicspath{{images/}}\n\n" + "\\usepackage{egetask_alternative}\n\n" + "\\linespread{1.15}\n\n";
