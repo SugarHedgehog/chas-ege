@@ -118,7 +118,7 @@ function konecSozd() {
 			tasksInLaTeX[id] = replaceCanvasWithImgInTask(
 				getTaskTextContainerByTaskId(id),
 				generatedTasks[id].txt
-			).replace(/\\?%/g, '\\%').replace(/<br>/g, '\\\\').replace(/<br\/>/g, '\\\\').replace(/<b>/g, '\\textbf{').replace(/<\/b>/g, '}');
+			).replace(/\\?%/g, '\\%').replace(/<br>/g, '\\\\').replace(/<br\/>/g, '\\\\').replace(/<b>/g, '\\textbf{').replace(/<\/b>/g, '}').replace(/"/g,'\\textquotedbl');
 		}
 	}
 
@@ -503,7 +503,7 @@ function createLaTeXbunch(variantN) {
 }
 //replace "sometext" with tasks
 function createLaTeXbunchTab(variantN) {
-	var bunchTextTab = "\\begin{tabular}{*{4}{|p{0.23\\textwidth}}|}\n" + "\\hline\n" + "sometext &\n" + "sometext &\n" + "sometext &\n" + "sometext \\\\\n" + "\\answersTable\n" + "sometext &\n" + "sometext &\n" + "sometext &\n" + "sometext\\\\\n" + "\\answersTable\n" + "sometext &\n" + "sometext &\n" + "sometext &\n" + "picture" + "\\answersTableScore\n" + "\\end{tabular}\n\n\n";
+	var bunchTextTab = "\\begin{tabular}{*{4}{|p{0.23\\textwidth}}|}\n" + "\\hline\n" + "sometext &\n" + "sometext &\n" + "sometext &\n" + "sometext \\\\\n" + "\\answersTable\n" + "sometext &\n" + "sometext &\n" + "sometext &\n" + "sometext\\\\\n" + "\\answersTable\n" + "sometext &\n" + "sometext &\n" + "sometext &\n" + "sometext\\\\\n" + "\\answersTable\n" + "\\end{tabular}\n\n\n";
 	for (var taskId in tasksInLaTeX) {
 		if (generatedTasks[taskId].variantNumber == variantN) {
 			bunchTextTab = bunchTextTab.replace("sometext", "\\textbf{" + generatedTasks[taskId].taskCategory + ") }" + tasksInLaTeX[taskId]);
@@ -523,7 +523,7 @@ function refreshLaTeXarchive() {
 	var bunchAnsw = "\\begin{document}\n\n";
 	var bunchTab = "\\begin{document}\n\n";
 	var bunchTabAnsw = "\\begin{document}\n\n";
-	var answersForTab = "\\begin{document}\n\n\\begin{tabular}{*{"+variantsGenerated.length+"}{l}\n\\\\hline}";
+	var answersForTab = "\\begin{document}\n\n\\begin{tabular}{*{"+variantsGenerated.length+"}{l}\n\n}";
 	let answers=[];
 	for (var variantN of variantsGenerated) {
 		bunch +=
@@ -554,11 +554,11 @@ function refreshLaTeXarchive() {
 
 	zip.file("variant_" + variantsGenerated[0] + "_watermark.tex", preambula + watermark + hyperref + bunch);
 
-	zip.file("ecoKIM_" + variantsGenerated[0] + "_watermark.tex", preambulaForTab + bunchTab.replaceAll("picture","\\addpictocenter[scale=0.3]{../logo.png}\\\\\n"));
+	zip.file("ecoKIM_" + variantsGenerated[0] + "_watermark.tex", preambulaForTab + watermark + bunchTab);
 
-	zip.file("ecoKIM_" + variantsGenerated[0] + ".tex", preambulaForTab + bunchTabAnsw.replaceAll("picture","\\form\\\\\n"));
+	zip.file("ecoKIM_" + variantsGenerated[0] + ".tex", preambulaForTab + bunchTabAnsw);
 
-	zip.file("answers.tex", preambula + answersForTab);
+	zip.file("answers.tex", "\\documentclass[a5paper]{article}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\n" + answersForTab);
 
 	var img = zip.folder("images");
 	for (var i in preparedImages) {
@@ -572,7 +572,7 @@ function refreshLaTeXarchive() {
 
 var preambula = "\\documentclass[twocolumn]{article}\n\\usepackage{dashbox}\n\\setlength{\\columnsep}{40pt}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{graphicx}\n\\graphicspath{{images/}}\n\\DeclareGraphicsExtensions{.pdf,.png,.jpg}\n\n\\linespread{1.15}\n\n\\usepackage{../../egetask}\n\\usepackage{../../egetask-math-11-2022}\n\n\\def\\examyear{2023}\n\\usepackage[colorlinks,linkcolor=blue]{hyperref}";
 
-var hyperref = "\\def\\rfoottext{Разрешается свободное копирование в некоммерческих целях с указанием источника }\n\\def\\0.4lfoottext{Источник \\href{https://vk.com/egemathika}{https://vk.com/egemathika}}";
+var hyperref = "\\def\\rfoottext{Разрешается свободное копирование в некоммерческих целях с указанием источника }\n\\def\\lfoottext{Источник \\href{https://vk.com/egemathika}{https://vk.com/egemathika}}";
 
 var watermark = "\\usepackage{draftwatermark}\n\\SetWatermarkLightness{0.9}\n\\SetWatermarkText{https://vk.com/egemathika}\n\\SetWatermarkScale{ 0.4 }\n";
 
