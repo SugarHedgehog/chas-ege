@@ -153,9 +153,9 @@ function bumpVariantNumber() {
 	variantsGenerated.push(variantNumber);
 }
 
-function appendVariantTasksCaption() {
-	if (!options.vanishVariants) {
-		strVopr += '<h2 class="d">Вариант №' + variantNumber + '</h2>';
+function appendVariantTasksCaption(){
+	if(!options.vanishVariants){
+		strVopr+='<h2 class="d">Контрольная работа №'+variantNumber+'</h2>';
 	}
 }
 
@@ -446,7 +446,7 @@ function removeGridFields() {
 
 
 function getAnswersSubtableLaTeX(cellsInFirstRow, answersParsedToTeX) {
-	var hline = "\n\\\\\n\\hline\n";
+	var hline = "\n\n\\hline\n";
 	return (
 		'\\begin{table}[h]' +
 			'\\begin{tabular}{' + (new Array(cellsInFirstRow)).fill('|l').join('')+ '|' + '}' +
@@ -512,16 +512,20 @@ function refreshLaTeXarchive(){
 	}
 	var zip = new JSZip();
 	var bunch = "";
-	for(var variantN of variantsGenerated){
-		bunch +=
-			'\n\n\n\n' +
-			'\\cleardoublepage\n' +
-			'\\def\\examvart{Вариант ' + variantN + '}\n' +
-			'\\normalsize\n\\input{instruction.tex}\n\\startpartone\n\\large' +
-			'\n\n\n\n' +
-			createLaTeXbunch(variantN);
+	var answ = "";
+	for (var variantN of variantsGenerated) {
+		bunch += '\n\n\\section{Вариант}\n'+createLaTeXbunch(variantN)+'\n\n\\newpage';
+		answ += '\n\n\\section{Вариант}\n'+getAnswersTableLaTeX(variantN);
 	}
-	zip.file("tasks.tex", bunch);
+
+	//zip.file("task.tex", preambula+'\n\n\\begin{document}'+bunch+'\n\\end{document}');
+
+	zip.file("vector" + ".tex", preambula + '\n\n\\begin{document}' + bunch + '\n\\newpage\n ' + '\n' + '\\end{document}');
+
+	zip.file("answers" + ".tex", preambula + '\n\n\\begin{document}' + answ + '\\end{document}');
+
+	zip.file("vector_watermark.tex", preambula + watermark + hyperref + '\n\n\\begin{document}' + bunch + '\\end{document}');
+
 	var img = zip.folder("images");
 	for (var i in preparedImages) {
 		img.file(i + ".png", preparedImages[i], { base64: true });
@@ -531,3 +535,9 @@ function refreshLaTeXarchive(){
 		$('#latex-archive-placeholder')[0].href = "data:application/zip;base64," + base64;
 	});
 }
+
+var preambula = ['\\documentclass[a4paper]{article}\n\\usepackage{dashbox}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{graphicx}\n\\DeclareGraphicsExtensions{.pdf,.png,.jpg}\n\n\\linespread{1.15}\n\n\\usepackage{egetask_alternative}\n\n\\def\\examyear{2023}\n\\usepackage[colorlinks,linkcolor=blue]{hyperref}\n\n\\usepackage{tikz}']
+
+var hyperref = '\\def\\lfoottext{Источник \\href{https://vk.com/egemathika}{https://vk.com/egemathika}}';
+
+var watermark = '\\usepackage{draftwatermark}\n\\SetWatermarkLightness{0.9}\n\\SetWatermarkText{https://vk.com/egemathika}\n\\SetWatermarkScale{ 0.4 }\n';
