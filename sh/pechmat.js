@@ -443,13 +443,11 @@ function removeGridFields() {
 function getAnswersSubtableLaTeX(cellsInFirstRow, answersParsedToTeX) {
 	var hline = "\n\\\\\n\\hline\n";
 	return (
-		"\\begin{table}[h]" +
 		"\\begin{tabular}{" + (new Array(cellsInFirstRow)).fill("|l").join("") + "|" + "}" +
 		"\n\\hline\n" +
 		answersParsedToTeX.join(hline) +
 		hline +
 		"\\end{tabular}" +
-		"\\end{table}" +
 		"\n\n\n"
 	);
 }
@@ -503,7 +501,7 @@ function createLaTeXbunch(variantN) {
 }
 //replace "sometext" with tasks
 function createLaTeXbunchTab(variantN) {
-	var bunchTextTab = "\\begin{tabular}{*{4}{|p{0.23\\textwidth}}|}\n" + "\\hline\n" + "sometext &\n" + "sometext &\n" + "sometext &\n" + "sometext \\\\\n" + "\\answersTable\n" + "sometext &\n" + "sometext &\n" + "sometext &\n" + "sometext\\\\\n" + "\\answersTable\n" + "sometext &\n" + "sometext &\n" + "sometext &\n" + "picture" + "\\answersTableScore\n" + "\\end{tabular}\n\n\n";
+	var bunchTextTab = "\\begin{tabular}{*{4}{|p{0.23\\textwidth}}|}\n" + "\\hline\n" + "sometext &\n" + "sometext &\n" + "sometext &\n" + "sometext \\\\\n" + "\\answersTable\n" + "sometext &\n" + "sometext &\n" + "sometext &\n" + "sometext\\\\\n" + "\\answersTable\n" + "sometext &\n" + "sometext &\n" + "sometext &\n" + "sometext\\\\\n" + "\\answersTable\n"+ "\\end{tabular}\n\n\n";
 	for (var taskId in tasksInLaTeX) {
 		if (generatedTasks[taskId].variantNumber == variantN) {
 			bunchTextTab = bunchTextTab.replace("sometext", "\\textbf{" + generatedTasks[taskId].taskCategory + ") }" + tasksInLaTeX[taskId]);
@@ -523,7 +521,7 @@ function refreshLaTeXarchive() {
 	var bunchAnsw = "\\begin{document}\n\n";
 	var bunchTab = "\\begin{document}\n\n";
 	var bunchTabAnsw = "\\begin{document}\n\n";
-	var answersForTab = "\\begin{document}\n\n\\begin{tabular}{*{"+variantsGenerated.length+"}{l}\n\\\\hline}";
+	var answersForTab = "\\begin{document}\n\n\\begin{tabular}{*{"+variantsGenerated.length+"}{l}}";
 	let answers=[];
 	for (var variantN of variantsGenerated) {
 		bunch +=
@@ -558,7 +556,7 @@ function refreshLaTeXarchive() {
 
 	zip.file("ecoKIM_" + variantsGenerated[0] + ".tex", preambulaForTab + bunchTabAnsw.replaceAll("picture","\\form\\\\\n"));
 
-	zip.file("answers.tex", preambula + answersForTab);
+	zip.file("answers.tex", preambulaForAnsw + answersForTab);
 
 	var img = zip.folder("images");
 	for (var i in preparedImages) {
@@ -570,7 +568,9 @@ function refreshLaTeXarchive() {
 	});
 }
 
-var preambula = "\\documentclass[twocolumn]{article}\n\\usepackage{dashbox}\n\\setlength{\\columnsep}{40pt}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{graphicx}\n\\graphicspath{{images/}}\n\\DeclareGraphicsExtensions{.pdf,.png,.jpg}\n\n\\linespread{1.15}\n\n\\usepackage{../../egetask}\n\\usepackage{../../egetask-math-11-2022}\n\n\\def\\examyear{2023}\n\\usepackage[colorlinks,linkcolor=blue]{hyperref}";
+var preambula = "\\documentclass[twocolumn]{article}\n\\usepackage{dashbox}\n\\setlength{\\columnsep}{40pt}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{graphicx}\n\\graphicspath{{images/}}\n\\DeclareGraphicsExtensions{.pdf,.png,.jpg}\n\n\\linespread{1.15}\n\n\\usepackage{../../egetask}\n\\usepackage{../../egetask-math-11-2022}\n\n\\def\\examyear{2024}\n\\usepackage[colorlinks,linkcolor=blue]{hyperref}";
+
+var preambulaForAnsw = "\\documentclass[a4paper]{article}\n\\usepackage{dashbox}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\n\\linespread{1.15}";
 
 var hyperref = "\\def\\rfoottext{Разрешается свободное копирование в некоммерческих целях с указанием источника }\n\\def\\0.4lfoottext{Источник \\href{https://vk.com/egemathika}{https://vk.com/egemathika}}";
 
