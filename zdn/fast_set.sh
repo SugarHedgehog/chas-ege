@@ -1,4 +1,15 @@
-array=(26663 77383 77384 1 26664 509570 773101 282849 77371 26667 26665 77366 77367 77369 77370 77368 101879 10 26668 628738 6 26671 4 5 77379 26650 2 3 7 8 26648 77380 77382 525399 9 77381 315120 315535 11)
+array=()
+
+if [[ ${#array[@]} -eq 0 ]]; then
+     echo "change array in file"
+fi
+
+result=${PWD##*/}
+result=${result:-/} 
+touch $result.js
+printf "if (!window.nabor)\n\twindow.nabor = {};\nwindow.nabor.importFrom({\n\tnZad: "${#array[@]}",\n \tadres: '../zdn/"$result"',\n" >> $result.js
+printf "\tname: '"$result"',\n});\n" >> $result.js
+
 cd "./"
 i=1;
 for index in ${!array[*]}
@@ -16,4 +27,5 @@ cd ..;
 done
 
 #переходим в общую папку набора
+
 #.././fast_set.sh ../../matege2023p/5
