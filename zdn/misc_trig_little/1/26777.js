@@ -10,6 +10,8 @@
 		let givenFn = ['sin', 'cos', ].shuffle();
 		let askedFn = givenFn.pop();
 
+		genAssert(math.evaluate(expr).abs() < 1, 'Синус и косинус не могут превышать 1 по модулю');
+
 		let quarter = sl(0, 3);
 
 		let leftBound = quarter.texfracpi(2);
