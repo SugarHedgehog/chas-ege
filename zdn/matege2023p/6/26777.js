@@ -7,8 +7,7 @@
 		let value = math.parse(expr);
 		value = math.simplify(value, mathjsRules.omit1sqrt);
 
-		let rand = sl1();
-		let givenFn = ['sin', 'cos', ][rand];
+		let givenFn = ['sin', 'cos', ].shffle();
 		let askedFn = ['sin', 'cos', ][1 - rand];
 
 		let quarter = sl(0, 3);
