@@ -445,13 +445,11 @@ function removeGridFields() {
 function getAnswersSubtableLaTeX(cellsInFirstRow, answersParsedToTeX) {
 	var hline = "\n\\\\\n\\hline\n";
 	return (
-		"\\begin{table}[h]" +
 		"\\begin{tabular}{" + (new Array(cellsInFirstRow)).fill("|l").join("") + "|" + "}" +
 		"\n\\hline\n" +
 		answersParsedToTeX.join(hline) +
 		hline +
 		"\\end{tabular}" +
-		"\\end{table}" +
 		"\n\n\n"
 	);
 }
@@ -505,7 +503,7 @@ function createLaTeXbunch(variantN) {
 }
 //replace "sometext" with tasks
 function createLaTeXbunchTab(variantN) {
-	var bunchTextTab = "\\begin{tabular}{*{4}{|p{0.23\\textwidth}}|}\n" + "\\hline\n" + "sometext &\n" + "sometext &\n" + "sometext &\n" + "sometext \\\\\n" + "\\answersTable\n" + "sometext &\n" + "sometext &\n" + "sometext &\n" + "sometext\\\\\n" + "\\answersTable\n" + "sometext &\n" + "sometext &\n" + "sometext &\n" + "sometext" + "\\answersTable\n" + "\\end{tabular}\n\n\n";
+	var bunchTextTab = "\\begin{tabular}{*{4}{|p{0.23\\textwidth}}|}\n" + "\\hline\n" + "sometext &\n" + "sometext &\n" + "sometext &\n" + "sometext \\\\\n" + "\\answersTable\n" + "sometext &\n" + "sometext &\n" + "sometext &\n" + "sometext\\\\\n" + "\\answersTable\n" + "sometext &\n" + "sometext &\n" + "sometext &\n" + "sometext\\\\\n" + "\\answersTable\n" + "\\end{tabular}\n\n\n";
 	for (var taskId in tasksInLaTeX) {
 		if (generatedTasks[taskId].variantNumber == variantN) {
 			bunchTextTab = bunchTextTab.replace("sometext", "\\textbf{" + generatedTasks[taskId].taskCategory + ") }" + tasksInLaTeX[taskId]);
@@ -522,37 +520,27 @@ function refreshLaTeXarchive() {
 	}
 	var zip = new JSZip();
 	var bunch = "\\begin{document}\n\n\\";
-	var bunchAnsw = "\\begin{document}\n\n";
 	var bunchTab = "\\begin{document}\n\n";
 	var bunchTabAnsw = "\\begin{document}\n\n";
-	var answersForTab = "\\begin{document}\n\n\\begin{tabular}{*{"+variantsGenerated.length+"}{l}\n\\\\hline}";
-	let answers=[];
+	var answers = "\\begin{document}\n\n\\begin{multicols}{"+variantsGenerated.length+"}";
 	for (var variantN of variantsGenerated) {
 		bunch +=
-			"\n\\def\\examvart{Вариант " + variantsGenerated[0] + "." + variantN + "}" +
+			"\n\\def\\examvart{Вариант " + variantsGenerated[0] + "." + (variantN%variantsGenerated[0]+1) + "}" +
 			"\\normalsize\n\\input{../instruction.tex}\n\\large" +
 			"\n\n\n\n" +
 			createLaTeXbunch(variantN) + "\\clearpage\n\n";
-		bunchAnsw +=
-			"\n\\def\\examvart{Вариант " + variantsGenerated[0] + "." + variantN + "}" +
-			"\n\\normalsize\n\\input{../instruction.tex}\n\\large" +
-			"\n\n\n\n" +
-			createLaTeXbunch(variantN) + "\n\\newpage\n Ответы\n\n" + getAnswersTableLaTeX(variantN) + "\\clearpage\n\n";
 		bunchTab +=
 			createLaTeXbunchTab(variantN).replaceAll("\\vspace{2.5cm}", "").replaceAll("[0.4\\linewidth]", "");
 		bunchTabAnsw +=
 			createLaTeXbunchTab(variantN).replaceAll("\\vspace{2.5cm}", "").replaceAll("[0.4\\linewidth]", "") + "\\clearpage\n\n";
-		answers.push(getAnswersTableLaTeX(variantN));
+		answers+= getAnswersTableLaTeX(variantN);
 	}
 	bunch += "\\end{document}";
-	bunchAnsw += "\\end{document}";
 	bunchTab += "\\end{document}";
 	bunchTabAnsw += "\\end{document}";
-	answersForTab += answers.join(" & ")+"\\\\\n\\end{tabular}\n\n\\end{document}";
+	answers += "\n\n\\end{multicols}\n\n\\end{document}";
 
-	zip.file("variant_" + variantsGenerated[0] + "_no_answers.tex", preambula + bunch);
-
-	zip.file("variant_" + variantsGenerated[0] + ".tex", preambula + hyperref + bunchAnsw);
+	zip.file("variant_" + variantsGenerated[0] + ".tex", preambula + hyperref + bunch);
 
 	zip.file("variant_" + variantsGenerated[0] + "_watermark.tex", preambula + watermark + hyperref + bunch);
 
@@ -560,7 +548,7 @@ function refreshLaTeXarchive() {
 
 	zip.file("ecoKIM_" + variantsGenerated[0] + ".tex", preambulaForTab + bunchTabAnsw);
 
-	zip.file("answers.tex", "\\documentclass[a5paper]{article}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\n" + answersForTab);
+	zip.file("answers.tex", "\\documentclass[a5paper]{article}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{multicol}\n\n" + answers);
 
 	var img = zip.folder("images");
 	for (var i in preparedImages) {
@@ -574,8 +562,8 @@ function refreshLaTeXarchive() {
 
 var preambula = "\\documentclass[twocolumn]{article}\n\\usepackage{dashbox}\n\\setlength{\\columnsep}{40pt}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{graphicx}\n\\graphicspath{{images/}}\n\\DeclareGraphicsExtensions{.pdf,.png,.jpg}\n\n\\linespread{1.15}\n\n\\usepackage{../../egetask}\n\\usepackage{../../egetask-math-11-2022}\n\n\\def\\examyear{2023}\n\\usepackage[colorlinks,linkcolor=blue]{hyperref}";
 
-var hyperref = "\\def\\rfoottext{Разрешается свободное копирование в некоммерческих целях с указанием источника }\n\\def\\0.4lfoottext{Источник \\href{https://vk.com/egemathika}{https://vk.com/egemathika}}";
+var hyperref = "\\def\\rfoottext{Разрешается свободное копирование в некоммерческих целях с указанием источника }\n\\def\\lfoottext{Источник \\href{https://vk.com/egemathika}{https://vk.com/egemathika}}";
 
 var watermark = "\\usepackage{draftwatermark}\n\\SetWatermarkLightness{0.9}\n\\SetWatermarkText{https://vk.com/egemathika}\n\\SetWatermarkScale{ 0.4 }\n";
 
-var preambulaForTab = "\\documentclass[a4paper,landscape,9pt]{extarticle}" + "\\usepackage{dashbox}\n" + "\\setlength{\\columnsep}{40pt}\n" + "\\usepackage[T2A]{fontenc}\n" + "\\usepackage[utf8]{inputenc}\n" + "\\usepackage[english,russian]{babel}\n" + "\\usepackage{graphicx}\n" + "\\usepackage{multirow}\n\n" + "\\graphicspath{{images/}}\n\n" + "\\usepackage{egetask_alternative}\n\n" + "\\linespread{1.15}\n\n";
+var preambulaForTab = "\\documentclass[landscape,9pt]{extarticle}\n" + "\\usepackage{dashbox}\n" + "\\setlength{\\columnsep}{40pt}\n" + "\\usepackage[T2A]{fontenc}\n" + "\\usepackage[utf8]{inputenc}\n" + "\\usepackage[english,russian]{babel}\n" + "\\usepackage{graphicx}\n" + "\\usepackage{multirow}\n\n" + "\\graphicspath{{images/}}\n\n" + "\\usepackage{egetask_alternative}\n\n" + "\\linespread{1.15}\n\n";
