@@ -7,34 +7,25 @@
 
 		let letterForQuestion = letter.pop();
 
-		let vectorA = generateMatrix(1, 4, 1, 13).iz();
-		let vectorB = generateMatrix(1, 4, 1, 13).iz();
-		let vectorC = generateMatrix(1, 4, 1, 13).iz();
 
-		let coordVect = (V) => [V[2] - V[0], V[3] - V[1]];
-
-		let coordA = coordVect(vectorA);
-		let coordB = coordVect(vectorB);
-		let coordC = coordVect(vectorC);
+		let coordA = generateMatrix(1, 2, 1, 13).iz();
+		let coordB = generateMatrix(1, 2, 1, 13).iz();
+		let coordC = generateMatrix(1, 2, 1, 13).iz();
 
 		genAssert(coordA.sum(), 'Первый вектор зануляет выражение');
 
 		genAssert(!coordA.equalAr(coordB), 'Вектора A и B совпадают');
 		genAssert(!coordA.equalAr(coordC), 'Вектора A и C совпадают');
 
-		let lengthA = coordA.map((elem) => elem.pow(2)).sum();
-		let lengthB = coordB.map((elem) => elem.pow(2)).sum();
-		let lengthC = coordC.map((elem) => elem.pow(2)).sum();
-
 		let coeffs = [
 			[sl(1, 10).pm(), sl(2, 20)],
 			[sl(1, 10).pm(), sl(2, 20)],
-			[sl(1, 10).pm(), sl(2, 20)]
+			[sl(1, 10).pm(), sl(2, 20)],
 		];
 		let vectors = [coordA.slice(), coordB.slice(), coordC.slice()];
 		let rand = sl(0, 2);
 		let answ;
-		let vectorsView = vectors.slice().map((elem, index) => {
+		let vectorsView = vectors.copyAr().map((elem, index) => {
 			if (index == rand) {
 				let r = sl1();
 				answ = elem[r];
@@ -43,37 +34,42 @@
 			return '$\\overrightarrow{' + letter[index] + '}(' + elem.join(' ;') + ')$';
 		});
 
-		console.log(vectorsView);
 
 		vectors = vectors.map((elem, index) => objUmn(elem, coeffs[index][0] / coeffs[index][1]));
 
-		let scal = objSum(vectors[1], vectors[2]);
+		let scal =(coordA,coordB)=> coordA[0] * coordB[0] + coordA[1] * coordB[1];
+		
+		let finalVector = objSum(vectors[1],vectors[2]);
+		genAssert(!finalVector.sum(), 'Cкобка занулилась');
+		
+		finalVector = scal(finalVector,vectors[0]);
 
-		let sk = scal.slice();
+		genAssertZ1000(finalVector, 'Нецелое скалярное произведение');
 
-		//genAssert(!scal.sum(), 'Cкобка занулилась');
+		let vec = (l) => '\\vec{' + l + '}';
 
-		scal = vectors[0][0] * scal[0] + vectors[0][1] * scal[1];
-
-		genAssertZ1000(scal, 'Нецелое скалярное произведение');
-
-
-
-		let condition = (coeffs[0][0].texrndfrac(coeffs[0][1]) + '\\vec{' + letter[0] + '}\\cdot(');
-		condition += (coeffs[1][0].texrndfrac(coeffs[1][1]) + '\\vec{' + letter[1] + '}' + '+'.esli(coeffs[2][0] > 0) +
-			coeffs[2][0].texrndfrac(coeffs[2][1]) + '\\vec{' + letter[2] + '})=' + scal.ts());
+		let condition =
+			coeffs[0][0].texrndfrac(coeffs[0][1]) + vec(letter[0]) + '\\cdot(' +
+			coeffs[1][0].texrndfrac(coeffs[1][1]) + vec(letter[1]) + '+'.esli(coeffs[2][0] > 0) +
+			coeffs[2][0].texrndfrac(coeffs[2][1]) + vec(letter[2]) + ')=' + finalVector.ts();
 
 		NAtask.setTask({
 			text: 'Даны векторы ' + vectorsView.joinWithConjunction() + '. Найдите $' + letterForQuestion +
-				'$, если $' + condition + '$.',
+				'$, если $' +
+				condition.plusminus().
+			replace(/\(\s*1\s*(?=\\vec)/g, '(').
+			replace(/\+\s*1\s*(?=\\vec)/g, '+').
+			replace(/\-\s*1\s*(?=\\vec)/g, '-').
+			replace(/\{\-1\}\s*(?=\\vec)/g, '-') +
+			'$.',
 			answers: answ,
-			analys: '$(' + coeffs[1][0].texrndfrac(coeffs[1][1]) + '\\vec{' + letter[1] + '}' + '+'.esli(coeffs[2][0] > 0) +
-				coeffs[2][0].texrndfrac(coeffs[2][1]) + '\\vec{' + letter[2] + '})=\\{' + sk.join(' ;') + '\\}$' + '<br>' +
-				'$\\overrightarrow{' + letter[0] + '}=\\{' + coordA.join(' ;') + '\\}$' + '<br>' +
-				'$\\overrightarrow{' + letter[1] + '}=\\{' + coordB.join(' ;') + '\\}$' + '<br>' +
-				'$\\overrightarrow{' + letter[2] + '}=\\{' + coordC.join(' ;') + '\\}$',
+			analys: //'$(' + coeffs[1][0].texrndfrac(coeffs[1][1]) + '\\vec{' + letter[1] + '}' + '+'.esli(coeffs[2][0] > 0) +'$'+
+				//coeffs[2][0].texrndfrac(coeffs[2][1]) + '\\vec{' + letter[2] + '})=(' + sk.join(' ;') + ')$' + '<br>' +
+				'$\\overrightarrow{' + letter[0] + '}=(' + coordA.join(' ;') + ')$' + '<br>' +
+				'$\\overrightarrow{' + letter[1] + '}=(' + coordB.join(' ;') + ')$' + '<br>' +
+				'$\\overrightarrow{' + letter[2] + '}=(' + coordC.join(' ;') + ')$',
 			author: 'Суматохина Александра',
 		});
 	}, 100000);
 })();
-//TODO: НИХРЕНА НЕ ПРАВИЛЬНО СЧИТАЕТ
+
