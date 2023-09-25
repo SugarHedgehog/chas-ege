@@ -3,6 +3,8 @@
 		NAinfo.requireApiVersion(0, 2);
 
 		let vectorsName = window.smallLatinLetters.iz(5);
+		
+		let vectorForQuestion = vectorsName.pop();
 
 		let vectA = [sl(-20, 20), sl(-20, 20)];
 		let vectB = [slKrome(vectA[0], -20, 20), slKrome(vectA[1], -20, 20)];
@@ -35,13 +37,13 @@
 		genAssertZ1000(finalyVector[0]);
 		genAssertZ1000(finalyVector[1]);
 
-		let resultExpr = condition.shuffle().slag().plusminus();
+		let resultExpr = condition.slag().plusminus();
 
 		NAtask.setTask({
 			text: 'Даны векторы ' + vectorsView.joinWithConjunction() + '. ' +
-				'Найдите координаты вектора $\\vec{' + vectorsName[2] + '}=' + resultExpr.replace('+-', '-') +
+				'Найдите координаты вектора $\\vec{' + vectorForQuestion + '}=' + resultExpr.replace('+-', '-') +
 				'$. В ответе запишите ' + question +
-				' вектора $\\vec{' + vectorsName[2] + '}$.',
+				' вектора $\\vec{' + vectorForQuestion + '}$.',
 			answers: answ,
 			analys: '$' + (resultExpr + '=(' + finalyVectorView.join('; ')).plusminus() + ')$',
 		});
