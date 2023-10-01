@@ -479,22 +479,21 @@ function replaceCanvasWithImgInTask(element, text) {
 	var canvases = Array.from(element.getElementsByTagName('canvas'));
 	for (var i = 0; i < canvases.length; i++) {
 		var imageName = canvases[i].getAttribute('data-nonce').substr(3) + "n" + i;
-		preparedImages[imageName] = canvases[i].toDataURL().replace('data:image/png;base64,','');
-		text = text.replace(/<canvas.*?<\/canvas>/, '\\addpictoright[0.4\\linewidth]{'+imageName+'}');
-		text+='\\vspace{2.5cm}';
+		preparedImages[imageName] = canvases[i].toDataURL().replace('data:image/png;base64,', '');
+		text = text.replace(/<canvas.*?<\/canvas>/, '\\addpictoright[\\standartWidth]{images/' + imageName + '}');
 	}
 	return text;
 }
 
 function createLaTeXbunch(variantN) {
-	var bunchText = "";
+	var bunchText = '';
 	for (var taskId in tasksInLaTeX) {
 		if (generatedTasks[taskId].variantNumber == variantN) {
 			bunchText +=
-				"\n" +
-				"\\begin{taskBN}{" + generatedTasks[taskId].taskCategory + "}" + "\n" +
-				tasksInLaTeX[taskId] + "\n" +
-				"\\end{taskBN}\n\n";
+				'\n' +
+				'\\begin{taskBN}{' + generatedTasks[taskId].taskCategory + '}' + '\n' +
+				tasksInLaTeX[taskId] + '\n' +
+				'\\end{taskBN}' + '\n';
 		}
 
 	}
@@ -519,36 +518,20 @@ function refreshLaTeXarchive() {
 		return;
 	}
 	var zip = new JSZip();
-	var bunch = "\\begin{document}\n\n\\";
-	var bunchTab = "\\begin{document}\n\n";
-	var bunchTabAnsw = "\\begin{document}\n\n";
-	var answers = "\\begin{document}\n\n\\begin{multicols}{"+variantsGenerated.length+"}";
+	var bunch = "\\begin{document}\n\n\\begin{multicols}{4}\n\\SetMCRule{line-style=loose-dots,color=chas-ege-color}\n";
+	var answers = "\\begin{document}\n\n";
 	for (var variantN of variantsGenerated) {
-		bunch +=
-			"\n\\def\\examvart{Вариант " + variantsGenerated[0] + "." + (variantN%variantsGenerated[0]+1) + "}" +
-			"\\normalsize\n\\input{../instruction.tex}\n\\large" +
-			"\n\n\n\n" +
-			createLaTeXbunch(variantN) + "\\clearpage\n\n";
-		bunchTab +=
-			createLaTeXbunchTab(variantN).replaceAll("\\vspace{2.5cm}", "").replaceAll("[0.4\\linewidth]", "");
-		bunchTabAnsw +=
-			createLaTeXbunchTab(variantN).replaceAll("\\vspace{2.5cm}", "").replaceAll("[0.4\\linewidth]", "") + "\\clearpage\n\n";
-		answers+= getAnswersTableLaTeX(variantN);
+		bunch += createLaTeXbunch(variantN) + "\n\\clearpage\n\n";
+		answers += getAnswersTableLaTeX(variantN);
 	}
-	bunch += "\\end{document}";
-	bunchTab += "\\end{document}";
-	bunchTabAnsw += "\\end{document}";
+	bunch += "\n\n\\end{multicols}\n\n\\end{document}";
 	answers += "\n\n\\end{multicols}\n\n\\end{document}";
 
-	zip.file("variant_" + variantsGenerated[0] + ".tex", preambula + hyperref + bunch);
+	zip.file("cards_" + variantsGenerated[0] + ".tex", preambula + bunch.replaceAll("Найдите значение выражения:", ''));
 
-	zip.file("variant_" + variantsGenerated[0] + "_watermark.tex", preambula + watermark + hyperref + bunch);
+	zip.file("cards_" + variantsGenerated[0] + "_watermark.tex", preambula + watermark + hyperref + bunch.replaceAll("Найдите значение выражения:", ''));
 
-	zip.file("ecoKIM_" + variantsGenerated[0] + "_watermark.tex", preambulaForTab + watermark + bunchTab);
-
-	zip.file("ecoKIM_" + variantsGenerated[0] + ".tex", preambulaForTab + bunchTabAnsw);
-
-	zip.file("answers.tex", "\\documentclass[a5paper]{article}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{multicol}\n\n" + answers);
+	zip.file("answers.tex", "\\documentclass[a5paper,landscape]{article}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{multicol}\n\n" + answers);
 
 	var img = zip.folder("images");
 	for (var i in preparedImages) {
@@ -560,7 +543,7 @@ function refreshLaTeXarchive() {
 	});
 }
 
-var preambula = "\\documentclass[twocolumn]{article}\n\\usepackage{dashbox}\n\\setlength{\\columnsep}{40pt}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{graphicx}\n\\graphicspath{{images/}}\n\\DeclareGraphicsExtensions{.pdf,.png,.jpg}\n\n\\linespread{1.15}\n\n\\usepackage{../../egetask}\n\\usepackage{../../egetask-math-11-2022}\n\n\\def\\examyear{2023}\n\\usepackage[colorlinks,linkcolor=blue]{hyperref}";
+var preambula = "\\documentclass[landscape, 9pt]{extarticle}\n\n\\usepackage{dashbox}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{graphicx}\n\\usepackage{multicol}\n\\graphicspath{{images/}}\n\\DeclareGraphicsExtensions{.pdf,.png,.jpg}\n\\linespread{1.15}\n\\usepackage[tikz]{multicolrule}\n\n\\usepackage{egetask_alternative}";
 
 var hyperref = "\\def\\rfoottext{Разрешается свободное копирование в некоммерческих целях с указанием источника }\n\\def\\lfoottext{Источник \\href{https://vk.com/egemathika}{https://vk.com/egemathika}}";
 
