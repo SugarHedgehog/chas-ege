@@ -448,14 +448,12 @@ function removeGridFields() {
 function getAnswersSubtableLaTeX(cellsInFirstRow, answersParsedToTeX) {
 	var hline = "\n\\\\\n\\hline\n";
 	return (
-		'\\begin{table}[h]' +
-			'\\begin{tabular}{' + (new Array(cellsInFirstRow)).fill('|l').join('')+ '|' + '}' +
-				'\n\\hline\n' +
-				answersParsedToTeX.join(hline) +
-				hline +
-			'\\end{tabular}' +
-		'\\end{table}' +
-		'\n\n\n'
+		"\\begin{tabular}{" + (new Array(cellsInFirstRow)).fill("|l").join("") + "|" + "}" +
+		"\n\\hline\n" +
+		answersParsedToTeX.join(hline) +
+		hline +
+		"\\end{tabular}" +
+		"\n\n\n"
 	);
 }
 
@@ -503,7 +501,8 @@ function createLaTeXbunch(variantN) {
 		}
 
 	}
-	return bunchText + '\n\\newpage\n Ответы\n\n' + getAnswersTableLaTeX(variantN) + '\n\\newpage\n';
+	return bunchText;
+
 }
 
 function refreshLaTeXarchive(){
@@ -511,17 +510,21 @@ function refreshLaTeXarchive(){
 		return;
 	}
 	var zip = new JSZip();
-	var bunch = "";
-	for(var variantN of variantsGenerated){
-		bunch +=
-			'\n\n\n\n' +
-			'\\cleardoublepage\n' +
-			'\\def\\examvart{Вариант ' + variantN + '}\n' +
-			'\\normalsize\n\\input{instruction.tex}\n\\startpartone\n\\large' +
-			'\n\n\n\n' +
-			createLaTeXbunch(variantN);
+	var bunch = "\\begin{document}\n\n\\begin{multicols}{3}\n\\SetMCRule{line-style=loose-dots,color=chas-ege-color}\n";
+	var answers = "\\begin{document}\n\n";
+	for (var variantN of variantsGenerated) {
+		bunch += "\\begin{variant}\n" + createLaTeXbunch(variantN) + "\n\\end{variant}\n\n";
+		answers += getAnswersTableLaTeX(variantN);
 	}
-	zip.file("tasks.tex", bunch);
+	bunch += "\n\n\\end{multicols}\n\n\\end{document}";
+	answers += "\n\n\\end{multicols}\n\n\\end{document}";
+
+	zip.file("cards_" + variantsGenerated[0] + ".tex", preambula + bunch.replaceAll("Найдите значение выражения:", ''));
+
+	zip.file("cards_" + variantsGenerated[0] + "_watermark.tex", preambula + watermark + hyperref + bunch.replaceAll("Найдите значение выражения:", ''));
+
+	zip.file("answers.tex", "\\documentclass[a5paper,landscape]{article}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{multicol}\n\n" + answers);
+
 	var img = zip.folder("images");
 	for (var i in preparedImages) {
 		img.file(i + ".png", preparedImages[i], { base64: true });
@@ -531,3 +534,11 @@ function refreshLaTeXarchive(){
 		$('#latex-archive-placeholder')[0].href = "data:application/zip;base64," + base64;
 	});
 }
+
+var preambula = "\\documentclass[landscape, 9pt]{extarticle}\n\n\\usepackage{dashbox}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{graphicx}\n\\usepackage{multicol}\n\\graphicspath{{images/}}\n\\DeclareGraphicsExtensions{.pdf,.png,.jpg}\n\\linespread{1.15}\n\\usepackage[tikz]{multicolrule}\n\n\\usepackage{egetask_alternative}";
+
+var hyperref = "\\def\\rfoottext{Разрешается свободное копирование в некоммерческих целях с указанием источника }\n\\def\\lfoottext{Источник \\href{https://vk.com/egemathika}{https://vk.com/egemathika}}";
+
+var watermark = "\\usepackage{draftwatermark}\n\\SetWatermarkLightness{0.9}\n\\SetWatermarkText{https://vk.com/egemathika}\n\\SetWatermarkScale{ 0.4 }\n";
+
+var preambulaForTab = "\\documentclass[landscape,9pt]{extarticle}\n" + "\\usepackage{dashbox}\n" + "\\setlength{\\columnsep}{40pt}\n" + "\\usepackage[T2A]{fontenc}\n" + "\\usepackage[utf8]{inputenc}\n" + "\\usepackage[english,russian]{babel}\n" + "\\usepackage{graphicx}\n" + "\\usepackage{multirow}\n\n" + "\\graphicspath{{images/}}\n\n" + "\\usepackage{egetask_alternative}\n\n" + "\\linespread{1.15}\n\n";
