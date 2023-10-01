@@ -446,14 +446,12 @@ function removeGridFields() {
 function getAnswersSubtableLaTeX(cellsInFirstRow, answersParsedToTeX) {
 	var hline = '\n\\hline\n';
 	return (
-		'\n\\begin{tabular}{*{' + (kZ / 50).ceil() + '}l}' +//TODO: надо как-то узнать количество всех заданий и сколько оно делится на 50(тк 50 ответов обычно влазит на страницу(вообще в идеале 47)) и только l поставить
-		'\n\\begin{tabular}[t]{' + (new Array(cellsInFirstRow)).fill('|l').join('') + '|' + '}' +
-		'\n\\hline\n' +
+		"\\begin{tabular}{" + (new Array(cellsInFirstRow)).fill("|l").join("") + "|" + "}" +
+		"\n\\hline\n" +
 		answersParsedToTeX.join(hline) +
 		hline +
-		'\\end{tabular}' +
-		'\\end{tabular}' +
-		'\n\n\n'
+		"\\end{tabular}" +
+		"\n\n\n"
 	);
 }
 
@@ -495,7 +493,6 @@ function replaceCanvasWithImgInTask(element, text) {
 
 function createLaTeXbunch(variantN) {
 	var bunchText = '';
-	var count=0;
 	for (var taskId in tasksInLaTeX) {
 		if (generatedTasks[taskId].variantNumber == variantN) {
 			bunchText +=
@@ -503,11 +500,6 @@ function createLaTeXbunch(variantN) {
 				'\\begin{taskBN}{' + generatedTasks[taskId].taskCategory + '}' + '\n' +
 				tasksInLaTeX[taskId] + '\n' +
 				'\\end{taskBN}' + '\n';
-				count++;
-			if (count==3){
-				bunchText += '\n\\tikz[remember picture,overlay] \\node[opacity=0.3,inner sep=0pt] at (current page.center){\\includegraphics[width=\\paperwidth,height=\\paperheight]{' + sl(1, 52) + '}};\n';
-				count=0;
-			}
 		}
 
 	}
@@ -519,21 +511,20 @@ function refreshLaTeXarchive() {
 		return;
 	}
 	var zip = new JSZip();
-	var bunch = "";
-	var answ = "";
+	var bunch = "\\begin{document}\n\n\\begin{multicols}{3}\n\\SetMCRule{line-style=loose-dots,color=chas-ege-color}\n";
+	var answers = "\\begin{document}\n\n";
 	for (var variantN of variantsGenerated) {
-		bunch += '\n\n\\section{Рабочая тетрадь}\n'+createLaTeXbunch(variantN);
-		answ += '\n\n\\section{Рабочая тетрадь}\n'+getAnswersTableLaTeX(variantN);
+		bunch += createLaTeXbunch(variantN) + "\n\\clearpage\n\n";
+		answers += getAnswersTableLaTeX(variantN);
 	}
+	bunch += "\n\n\\end{multicols}\n\n\\end{document}";
+	answers += "\n\n\\end{multicols}\n\n\\end{document}";
 
-	//zip.file("task.tex", preambula+'\n\n\\begin{document}'+bunch+'\n\\end{document}');
+	zip.file("cards_" + variantsGenerated[0] + ".tex", preambula + bunch.replaceAll("Найдите значение выражения:", ''));
 
-	zip.file("task" + ".tex", preambula + '\n\n\\begin{document}' + bunch + '\n\\newpage\n ' + '\n' + '\\end{document}');
+	zip.file("cards_" + variantsGenerated[0] + "_watermark.tex", preambula + watermark + hyperref + bunch.replaceAll("Найдите значение выражения:", ''));
 
-	zip.file("answers" + ".tex", preambula + '\n\n\\begin{document}'+  + '\n' + answ + '\\end{document}');
-
-
-	zip.file("task_watermark.tex", preambula + watermark + hyperref + '\n\n\\begin{document}' + bunch + '\\end{document}');
+	zip.file("answers.tex", "\\documentclass[a5paper,landscape]{article}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{multicol}\n\n" + answers);
 
 	var img = zip.folder("images");
 	for (var i in preparedImages) {
@@ -545,8 +536,10 @@ function refreshLaTeXarchive() {
 	});
 }
 
-var preambula = ['\\documentclass[a4paper]{article}\n\\usepackage{dashbox}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{graphicx}\n\\DeclareGraphicsExtensions{.pdf,.png,.jpg}\n\\graphicspath{{../../animal/}}\n\n\\linespread{1.15}\n\n\\usepackage{egetask_alternative}\n\n\\def\\examyear{2023}\n\\usepackage[colorlinks,linkcolor=blue]{hyperref}\n\n\\usepackage{tikz}\n\\usepackage{transparent}']
+var preambula = "\\documentclass[landscape, 9pt]{extarticle}\n\n\\usepackage{dashbox}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{graphicx}\n\\usepackage{multicol}\n\\graphicspath{{images/}}\n\\DeclareGraphicsExtensions{.pdf,.png,.jpg}\n\\linespread{1.15}\n\\usepackage[tikz]{multicolrule}\n\n\\usepackage{egetask_alternative}";
 
-var hyperref = '\\def\\lfoottext{Источник \\href{https://vk.com/egemathika}{https://vk.com/egemathika}}';
+var hyperref = "\\def\\rfoottext{Разрешается свободное копирование в некоммерческих целях с указанием источника }\n\\def\\lfoottext{Источник \\href{https://vk.com/egemathika}{https://vk.com/egemathika}}";
 
-var watermark = '\\usepackage{draftwatermark}\n\\SetWatermarkLightness{0.9}\n\\SetWatermarkText{https://vk.com/egemathika}\n\\SetWatermarkScale{ 0.4 }\n';
+var watermark = "\\usepackage{draftwatermark}\n\\SetWatermarkLightness{0.9}\n\\SetWatermarkText{https://vk.com/egemathika}\n\\SetWatermarkScale{ 0.4 }\n";
+
+var preambulaForTab = "\\documentclass[landscape,9pt]{extarticle}\n" + "\\usepackage{dashbox}\n" + "\\setlength{\\columnsep}{40pt}\n" + "\\usepackage[T2A]{fontenc}\n" + "\\usepackage[utf8]{inputenc}\n" + "\\usepackage[english,russian]{babel}\n" + "\\usepackage{graphicx}\n" + "\\usepackage{multirow}\n\n" + "\\graphicspath{{images/}}\n\n" + "\\usepackage{egetask_alternative}\n\n" + "\\linespread{1.15}\n\n";
