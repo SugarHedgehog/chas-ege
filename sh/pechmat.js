@@ -519,9 +519,9 @@ function refreshLaTeXarchive() {
 	}
 	var zip = new JSZip();
 	var bunch = "\\begin{document}\n\n\\begin{multicols}{4}\n\\SetMCRule{line-style=loose-dots,color=chas-ege-color}\n";
-	var answers = "\\begin{document}\n\n";
+	var answers = "\\begin{document}\n\n\\begin{multicols}{6}";
 	for (var variantN of variantsGenerated) {
-		bunch += createLaTeXbunch(variantN) + "\n\\clearpage\n\n";
+		bunch += "\\def\\examvart{\\Large Карточка " + variantN + "}" + createLaTeXbunch(variantN) + "\n\\clearpage\n\n";
 		answers += getAnswersTableLaTeX(variantN);
 	}
 	bunch += "\n\n\\end{multicols}\n\n\\end{document}";
@@ -529,9 +529,9 @@ function refreshLaTeXarchive() {
 
 	zip.file("cards_" + variantsGenerated[0] + ".tex", preambula + bunch.replaceAll("Найдите значение выражения:", ''));
 
-	zip.file("cards_" + variantsGenerated[0] + "_watermark.tex", preambula + watermark + hyperref + bunch.replaceAll("Найдите значение выражения:", ''));
+	zip.file("cards_" + variantsGenerated[0] + "_watermark.tex", preambula + watermark + bunch.replaceAll("Найдите значение выражения:", "").replaceAll("$$","$"));
 
-	zip.file("answers.tex", "\\documentclass[a5paper,landscape]{article}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{multicol}\n\n" + answers);
+	zip.file("answers.tex", "\\documentclass[a4paper]{article}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{multicol}\n\n\\usepackage{egetask_alternative}\\setlength\\{columnseprule}{0pt}\n\n" + answers);
 
 	var img = zip.folder("images");
 	for (var i in preparedImages) {
@@ -543,7 +543,7 @@ function refreshLaTeXarchive() {
 	});
 }
 
-var preambula = "\\documentclass[landscape, 9pt]{extarticle}\n\n\\usepackage{dashbox}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{graphicx}\n\\usepackage{multicol}\n\\graphicspath{{images/}}\n\\DeclareGraphicsExtensions{.pdf,.png,.jpg}\n\\linespread{1.15}\n\\usepackage[tikz]{multicolrule}\n\n\\usepackage{egetask_alternative}";
+var preambula = "\\documentclass[landscape, 10pt]{extarticle}\n\n\\usepackage{dashbox}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{graphicx}\n\\usepackage{multicol}\n\\graphicspath{{images/}}\n\\DeclareGraphicsExtensions{.pdf,.png,.jpg}\n\\linespread{1.15}\n\\usepackage[tikz]{multicolrule}\n\n\\usepackage{egetask_alternative}";
 
 var hyperref = "\\def\\rfoottext{Разрешается свободное копирование в некоммерческих целях с указанием источника }\n\\def\\lfoottext{Источник \\href{https://vk.com/egemathika}{https://vk.com/egemathika}}";
 
