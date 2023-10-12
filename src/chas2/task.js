@@ -611,7 +611,7 @@ chas2.task = {
 				answer = answer.d;
 				textAboutFraction += "В ответ запишите знаменатель этой дроби."
 			}
-
+			genAssert(denominatorFound, 'Не удалось угадать знаменатель');
 			genAssert(answer.ts().length < 7, 'Ответ слишком длинный - вероятна ложная точность');
 		}
 
