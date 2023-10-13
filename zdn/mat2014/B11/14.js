@@ -1,14 +1,15 @@
 (function() {
 	retryWhileError(function() {
 		'use strict';
-		let power = sl(3,5);
-		let base = sl(2,5);
-		let num1 = base.pow(sl(2,10));
-		let num2 = base.pow(sl(2,10));
-		let num3 = base.pow(sl(2,10));
-		genAssert(num2!=num3||num1!=num3||num1!=num2,'Дробь сократилась');
+		let power = sl(3, 5);
+		let base = sl(2, 5);
+		let num1 = base.pow(sl(2, 10));
+		let num2 = base.pow(sl(2, 10));
+		let num3 = base.pow(sl(2, 10));
+		genAssert(num2 != num3 || num1 != num3 || num1 != num2, 'Дробь сократилась');
+		genAssert(num1 < 100000 && num2 < 100000 && num3 < 100000);
 		NAtask.setEvaluationTask({
-			expr: 'nthRoot('+num1+','+power+')'+'nthRoot('+num2+','+power+')/nthRoot('+num3+','+power+')',
+			expr: 'nthRoot(' + num1 + ',' + power + ')' + 'nthRoot(' + num2 + ',' + power + ')/nthRoot(' + num3 + ',' + power + ')',
 			//forbiddenAnswers: [0],
 			authors: ['Суматохина Александра'],
 		});
