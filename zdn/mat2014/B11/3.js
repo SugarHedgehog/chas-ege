@@ -6,15 +6,16 @@
 		b = 2 * m * n,
 		c = m * m + n * n,
 		d = '-',
-		variety = [a,b,c].shuffle(),
+		variety = [a, b, c].shuffle(),
 		h = variety[0],
-		f = Math.max(variety[1],variety[2]),
-		g = Math.min(variety[1],variety[2]);
-		if(h == c){
-			d = '+';
-			f = variety[1];
-			g = variety[2];//если знак "+", числа в случайном порядке, если "-", большее стоит первым
-		}
+		f = Math.max(variety[1], variety[2]),
+		g = Math.min(variety[1], variety[2]);
+	if (h == c) {
+		d = '+';
+		f = variety[1];
+		g = variety[2]; //если знак "+", числа в случайном порядке, если "-", большее стоит первым
+	}
+	genAssert(f * (d + g) != 0, 'ноль под корнем');
 	chas2.task.setTask({
 		text: 'Найдите значение выражения $$\\sqrt{'+f+'^{2}'+d+g+'{^2}}$$',
 		answers: ''+h,
