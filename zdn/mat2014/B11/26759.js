@@ -56,7 +56,7 @@
 	var x = '\\' + func2 + f.texfracpi(d);
 	koef = b === 1 ? a : a + '\\sqrt{' + b + '}';
 	NAtask.setTask({
-		text: ('Найдите значение выражения $$' + koef + v + '' + x + '$$').plusminus(),
+		text: ('Найдите значение выражения $' + koef + v + '' + x + '$').plusminus(),
 		answers: answer.ts() == '-0' ? 0 : answer,
 	});
 })();

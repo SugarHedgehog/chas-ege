@@ -6,7 +6,7 @@ do{
 }while(b==a);
 
 var c=['+','-'].shuffle();
-window.vopr.txt='Найдите значение выражения $$(\\sqrt{'+a+'}'+c[0]+'\\sqrt{'+b+'})(\\sqrt{'+a+'}'+c[1]+'\\sqrt{'+b+'})$$';
+window.vopr.txt='Найдите значение выражения $(\\sqrt{'+a+'}'+c[0]+'\\sqrt{'+b+'})(\\sqrt{'+a+'}'+c[1]+'\\sqrt{'+b+'})$';
 window.vopr.ver=[''+(a-b)];
 
 window.vopr.kat['log']=0;

@@ -4,7 +4,7 @@
 	var c = sluchch(2, 200);
 	var b = sluchch(2*c, 200, c);
 	NAtask.setTask({
-		text: 'Найдите значение выражения $$\\frac{'+b+'}{{'+a+'}^{\\log_{'+a+'}{'+c+'}}}$$',
+		text: 'Найдите значение выражения $\\frac{'+b+'}{{'+a+'}^{\\log_{'+a+'}{'+c+'}}}$',
 		answers: b/c,
 	},{
 		tags: {

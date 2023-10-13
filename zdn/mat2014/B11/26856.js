@@ -4,7 +4,7 @@
 	var a = sluchch(c/2, 75, c/2);
 	var b = sluchch(2, 20);
 	NAtask.setTask({
-		text: 'Найдите значение выражения $${'+a.ts()+'}\\log_{'+b+'}{\\sqrt[{'+c+'}]{'+b+'}}$$',
+		text: 'Найдите значение выражения ${'+a.ts()+'}\\log_{'+b+'}{\\sqrt[{'+c+'}]{'+b+'}}$',
 		answers: a/c,
 	},{
 		tags: {

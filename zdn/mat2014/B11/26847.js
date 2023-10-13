@@ -9,7 +9,7 @@
 		b = Math.pow(a, y);
 	} while (b > 10000 || b % 1 !== 0);
 	NAtask.setTask({
-		text: 'Найдите значение выражения $$ \\log_{' + a + '}' + b + ' $$',
+		text: 'Найдите значение выражения $ \\log_{' + a + '}' + b + ' $',
 		answers: y,
 	}, {
 		tags: {

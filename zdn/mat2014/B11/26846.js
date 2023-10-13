@@ -12,7 +12,7 @@
 	while (b > 1000 || d % c !== 0);
 	var a = Math.pow(y, c);
 	NAtask.setTask({
-		text: 'Найдите значение выражения $$ \\log_{'+a.ts()+'}'+b.ts()+' $$',
+		text: 'Найдите значение выражения $ \\log_{'+a.ts()+'}'+b.ts()+' $',
 		answers: d/c,
 	},{
 		tags: {

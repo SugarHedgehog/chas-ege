@@ -24,7 +24,7 @@ if(sl1()){
 	window.vopr.ver=[(b*2/c).ts()];
 }
 
-window.vopr.txt=('Найдите значение выражения $$'+y+'$$').plusminus().ts();
+window.vopr.txt=('Найдите значение выражения $'+y+'$').plusminus().ts();
 
 window.vopr.kat['log']=0;
 window.vopr.kat['prz']=0;
