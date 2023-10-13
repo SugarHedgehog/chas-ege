@@ -5,7 +5,7 @@
 	var y = [2, 3, 4, 5].iz();
 	var b = Math.pow(a, y);
 	NAtask.setTask({
-		text: 'Найдите значение выражения $$\\log^{'+c+'}_{\\sqrt{'+a+'}}{'+b+'}$$',
+		text: 'Найдите значение выражения $\\log^{'+c+'}_{\\sqrt{'+a+'}}{'+b+'}$',
 		answers: Math.pow(2*y, c),
 	},{
 		tags: {

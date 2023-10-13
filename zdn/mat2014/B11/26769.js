@@ -10,7 +10,7 @@
 		ans = -a;
 	}
 	NAtask.setTask({
-		text: 'Вычислить значение выражения: $$ \\frac{{'+a+'}\\'+f+'{'+alpha+'}^\\circ}{\\'+f+'{'+beta+'}^\\circ}$$',
+		text: 'Вычислить значение выражения: $ \\frac{{'+a+'}\\'+f+'{'+alpha+'}^\\circ}{\\'+f+'{'+beta+'}^\\circ}$',
 		answers: ans,
 	});
 })();

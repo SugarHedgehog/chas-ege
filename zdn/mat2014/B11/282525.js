@@ -32,7 +32,7 @@
 	}
 	var sincos = ['\\sin' + (e).texfracpi(c), '\\cos' + (e).texfracpi(c)].shuffle();
 	NAtask.setTask({
-		text: 'Найдите значение выражения $$ ' + koef + sincos[0] + sincos[1] + '$$',
+		text: 'Найдите значение выражения $ ' + koef + sincos[0] + sincos[1] + '$',
 		answers: answer,
 	}, {
 		tags: {

@@ -18,7 +18,7 @@
 	var sk2_in = '(' + e + ' - \\log_{' + b + '}{' + Math.pow(a, e) + '})' //вторая скобка с множителем под логарифмом
 	var x = ([sk1_out, sk1_in].iz() + [sk2_out, sk2_in].iz()).plusminus();
 	NAtask.setTask({
-		text: 'Найдите значение выражения $$' + x + '$$',
+		text: 'Найдите значение выражения $' + x + '$',
 		answers: c * e,
 	}, {
 		tags: {

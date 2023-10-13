@@ -10,7 +10,7 @@
 	}
 	var f = [d, e].shuffle();
 	NAtask.setTask({
-		text: "Найдите значение выражения $$\\sqrt{" + f[0].ts() + "} \\cdot \\sqrt{" + f[1].ts() + "}$$",
+		text: "Найдите значение выражения $\\sqrt{" + f[0].ts() + "} \\cdot \\sqrt{" + f[1].ts() + "}$",
 		answers: a,
 	});
 })();

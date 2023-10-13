@@ -12,9 +12,9 @@
 
 
 	NAtask.setTask({
-		text: 'Найдите значение выражения $$' +
+		text: 'Найдите значение выражения $' +
 			'\\frac{' + logbase + sqrttex + '}{' + logbase + '{' + b + '}}' +
-			'.$$',
+			'.$',
 		answers: (1/sqrtpower/argpower).ts(),
 	},{
 		tags: {
