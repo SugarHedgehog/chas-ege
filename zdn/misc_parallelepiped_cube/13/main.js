@@ -1,4 +1,4 @@
 window.nomer=[
-	11,
+	9,
 ].iz()
-window.comment='11';
+window.comment='9';
