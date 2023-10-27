@@ -59,7 +59,7 @@
 			answers: answ,
 			author: ['Суматохина Александра']
 		});
-		//NAtask.modifiers.variativeABC(allLet);
+		NAtask.modifiers.variativeABC(allLet);
 		NAtask.modifiers.multiplyAnswerBySqrt(13);
 		NAtask.modifiers.addCanvasIllustration({
 			width: 400,
