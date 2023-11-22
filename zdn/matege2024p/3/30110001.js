@@ -10,10 +10,10 @@
 		let question = [
 			[sklonlxkand('сторона основания'), a],
 			[sklonlxkand('боковое ребро'), b.texsqrt(sl1())],
-			[sklonlxkand('объём'), (a * a * h).texrndfrac(3)],
+			[sklonlxkand('объём'), (a * a * h)/3],
 		];
-
-		let answ = Number.isInteger(question[2][1]) ? question[2][1] : b.sqrt();
+		
+		genAssertZ1000(question[2][1]);
 
 		let paint1 = function(ctx) {
 			ctx.font = "3px liberation_sans";
@@ -34,7 +34,7 @@
 				'основанием $ABCD$ ' + question[0][0].ie + ' рав' + ['ен', 'на', 'но'][question[0][0].rod] + ' $' + question[0][1] + '$, ' +
 				question[1][0].ie + ' рав' + ['ен', 'на', 'но'][question[1][0].rod] + ' $' + question[1][1] + '$' +
 				'. Найдите ' + question[2][0].ve + ' пирамиды.',
-			answers: answ,
+			answers: question[2][1],
 			author: ['Суматохина Александра'],
 		});
 		NAtask.modifiers.multiplyAnswerBySqrt(13);
