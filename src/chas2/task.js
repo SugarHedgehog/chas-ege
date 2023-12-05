@@ -945,6 +945,15 @@ chas2.task = {
 			currentTask.answers = [answ];
 			chas2.task.setTask(currentTask);
 		},
-
+		
+		/** @function NAtask.modifiers.allDecimalsToStandard
+		Применяет .ts() ко всем цифрам с излишней точностью в задании.
+		*/
+		allDecimalsToStandard : function(p1) {
+			var o = NAtask.getTask();
+			p1 = p1 || false;
+			o.text = o.text.allDecimalsToStandard(p1)
+			NAtask.setTask(o);
+		},
 	},
 };
