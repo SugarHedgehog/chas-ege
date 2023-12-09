@@ -951,8 +951,8 @@ chas2.task = {
 		*/
 		allDecimalsToStandard : function(p1) {
 			var o = NAtask.getTask();
-			p1 = p1 || false;
-			o.text = o.text.allDecimalsToStandard(p1)
+			o.text = o.text.allDecimalsToStandard(p1);
+			o.analys = o.analys.allDecimalsToStandard(p1);
 			NAtask.setTask(o);
 		},
 	},
