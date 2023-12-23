@@ -29,13 +29,9 @@
 		genAssert(generatrixСoneBig.sqrt().isZ(), 'Образующая нормальная');
 		genAssert(generatrixСoneSmall.sqrt().isZ(), 'Образующая нормальная');
 		let variable = [
-			['полная площадь поверхности', (radiusSmall * radiusSmall * generatrixСoneBig).texsqrt(sl1()), radiusSmall *
-				generatrixСoneSmall.sqrt()
-			],
+			['полная площадь поверхности', radiusBig * generatrixСoneBig.sqrt()+radiusBig + '\\pi', radiusSmall *	generatrixСoneSmall.sqrt()+radiusSmall+ '\\pi'],
 			['высота', heightBig, heightSmall],
-			['полная площадь поверхности', (radiusSmall * radiusSmall * generatrixСoneBig).texsqrt(sl1()), radiusSmall *
-				generatrixСoneSmall.sqrt()
-			],
+			['полная площадь поверхности', radiusBig * generatrixСoneBig.sqrt()+radiusBig + '\\pi', radiusSmall *	generatrixСoneSmall.sqrt()+radiusSmall+ '\\pi'],
 		];
 
 		if ((heightBig * radiusBig.pow(2) / 3).isZ() && (heightSmall * radiusSmall.pow(2) / 3).isZ())
