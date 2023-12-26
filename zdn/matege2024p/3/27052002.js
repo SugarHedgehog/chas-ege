@@ -29,9 +29,9 @@
 		genAssert(generatrixСoneBig.sqrt().isZ(), 'Образующая нормальная');
 		genAssert(generatrixСoneSmall.sqrt().isZ(), 'Образующая нормальная');
 		let variable = [
-			['полная площадь поверхности', radiusBig * generatrixСoneBig.sqrt()+radiusBig + '\\pi', radiusSmall *	generatrixСoneSmall.sqrt()+radiusSmall+ '\\pi'],
+			['полная площадь поверхности', radiusBig * (generatrixСoneBig.sqrt()+radiusBig) + '\\pi', radiusSmall *	(generatrixСoneSmall.sqrt()+radiusSmall)+ '\\pi'],
 			['высота', heightBig, heightSmall],
-			['полная площадь поверхности', radiusBig * generatrixСoneBig.sqrt()+radiusBig + '\\pi', radiusSmall *	generatrixСoneSmall.sqrt()+radiusSmall+ '\\pi'],
+			['полная площадь поверхности', radiusBig * (generatrixСoneBig.sqrt()+radiusBig) + '\\pi', radiusSmall *	(generatrixСoneSmall.sqrt()+radiusSmall)+ '\\pi'],
 		];
 
 		if ((heightBig * radiusBig.pow(2) / 3).isZ() && (heightSmall * radiusSmall.pow(2) / 3).isZ())
@@ -58,7 +58,7 @@
 		let verb = ['делит его так, что ' + secondWorld + ' конусов ' + ['равны $' + numberSmall[1] + '$ и $' + numberBig[
 				1] + '$',
 			'относятся, как $' + ratio.join(':') + '$'
-		].iz(), 'делящее ' + name[1].ve + ' в отношении $' + [ratio.join(':') + '$, считая от вершины', ratio.reverse().join(
+		].iz(), 'делящая ' + name[1].ve + ' в отношении $' + [ratio.join(':') + '$, считая от вершины', ratio.reverse().join(
 			':') + '$, считая от основания'].iz() + ' конуса'][variant];
 
 		let answer = numberSmall[2];
