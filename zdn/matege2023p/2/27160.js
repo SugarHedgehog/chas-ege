@@ -3,21 +3,13 @@
 	lx_declareClarifiedPhrase('площадь', 'боковой поверхности');
 	retryWhileError(function() {
 
-
 		let variable = [
-			['площадь боковой поверхности', [
-				['больше', 60],
-				['меньше', 30]
-			].iz()],
-			['площадь основания', [
-				['больше', 30],
-				['меньше', 60]
-			].iz()]
+			['площадь боковой поверхности', 'больше'],
+			['площадь основания', 'меньше']
 		].shuffle();
 
 		let name = sklonlxkand(variable.T()[0]);
-		let moreLess = variable.T()[1][0][0];
-		let answ = variable.T()[1][0][1];
+		let moreLess = variable.T()[1][0];
 
 		let paint1 = function(ctx) {
 			ctx.lineWidth = 2;
@@ -47,7 +39,7 @@
 				'. ' +
 				'Найдите угол между образующей конуса и плоскостью основания. ' +
 				'Ответ дайте в градусах.',
-			answers: answ,
+			answers: 60,
 			authors: ['Суматохина Александра'],
 			analys: '',
 		});
