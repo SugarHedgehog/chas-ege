@@ -68,7 +68,7 @@
 		let verb = ['делит его так, что ' + secondWorld + ' конусов ' + ['равны $' + numberSmall[1] + '$ и $' + numberBig[
 				1] + '$',
 			'относятся, как $' + ratio.join(':') + '$'
-		].iz(), 'делящее ' + name[1].ve + ' в отношении ' + [ratio.join(':') + ', считая от вершины', ratio.reverse().join(
+		].iz(), 'делящая ' + name[1].ve + ' в отношении ' + [ratio.join(':') + ', считая от вершины', ratio.reverse().join(
 			':') + ', считая от основания'].iz() + ' конуса'][variant];
 
 		let answer = numberSmall[2];
