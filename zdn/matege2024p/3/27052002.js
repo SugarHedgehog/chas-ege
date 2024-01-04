@@ -7,6 +7,7 @@
 		odu: 0,
 	};
 	lx_declareClarifiedPhrase('площадь', 'поверхности');
+	lx_declareClarifiedPhrase('полная площадь', 'поверхности');
 	lx_declareClarifiedPhrase('радиус', 'основания');
 	lx_declareClarifiedPhrase('площадь', 'боковой поверхности');
 	lx_declareClarifiedPhrase('длина', 'окружности основания');
@@ -28,36 +29,25 @@
 		genAssert(generatrixСoneBig.sqrt().isZ(), 'Образующая нормальная');
 		genAssert(generatrixСoneSmall.sqrt().isZ(), 'Образующая нормальная');
 		let variable = [
-
+			['полная площадь поверхности', radiusBig * (generatrixСoneBig.sqrt()+radiusBig) + '\\pi', radiusSmall *	(generatrixСoneSmall.sqrt()+radiusSmall)+ '\\pi'],
 			['высота', heightBig, heightSmall],
-			[
-				['диаметр основания', 2 * radiusBig, 2 * radiusSmall],
-				['радиус основания', radiusBig, radiusSmall],
-				['длина окружности основания', 2 * radiusBig + '\\pi', 2 * radiusSmall + '\\pi'],
-				['площадь окружности основания', radiusBig.pow(2) + '\\pi', radiusSmall.pow(2) + '\\pi']
-			].iz(), ['образующая', generatrixСoneBig.texsqrt(sl1()), generatrixСoneSmall.texsqrt(sl1())],
-			['площадь осевого сечения', radiusBig * heightBig, radiusSmall * heightSmall],
+			['полная площадь поверхности', radiusBig * (generatrixСoneBig.sqrt()+radiusBig) + '\\pi', radiusSmall *	(generatrixСoneSmall.sqrt()+radiusSmall)+ '\\pi'],
 		];
 
 		if ((heightBig * radiusBig.pow(2) / 3).isZ() && (heightSmall * radiusSmall.pow(2) / 3).isZ())
 			variable.push(['объём', heightBig * radiusBig.pow(2) / 3 + '\\pi', heightSmall * radiusSmall.pow(2) / 3 + '\\pi']);
 
-		variable = variable.iz(3);
-
 		let name = sklonlxkand(variable.T()[0]);
 		let numberBig = variable.T()[1];
 		let numberSmall = variable.T()[2];
 
-		let secondWorld = name[1].im.replace('площадь', 'площади').replace('боковой', 'боковых').replace('основания',
-			'оснований').replace(
-			'поверхности', 'поверхностей').replace('осевого', 'осевых').replace('сечения', 'сечений').replace('окружности',
-			'окружностей');
+		let secondWorld = name[1].im.replace('площадь', 'площади').replace('поверхности', 'поверхностей');
 
 		let ratio = [numberSmall[1], numberBig[1]];
 		if (ratio[0].isString)
 			ratio = ratio.map((elem) => Number(elem.replace('\\pi', '')));
 
-		let variant = sl1();
+		let variant = 1;
 		if (['высота', 'образующая'].includes(name[1].ie) && variant) {
 			console.log('!');
 			ratio[1] -= ratio[0];
@@ -68,8 +58,8 @@
 		let verb = ['делит его так, что ' + secondWorld + ' конусов ' + ['равны $' + numberSmall[1] + '$ и $' + numberBig[
 				1] + '$',
 			'относятся, как $' + ratio.join(':') + '$'
-		].iz(), 'делящая ' + name[1].ve + ' в отношении ' + [ratio.join(':') + ', считая от вершины', ratio.reverse().join(
-			':') + ', считая от основания'].iz() + ' конуса'][variant];
+		].iz(), 'делящее ' + name[1].ve + ' в отношении $' + [ratio.join(':') + '$, считая от вершины', ratio.reverse().join(
+			':') + '$, считая от основания'].iz() + ' конуса'][variant];
 
 		let answer = numberSmall[2];
 
@@ -140,10 +130,10 @@
 		NAinfo.requireApiVersion(0, 2);
 		NAtask.setTask({
 			text: name[0].ie.toZagl() + ' конуса ' + ['равен', 'равна'][name[0].rod] + ' $' + numberBig[0] +
-				'$. Плоскость,' +
-				' параллельная плоскости основания конуса, ' + ' ' +
+				'$. Параллельно основанию конуса проведено сечение, ' + ' ' +
 				verb + '. ' +
-				'Найдите ' + name[2].ve + ' ' + ['конуса, отсекаемого от данного конуса проведённой плоскостью',
+				'Найдите ' + name[2].ve.replace('полная', 'полную') + ' ' + [
+					'конуса, отсекаемого от данного конуса проведённой плоскостью',
 					'меньшего конуса'
 				].iz() + '. ' + ps,
 			answers: '$' + answer + '$',
