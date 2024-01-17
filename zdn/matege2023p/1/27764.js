@@ -10,6 +10,7 @@
 
 		let paint1 = function(ctx) {
 			ctx.lineWidth = 2;
+			ctx.strokeStyle = om.secondaryBrandColors.iz();
 
 			let coordinatesByAngle = (x, y, angle, length) => [x + angle.cos() * length, y + angle.sin() * length];//А надо ли это в функцию?
 
@@ -21,7 +22,7 @@
 			ctx.drawLine(10, 370, vertex[0], vertex[1]);
 			ctx.drawLine(390, 370, vertex[0], vertex[1]);
 
-
+			ctx.strokeStyle = om.primaryBrandColors.iz();
 			ctx.drawLineAtAngle(390, 370, Math.atan2(-370 + vertex[1], -390 + vertex[0]) / 2 - Math.PI / 2, 317);
 			ctx.drawLineAtAngle(10, 370, angle / 2, 345);
 
