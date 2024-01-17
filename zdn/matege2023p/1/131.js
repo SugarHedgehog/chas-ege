@@ -16,14 +16,14 @@
 
 		let paint1 = function(ctx) {
 			ctx.lineWidth = 2;
-			ctx.strokeStyle = "#809DF2";
+			ctx.strokeStyle = om.secondaryBrandColors.iz();
 
 			ctx.beginPath();
 			ctx.arc(200, 200, 180, 0, 2 * Math.PI);
 			ctx.stroke();
 
 			//вписанный
-			ctx.strokeStyle = ["#D777F2","#F2A2D6"].iz();
+			ctx.strokeStyle = om.primaryBrandColors.iz();
 
 			ctx.drawLine(200 + 180, 200 + 10, 200 - 80, 200 - 160);
 			ctx.drawLine(200 - 180, 200 + 10, 200 - 80, 200 - 160);
@@ -36,12 +36,12 @@
 			ctx.fillText(vertices[2], 200 - 90, 200 - 170);
 
 		};
-
+s
 		NAtask.setTask({
 			text: 'На окружности отмечены точки $' + vertices[0] + '$, $' + vertices[1] + '$ и $' + vertices[2] + '$. ' +
-				'Дуга окружности $' + [vertices[0], vertices[2]].shuffle().join('') + '$, не содержащая точку $' + vertices[1] +
+				'Дуга окружности $' + [vertices[0], vertices[2]].shuffleJoin('') + '$, не содержащая точку $' + vertices[1] +
 				'$, составляет $' + a + '^\\circ$. ' +
-				'Дуга окружности $' + vertices.slice(1, 4).shuffle().join('') + '$, не содержащая точку $' + vertices[0] +
+				'Дуга окружности $' + vertices.slice(1, 4).shuffleJoin('') + '$, не содержащая точку $' + vertices[0] +
 				'$, составляет $' + b +
 				'^\\circ$. ' +
 				'Найдите вписанный угол $' + [vertices[0], vertices[2], vertices[1]].join('') + '$. Ответ дайте в градусах.',
