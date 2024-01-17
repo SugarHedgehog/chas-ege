@@ -21,7 +21,7 @@
 			ct.translate(10, 20);
 			ct.scale(18, -18);
 			ct.lineWidth = 2 / 20;
-			ct.strokeStyle = "#809DF2";
+			ct.strokeStyle = om.secondaryBrandColors.iz();
 
 			ct.rightPyramid3({
 				edge: 17,
