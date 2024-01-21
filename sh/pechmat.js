@@ -60,6 +60,20 @@ function zapusk() {
 		variantNumber = $('#start-number').val() - 1;
 	}
 
+	if (options.naturalNumbers) {
+		console.log('новая функция')
+		function sluchch (n,k) {
+			console.log('sluchch')
+			if(k==undefined)
+					return sluchch(0,n,1);
+				return okrugldo(Math.random() * (k-n),s) + n;
+		}
+		try{
+			global.sluchch = module.exports.sluchch = sluchch ;
+		}catch (e) {
+		}			
+	}
+
 	if ($('#htmlcss').is(':checked')) {
 		MathJax.Hub.setRenderer('HTML-CSS');
 	}
