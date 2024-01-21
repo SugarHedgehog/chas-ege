@@ -61,7 +61,7 @@ function zapusk() {
 	}
 
 	if (options.naturalNumbers) {
-		function sluchch (n,k) {
+		sluchch = function sluchch (n,k) {
 			console.log('новая функция')
 			if(k==undefined)
 					return sluchch(0,n,1);
@@ -215,7 +215,7 @@ function zadan() {
 		return;
 	}
 	if (options.naturalNumbers) {
-		function sluchch (n,k) {
+		sluchch = function sluchch (n,k) {
 			console.log('новая функция')
 			if(k==undefined)
 					return sluchch(0,n,1);
@@ -309,7 +309,7 @@ function obnov() {
 	var nazvzad;
 
 	if (options.naturalNumbers) {
-		function sluchch (n,k) {
+		sluchch = function sluchch (n,k) {
 			console.log('новая функция')
 			if(k==undefined)
 					return sluchch(0,n,1);
