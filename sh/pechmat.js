@@ -54,7 +54,7 @@ function zapusk() {
 	options.uniqueAnswersAndSolutions = $('#uniqueAnswersAndSolutions').is(':checked');
 	options.startTransitNumber = 1 * $('#start-transit-number').val();
 	options.prepareLaTeX = $('#prepareLaTeX').is(':checked');
-
+	options.naturalNumbers = $('#naturalNumbers').is(':checked');
 
 	if (customNumber) {
 		variantNumber = $('#start-number').val() - 1;
