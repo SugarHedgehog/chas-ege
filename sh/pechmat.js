@@ -54,19 +54,18 @@ function zapusk() {
 	options.uniqueAnswersAndSolutions = $('#uniqueAnswersAndSolutions').is(':checked');
 	options.startTransitNumber = 1 * $('#start-transit-number').val();
 	options.prepareLaTeX = $('#prepareLaTeX').is(':checked');
-	options.naturalNumbers = $('#naturalNumbers').is(':checked');
+
 
 	if (customNumber) {
 		variantNumber = $('#start-number').val() - 1;
 	}
 
 	if (options.naturalNumbers) {
-		console.log('новая функция')
 		function sluchch (n,k) {
-			console.log('sluchch')
+			console.log('новая функция')
 			if(k==undefined)
 					return sluchch(0,n,1);
-				return okrugldo(Math.random() * (k-n),s) + n;
+				return okrugldo(Math.random() * (k-n),1) + n;
 		}
 		try{
 			global.sluchch = module.exports.sluchch = sluchch ;
@@ -215,6 +214,18 @@ function zadan() {
 		endCurrentVariant();
 		return;
 	}
+	if (options.naturalNumbers) {
+		function sluchch (n,k) {
+			console.log('новая функция')
+			if(k==undefined)
+					return sluchch(0,n,1);
+				return okrugldo(Math.random() * (k-n),1) + n;
+		}
+		try{
+			global.sluchch = module.exports.sluchch = sluchch ;
+		}catch (e) {
+		}			
+	}
 
 	if (nZ == 0) {
 		if (!nV) {
@@ -296,6 +307,19 @@ var unqDict = {};
 
 function obnov() {
 	var nazvzad;
+
+	if (options.naturalNumbers) {
+		function sluchch (n,k) {
+			console.log('новая функция')
+			if(k==undefined)
+					return sluchch(0,n,1);
+				return okrugldo(Math.random() * (k-n),1) + n;
+		}
+		try{
+			global.sluchch = module.exports.sluchch = sluchch ;
+		}catch (e) {
+		}			
+	}
 
 	if (options.transitTaskNumbers) {
 		nazvzad = options.startTransitNumber + aZ.sum() - iZ.sum() - 1;
