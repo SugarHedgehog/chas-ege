@@ -1,6 +1,7 @@
 (function() {
 	lx_declareClarifiedPhrase('площадь', 'боковой поверхности');
 	lx_declareClarifiedPhrase('диаметр', 'основания');
+	lx_declareClarifiedPhrase('радиус', 'основания');
 	lx_declareClarifiedPhrase('полная', ' площадь поверхности');
 	lx['полная площадь поверхности'] = {
 		ve: 'полную площадь поверхности',
