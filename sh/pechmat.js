@@ -522,8 +522,8 @@ function refreshLaTeXarchive() {
 		return;
 	}
 	var zip = new JSZip();
-	var bunchUnited = "", bunchTasks = "";
-	var answers = "\\begin{document}\n\n\\begin{multicols}{"+variantsGenerated.length+"}";
+	var bunchTasks = "";
+	var answers = "\\begin{document}\n\n\\begin{multicols}{"+((variantsGenerated.length>10)?6:variantsGenerated.length)+"}";
 
 	for(var variantN of variantsGenerated){
 		var head =
@@ -541,7 +541,7 @@ function refreshLaTeXarchive() {
 	answers += "\n\n\\end{multicols}\n\n\\end{document}";
 
 	zip.file("tasks.tex", bunchTasks);
-	zip.file("answers.tex", "\\documentclass[a5paper]{article}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{multicol}\n\n" + answers);
+	zip.file("answers.tex", "\\documentclass[a4paper]{article}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{multicol}\n\n\\setlength{\\columnsep}{0pt}\n\\usepackage[\n\tleft = 0.5cm,\n\tright = 0.5cm,\n\ttop = 0.5cm,\n\tbottom = 0.5cm,\n]{geometry}" + answers);
 
 	var img = zip.folder("images");
 	for (var i in preparedImages) {
@@ -552,11 +552,3 @@ function refreshLaTeXarchive() {
 		$('#latex-archive-placeholder')[0].href = "data:application/zip;base64," + base64;
 	});
 }
-
-var preambula = "\\documentclass[twocolumn]{article}\n\\usepackage{dashbox}\n\\setlength{\\columnsep}{40pt}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{graphicx}\n\\graphicspath{{images/}}\n\\DeclareGraphicsExtensions{.pdf,.png,.jpg}\n\n\\linespread{1.15}\n\n\\usepackage{../../egetask}\n\\usepackage{../../egetask-math-11-2022}\n\n\\def\\examyear{2023}\n\\usepackage[colorlinks,linkcolor=blue]{hyperref}";
-
-var hyperref = "\\def\\rfoottext{Разрешается свободное копирование в некоммерческих целях с указанием источника }\n\\def\\lfoottext{Источник \\href{https://vk.com/egemathika}{https://vk.com/egemathika}}";
-
-var watermark = "\\usepackage{draftwatermark}\n\\SetWatermarkLightness{0.9}\n\\SetWatermarkText{https://vk.com/egemathika}\n\\SetWatermarkScale{ 0.4 }\n";
-
-var preambulaForTab = "\\documentclass[landscape,9pt]{extarticle}\n" + "\\usepackage{dashbox}\n" + "\\setlength{\\columnsep}{40pt}\n" + "\\usepackage[T2A]{fontenc}\n" + "\\usepackage[utf8]{inputenc}\n" + "\\usepackage[english,russian]{babel}\n" + "\\usepackage{graphicx}\n" + "\\usepackage{multirow}\n\n" + "\\graphicspath{{images/}}\n\n" + "\\usepackage{egetask_alternative}\n\n" + "\\linespread{1.15}\n\n";
