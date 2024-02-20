@@ -9,7 +9,7 @@ chas2.task = {
 	 * @private
 	 */
 	_ : {
-		/** @function chas2.task.validateTask
+		/** @function chas2.task._.validateTask
 		 * Проверить корректность объекта-задания
 		 * @param {String} text текст задания
 		 * @param {String} analys текст разбора задания
@@ -50,8 +50,8 @@ chas2.task = {
 		},
 
 
-		/** @function chas2.task.normalizeTask
-		 * Привести объект-задани к нормальному виду
+		/** @function chas2.task._.normalizeTask
+		 * Привести объект-задание к нормальному виду
 		 * @param {String} text текст задания
 		 * @param {String} analys текст разбора задания
 		 * @param {String|Number|String[]|Number[]} answers правильные ответы
@@ -63,8 +63,52 @@ chas2.task = {
 		normalizeTask : function(o) {
 			o.text = o.text || '';
 			o.analys = o.analys || '';
-			o.answers = chaslib.toStringsArray(o.answers || []);
-			o.wrongAnswers = chaslib.toStringsArray(o.wrongAnswers || []);
+			o.answers = chaslib.toStringsArray('answers' in o ? o.answers : []);
+			o.wrongAnswers = chaslib.toStringsArray((('wrongAnswers' in o) && (o.wrongAnswers !== undefined)) ? o.wrongAnswers : []);
+			// Просто o.answers || [] нельзя - ноль не будет передаваться
+			o.authors = chaslib.toStringsArray(o.authors || o.author || []);
+		},
+
+
+		/** @function chas2.task._.normalizeCanvasOptions
+		 * Привести опции canvas к нормальному виду
+		 * @param {Number} o.width ширина canvas
+		 * @param {Number} o.height высота canvas
+		 * @param {String} o.style стиль canvas
+		 */
+		normalizeCanvasOptions : function(o) {
+			o.importNonExistingFrom({
+				width: 600,
+				height: 400,
+				style: 'float:left; margin-right:1em;',
+			});
+		},
+
+
+		/** @function chas2.task._.normalizeCanvasOptionsDisplay
+		 * Привести опции canvas к нормальному виду
+		 * @param {Number} o.width ширина canvas
+		 * @param {Number} o.height высота canvas
+		 * @param {String} o.style стиль canvas
+		 */
+		normalizeCanvasOptionsDisplay : function(o) {
+			o.importNonExistingFrom({
+				width: 600,
+				height: 400,
+				style: 'float:none !important; margin-top:1em; margin-left: auto; margin-right: auto; display:block;',
+			});
+		},
+
+
+		/** @function chas2.task._.generateCanvasTag
+		 * Сгенерировать тэг canvas для иллюстрации
+		 * @param {Number} o.width ширина canvas
+		 * @param {Number} o.height высота canvas
+		 * @param {String} o.style стиль canvas
+		 * @param {Number} randomId случайный идентификатор canvas
+		 */
+		generateCanvasTag : function(o, randomId) {
+			return '<canvas style="' + o.style + '" width="' + o.width + '" height="' + o.height + '" id="canvas' + randomId + '" data-nonce="' + Math.random() + '"></canvas>';
 		},
 
 	},
@@ -76,6 +120,7 @@ chas2.task = {
 	 * @param {String} analys текст разбора задания
 	 * @param {String|Number|String[]|Number[]} answers правильные ответы
 	 * @param {String|Number|String[]|Number[]} wrongAnswers неправильные ответы
+	 * @param {String|String[]} authors авторы шаблона
 	 * @param {String[]} tags теги
 	 * @param {Function} checkAnswer функция проверки ответа
 	 * @param {Function} draw функция отрисовки
@@ -89,6 +134,7 @@ chas2.task = {
 		window.vopr.rsh = o.analys;
 		window.vopr.ver = o.answers;
 		window.vopr.nev = o.wrongAnswers;
+		window.vopr.authors = o.authors;
 		if (o.checkAnswer) {
 			window.vopr.vrn = o.checkAnswer;
 		}
@@ -116,6 +162,7 @@ chas2.task = {
 			checkAnswer : window.vopr.vrn,
 			draw : window.vopr.dey,
 			tags : {},
+			authors : window.vopr.authors,
 		};
 		chas2.task._.normalizeTask(o);
 		chas2.task._.validateTask(o);
@@ -148,6 +195,7 @@ chas2.task = {
 	 * @param {String|Number} mainList[].vin: величина в винительном падеже. Если равна 1, то именительный и винительный падежи совпадают. Если не определена, то конструкции, где нужен в. п., избегаются.
 	 * @param {Object} options: дополнительные опции
 	 * @param {String} options.preambula то, что пишется в вопросе перед задачей
+	 * @param {String} options.conclusion то, что пишется в вопросе после задачи
 	 * @param {Object} taskOptions: дополнительные опции, передаваемые setTask
 	 */
 	setCountableTask : function(mainList, options, taskOptions) {
@@ -155,6 +203,9 @@ chas2.task = {
 		if (options) {
 			if (options.preambula) {
 				tmpObject.text = options.preambula + tmpObject.text;
+			}
+			if (options.conclusion) {
+				tmpObject.text += options.conclusion;
 			}
 		}
 		tmpObject.importFrom(taskOptions);
@@ -206,6 +257,8 @@ chas2.task = {
 	 * Составить задание типа 'уравнение'
 	 * @param {Array} o.parts части уравнения (левая и правая)
 	 * @param {String} o.handleMultipleRoots способ обработки случая, когда корней два или более
+	 * @param {Boolean} o.forceMultipleRoots выводить вопрос вида "..., если корней несколько", даже если корень один
+	 * @param {String} o.customPreamble фраза на замену "Найдите корень уравнения"
 	 * @param {Number|String|Number[]|String[]} o.roots корни уравнения
 	 * @param {Boolean} o.enablePartsExchange можно ли менять части уравнения местами?
 	 * @param {Boolean} o.filterWholeRoots отобрать ли только целые корни?
@@ -307,7 +360,7 @@ chas2.task = {
 			throw new Error('Множество корней уравнения не должно быть пусто');
 		}
 
-		var multiRoots = (o.roots.length > 1);
+		var multipleRoots = (o.roots.length > 1) || o.forceMultipleRoots;
 		o.roots = o.roots.sortDelDubl();
 
 		var notListVariants = ['sum', 'production', 'min', 'max'];
@@ -346,11 +399,14 @@ chas2.task = {
 			break;
 		}
 
-		taskOptions.text = 'Найдите корень уравнения $$' + o.parts[0].plusminus() + '=' + o.parts[1].plusminus() + '$$' +
+		var preamble = o.customPreamble || 'Найдите корень уравнения';
+
+
+		taskOptions.text = preamble + ' $$' + o.parts[0].plusminus() + '=' + o.parts[1].plusminus() + '$$' +
 			' В ответе укажите только целый корень. '.esli(o.filterWholeRoots) +
 			//При желании форсированно вызвать обработку нескольких корней - просто указать два одинаковых корня
 			(' Если ' + 'таких '.esli(o.filterWholeRoots) + 'корней несколько, в ответе укажите ' + multipleRootsPhrase + '.').
-				esli(multiRoots);
+				esli(multipleRoots);
 
 		//Наконец, устанавливаем задание
 		chas2.task.setTask(taskOptions);
@@ -372,8 +428,6 @@ chas2.task = {
 	setAdditiveEquationTask : function(o, taskOptions) {
 		//Сами всё, что нужно, вычтем!
 		o.enablePartsSubtraction = 0;
-		//И местами поменяем!
-		o.enablePartsExchange = 0;
 
 		o.parts = o.parts.shuffle();
 		var leftCount = sl(1, o.parts.length);
@@ -383,8 +437,181 @@ chas2.task = {
 		for (var i = 0; i < left.length; i++) {
 			left[i] = '-' + left[i];
 		}
+		// Если справа хоть что-то осталось, то левую и правую часть можно менять местами
+		// (если это было изначально разрешено).
+		// Иначе слева от знака равенства получится одинокий нуль, что нехорошо.
+		o.enablePartsExchange = o.enablePartsExchange && o.parts.length;
 		o.parts = [left.slag(), right.slag()];
 		chas2.task.setEquationTask(o, taskOptions);
+	},
+
+
+	/** @function NApi.task.setDilationTask
+	 * Составить задание о растяжении геометрической фигуры
+	 */
+	setDilationTask: function (o) {
+		let dilationCoefficient = o.dilationCoefficient || sl(2, 10);
+		let figureName = sklonlxkand(o.figureName);
+		let action = ['увелич', 'уменьш'].iz();
+
+		//перемешаем ещё разок! А то вдруг положили не перемешанный
+		if (!o.measurements[1].primary)
+			o.measurements = o.measurements.shuffle();
+
+		//подготовка к 3м переменным
+		o.measurements.forEach(element => element.name = sklonlxkand(element.name));
+
+		//Будет ли дополнение?
+		let PS = o.PS || undefined;
+		let figureInPS;
+
+		if (PS != undefined)
+			for (let i = 0; i < o.measurements.length; i++) {
+				if (o.measurements[i].wordToClarify) {
+					figureInPS = o.measurements[i];
+					o.measurements.splice(i, 1);
+					break;
+				}
+			}
+
+		let first = ['первого', 'первой', 'первого', 'первых'][figureName.rod];
+		let second = ['второго', 'второй', 'второго', 'вторых'][figureName.rod];
+		let bigger = ['больше', 'меньше'].iz(); // TODO: 'превосходит' ?
+
+		//TODO: разнонаправленное больше-меньше
+		let phrase1 =
+			'во сколько раз ' + o.measurements[0].name.ie + ' ' + first + ' ' + figureName.re + ' ' + bigger + ' ' +
+			o.measurements[0].name.re + ' ' + second + ' ' + figureName.re;
+		let phrase2 =
+			o.measurements[1].name.ie + ' ' + first + ' ' + figureName.re + ' в ' + chislitlx(dilationCoefficient.pow(o.measurements[1].power), 'раз', 'v') + ' ' +
+			bigger + ', чем ' + o.measurements[1].name.ie + ' ' + second + ' ' + figureName.re;
+
+		let textOptions = [
+			phrase1.toZagl() + ', если ' + phrase2 + '?',
+			phrase2.toZagl() + '. ' + phrase1.toZagl() + '?',
+		];
+
+		if (o.measurements[1].primary) {
+			textOptions.push(
+				'Во сколько раз ' + action + 'ится ' + o.measurements[0].name.ie + ' ' +
+				figureName.re + ', если ' +
+				['его', 'её', 'его', 'их'][figureName.rod] + ' ' + o.measurements[1].name.ve + ' ' + action + 'ить в ' +
+				chislitlx(dilationCoefficient.pow(o.measurements[1].power), 'раз', 'v') + '?'
+			);
+		}
+		else {
+			textOptions.push(
+				'Во сколько раз ' + action + 'или ' + o.measurements[0].name.ve + ' ' +
+				figureName.re + ', если ' +
+				['его', 'её', 'его', 'их'][figureName.rod] + ' ' + o.measurements[1].name.ie + ' ' +
+				action + ['ился', 'илась', 'илось', 'ились'][o.measurements[1].name.rod] + ' в ' +
+				chislitlx(dilationCoefficient.pow(o.measurements[1].power), 'раз', 'v') + '?'
+			);
+		}
+
+		//выберем вариант задачи
+
+		let choosePhrase = (o.choosePhrase == undefined) ? sl(0, textOptions.length - 1) : o.choosePhrase;
+
+		let task = o.clone();
+		task.text = textOptions[choosePhrase];
+
+		if (figureInPS !== undefined) {
+
+			if (PS.verb.isArray)
+				PS.verb = PS.verb[figureInPS.name.rod];
+
+			let mass = [figureInPS.name.ie + ' ' + PS.verb,''];
+			for (let i = 0; i < PS.proposal.length; i++)
+				task.text += PS.proposal[i] + mass[i];
+		}
+
+		if (!o.forbidDirectReplacements) {
+			task.text = task.text.
+				replace(' его площадь поверхности ', ' площадь его поверхности ').
+				replace(' её площадь поверхности ', ' площадь её поверхности ');
+		}
+
+		task.answers = [dilationCoefficient.pow(o.measurements[0].power)];
+		NAtask.setTask(task);
+	},
+
+
+	/** @function NApi.task.setEvaluationTask
+	 * Составить задание о нахождении значения выражения
+	 * @param {String} o.expr выражение, значение которого нужно найти
+	 * @param {Array}  o.forbiddenAnswers (необязательно) массив значений, которые не должны получаться (например, 0)
+	 */
+	setEvaluationTask: function (o) {
+		let task = o.clone();
+
+		let expr = math.parse(o.expr);
+		let answer = expr.evaluate();
+
+		o.forbiddenAnswers = o.forbiddenAnswers || [];
+		genAssert(!o.forbiddenAnswers.hasElem(answer), 'Ответ находится в списке запрещённых');
+
+		if(!o.askAboutFraction){
+			genAssertZ1000(answer, 'Ответ существенно нецелый');
+			genAssert(answer.ts().length < 7, 'Ответ слишком длинный');
+		}
+
+		//TODO: o.maxAnswer, o.minAnswer, o.maxAnswerLength, o.minAnswerLength
+		genAssert(answer <  1000000, 'Ответ слишком большой'  );
+		genAssert(answer > -1000000, 'Ответ слишком маленький');
+		genAssert(answer.abs() > 2/1024/1024 || answer === 0, 'Ответ слишком маленький (по модулю)');
+
+		let textAboutFraction = "";
+		if(o.askAboutFraction){
+			genAssert(!answer.isAlmostInteger(), 'Ответ должен быть дробью, а не целым числом');
+			answer = math.fraction(answer);
+			genAssert(answer.n < 1000000, 'Числитель дроби слишком большой (по модулю)');
+			genAssert(answer.d <= (o.maxDenominator || 20), 'Знаменатель дроби слишком большой');
+			genAssert(answer.d >= (o.minDenominator ||  2), 'Знаменатель дроби слишком маленький');
+1
+			// Вносим минус в числитель
+			answer.n *= answer.s;
+
+			textAboutFraction = " Представьте результат в виде несократимой обыкновенной дроби. ";
+			task.analys =
+				(task.analys || "") +
+				" Значение выражения в виде дроби: " +
+				answer.n.ts() + "/" + answer.d.ts();
+			if(sl1()){
+				answer = answer.n;
+				textAboutFraction += "В ответ запишите числитель этой дроби."
+			} else {
+				answer = answer.d;
+				textAboutFraction += "В ответ запишите знаменатель этой дроби."
+			}
+
+			genAssert(answer.ts().length < 7, 'Ответ слишком длинный - вероятна ложная точность');
+		}
+
+		if (o.simplifyConstant){
+			expr = math.simplifyConstant(expr);
+		}
+
+		if (!o.keepFractionsIrreduced){
+			expr = math.simplify(expr,mathjsRules.reduceFractions);
+			expr = math.simplify(expr,mathjsRules.reduceFractionsPi);
+		}
+
+		expr = math.simplify(expr, mathjsRules.clearFracAsPower);
+		expr = math.simplify(expr, mathjsRules.omit1pi);
+		expr = math.simplify(expr, mathjsRules.omit1sqrt);
+		expr = math.simplify(expr, mathjsRules.trig2trigPow);
+
+
+		let tex = expr.toTex().allDecimalsToStandard(true);
+
+		task.text =
+			"Найдите значение выражения:" +
+			"$$" + tex + "$$" +
+			textAboutFraction;
+		task.answers = answer;
+
+		NAtask.setTask(task);
 	},
 
 
@@ -499,8 +726,14 @@ chas2.task = {
 		 */
 		variativeABC : (function() {
 			var alph = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-			return function() {
+			return function(variativeABCstrings) {
 				var alph2 = alph.slice().shuffle();
+				if (variativeABCstrings) {
+					for (let i = 0; i < variativeABCstrings.length; i++) {
+						variativeABCstrings[i] =
+							variativeABCstrings[i].cepZamena(alph, alph2);
+					}
+				}
 				chas2.task.setTask(
 					mapRecursive(
 						chas2.task.getTask(),
@@ -510,6 +743,176 @@ chas2.task = {
 					)
 				);
 			};
-		})()
+		})(),
+
+		/** @function chas2.task.modifiers.multiplyAnswerBySqrt
+		 * Добавить фразу "Ответ умножьте на $\sqrt{..}$." и домножить сам ответ.
+		 * @param {Number} n Максимальное число, до которого можно домножать на корень
+		 * @param {Boolean} opts.useMultiples Можно ли умножать/делить на конструкции вида 2\sqrt{3}
+		 */
+		multiplyAnswerBySqrt : function(n, opts) {
+			var o = chas2.task.getTask();
+			if (o.answers.length != 1){
+				throw new TypeError('Fixme: cannot apply multiplyAnswerBySqrt() to multiple answers')
+			}
+			//Меняем запятую на точку для корректной работы Number
+			var ans = Number(o.answers[0].replace(',', '.'));
+
+			opts = opts || {};
+			opts.useMultiples = opts.useMultiples || false;
+
+			if ((ans*1000).isAlmostInteger()){
+				//Ответ и так хорош!
+				return;
+			}
+
+			var possibleMultipliers = [2,3];
+			for (var i = 5; i <= n; i++){
+				if(!i.isPolnKvadr()){
+					possibleMultipliers.push(i);
+				}
+			}
+			possibleMultipliers.shuffle();
+			console.log(possibleMultipliers);
+			for (var i of possibleMultipliers){
+				if(sl1() && (ans/i.sqrt()*1000).isAlmostInteger()){
+					o.text += ' Ответ разделите на $' + i.texsqrt(opts.useMultiples) + '$.';
+					o.answers = [(ans / i.sqrt()).okrugldo((10).pow(-6)).ts()]
+					chas2.task.setTask(o);
+					return;
+				} else if((ans*i.sqrt()*1000).isAlmostInteger()){
+					o.text += ' Ответ умножьте на $' + i.texsqrt(opts.useMultiples) + '$.';
+					o.answers = [(ans * i.sqrt()).okrugldo((10).pow(-6)).ts()]
+					chas2.task.setTask(o);
+					return;
+				}
+			}
+			throw new RangeError('multiplyAnswerBySqrt(): can find no appropriate square root');
+		},
+
+		/** @function chas2.task.modifiers.roundUpTo
+		 * Добавить фразу "Округлить до ..." и округлить сам ответ.
+		 * @param {Number} n степень 10 (округлить до 10^n)
+		 */
+		roundUpTo : function(n) {
+			var rndInt = [
+				'десятков',
+				'сотен',
+				'тысяч',
+				'десятков тысяч',
+				'сотен тысяч',
+				'миллионов',
+				'десятков миллионов',
+				'сотен миллионов',
+				'миллиардов',
+			];
+			var rndFrac = [
+				'десятых',
+				'сотых',
+				'тысячных',
+				'десятитысячных',
+				'стотысячных',
+				'миллионных',
+				'десятимилионных',
+				'стомиллионных',
+				'миллиардных',
+			];
+			var o = chas2.task.getTask();
+			var ans = Number(o.answers[0].replace(',', '.')); //меняем запятую на точку для корректной работы Number
+			var cntFrac = String(ans).includes('.') ? String(ans).split('.')[1].length : 0;
+			var cntInt = String(ans).includes('.') ? String(ans).split('.')[0].length : String(ans).length;
+			if(n < 0){
+				var nAuto = (cntFrac < -n) || ((-n - 1) > 8) ? cntFrac : -n;
+				nAuto = Math.min(nAuto, rndFrac.length);
+				o.text += ' Ответ округлите до ' + (nAuto ? rndFrac[nAuto - 1] : 'целого') + '.';
+				o.answers = Math.round(ans * Math.pow(10, nAuto)) / Math.pow(10, nAuto);
+			}
+			else if(n > 0) {
+				var nAuto = (cntInt < n) || ((n - 1) > 8) ? cntInt : n;
+				nAuto = Math.min(nAuto, rndInt.length);
+				o.text += ' Ответ округлите до ' + (nAuto ? rndInt[nAuto - 1] : 'целого') + '.';
+				o.answers = Math.round(ans / Math.pow(10, nAuto)) * Math.pow(10, nAuto);
+			}
+			else { //если параметр n не задан или равен 0
+				o.text += ' Ответ округлите до целого.';
+				o.answers = Math.round(ans);
+			}
+			chas2.task.setTask(o);
+		},
+
+		/** @function chas2.task.modifiers.addCanvasIllustration
+		 * Добавить иллюстрацию на основе canvas
+		 * @param {Number} o.width ширина canvas
+		 * @param {Number} o.height высота canvas
+		 * @param {Boolean} o.belowText расположить под текстом (по умолчанию false)
+		 * @param {String} o.style стиль canvas
+		 * @param {Function} o.paint функция отрисовки
+		 */
+		addCanvasIllustration : function(o) {
+			var currentTask = chas2.task.getTask();
+			var randomId = getRandomInt(1, 1000000000); // Случайный идентификатор canvas (на случай, если их окажется несколько).
+			// Math.random() использовать нельзя - в id тэга не должно быть точки
+
+			if (o.belowText) {
+				chas2.task._.normalizeCanvasOptionsDisplay(o);
+				currentTask.text = currentTask.text + '<br/>' + chas2.task._.generateCanvasTag(o, randomId) + '<br/>';
+			} else {
+				chas2.task._.normalizeCanvasOptions(o);
+				currentTask.text = chas2.task._.generateCanvasTag(o, randomId) + currentTask.text;
+			}
+			var savedDrawFunction = currentTask.draw;
+			var paint = o.paint; // На всякий случай сохраняем ссылку прямо на свойство объекта
+
+			currentTask.draw = function() {
+				if (savedDrawFunction instanceof Function) {
+					savedDrawFunction();
+				}
+				var currentCanvas = document.getElementById('canvas' + randomId);
+				var ct = currentCanvas.getContext('2d');
+				paint(ct);
+
+				$(currentCanvas).attr('id', '');
+			};
+			chas2.task.setTask(currentTask);
+
+		},
+
+		/** @function chas2.task.modifiers.askAboutPoint
+		 * Спросить про точку
+		 * @param {String} название точки
+		 * @param {Array} координаты точки
+		 */
+		askAboutPoint : function(name, coordinates) {
+			var currentTask = chas2.task.getTask();
+			var what;
+			var coord = sl(coordinates.length - 1);
+			switch(coord){
+				case 0:
+					what = 'абсциссу';
+				break;
+				case 1:
+					what = 'ординату';
+				break;
+				case 2:
+					what = 'аппликату';
+				break;
+
+			}
+			var answ = coordinates[coord];
+
+			currentTask.text += ' Найдите ' + what + ' точки ' + name + '. ';
+			currentTask.answers = [answ];
+			chas2.task.setTask(currentTask);
+		},
+		
+		/** @function NAtask.modifiers.allDecimalsToStandard
+		Применяет .ts() ко всем цифрам с излишней точностью в задании.
+		*/
+		allDecimalsToStandard : function(p1) {
+			var o = NAtask.getTask();
+			o.text = o.text.allDecimalsToStandard(p1);
+			o.analys = o.analys.allDecimalsToStandard(p1);
+			NAtask.setTask(o);
+		},
 	},
 };
