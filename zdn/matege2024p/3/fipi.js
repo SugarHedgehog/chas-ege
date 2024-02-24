@@ -1,4 +1,4 @@
-window.nomer=[
+window.availableTaskNumbers = [
 	// 1,
 	2,
 	3,
@@ -63,5 +63,6 @@ window.nomer=[
 	318475,
 	324450,
 	509458,
-].iz()
+];
+window.nomer = window.availableTaskNumbers.iz();
 window.comment='Стереометрия';

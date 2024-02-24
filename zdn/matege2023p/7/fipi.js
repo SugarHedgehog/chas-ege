@@ -1,4 +1,4 @@
-window.nomer = [
+window.availableTaskNumbers = [
       // 1,
       // 2,
       // 3,
@@ -12,5 +12,6 @@ window.nomer = [
       // 562751,
       // 40130,
       // 510384,
-].iz();
+];
+window.nomer = window.availableTaskNumbers.iz();
 window.comment = 'Производная и первообразная';

@@ -1,4 +1,4 @@
-window.nomer = [
+window.availableTaskNumbers = [
     // 1,
     // 2,
     3,
@@ -18,5 +18,6 @@ window.nomer = [
     28003,
     28009,
     28012,
-].iz();
+];
+window.nomer = window.availableTaskNumbers.iz();
 window.comment = 'Задачи с прикладным содержанием';

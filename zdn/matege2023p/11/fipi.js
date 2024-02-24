@@ -1,4 +1,4 @@
-window.nomer = [
+window.availableTaskNumbers = [
     1,
     2,
     // 3,
@@ -37,5 +37,6 @@ window.nomer = [
     // 36,
     // 37,
     // 38,
-].iz();
+];
+window.nomer = window.availableTaskNumbers.iz();
 window.comment = 'Наибольшее и наименьшее значение';

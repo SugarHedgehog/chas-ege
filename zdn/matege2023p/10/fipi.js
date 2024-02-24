@@ -1,4 +1,4 @@
-window.nomer = [
+window.availableTaskNumbers = [
     // 508895,
     // 508911,
      508951,
@@ -19,5 +19,6 @@ window.nomer = [
      // 509253,
      // 509271,
      // 509275,
-].iz();
+];
+window.nomer = window.availableTaskNumbers.iz();
 window.comment = 'Графики функций';

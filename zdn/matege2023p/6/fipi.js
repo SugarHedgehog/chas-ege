@@ -1,4 +1,4 @@
-window.nomer = [
+window.availableTaskNumbers = [
     1,
     2,
     3,
@@ -59,5 +59,6 @@ window.nomer = [
     2674501,
     2684901,
     7741402,
-].iz();
+];
+window.nomer = window.availableTaskNumbers.iz();
 window.comment = 'Вычисления и преобразования';
