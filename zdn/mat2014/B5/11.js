@@ -11,7 +11,7 @@
 		NAtask.setTask({
 			text: 'Стороны ' + ['правильного', 'равностороннего', 'равноугольного'].iz() + ' треугольника $ABC$ равны $' +
 				length.texsqrt(sl1()) + '$. ' +
-				'Найдите ' + question +' $'+ ['\\overrightarrow{AB}', '\\overrightarrow{AC}'].shuffleJoin(['+', '$ и $'][rand])+'$'+'.',
+				'Найдите ' + question + ' $\\overrightarrow{AB}$' + ['$+$', ' и '][rand] + '$\\overrightarrow{AC}$.',
 			answers: answ,
 			analys: '',
 		});
