@@ -12,7 +12,7 @@ window.availableTaskNumbers = [
      // 320190,
      // 320191,
      // 320194,
-     320195,
+     // 320195,
 ];
 window.nomer = window.availableTaskNumbers.iz();
 window.comment = 'Начала теории вероятностей';
