@@ -22,7 +22,7 @@
 		let paint1 = function(ctx) {
 			ctx.lineWidth = 2;
 			//образующие
-			ctx.strokeStyle = "#809DF2";
+			ctx.strokeStyle = om.secondaryBrandColors.iz();
 			ctx.drawLine(50, 300, 200, 10);
 			ctx.drawLine(350, 300, 200, 10);
 			//эллипс
@@ -34,7 +34,7 @@
 			ctx.ellipse(200, 300, 20, 150, Math.PI / 2, Math.PI / 2, 1.5 * Math.PI);
 			ctx.stroke();
 
-			ctx.strokeStyle = ["#D777F2", "#F2A2D6"].iz();
+			ctx.strokeStyle = om.primaryBrandColors.iz();
 			//радиус
 			ctx.drawLine(200, 300, 350, 300);
 			//высота
