@@ -26,7 +26,7 @@
 			ct.translate(30, 60);
 			ct.scale(15, -15);
 			ct.lineWidth = 2 / 20;
-			ct.strokeStyle = "#809DF2";
+			ct.strokeStyle = om.secondaryBrandColors.iz();
 			switch (numberOfEdge) {
 			case 3:
 				ct.rightPyramid3({

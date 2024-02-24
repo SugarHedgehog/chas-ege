@@ -43,12 +43,12 @@
 			],
 			[
 				[{
-					name: 'площади оснований',
-					wordToClarify: true,
-				}, {
 					name: 'радиусы оснований',
 					wordToClarify: true,
-				}].iz(), [{
+				}, {
+					name: 'площадь основания',
+					power: 1,
+				}, {
 					name: 'высота',
 					power: 1,
 				}, {
@@ -100,7 +100,7 @@
 		let copy = measurements.map((num) => num);
 		let paint1 = function(ctx) {
 			ctx.translate(-50, 40);
-			ctx.strokeStyle = "#809DF2";
+			ctx.strokeStyle = om.secondaryBrandColors.iz();
 			ctx.lineWidth = 2;
 			//конус побольше
 			//образующие
@@ -115,7 +115,7 @@
 			ctx.ellipse(150, 200, 20, 90, Math.PI / 2, Math.PI / 2, 1.5 * Math.PI);
 			ctx.stroke();
 
-			ctx.strokeStyle = ["#D777F2", "#F2A2D6"].iz();
+			ctx.strokeStyle = om.primaryBrandColors.iz();
 			for (let i = 0; i < copy.length; i++) {
 				//радиус
 				if (copy[i].name.ie == 'радиус основания')
@@ -126,7 +126,7 @@
 			}
 
 			//конус поменьше	
-			ctx.strokeStyle = "#809DF2";
+			ctx.strokeStyle = om.secondaryBrandColors.iz();;
 			ctx.setLineDash([0, 0]);
 			ctx.translate(200, 0);
 			//образующие
@@ -141,7 +141,7 @@
 			ctx.ellipse(150, 200, 10, 90, Math.PI / 2, Math.PI / 2, 1.5 * Math.PI);
 			ctx.stroke();
 
-			ctx.strokeStyle = ["#D777F2", "#F2A2D6"].iz();
+			ctx.strokeStyle = om.primaryBrandColors.iz();
 			for (let i = 0; i < copy.length; i++) {
 				//радиус
 				if (copy[i].name.ie == 'радиус основания')
