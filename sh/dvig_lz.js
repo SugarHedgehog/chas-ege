@@ -1,9 +1,9 @@
 'use strict';
 
 //{{ Новый, даже работающий, парсер линейных задач
-let punctuation = [',', '.', ':', ';', '?', '!', '(', ')'];
+let punctuation = [',', '.', ':', ';', '?', '!', '(', ')', '[', ']'];
 function splitTextToLexems(text) {
-	var lexemArray = text.split(/[\[\]' '°]/);
+	var lexemArray = text.split(/[' '°]/);
 	//отделение от слов символов пунктуации
 	for (let i = 0; i < lexemArray.length; i++) {
 		if (lexemArray[i].length > 1 && punctuation.includes(lexemArray[i].slice(-1))) {
@@ -69,6 +69,7 @@ function variateOtherNumbers(lexemArray, variableList) {
 function makeTemplateFromPlainText(text) {
 	text = text.replace(/­/g, ""); //Убиваем мягкий перенос
 	text = text.replace(/\n/g, ""); //Убиваем перенос
+	text = text.replace(/\s+/g, " "); //Все пробелы - один пробел!
 	text = text.replace(/(\d+)(?=[А-ЯЁ\-])/ig, "$1 "); //Отделяем от слов "прилипшие" числа
 
 	// Полностью ликвидируем дефисы
