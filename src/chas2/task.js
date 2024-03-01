@@ -70,6 +70,29 @@ chas2.task = {
 		},
 
 
+		/** @function chas2.task._.unfoldTask
+		 * Развернуть вопросы в стандартный объект-задание,
+		 * а именно - обработать questions и postquestion
+		 */
+		unfoldTask : function(o) {
+			if (o.questions) {
+				let question = o.questions.iz();
+				if (! ('answer' in question) ){
+					question.answer = question.answers;
+				}
+				o.text += question.text;
+				o.answers = chaslib.toStringsArray(question.answer);
+				//TODO: черпать o.wrongAnswers из невостребованных вопросов?
+				if (question.analys) {
+					o.analys += question.analys;
+				}
+			}
+			if (o.postquestion) {
+				o.text += o.postquestion;
+			}
+		},
+
+
 		/** @function chas2.task._.normalizeCanvasOptions
 		 * Привести опции canvas к нормальному виду
 		 * @param {Number} o.width ширина canvas
@@ -127,6 +150,7 @@ chas2.task = {
 	 */
 	setTask : function(o) {
 		chas2.task._.normalizeTask(o);
+		chas2.task._.unfoldTask(o);
 		chas2.task._.validateTask(o);
 
 		window.vopr.podg();
@@ -782,6 +806,47 @@ chas2.task = {
 					return;
 				} else if((ans*i.sqrt()*1000).isAlmostInteger()){
 					o.text += ' Ответ умножьте на $' + i.texsqrt(opts.useMultiples) + '$.';
+					o.answers = [(ans * i.sqrt()).okrugldo((10).pow(-6)).ts()]
+					chas2.task.setTask(o);
+					return;
+				}
+			}
+			throw new RangeError('multiplyAnswerBySqrt(): can find no appropriate square root');
+		},
+
+		/** @function chas2.task.modifiers.roundUpTo
+		 * Добавить фразу "Ответ умножьте на $\sqrt{..}$." и домножить сам ответ.
+		 * @param {Number} n Максимальное число, до которого можно домножать на корень
+		 */
+		multiplyAnswerBySqrt : function(n) {
+			var o = chas2.task.getTask();
+			if (o.answers.length != 1){
+				throw new TypeError('Fixme: cannot apply multiplyAnswerBySqrt() to multiple answers')
+			}
+			//Меняем запятую на точку для корректной работы Number
+			var ans = Number(o.answers[0].replace(',', '.'));
+
+			if ((ans*1000).isAlmostInteger()){
+				//Ответ и так хорош!
+				return;
+			}
+
+			var possibleMultipliers = [2,3];
+			for (var i = 5; i <= n; i++){
+				if(!i.isPolnKvadr()){
+					possibleMultipliers.push(i);
+				}
+			}
+			possibleMultipliers.shuffle();
+			console.log(possibleMultipliers);
+			for (var i of possibleMultipliers){
+				if(sl1() && (ans/i.sqrt()*1000).isAlmostInteger()){
+					o.text += ' Ответ разделите на $' + i.texsqrt() + '$.';
+					o.answers = [(ans / i.sqrt()).okrugldo((10).pow(-6)).ts()]
+					chas2.task.setTask(o);
+					return;
+				} else if((ans*i.sqrt()*1000).isAlmostInteger()){
+					o.text += ' Ответ умножьте на $' + i.texsqrt() + '$.';
 					o.answers = [(ans * i.sqrt()).okrugldo((10).pow(-6)).ts()]
 					chas2.task.setTask(o);
 					return;
