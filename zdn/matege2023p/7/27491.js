@@ -47,7 +47,8 @@
 
 		let condition = '';
 		root = root.iz();
-		if (f(root[0]) > f(root[0] + 0.1) && f(root[0]) < f(root[0] - 0.1))
+		
+		if (f(root) > f(root + 0.1) && f(root) < f(root - 0.1))
 			condition = 'наименьшее';
 		else
 			condition = 'наибольшее';
