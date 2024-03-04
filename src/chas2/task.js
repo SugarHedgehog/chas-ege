@@ -911,6 +911,7 @@ chas2.task = {
 		 * @param {Number} o.height высота canvas
 		 * @param {Boolean} o.belowText расположить под текстом (по умолчанию false)
 		 * @param {String} o.style стиль canvas
+		 * @param {String} o.strokeStyle цвет линий canvas
 		 * @param {Function} o.paint функция отрисовки
 		 */
 		addCanvasIllustration : function(o) {
@@ -934,6 +935,8 @@ chas2.task = {
 				}
 				var currentCanvas = document.getElementById('canvas' + randomId);
 				var ct = currentCanvas.getContext('2d');
+				ct.strokeStyle = o.strokeStyle || om.secondaryBrandColors.iz();
+				ct.fillStyle = o.fillStyle || om.primaryBrandColors.iz();
 				paint(ct);
 
 				$(currentCanvas).attr('id', '');
