@@ -936,7 +936,7 @@ chas2.task = {
 				var currentCanvas = document.getElementById('canvas' + randomId);
 				var ct = currentCanvas.getContext('2d');
 				ct.strokeStyle = o.strokeStyle || om.secondaryBrandColors.iz();
-				ct.fillStyle = o.fillStyle || om.primaryBrandColors.iz();
+				ct.fillStyle = o.fillStyle || 'black';
 				paint(ct);
 
 				$(currentCanvas).attr('id', '');
