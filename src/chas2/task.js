@@ -755,7 +755,7 @@ chas2.task = {
 			derivative = math.simplify(derivative, mathjsRules.safeTrivialSimplification);
 			derivative = math.simplify(derivative, mathjsRules.trig2trigPow);
 			//TODO: a separate rule for this?
-			derivative = math.simplify(derivative, [{l: 'n1+-n2*n3', r: 'n1-n2*n3'}]);
+			//derivative = math.simplify(derivative, [{l: 'n1+-n2*n3', r: 'n1-n2*n3'}]);
 
 			o.analys = "Производная функции: $y' = " +
 				derivative.toTex() + "$" +
@@ -793,6 +793,91 @@ chas2.task = {
 		chas2.task.setTask(o);
 	},
 
+
+	/** @function NApi.task.setLocalExtremumTask
+	 * Составить задание о нахождении минимального/максимального значения функции на промежутке
+	 * @param {String}  o.expr mathjs-запись исследуемой функции
+	 * @param {String}  o.leftEnd mathjs-запись левого конца отрезка
+	 * @param {String}  o.rightEnd mathjs-запись правого конца отрезка
+	 * @param {Number}  o.primaryStep шаг первичного перебора значений x, по умолчанию 0.001
+	 * @param {Number}  o.secondaryStep шаг вторичного перебора значений x, по умолчанию o.primaryStep.sqr()
+	 * @param {Boolean}  o.forbidMinY запретить спрашивать минимум
+	 * @param {Boolean}  o.forbidMaxY запретить спрашивать максимум
+	 * @param {Boolean}  o.forbidAnalys запретить писать решение (если оно кривое)
+	 * @param {Boolean}  o.forbidOpenEnds запретить полуинтервалы и интервалы, спрашивать только про отрезок (в ФИПИ так)
+	 * @param {Boolean}  o.simplifyConstant упростить константы силами mathjs - численно
+	 * @param {Boolean}  o.keepFractionsIrreduced не сокращать дроби
+	 * @param {Boolean}  o.keepSumOrder не изменять порядок слагаемых
+	 */
+	setLocalExtremumTask: function (o) {
+		let expr = math.parse(o.expr);
+		//TODO: parse sl()
+		expr = math.simplify(expr, mathjsRules.safeTrivialSimplification);
+
+		if (!o.extremums) {
+			// We have to find them here...
+			let expr2 = math.simplify(expr, [{l:'ln(n1)', r:'log(n1)'}]);
+			expr2 = math.simplify(expr2, [{l:'log(n1,n2)', r:'(log(n1)/log(n2))'}]);
+			let derivative = math.derivative(expr2, 'x', {simplify: false});
+			derivative = math.simplify(derivative, mathjsRules.safeTrivialSimplification);
+
+			// Some trick to avoid problems with equations...
+			let eq = 'eq(' + derivative.toString() + ')';
+			eq = math.simplify(eq, [{l:'n1*n2 + n1*n3', r:'n1*(n2+n3)'}]);
+			eq = math.simplify(eq, [{l:'eq(n1*e^n2)', r:'eq(n1)'}]);
+			eq = eq.args[0];
+			console.log(eq.toString());
+			// Solve the equation eq using nerdamer
+
+			let roots = nerdamer.solve(eq.toString()+'=0', 'x').toString().replace(/^\[/,'').replace(/\]$/,'').split(',');
+			console.log(roots);
+
+			o.extremums = [];
+			for (let root of roots) {
+				let stringRoot = root.toString();
+				genAssert(stringRoot.length < 7, 'Слишком кривой ноль производной');
+				o.extremums.push(stringRoot);
+			}
+
+			//o.extremums = roots.toString().replace(/^\[/,'').replace(/\]$/,'').split(',');
+		}
+
+
+		let sortedExtremums = {min:[], max:[], not:[]};
+
+		//sort extremums
+		for (let e of o.extremums) {
+			console.log(e);
+			sortedExtremums[
+				mathjs_helpers.testLocalExtremum(expr.toString(), ''+e, '1/100')
+			].push(e);
+		}
+
+		if (sortedExtremums.min.length !== 1) {
+			delete sortedExtremums.min;
+		}
+		if (sortedExtremums.max.length !== 1) {
+			delete sortedExtremums.max;
+		}
+		delete sortedExtremums.not;
+
+		let whatToFind = Object.keys(sortedExtremums).shuffle();
+		genAssertNonempty(whatToFind, 'Искать-то нечего!');
+		whatToFind = whatToFind[0];
+		let theExtremum = sortedExtremums[whatToFind][0];
+
+		theExtremum = eval(theExtremum);
+		genAssertZ1000(theExtremum, 'Бесконечные десятичные дроби запрещены');
+
+		let extremumName = {min: 'минимум', max: 'максимум'}[whatToFind];
+
+		let tex = expr.toTex({parenthesis: 'auto'}).allDecimalsToStandard(true);
+		o.text = 'Найдите точку '+ extremumName + 'а функции $y=' + tex + '$.'
+
+		o.answers = [theExtremum];
+
+		chas2.task.setTask(o);
+	},
 
 	/** @function NApi.task.setTwoStatementTask
 	 * Составить задание о двух утверждениях
