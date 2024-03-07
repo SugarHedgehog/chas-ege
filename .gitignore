@@ -19,6 +19,7 @@ node_modules
 dist
 build
 temp
+ext
 
 package-lock.json
 
@@ -29,3 +30,6 @@ zdn/*/upak.js
 lib/head.min.js
 #lib/chas-uijs.js
 
+#Библиотеки
+math.js
+nerdamer.js
