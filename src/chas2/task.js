@@ -573,7 +573,13 @@ chas2.task = {
 		let expr = math.parse(o.expr);
 		expr = math.simplify(expr,[mathjs_helpers.slEvaluate]);
 
-		let answer = o.variables ? expr.evaluate(o.variables) : expr.evaluate();
+		let answer;
+
+		if (o.variables) {
+			answer = expr.evaluate(o.variables);
+		} else {
+			answer = expr.evaluate();
+		}
 
 		o.forbiddenAnswers = o.forbiddenAnswers || [];
 		genAssert(!o.forbiddenAnswers.hasElem(answer), 'Ответ находится в списке запрещённых');
