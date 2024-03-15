@@ -26,8 +26,6 @@ window.availableTaskNumbers = [
     99607,
     99612,
     99614,
-    99619,
-    113443,
 ];
 window.nomer = window.availableTaskNumbers.iz();
 window.comment = 'Текстовые задачи';
