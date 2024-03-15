@@ -12,7 +12,7 @@
 			let s = [2 * (f * k + (d + b) * f + (d + b) * k) - 2 * ((f - c) * b), k * (f * d + c * b)][rand];
 
 			let paint1 = function(ctx) {
-				ctx.strokeStyle = "#809DF2";
+				ctx.strokeStyle = om.secondaryBrandColors.iz();
 
 				a *= 10;
 				b *= 16;

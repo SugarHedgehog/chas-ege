@@ -3,7 +3,8 @@
 	lx['образующая'].ve = 'образующую';
 	lx['образующая'].rod = 1;
 	lx['образующая'].odu = 0;
-
+	
+	lx_declareClarifiedPhraseWithDeclensionInPlural('площадь', 'большого круга');
 	lx_declareClarifiedPhrase('площадь', 'поверхности');
 	lx_declareClarifiedPhrase('радиус', 'основания');
 	lx_declareClarifiedPhrase('площадь', 'боковой поверхности');

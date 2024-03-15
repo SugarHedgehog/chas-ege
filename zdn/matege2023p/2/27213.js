@@ -27,7 +27,7 @@
 					height: c,
 					depth: depth,
 					angle: angle,
-					strokeStyle: "#809DF2",
+					strokeStyle: om.secondaryBrandColors.iz(),
 				}, [0, 3, 4], false, [4, 5]);
 
 
@@ -37,7 +37,7 @@
 					height: c,
 					depth: depth * 2,
 					angle: angle,
-					strokeStyle: "#809DF2",
+					strokeStyle: om.secondaryBrandColors.iz(),
 				}, [0, 1, 2, 3, 4, 5, 6], false, [4, 5]);
 
 
@@ -47,7 +47,7 @@
 					height: c,
 					depth: depth,
 					angle: angle,
-					strokeStyle: "#809DF2",
+					strokeStyle: om.secondaryBrandColors.iz(),
 				}, [0, 1, 2, 3, 4, 8, 9, 10, 11], false, [0, 0]);
 
 				ctx.translate(a - depth * angle.cos(), depth * angle.cos());
@@ -56,7 +56,7 @@
 					height: c,
 					depth: depth,
 					angle: angle,
-					strokeStyle: "#809DF2",
+					strokeStyle: om.secondaryBrandColors.iz(),
 				}, [0, 3, 4, 6], false, [4, 5]);
 
 				//возрат к начальной точке

@@ -42,7 +42,7 @@ Number.prototype.texcube = function(p1, p2) {
 		let radiusView = radiuses.map((elem) => elem.texcube(1));
 
 		let paint1 = function(ctx) {
-			ctx.strokeStyle = "#809DF2";
+			ctx.strokeStyle = om.secondaryBrandColors.iz();
 			ctx.lineWidth = 2;
 			//шар 1
 			ctx.beginPath();
@@ -61,7 +61,7 @@ Number.prototype.texcube = function(p1, p2) {
 			ctx.stroke();
 			ctx.closePath();
 			
-			ctx.strokeStyle = ["#D777F2", "#F2A2D6"].iz();
+			ctx.strokeStyle = om.primaryBrandColors.iz();
 			ctx.drawLine(200, 200, 200, 50);
 		};
 
