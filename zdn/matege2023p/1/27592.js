@@ -44,28 +44,36 @@
 			question.find = vertices.slice(1, 5);
 			question.answ = a * 3;
 			break;
+		} //TODO: упростить
+		if (sl1()) {
+			question.data = question.data.reverse();
+		}
+		if (sl1()) {
+			question.find = question.find.reverse();
 		}
 
 		let paint1 = function(ctx) {
 			ctx.lineWidth = 2;
-			ctx.strokeStyle = om.secondaryBrandColors.iz();
+			ctx.strokeStyle = "#809DF2";
 
 			ctx.drawLine(10, 350, 390, 350);
 			ctx.drawLine(10, 350, 120, 50);
-
 			ctx.drawLine(120, 50, 390, 350);
+
+			ctx.strokeStyle = ["#D777F2","#F2A2D6"].iz();
 
 			ctx.drawLine(65, 200, 255, 200);
 
 			//штрихи
-			ctx.lineWidth = 1;
+			ctx.lineWidth = 1.2;
+			ctx.drawLine(80, 130, 80 + 20, 130 + 10);
+			ctx.drawLine(30, 260, 30 + 20, 260 + 10);
 
-			ctx.strokeStyle = om.primaryBrandColors.iz();
-			ctx.strokeInMiddleOfSegment(10, 350, 65, 200, 10);
-			ctx.strokeInMiddleOfSegment(120, 50, 65, 200, 10);
+			ctx.drawLine(190, 130 + 10, 190 + 20, 130);
+			ctx.drawLine(190 + 2, 130 + 13, 190 + 22, 130 + 3);
 
-			ctx.strokeInMiddleOfSegment(120, 50, 255, 200, 10, 2);
-			ctx.strokeInMiddleOfSegment(390, 350, 255, 200, 10, 2);
+			ctx.drawLine(300, 260 + 10, 300 + 20, 260);
+			ctx.drawLine(300 + 2, 260 + 13, 300 + 22, 260 + 3);
 
 			ctx.font = "23px liberation_sans";
 			ctx.fillText(vertices[0], 120, 40);
