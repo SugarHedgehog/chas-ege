@@ -1,4 +1,4 @@
-window.nomer = [
+window.availableTaskNumbers = [
      1,
      // 3,
      // 4,
@@ -13,5 +13,6 @@ window.nomer = [
      // 320191,
      // 320194,
      320195,
-].iz();
+];
+window.nomer = window.availableTaskNumbers.iz();
 window.comment = 'Начала теории вероятностей';

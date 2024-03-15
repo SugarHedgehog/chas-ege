@@ -1,4 +1,4 @@
-window.nomer = [
+window.availableTaskNumbers = [
      1,
      2,
      3,
@@ -35,5 +35,6 @@ window.nomer = [
      315120,
      315535,
      525399,
-].iz();
+];
+window.nomer = window.availableTaskNumbers.iz();
 window.comment = 'Простейшие уравнения';
