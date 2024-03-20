@@ -20,9 +20,9 @@
 		}, {
 			x: vectorB[2],
 			y: vectorB[3]
-		}].mt_otrPeres();
+		}].mt_coordinatesOfIntersectionOfTwoSegments();
 
-		genAssert(!check1, 'Вектора A и B пересекаются');
+		genAssert(!check1.status, 'Вектора A и B пересекаются');
 
 		let coordVect = (V) => [V[2] - V[0], V[3] - V[1]];
 
@@ -39,22 +39,19 @@
 
 		let vectors = [coordA, coordB];
 
-		let coeffs = [
-			[sl(1, 10).pm(), 1],
-			[sl(1, 10).pm(), 1],
-		];
+		let coeffs = [sl(1, 10).pm(),sl(1, 10).pm()];
 		let finalyVector = [0, 0];
 		let condition = [];
 
 		for (let i = 0; i < 2; i++) {
-			condition.push('' + coeffs[i][0] + '\\vec{' + letter[i] + '}');
-			finalyVector = objSum(finalyVector, objUmn(vectors[i], coeffs[i][0] / coeffs[i][1]));
+			condition.push('' + coeffs[i] + '\\vec{' + letter[i] + '}');
+			finalyVector = objSum(finalyVector, objUmn(vectors[i], coeffs[i]));
 		}
 
 		genAssert(finalyVector.production(), 'Слишком простой вектор');
 		let answ = finalyVector.map((elem) => elem.pow(2)).sum().sqrt();
 
-		let resultExpr = condition.shuffle().slag().plusminus();
+		let resultExpr = condition.slag().plusminus();
 
 		let paint1 = function(ctx) {
 			ctx.translate(-320, 0);
@@ -97,7 +94,9 @@
 				].shuffle().joinWithConjunction() +
 				'. Найдите длину вектора '+('$' + resultExpr + '$.').plusminus(),
 			answers: answ,
-			analys: '$' + resultExpr + '=(' + finalyVector[0].ts() + ' ;' + finalyVector[1].ts() + ')$',
+			analys: '$' + resultExpr + '=(' + finalyVector[0].ts() + ' ;' + finalyVector[1].ts() + ')$<br>'+
+			'$\\overrightarrow{' + letter[0] + '}(' + coordA[0].ts() + ' ;' + coordA[1].ts() + ')$<br>'+
+			'$\\overrightarrow{' + letter[1] + '}(' + coordB[0].ts() + ' ;' + coordB[1].ts() + ')$',
 			author: 'Суматохина Александра',
 		});
 		NAtask.modifiers.multiplyAnswerBySqrt(13);
