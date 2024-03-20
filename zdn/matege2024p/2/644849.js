@@ -7,9 +7,21 @@
 		let vectorA = generateMatrix(1, 4, 1, 13).iz();
 		let vectorB = generateMatrix(1, 4, 1, 13).iz();
 		
-		let check=[{x:vectorA[0],y:vectorA[1]},{x:vectorA[2],y:vectorA[3]},{x:vectorB[0],y:vectorB[1]},{x:vectorB[2],y:vectorB[3]}].mt_otrPeres();
+		let check1 = [{
+			x: vectorA[0],
+			y: vectorA[1]
+		}, {
+			x: vectorA[2],
+			y: vectorA[3]
+		}, {
+			x: vectorB[0],
+			y: vectorB[1]
+		}, {
+			x: vectorB[2],
+			y: vectorB[3]
+		}].mt_coordinatesOfIntersectionOfTwoSegments();
 
-		genAssert(!check,'Вектора пересекаются');
+		genAssert(!check1.status, 'Вектора A и B пересекаются');
 		
 		let coordVect = (V) => [V[2] - V[0], V[3] - V[1]];
 		
