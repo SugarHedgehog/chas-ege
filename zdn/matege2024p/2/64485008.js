@@ -40,14 +40,14 @@
 		let vectors = [coordA, coordB];
 
 		let coeffs = [
-			[sl(1, 10).pm(), sl(2, 20)],
-			[sl(1, 10).pm(), sl(2, 20)],
+			[sl(1, 10).pm(), 1],
+			[sl(1, 10).pm(), 1],
 		];
 		let finalyVector = [0, 0];
 		let condition = [];
 
 		for (let i = 0; i < 2; i++) {
-			condition.push('' + coeffs[i][0].texrndfrac(coeffs[i][1]) + '\\vec{' + letter[i] + '}');
+			condition.push('' + coeffs[i][0] + '\\vec{' + letter[i] + '}');
 			finalyVector = objSum(finalyVector, objUmn(vectors[i], coeffs[i][0] / coeffs[i][1]));
 		}
 
@@ -95,7 +95,7 @@
 			text: 'На координатной плоскости изображены векторы ' + ['$\\overrightarrow{' + letter[0] + '}$',
 					'$\\overrightarrow{' + letter[1] + '}$',
 				].shuffle().joinWithConjunction() +
-				'. Найдите длину вектора $' + resultExpr + '$.',
+				'. Найдите длину вектора '+('$' + resultExpr + '$.').plusminus(),
 			answers: answ,
 			analys: '$' + resultExpr + '=(' + finalyVector[0].ts() + ' ;' + finalyVector[1].ts() + ')$',
 			author: 'Суматохина Александра',
