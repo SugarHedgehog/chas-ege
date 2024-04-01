@@ -14,7 +14,6 @@ window.availableTaskNumbers = [
      // 320211,
      // 508830, 
      523366,
-     621772,
 ];
 window.nomer = window.availableTaskNumbers.iz();
 window.comment = 'Вероятности сложных событий';
