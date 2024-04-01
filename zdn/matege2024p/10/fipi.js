@@ -1,28 +1,5 @@
 window.availableTaskNumbers = [
-    // 1,
-    2,
-    // 3,
-    // 4,
-    5,
-    6,
-    // 7,
-    8,
-    // 9,
-    // 10,
-    11,
-    // 13,
-    14,
-    // 15,
-    // 16,
-    // 17,
-    26592,
-    26597,
-    99567,
-    // 99568,
-    99606,
-    99607,
-    99619,
-    113443,
+	113443,
 ];
 window.nomer = window.availableTaskNumbers.iz();
-window.comment = 'Текстовые задачи';
+window.comment='113443';
