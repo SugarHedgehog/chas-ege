@@ -1,14 +1,12 @@
 window.availableTaskNumbers = [
     // 1,
     2,
-    3,
     5,
     // 7,
     8,
     9,
     11,
     // 12,
-    13,
     // 15,
     26750,
     // 26755,
@@ -20,7 +18,6 @@ window.availableTaskNumbers = [
     26850,
     26851,
     26852,
-    26853,
     26855,
     26856,
     26857,
@@ -32,7 +29,6 @@ window.availableTaskNumbers = [
     26892,
     26896,
     282525,
-    // 316350,
     // 508966,
 ];
 window.nomer = window.availableTaskNumbers.iz();
