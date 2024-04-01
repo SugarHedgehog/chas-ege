@@ -13,7 +13,6 @@ window.availableTaskNumbers = [
     // 12,
     // 27965,
     // 27984,
-    28003,
     28009,
     28012,
 ];
