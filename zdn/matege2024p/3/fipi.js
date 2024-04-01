@@ -22,7 +22,6 @@ window.availableTaskNumbers = [
 	956,
 	2966,
 	2976,
-	3011,
 	4883,
 	5077,
 	27041,

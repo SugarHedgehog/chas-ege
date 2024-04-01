@@ -44,7 +44,6 @@ window.availableTaskNumbers = [
 	77427,
 	77467,
 	77486,
-	77490,
 ];
 window.nomer = window.availableTaskNumbers.iz();
 window.comment = 'Наибольшее и наименьшее значение';
