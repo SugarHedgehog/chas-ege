@@ -34,7 +34,7 @@
 			ctx.translate(110, 50);
 			let edge = 25;
 			ctx.scale(10, 10);
-			ctx.font = "2.5px liberation_sans";
+			ctx.font = "3px liberation_sans";
 			ctx.lineWidth = 0.2;
 			ctx.drawParallelepiped({
 				width: edge,
