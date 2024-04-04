@@ -7,7 +7,6 @@
 		rod: 1,
 		odu: 0,
 	};
-
 	lx_declareClarifiedPhrase('площадь', 'боковой поверхности');
 	lx_declareClarifiedPhrase('радиус', 'основания');
 	lx_declareClarifiedPhrase('площадь', 'основания');

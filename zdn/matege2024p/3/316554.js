@@ -3,6 +3,8 @@
 		NAinfo.requireApiVersion(0, 2);
 
 		let letters = ['A', 'B', 'C', 'D'];
+		let letterWithIndex = letters.map((elem) => elem + '₁');
+		let allLet = letters.concat(letterWithIndex);
 
 		let letters1, letters2;
 
@@ -30,17 +32,19 @@
 
 		let paint1 = function(ct) {
 			ct.translate(110, 60);
-			ct.scale(20, 20);
-			ct.lineWidth = 2 / 20;
-			let cubeEdge = 12;
+			ct.scale(10, 10);
+			ct.lineWidth = 0.1;
+			let cubeEdge = 24;
 
+			ct.font = "2.5px liberation_sans";
+			ct.lineWidth = 0.2;
 			ct.drawParallelepiped({
 				width: cubeEdge,
 				height: cubeEdge,
-				depth: cubeEdge / (2.5),
+				depth: cubeEdge / 2,
 				angle: 40,
-				strokeStyle: om.secondaryBrandColors,
-				diagonalStrokeStyle: om.primaryBrandColors.iz(),
+				scale: 20,
+				lettersOnVertex: allLet,
 			}, [0, 3, 4], false, [0.5, 0.2]);
 		};
 		NAtask.setTask({
@@ -49,7 +53,7 @@
 			answers: 90,
 			author: ['Суматохина Александра']
 		});
-		NAtask.modifiers.variativeABC();
+		NAtask.modifiers.variativeABC(allLet);
 		NAtask.modifiers.addCanvasIllustration({
 			width: 400,
 			height: 400,

@@ -5,7 +5,6 @@
 		let letters = ['A', 'B', 'C', 'D'];
 		let letterWithIndex = letters.map((elem) => elem + '₁');
 		let allLet = letters.concat(letterWithIndex);
-
 		let subangle = [
 			[
 				[letters[0], letters[3]],
