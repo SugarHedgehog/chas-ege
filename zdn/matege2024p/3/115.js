@@ -9,7 +9,7 @@
 			numberSide: 6
 		});
 
-		let prism3 = new Prism({
+		let pyr = new Pyramid({
 			height: prism6.height,
 			baseArea: prism6.baseArea / 6,
 		});
@@ -34,7 +34,7 @@
 		let vert = ['A', 'B', 'C', 'D', 'E', 'F'];
 		vert = vert.permuteCyclic(sl(0, 5));
 		vert = vert.slice(0, 3);
-		vert = vert.concat(vert.map((elem) => elem + '_1'));
+		vert = vert.concat(vert.iz() + '_1');
 
 		let camera = {
 			x: 0,
@@ -74,20 +74,19 @@
 
 		NAinfo.requireApiVersion(0, 2);
 		NAtask.setTask({
-			text: ['Найдите ', 'Дана треугольная призма $' + vert.join('') + '$, площадь основания которой равна $' +
-				(6 * prism3.baseArea).pow(2).texsqrt(1) + '$, а высота, проведённая к этому основанию, равна $' + prism3.height +
+			text: ['Найдите ', 'Дана треугольная пирамида $' + vert.join('') + '$, площадь основания которой равна $' +
+				pyr.baseArea.pow(2).texsqrt(1) + '$, а высота, проведённая к этому основанию, равна $' + pyr.height +
 				'$. Найдите '
 			][v],
 			questions: [{
 				text: 'объём',
-				answers: [prism3.volume, 6 * prism3.volume][v],
+				answers: [pyr.volume, 18 * pyr.volume][v],
 			}, ],
 			postquestion: [' многогранника, ' +
 				'вершинами которого являются вершины $' + vert.shuffleJoin(', ') +
 				'$ правильной шестиугольной призмы ' +
-				'$ABCDFEA_1B_1C_1D_1F_1E_1$, площадь основания которой равна $' + (6 * prism3.baseArea).pow(2).texsqrt(1) +
-				'$, а боковое ребро равно $' +
-				prism3.height +
+				'$ABCDFEA_1B_1C_1D_1F_1E_1$, площадь основания которой равна $' + (6 * pyr.baseArea).pow(2).texsqrt(1) +
+				'$, а боковое ребро равно $' + pyr.height +
 				'$', ' прямой призмы с вершинами $' + ['A', 'B', 'C', 'D', 'E', 'F', 'A_1', 'B_1', 'C_1', 'D_1', 'E_1', 'F_1']
 				.shuffleJoin(', ') + '$'
 			][v] + '.',
