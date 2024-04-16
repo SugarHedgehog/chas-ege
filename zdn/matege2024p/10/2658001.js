@@ -34,12 +34,7 @@
 					the_humanSettlementDestination.ve +' B на ' + (n*60 + k).toChMin() + ' позже ' + the_vehicleRacingOnRoad[0].re +'. ',
 				answers: x,
 			},
-			{
-				text:  the_orderToFind.toZagl() +' скорость ' + the_vehicleRacingOnRoad[0].re + ', если известно, что он прибыл в ' +
-					the_humanSettlementDestination.ve +' B на ' + (n*60 + k).toChMin() + ' раньше ' + the_vehicleRacingOnRoad[1].re +'. ',
-				answers: x + a,
-			},
-		][v],
+		],
 		postquestion: ' Ответ дайте в км/ч.',
 		authors: ['Николай Авдеев'],
 	});
