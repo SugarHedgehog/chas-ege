@@ -3,7 +3,8 @@
 
 	let t=sl(1,10,0.01);
 	let m=sl(1, 4,0.01)*60+sl(1, 59, 1,0.01);
-	let n = t - 1 / ( 1 / m - 1 / t  );
+	let n = t - 1 / ( 60 / m - 1 / t  );
+	let v = 0;
 
 	genAssert(n>0.001, 'Время не может быть отрицательным');
 	genAssert(t!=n, 'Время не может быть отрицательным');
@@ -23,7 +24,7 @@
 			' ' + the_vehicleRacingOnRoad[0].ie +' затратил на '+['путь','дорогу'].iz()+' из ' + the_humanSettlementDestination.re +' B в ' + the_humanSettlementDestination.ve + ' A?',
 			' затратил ' + the_vehicleRacingOnRoad[0].ie +' на '+['путь','дорогу'].iz()+' из ' + the_humanSettlementDestination.re +' B в ' + the_humanSettlementDestination.ve + ' A?',
 			' ушло у ' + the_vehicleRacingOnRoad[0].re +' на '+['путь','дорогу'].iz()+' из ' + the_humanSettlementDestination.re +' B в ' + the_humanSettlementDestination.ve + ' A?'
-			].iz(),
+			][v],
 		answers: t,
 		authors: ['Aisse-258'],
 	});
