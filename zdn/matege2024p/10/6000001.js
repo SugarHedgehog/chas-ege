@@ -10,11 +10,10 @@
     var t1=sluchch(om.transportm.ie.length-1);
     var t3=om.transportm.r2[t1];
     var t4=om.transportm.re[t1];
-    let v = 0;
+    var v5=0;
     
-    var t5=['первым','вторым'][v];
+    var t5=['первым','вторым'];
     var p5=[x+a,x];
-    var v5=sl1();
     
     window.vopr.txt='Два '+t3+' одновременно отправились в '+(x*t)+'-километровый пробег. Первый ехал со скоростью, на '+
                     a+' км/ч большей, чем скорость второго, и прибыл к финишу на '+chislitM(b,'час','часа','часов')+

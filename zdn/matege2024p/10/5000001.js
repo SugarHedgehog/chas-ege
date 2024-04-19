@@ -14,15 +14,15 @@
     var t1=sluchch(om.transportm.ie.length-1);
     var t3=om.transportm.ie[t1];
     var t4=om.transportm.re[t1];
-    let v = 0;
+    var v5=0;
     var t5=['скорость '+t4+' на пути из '+t2[0]+' в '+t2[1],
             'скорость '+t4+' на пути из '+t2[1]+' в '+t2[0],
             'время, затраченное на путь из '+t2[0]+' в '+t2[1],
             'время, затраченное на путь из '+t2[0]+' в '+t2[1]+' (не считая времени остановки)',
-    ][v];
+    ];
     var p5=[x,x+a,t,t-b];
     var m5=['км/ч','км/ч','часах','часах'];
-    var v5=sl(3);
+    
     
     window.vopr.txt=t3.toZagl()+' выехал с постоянной скоростью из '+lx[om.naspunkt.iz()].re+' '+
                     t2[0]+' в '+lx[om.naspunkt.iz()].ve+' '+t2[1]+
