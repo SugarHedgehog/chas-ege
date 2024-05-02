@@ -4,14 +4,11 @@
 		let edgeOfBase = sl(1, 20);
 		let height = sl(1, 20);
 		let numberOfEdge = 6;
-		let apothem = [(height.pow(2) + edgeOfBase.pow(2) / 12).sqrt(), (height.pow(2) + 0.25 * edgeOfBase.pow(2)).sqrt(),
-			0, (height.pow(2) + 0.75 * (edgeOfBase).pow(2)).sqrt()
-		][numberOfEdge - 3];
 
 		let question = [
-            ['сторона основания', edgeOfBase],
+			['сторона основания', edgeOfBase],
 			['высота', height],
-			['боковое ребро', (height.pow(2)+edgeOfBase.pow(2)).sqrt()],
+			['боковое ребро', (height.pow(2) + edgeOfBase.pow(2)).sqrt()],
 		];
 
 		let name = question.T()[0];
@@ -50,10 +47,9 @@
 
 		NAtask.setTask({
 			text: 'В правильной ' + ['тре', 'четырёх', '', 'шести'][numberOfEdge - 3] +
-				'угольной пирамиде ' + name[0] + [' составляет ', ' равна '].iz() + number[0] + '; ' + name[1] + [
+				'угольной пирамиде ' + name[0] + [' составляет ', ' равна '].iz() + '$' + number[0] + '$' + '; ' + name[1] + [
 					' составляет ', ' равна '
-				].iz() + number[1] +
-				'. Чему равна ' + name[2] + ' пирамиды?',
+				].iz() + '$' + number[1] + '$' +'. Чему равно ' + name[2] + ' пирамиды?',
 			answers: number[2],
 		});
 		NAtask.modifiers.multiplyAnswerBySqrt(13);

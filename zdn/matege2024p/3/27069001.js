@@ -6,8 +6,8 @@
 		let numberOfEdge = 6;
 
 		let question = [
-            ['сторона основания', edgeOfBase],
-			['боковое ребро', '$'+(height.pow(2)+edgeOfBase.pow(2)).texsqrt(sl1())+'$'],
+			['сторона основания', edgeOfBase],
+			['боковое ребро', '$' + (height.pow(2) + edgeOfBase.pow(2)).texsqrt(sl1()) + '$'],
 			['высота', height],
 		];
 
@@ -48,7 +48,7 @@
 		NAtask.setTask({
 			text: 'В правильной ' + ['тре', 'четырёх', '', 'шести'][numberOfEdge - 3] +
 				'угольной пирамиде ' + name[0] + [' составляет ', ' равна '].iz() + number[0] + '; ' + name[1] + [
-					' составляет ', ' равна '
+					' составляет ', ' равно '
 				].iz() + number[1] +
 				'. Чему равна ' + name[2] + ' пирамиды?',
 			answers: number[2],
