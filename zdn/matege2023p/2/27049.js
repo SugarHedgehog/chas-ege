@@ -34,7 +34,7 @@
 
 				ctx.setLineDash([]);
 				//призма
-				ctx.strokeStyle = ["#D777F2", "#F2A2D6"].iz();
+				ctx.strokeStyle = om.primaryBrandColors.iz();
 				//треугольник сверху
 				ctx.drawLine(-radius, -153, 90, -116);
 				ctx.drawLine(90, -116, radius, -153);
