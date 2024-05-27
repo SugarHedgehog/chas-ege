@@ -64,7 +64,7 @@
 			genAssert((point2D[3].x - point2D[8].x).abs() > 20);
 			genAssert(distanceFromPointToSegment(point2D[3], point2D[8], point2D[11]) > 10);
 
-			let rand = 0;
+			let rand = 1;
 
 			let paint1 = function(ctx) {
 				let h = 400;
