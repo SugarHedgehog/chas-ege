@@ -21,9 +21,7 @@
 
 		let spline = new Spline(X, Y);
 
-		genAssertGraphCrossesHorizontal(1, f);
-		genAssertGraphCrossesVertical(1, f);
-
+		genAssertGraphIntersectsPointWithNeighborhood(f, 20, 20, 10)
 		genAssert(f(maxX).abs() < 5, 'Экстремум за пределами сетки');
 
 		let extremums = findExtremumsOfFunction(f, minX, maxX, 0.1);
