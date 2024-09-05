@@ -6,7 +6,7 @@
     let a = sluchch(2, 9);
     let b = sluchch(2, 4);
     let u = sluchch(1, 9);
-    let d = sluchch(0, 5);
+    let d = sluchch(0, 4);
     let u0 = u * Math.pow(2, b);
     let t = a * r * c * b / 10;
     a /= 10;
