@@ -5,13 +5,7 @@
 
 		let a = sl(2, 89);
 
-		let vertices = [];
-		do {
-			let a = slLetter(vertices).toUpperCase();
-			if (!vertices.includes(a))
-				vertices.push(a);
-		}
-		while (vertices.length < 4);
+		let vertices = om.latbukv.iz(4);
 
 		let question = [
 			['Найдите величину меньшей дуги ', ' окружности. Ответ дайте в градусах'],

@@ -6,13 +6,7 @@
 		let a = sl(2, b / 2-1);
 
 
-		let vertices = [];
-		do {
-			let a = slLetter(vertices).toUpperCase();
-			if (!vertices.includes(a))
-				vertices.push(a);
-		}
-		while (vertices.length < 5);
+		let vertices = om.latbukv.iz(5);
 
 		let paint1 = function(ctx) {
 			ctx.lineWidth = 2;
