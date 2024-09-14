@@ -67,20 +67,6 @@
 
 			ctx.drawFigure(point2DPyr, matrixPyr);
 
-<<<<<<< HEAD
-=======
-		let paint1 = function(ct) {
-			ct.translate(10, 20);
-			ct.scale(18, -18);
-			ct.lineWidth = 2 / 20;
-			ct.strokeStyle = "#809DF2";
-
-			ct.rightPyramid3({
-				edge: 17,
-				angle: Math.PI / 8,
-				height: 11,
-			}, [1], [0.5, 0.2], name.includes('высота'), name.includes('апофема'));
->>>>>>> 131829577 ([zdn] [fix] - more color)
 		};
 		NAtask.setTask({
 			text: 'Во сколько раз увеличится ' + sklonlxkand(name[0][0]).ie + ' правильного тетраэдра, ' +
