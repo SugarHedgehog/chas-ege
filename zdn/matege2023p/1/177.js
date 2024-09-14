@@ -4,13 +4,7 @@
 		'use strict'
 		let a = sl(10, 179);
 
-		let vertices = [];
-		do {
-			let a = slLetter(vertices).toUpperCase();
-			if (!vertices.includes(a))
-				vertices.push(a);
-		}
-		while (vertices.length < 4);
+		let vertices = om.latbukv.iz(4);
 
 		let angle = [
 			[vertices.slice(1, 4), [vertices[3], vertices[0], vertices[1]]],
