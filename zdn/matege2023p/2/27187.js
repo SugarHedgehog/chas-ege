@@ -1,7 +1,6 @@
 (function() {
 	retryWhileError(function() {
 			NAinfo.requireApiVersion(0, 2);
-<<<<<<< HEAD
 
 			let stroke = [4, 5];
 
@@ -67,72 +66,15 @@
 			
 			genAssert([point2D[1], point2D[2]].mt_rasst()>40);
 			
-=======
-			let a = sl(10, 17);
-			let b = sl(5, 14);
-			let c = sl(5, 10);
-			let d = sl(10, 16);
-			let k = slKrome(d, 5, 16);
-			let f = a + c;
-
->>>>>>> 131829577 ([zdn] [fix] - more color)
 			let rand = sl1();
 
 			let paint1 = function(ctx) {
-<<<<<<< HEAD
 				let h = 400;
 				let w = 400;
 				ctx.translate(w / 2, h / 2);
 				ctx.lineWidth = 2;
 				ctx.strokeStyle = om.secondaryBrandColors;
 				ctx.drawFigureVer2(point2D, matrixConnections);
-=======
-				ctx.strokeStyle = "#809DF2";
-				a *= 13;
-				b *= 10;
-				c *= 10;
-				d *= 10;
-				ctx.translate(200, 200);
-				ctx.translate(-95, 0);
-
-				ctx.lineWidth = 2;
-				for (let i = 0; i < 2; i++) {
-					if (i)
-						ctx.translate(30, -b * 0.2);
-					ctx.moveTo(-c, -b);
-					ctx.lineTo(c, -b);
-					ctx.lineTo(c, 0);
-					ctx.lineTo(a, 0);
-					ctx.lineTo(a, d);
-					ctx.stroke();
-					if (i)
-						ctx.setLineDash([4, 3]);
-					ctx.lineTo(-c, d);
-					ctx.lineTo(-c, -b);
-					ctx.stroke();
-				}
-				ctx.setLineDash([0, 0]);
-
-				ctx.translate(-30, b * 0.2);
-
-				ctx.drawLine(-c, -b, -c + 30, -b - b * 0.2);
-				ctx.drawLine(c, -b, c + 30, -b - b * 0.2);
-				ctx.drawLine(c, 0, c + 30, -b * 0.2);
-				ctx.drawLine(a, 0, a + 30, -b * 0.2);
-				ctx.drawLine(a, d, a + 30, d - b * 0.2);
-
-				ctx.setLineDash([4, 3]);
-				ctx.drawLine(-c, d, -c + 30, d - b * 0.2);
-
-				//цифорки
-				ctx.font = "20px serif";
-				ctx.fillText((b / 10).toString(), c + 30 + 3, -b / 2, 18); //b
-				ctx.fillText((c / 10).toString(), 30, -b - b * 0.2 - 5, 18); //c
-				ctx.fillText((d / 10).toString(), a + 30 + 5, d / 2, 18); //d
-				ctx.fillText(k.toString(), a + 10, d * 1.05, 18); //k
-				ctx.fillText(f.toString(), 0, d + 30 + 10, 18); //f
-
->>>>>>> 131829577 ([zdn] [fix] - more color)
 
 				ctx.font = "20px liberation_sans";
 				ctx.signSegmentInMiddle(point2D[2].x, point2D[2].y, point2D[7].x, point2D[7].y, par1.height, 10, 20);
