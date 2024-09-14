@@ -78,28 +78,8 @@
 				let w = 400;
 				ctx.translate(w / 2, h / 2);
 				ctx.lineWidth = 2;
-<<<<<<< HEAD
 				ctx.strokeStyle = om.secondaryBrandColors;
 				ctx.drawFigureVer2(point2D, matrixConnections);
-=======
-				ctx.strokeStyle = "#809DF2";
-				for (let i = 0; i < 2; i++) {
-					if (i)
-						ctx.translate(20, -b * 0.3);
-					ctx.moveTo(-c, -b);
-					ctx.lineTo(c, -b);
-					ctx.lineTo(c, 0);
-					ctx.lineTo(a, 0);
-					ctx.lineTo(a, d);
-					ctx.stroke();
-					if (i)
-						ctx.setLineDash([4, 3]);
-					ctx.lineTo(-a, d);
-					ctx.lineTo(-a, 0);
-					ctx.lineTo(-c, 0);
-					ctx.lineTo(-c, -b);
-					ctx.stroke();
->>>>>>> 131829577 ([zdn] [fix] - more color)
 
 				if (point2D[4].x > point2D[8].x) {
 					let point = [point2D[4], point2D[5], point2D[8], point2D[13]].mt_coordinatesOfIntersectionOfTwoSegments();

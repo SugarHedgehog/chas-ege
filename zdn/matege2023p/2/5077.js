@@ -33,21 +33,10 @@
 
 		let paint1 = function(ctx) {
 
-<<<<<<< HEAD
 			ctx.lineWidth = 2;
 			ctx.translate(100, 40);
 			ctx.scale = (100, 100);
 			ctx.strokeStyle = om.secondaryBrandColors;
-=======
-		let paint1 = function(ct) {
-
-			ct.lineWidth = 2;
-			ct.translate(100, 40);
-			ct.scale = (100, 100);
-			ct.fillStyle = "black";
-			ct.strokeStyle = "#809DF2";
-			let radius = 400;
->>>>>>> 131829577 ([zdn] [fix] - more color)
 
 			//верхний эллипс
 
@@ -71,16 +60,6 @@
 			ctx.drawArc(100, 80, 150, 0, 2 * Math.PI);
 			ctx.drawEllipse(100, 80, 150, 30, 0, 0, 2 * Math.PI);
 
-<<<<<<< HEAD
-=======
-			ct.translate(0, 80);
-			ct.beginPath();
-			ct.setLineDash([4, 5]);
-			ct.strokeStyle = ["#D777F2","#F2A2D6"].iz();
-			ct.arc(100, 80, 150, 0, 2 * Math.PI);
-			ct.ellipse(100, 80, 150, 30, 0, 0, 2 * Math.PI);
-			ct.stroke();
->>>>>>> 131829577 ([zdn] [fix] - more color)
 		};
 
 		NAtask.setTask({
@@ -93,12 +72,9 @@
 			][rand],
 			answers: [nameCylinder[1], nameSphere[1]][rand],
 		});
-<<<<<<< HEAD
 		NAtask.modifiers.multiplyAnswerByPI();
 		NAtask.modifiers.allDecimalsToStandard(true);
 		NAtask.modifiers.assertSaneDecimals();
-=======
->>>>>>> 131829577 ([zdn] [fix] - more color)
 		NAtask.modifiers.addCanvasIllustration({
 			width: 400,
 			height: 400,

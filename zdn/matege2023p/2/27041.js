@@ -39,19 +39,11 @@
 				['диагональ', par.mainDiagonal],
 				['диагональ одной из боковых сторон', par.DHDiagonal],
 				[
-<<<<<<< HEAD
 					['сторона основания', par.width],
 					['диагональ основания', par.DWDiagonal]
-=======
-					['площадь полной поверхности', (2 * (2 * edge * height + edge.pow(2))).pow(2), '', ''],
-					['объём', (edge.pow(2) * height).pow(2), '', ''],
-					['диагональ', 2 * edge.pow(2) + height.pow(2), '', ''],
-					['диагональ одной из боковых сторон', edge.pow(2) + height.pow(2), '', ''],
->>>>>>> 131829577 ([zdn] [fix] - more color)
 				].iz(),
 			].iz(3);
 
-<<<<<<< HEAD
 			let strok = [5, 4];
 
 			let parForPaint = new Parallelepiped({
@@ -129,80 +121,6 @@
 			NAtask.modifiers.multiplyAnswerByPI();
 			NAtask.modifiers.allDecimalsToStandard(true);
 			NAtask.modifiers.assertSaneDecimals();
-=======
-			if (rand)
-				nameParal.push([
-					['сторона основания', edge.pow(2), '', ''],
-					['диагональ основания', 2 * edge.pow(2), '', '']
-				].iz());
-			nameParal = nameParal.iz(3 - nameCylinder.length);
-
-
-			console.log(nameParal);
-			console.log(nameCylinder);
-
-			let question;
-			if (rand)
-				question = [nameParal[0][0].toZagl() + ' и ' + nameParal[1][0] + ' параллелепипеда равны $' + nameParal[0][1].texsqrt(
-						1) +
-					nameParal[0][3] +
-					'$ и $' +
-					nameParal[
-						1][1].texsqrt(1) + nameParal[1][3] + '$ соотвественно. Найдите ' + sklonlxkand(nameCylinder[0][0]).ve +
-					' цилиндра' +
-					nameCylinder[0][2] +
-					'.', nameCylinder[0][1]
-				];
-			else
-				question = [nameCylinder[0][0].toZagl() + ' и ' + nameCylinder[1][0] + ' цилиндра равны $' + nameCylinder[0][1].texsqrt(
-						1) +
-					nameCylinder[0][3] +
-					'$ и $' +
-					nameCylinder[1][1].texsqrt(1) + nameCylinder[1][3] +
-					'$ соотвественно. Найдите ' + sklonlxkand(nameParal[0][0]).ve + ' параллелепипеда' + nameParal[0][2] +
-					'.', nameParal[0][1]
-				];
-
-
-			let paint1 = function(ct) {
-				ct.scale = (60, 60);
-				ct.strokeStyle = ["#D777F2", "#F2A2D6"].iz();
-				radius = 140;
-				height = 200;
-				ct.translate(200, 200);
-
-				ct.lineWidth = 2;
-				//цилиндр
-				ct.beginPath();
-				ct.ellipse(0, -height / 2, radius - 5, 40 - 2, 0, 0, 2 * Math.PI);
-				ct.stroke();
-
-				ct.beginPath();
-				ct.setLineDash([4, 5]);
-				ct.ellipse(0, height / 2, radius - 6, 40 - 4, 0, 0, 2 * Math.PI);
-				ct.stroke();
-
-
-				ct.drawLine(-radius + 5, height / 2, -radius + 5, -height / 2);
-				ct.setLineDash([0, 0]);
-				ct.drawLine(radius - 5, height / 2, radius - 5, -height / 2);
-
-				ct.translate(-102, -140);
-				//паралелепипед
-				ct.drawParallelepiped({
-					width: radius * 2,
-					height: height,
-					depth: radius + 15,
-					angle: Math.PI / 1.5,
-					strokeStyle: "#809DF2",
-				}, [0, 3, 4], false, [4, 5]);
-			};
-			NAtask.setTask({
-				text: 'Прямоугольный параллелепипед описан около цилиндра. ' + question[0],
-				answers: question[1].sqrt(),
-			});
-			NAtask.modifiers.multiplyAnswerBySqrt(3);
->>>>>>> 131829577 ([zdn] [fix] - more color)
 			NAtask.modifiers.addCanvasIllustration({
 				width: 400,
 				height: 400,
