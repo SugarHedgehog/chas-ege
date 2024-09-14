@@ -14,6 +14,7 @@
 		let radiusView = radiuses.map((elem) => elem.texcbrt(1));
 
 		let paint1 = function(ctx) {
+<<<<<<< HEAD
 			ctx.strokeStyle = om.secondaryBrandColors;
 			ctx.lineWidth = 2;
 			//шар 1
@@ -26,6 +27,28 @@
 			ctx.drawEllipse(200, 200, 20, 150, Math.PI / 2, Math.PI / 2, 1.5 * Math.PI);
 			
 			ctx.strokeStyle = om.primaryBrandColors.iz();
+=======
+			ctx.strokeStyle = "#809DF2";
+			ctx.lineWidth = 2;
+			//шар 1
+			ctx.beginPath();
+			ctx.arc(200, 200, 150, 0, Math.PI * 2, true); // Внешняя окружность
+			ctx.stroke();
+			ctx.closePath();
+
+			ctx.beginPath();
+			ctx.ellipse(200, 200, 20, 150, Math.PI / 2, 1.5 * Math.PI, Math.PI / 2);
+			ctx.stroke();
+			ctx.closePath();
+
+			ctx.beginPath();
+			ctx.setLineDash([5, 5]);
+			ctx.ellipse(200, 200, 20, 150, Math.PI / 2, Math.PI / 2, 1.5 * Math.PI);
+			ctx.stroke();
+			ctx.closePath();
+			
+			ctx.strokeStyle = ["#D777F2", "#F2A2D6"].iz();
+>>>>>>> 131829577 ([zdn] [fix] - more color)
 			ctx.drawLine(200, 200, 200, 50);
 		};
 

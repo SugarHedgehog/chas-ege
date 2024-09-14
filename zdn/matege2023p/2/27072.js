@@ -59,6 +59,10 @@
 		if ([measurements[0].name.ie, measurements[1].name.ie].includes('площадь большого круга'))
 			ctx.ellipse(100, 150, 20, 100, Math.PI / 2, 0, 2 * Math.PI);
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 131829577 ([zdn] [fix] - more color)
 		ctx.fill();
 		ctx.closePath();
 

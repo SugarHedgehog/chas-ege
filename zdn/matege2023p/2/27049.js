@@ -21,20 +21,47 @@
 				ctx.scale = (60, 60);
 				radius = 180;
 				height = 300;
+<<<<<<< HEAD
 				ctx.translate(w / 2, h / 2);
 				ctx.lineWidth = 2;
 				ctx.strokeStyle = om.secondaryBrandColors;
+=======
+				ct.translate(200, 200);
+				ct.lineWidth = 2;
+				ct.strokeStyle = "#809DF2";
+
+>>>>>>> 131829577 ([zdn] [fix] - more color)
 
 				//цилиндр
 				ctx.drawEllipse(0, -height / 2, radius, 40, 0, 0, 2 * Math.PI, true);
 				ctx.drawEllipse(0, height / 2, radius, 40, 0, 0, Math.PI);
 
+<<<<<<< HEAD
 				ctx.setLineDash([4, 4]);
 				ctx.drawEllipse(0, height / 2, radius, 40, 0, Math.PI, 2 * Math.PI);
+=======
+				ct.beginPath();
+				ct.ellipse(0, height / 2, radius, 40, 0, 0, Math.PI);
+				ct.stroke();
+
+				ct.setLineDash([4, 4]);
+				ct.beginPath();
+				ct.ellipse(0, height / 2, radius, 40, 0, Math.PI, 2 * Math.PI);
+				ct.stroke();
+				ct.setLineDash([]);
+>>>>>>> 131829577 ([zdn] [fix] - more color)
 
 				ctx.setLineDash([]);
 				//призма
+<<<<<<< HEAD
 				ctx.strokeStyle = om.primaryBrandColors.iz();
+=======
+				ct.strokeStyle = ["#D777F2", "#F2A2D6"].iz();
+
+				ct.beginPath();
+				ct.moveTo(-radius, -150);
+
+>>>>>>> 131829577 ([zdn] [fix] - more color)
 				//треугольник сверху
 				ctx.drawLine(-radius, -153, 90, -116);
 				ctx.drawLine(90, -116, radius, -153);
@@ -46,10 +73,30 @@
 				ctx.drawLine(radius, -height / 2, radius, height / 2);
 
 				//треугольник снизу
+<<<<<<< HEAD
 				ctx.setLineDash([4, 5]);
 				ctx.drawLine(-radius, height - 153, 90, height - 116);
 				ctx.drawLine(90, height - 116, radius, height - 153);
 				ctx.drawLine(radius, height - 153, -radius, height - 153);
+=======
+				ct.setLineDash([4, 5]);
+				ct.lineTo(90, height - 116);
+				ct.lineTo(150, height - radius + 10);
+				ct.lineTo(-radius, height - 150);
+				ct.stroke();
+
+				//высоты призмы
+				ct.drawLine(150, height - radius + 10, 150, -radius + 10);
+				ct.setLineDash([]);
+				ct.drawLine(90, height - 116, 90, -116);
+
+				//правая высота цилиндра
+				ct.strokeStyle = "#809DF2";
+				ct.moveTo(radius, 150);
+				ct.lineTo(radius, -height + 150);
+				ct.stroke();
+
+>>>>>>> 131829577 ([zdn] [fix] - more color)
 			};
 			NAtask.setTask({
 				text: 'В основании прямой призмы лежит прямоугольный треугольник с катетами $' + prism.sideA + '$ и $' + prism.sideB +

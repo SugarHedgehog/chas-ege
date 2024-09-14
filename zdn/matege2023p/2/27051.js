@@ -24,8 +24,13 @@
 				ctx.scale = (60, 60);
 				radius = 180;
 				height = 300;
+<<<<<<< HEAD
 				ctx.translate(200, 200);
 				ctx.strokeStyle = om.secondaryBrandColors;
+=======
+				ct.translate(200, 200);
+				ct.strokeStyle = "#809DF2";
+>>>>>>> 131829577 ([zdn] [fix] - more color)
 
 				ctx.lineWidth = 2;
 				//цилиндр
@@ -40,10 +45,23 @@
 				ctx.drawLine(radius, height / 2, radius, -height / 2);
 
 				//конус
+<<<<<<< HEAD
 				ctx.strokeStyle = om.primaryBrandColors.iz();
 				ctx.setLineDash([4, 5]);
 				ctx.drawLine(-radius, height / 2, 0, -height / 2);
 				ctx.drawLine(radius, height / 2, 0, -height / 2);
+=======
+				ct.strokeStyle = ["#D777F2","#F2A2D6"].iz();
+				ct.setLineDash([4, 5]);
+				ct.drawLine(-radius, height / 2, 0, -height / 2);
+				ct.drawLine(radius, height / 2, 0, -height / 2);
+
+				ct.setLineDash([4, 5]);
+				ct.drawLine(0, height / 2, 0, -height / 2);
+				ct.drawLine(0, height / 2, radius, height / 2);
+
+
+>>>>>>> 131829577 ([zdn] [fix] - more color)
 
 				ctx.setLineDash([4, 5]);
 				ctx.drawLine(0, height / 2, 0, -height / 2);
@@ -56,9 +74,13 @@
 					' $' + nameFigura[1 + rand1].pow(2).texsqrt(1) + '$. Найдите ' + nameFigura[0] + ' ' + ['конуса', 'цилиндра'][rand1] + '.',
 				answers: nameFigura[2 - rand1],
 			});
+<<<<<<< HEAD
 			NAtask.modifiers.multiplyAnswerBySqrt(13);
 			NAtask.modifiers.allDecimalsToStandard(true);
 			NAtask.modifiers.assertSaneDecimals();
+=======
+			NAtask.modifiers.multiplyAnswerBySqrt(3);
+>>>>>>> 131829577 ([zdn] [fix] - more color)
 			NAtask.modifiers.addCanvasIllustration({
 				width: 400,
 				height: 400,

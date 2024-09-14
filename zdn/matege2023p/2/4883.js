@@ -25,6 +25,7 @@
 
 		let strok = [5, 4];
 
+<<<<<<< HEAD
 		let parForPaint = new Cube(300);
 
 		let camera = {
@@ -61,6 +62,29 @@
 			ctx.strokeStyle = om.primaryBrandColors.iz();
 			ctx.drawArc(0, 0, 150, 0, 2 * Math.PI);
 			ctx.drawEllipse(0, 0, 150, 30, 0, 0, 2 * Math.PI);
+=======
+		let paint1 = function(ct) {
+			ct.lineWidth = 2;
+			ct.translate(100, 40);
+			ct.scale = (100, 100);
+			ct.fillStyle = "black";
+			let cubeEdge = 400;
+			ct.drawParallelepiped({
+				strokeStyle: "#809DF2",
+				width: cubeEdge / 1.5,
+				height: cubeEdge / 1.5,
+				depth: cubeEdge / (2.5 * 1.5),
+				angle: 40
+			}, [0, 3, 4], false, [4, 5]);
+
+			ct.translate(0, 80);
+			ct.beginPath();
+			ct.setLineDash([4, 5]);
+			ct.strokeStyle = ["#D777F2", "#F2A2D6"].iz();
+			ct.arc(100, 80, 150, 0, 2 * Math.PI);
+			ct.ellipse(100, 80, 150, 30, 0, 0, 2 * Math.PI);
+			ct.stroke();
+>>>>>>> 131829577 ([zdn] [fix] - more color)
 		};
 
 		NAtask.setTask({
@@ -70,10 +94,13 @@
 			][rand],
 			answers: [nameSphere[1], nameCube[1]][rand],
 		});
+<<<<<<< HEAD
 		NAtask.modifiers.multiplyAnswerByPI();
 		NAtask.modifiers.multiplyAnswerBySqrt(13);
 		NAtask.modifiers.allDecimalsToStandard(true);
 		NAtask.modifiers.assertSaneDecimals();
+=======
+>>>>>>> 131829577 ([zdn] [fix] - more color)
 		NAtask.modifiers.addCanvasIllustration({
 			width: 400,
 			height: 400,

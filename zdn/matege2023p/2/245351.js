@@ -33,15 +33,35 @@
 			ctx.translate(100, 40);
 			ctx.scale = (100, 100);
 
+<<<<<<< HEAD
 			ctx.translate(0, 80);
 			ctx.drawArc(100, 80, 180, 0, 2 * Math.PI);
+=======
+			ct.lineWidth = 2;
+			ct.strokeStyle = "#809DF2";
+			ct.translate(100, 40);
+			ct.scale = (100, 100);
+>>>>>>> 131829577 ([zdn] [fix] - more color)
 
 			ctx.setLineDash([4, 5]);
 			ctx.strokeStyle = om.primaryBrandColors.iz();
 			ctx.drawEllipse(100, 80, 180, 30, 0, Math.PI, 2 * Math.PI);
 
+<<<<<<< HEAD
 			ctx.setLineDash([0, 0]);
 			ctx.drawEllipse(100, 80, 180, 30, 0, 0, Math.PI);
+=======
+			ct.beginPath();
+			ct.setLineDash([4, 5]);
+			ct.strokeStyle =["#D777F2","#F2A2D6"].iz();
+			ct.ellipse(100, 80, 180, 30, 0, Math.PI, 2 * Math.PI);
+			ct.stroke();
+
+			ct.beginPath();
+			ct.setLineDash([0, 0]);
+			ct.ellipse(100, 80, 180, 30, 0, 0, Math.PI);
+			ct.stroke();
+>>>>>>> 131829577 ([zdn] [fix] - more color)
 
 			//пирамида
 			ctx.setLineDash([4, 5]);
@@ -64,10 +84,14 @@
 			][rand] + '.',
 			answers: [nameSphere[1], nameCone[1]][rand],
 		});
+<<<<<<< HEAD
 		
 		NAtask.modifiers.multiplyAnswerByPI();
 		NAtask.modifiers.allDecimalsToStandard(true);
 		NAtask.modifiers.assertSaneDecimals();
+=======
+		NAtask.modifiers.multiplyAnswerBySqrt(3);
+>>>>>>> 131829577 ([zdn] [fix] - more color)
 		NAtask.modifiers.addCanvasIllustration({
 			width: 400,
 			height: 400,

@@ -77,12 +77,53 @@
 				let point = [point2D[10], point2D[11], point2D[9], point2D[14]].mt_coordinatesOfIntersectionOfTwoSegments();
 				ctx.drawLine(point2D[11].x, point2D[11].y, point.x, point.y);
 
+<<<<<<< HEAD
 				ctx.font = "20px liberation_sans";
 				ctx.signSegmentInMiddle(point2D[2].x, point2D[2].y, point2D[7].x, point2D[7].y, par1.height, 10, 20);
 				ctx.signSegmentInMiddle(point2D[8].x, point2D[8].y, point2D[13].x, point2D[13].y, par2.height, -22, 20);
 				ctx.signSegmentInMiddle(point2D[8].x, point2D[8].y, point2D[9].x, point2D[9].y, par2.width, -5, 20);
 				ctx.signSegmentInMiddle(point2D[0].x, point2D[0].y, point2D[1].x, point2D[1].y, par1.width, 18, 20);
 				ctx.signSegmentInMiddle(point2D[1].x, point2D[1].y, point2D[2].x, point2D[2].y, par1.depth, 18, 20);
+=======
+				angle = -Math.PI - Math.PI / 3;
+				ctx.drawParallelepiped({
+					width: a,
+					height: b,
+					depth: depth,
+					angle: angle,
+					strokeStyle: "#809DF2",
+				}, [0, 3, 4], false, [4, 5]);
+
+				ctx.translate((a - d) / 2, 0);
+				ctx.drawParallelepiped({
+					width: d,
+					height: c,
+					depth: depth,
+					angle: angle,
+					strokeStyle: "#809DF2",
+				}, [1, 3, 4, 5], false, [4, 5]);
+
+
+				ctx.strokeStyle = "white";
+				ctx.drawLine(1, 0, d - 0.5, 0);
+				ctx.translate(depth * (angle).cos() + 5, -depth * (angle).cos());
+				ctx.drawLine(-2, 0, d - 5, 0);
+
+				ctx.strokeStyle = "black";
+				ctx.font = "20px serif";
+				ctx.fillText(a / koefA, a / 3 + depth * (angle).cos(), b + 17, 18);
+				ctx.fillText(f, -depth * (angle).cos() - 20, 0, 18);
+				ctx.translate(0, c / 2);
+
+
+				ctx.fillText(c / koefA, 0, 0, 18);
+
+				ctx.translate(d / 2, c / 2);
+				ctx.fillText(d / koefA, 0, -5, 18);
+
+				ctx.translate(d / 2 + (a - d) / 2, 0);
+				ctx.fillText(b / koefA, 0, -5, 18);
+>>>>>>> 131829577 ([zdn] [fix] - more color)
 			};
 
 			NAtask.setTask({
