@@ -4,7 +4,7 @@
 #относительный путь до скрипта и до обрабатываемой папки
 #../fast_set.sh ../../matege2023p/4
 
-array=()
+array=(4 5 2)
 
 if [[ ${#array[@]} -eq 0 ]]; then
      echo "change array in file"
