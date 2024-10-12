@@ -16,7 +16,7 @@
 			questionsF: {
 				main: 'integer_points',
 				conditions: ['maximum_points_on_the_segment', 'minimum_points_on_the_segment'],
-				variants: ['sum', 'production', 'number', 'largest', 'smallest'],
+				variants: ['number', 'largest', 'smallest'],
 			},
 			canvasSettings: {
 				height: 400,
@@ -26,16 +26,16 @@
 			},
 			minimumDifferenceBetweenExtremes: 1,
 			numberOfRoots: {min:3, max:10}, 
-			numberOfExtremes: {min: 2, max:10}, 
+			numberOfExtremes: {min: 1, max:10}, 
 			rootsIsInteger: {
 				int: 'yes',
-				tolerance: 0.09
+				tolerance: 0.1
 			},
 		});
-	}, 10000);
+	}, 20000);
 })();
 //27494 7801 7807 8037 8045 509990 520652 520693 7817 7823 7841 7849 7855 7865 
-//7877 7879 7881 7897 7907 7909 7919 7921 7939 7943 7947 7949 7967 7969 7975 8001 
+//7877 7879 7881 7897 7907 7909 7919 7921 7939 7943 7947a 7949 7967 7969 7975 8001 
 //8005 8009 8015 8025 8027 8031 8035 8041 27495 7803 7809 8049 500910 7821 7825 7829 
 //7833 7835 7839 7843 7847 7851 7859 7861 7869 7873 7875 7885 7891 7893 7895 7899 7901 
 //7911 7913 7915 7925 7929 7935 7941 7945 7951 7955 7959 7971 7977 7979 7985 7987 7991 
