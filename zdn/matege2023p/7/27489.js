@@ -2,90 +2,39 @@
 	retryWhileError(function() {
 		'use strict';
 
-		function f(x) {
-			return spline.at(x);
-		}
-		NAinfo.requireApiVersion(0, 2);
-		let maxX = sl(0, 10);
-		let minX = maxX - sl(8, 10);
-		let X = [];
-		let Y = [];
-		for (let i = minX; i <= maxX; i += sl(0.5, 4, 0.1))
-			X.push(i);
-		Y.push(sl(1, 6).pm());
-		for (let i = 1; i < X.length; i++) {
-			do {
-				Y[i] = Y[i - 1] + sl(2, 10).pm();
-			} while (Y[i].abs() > 5 || Y[i] == 0);
-		}
-		let spline = new Spline(X, Y);
-		let extremum = [];
-		for (let i = minX; i < maxX; i += 0.1) {
-			genAssert(f(i).abs() < 8, 'Слишком большой горбик');
-			if (f(i) < f(i - 0.1) && f(i) < f(i + 0.1) || (f(i) > f(i - 0.1) && f(i) > f(i + 0.1))) {
-				extremum.push([i, f(i)]);
-			}
-			if (extremum.length >= 2)
-				genAssert((extremum[extremum.length - 2][1] - extremum[extremum.length - 1][1]).abs() > 1,
-					'Горбики слишком близко');
-		}
-		genAssert((extremum[extremum.length - 1][1] - f(maxX)).abs() > 2, 'Слишком близко к правому концу');
-		genAssert((extremum[0][1] - f(minX)).abs() > 2, 'Слишком близко к левому концу');
-		genAssert(extremum.length > 2, 'Максимумов недостаточно');
-		let paint1 = function(ct) {
-			let h = 400;
-			let w = 500;
-			ct.drawCoordinatePlane(w, h, {
-				hor: 1,
-				ver: 1
-			}, {
-				x1: '1',
-				y1: '1',
-				sh1: 13,
-			}, 20);
-			ct.font = "12px liberation_sans";
-			ct.drawLine(20 * maxX, 5, 20 * maxX, -5);
-			ct.drawLine(20 * minX, 5, 20 * minX, -5);
-			if (maxX != 0 && maxX != 1)
-				ct.fillText(maxX, 20 * maxX, 15);
-			if (minX != 0 && minX != 1)
-				ct.fillText(minX, 20 * minX - 13, 15);
-			ct.scale(20, -20);
-			ct.lineWidth = 0.15;
-
-			graph9AdrawFunction(ct, f, {
-				minX: minX,
-				maxX: maxX,
+		NAtask.setTaskWithGraphOfFunctionDerivative({
+			authors: 'Суматохина Александра',
+			type: 'function',
+			boundariesOfGraph: {
+				minX: sl(-11,-5),
+				maxX: sl(5,10),
 				minY: -9,
-				maxY: 9,
-				step: 0.01
-			});
-			graph9AmarkCircles(ct, [
-				[maxX, f(maxX)],
-				[minX, f(minX)]
-			], 2, 0.2);
-			ct.fillStyle = "white";
-			graph9AmarkCircles(ct, [
-				[maxX, f(maxX)],
-				[minX, f(minX)]
-			], 2, 0.1);
-		};
-		NAtask.setTask({
-			text: 'На рисунке изображен график функции $y = f(x)$, определенной на интервале $(' + minX + '; ' + maxX +
-				')$. ' +
-				'Найдите количество ' +
-				['точек, в которых '+['касательная к графику функции параллельна прямой $y=' + sl(0, 20, 0.1).ts(1) +
-				'$ или совпадает с ней','производная функции $f(x)$ равна $0$'].iz(), 'решений уравнения $f\'(x)=0$'].iz()+'.',
-			answers: extremum.length,
-			analys: 'Точек экстремума: ' + extremum.length,
+				maxY: 8,
+				stepForX: 4,
+				stepForY: 0.3,
+			},
+			questionsF: {
+				main: 'integer_points',
+				conditions: [ 'tangent_to_graph_const', 'tangent_to_graph_abscissa', 'derivative_is_zero', 'solutions_equation',],
+				variants: ['sum', 'production', 'number'],
+			},
+			canvasSettings: {
+				height: 400,
+				width: 500,
+				scale: 20,
+				lineWidth: 0.07,
+			},
+			minimumDifferenceBetweenExtremes: 2,
+			numberOfRoots: {min:0, max:10}, 
+			numberOfExtremes: {min: 3, max:10}, 
+			extremumsIsInteger: {
+				int: 'yes',
+				tolerance: 0.15
+			},
 		});
-		chas2.task.modifiers.addCanvasIllustration({
-			width: 500,
-			height: 400,
-			paint: paint1,
-		});
-	});
+	}, 10000);
 })();
+
 //27489 510938 6401 6421 7321 7325 509436 510918 560131 560650 560724 560773 
 //7088 7093 7095 7097 7099 7101 7103 7105 7107 7109 7111 7113 7115 7117 7119 
 //7121 7123 7125 7127 7129 7131 7133 7135 7137 7139 7141 7143 7145 7147 7149 

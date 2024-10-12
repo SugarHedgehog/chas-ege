@@ -15,7 +15,7 @@
 			},
 			questionsF: {
 				main: 'point',
-				conditions: ['maximum_point', 'minimum_point','extreme_point'],
+				conditions: ['maximum_point', 'minimum_point'],
 				variants: ['empty'],
 			},
 			canvasSettings: {
@@ -25,7 +25,7 @@
 				lineWidth: 0.07,
 			},
 			minimumDifferenceBetweenExtremes: 1,
-			numberOfRoots: {min:1, max:1}, 
+			numberOfRoots: {min:2, max:2}, 
 			rootsIsInteger: {
 				int: 'yes',
 				tolerance: 0.09
@@ -33,4 +33,4 @@
 		});
 	}, 10000);
 })();
-/*38 по Ширяевой*/
+//501188: 526007 525111

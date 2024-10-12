@@ -4,19 +4,19 @@
 
 		NAtask.setTaskWithGraphOfFunctionDerivative({
 			authors: 'Суматохина Александра',
-			type: 'derivative',
+			type: 'function',
 			boundariesOfGraph: {
 				minX: sl(-11,-5),
 				maxX: sl(5,10),
 				minY: -9,
 				maxY: 8,
-				stepForX: sl(6,8),
-				stepForY: 0.1,
+				stepForX: 4,
+				stepForY: 0.3,
 			},
 			questionsF: {
-				main: 'point',
-				conditions: ['maximum_point', 'minimum_point','extreme_point'],
-				variants: ['empty'],
+				main: 'integer_points',
+				conditions: ['solutions_equation_on_the_segment'],
+				variants: ['sum', 'production', 'number'],
 			},
 			canvasSettings: {
 				height: 400,
@@ -24,13 +24,16 @@
 				scale: 20,
 				lineWidth: 0.07,
 			},
-			minimumDifferenceBetweenExtremes: 1,
-			numberOfRoots: {min:1, max:1}, 
-			rootsIsInteger: {
+			minimumDifferenceBetweenExtremes: 2,
+			numberOfRoots: {min:0, max:10}, 
+			numberOfExtremes: {min: 3, max:10}, 
+			extremumsIsInteger: {
 				int: 'yes',
 				tolerance: 0.09
 			},
 		});
 	}, 10000);
 })();
-/*38 по Ширяевой*/
+
+//2542
+//https://self-edu.ru
