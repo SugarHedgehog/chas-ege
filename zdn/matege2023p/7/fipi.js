@@ -1,24 +1,5 @@
-window.nomer = [
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    28,
-    38,
-    2542,
-    27496,
-    27489,
-    27492,
-    27501,
-    27505,
-    40130,
-    119979,
-    501188,
-    510384,
-    525690,
-    562751,    
-].iz();
-window.comment = 'Производная и первообразная';
+window.availableTaskNumbers = [
+	2750502,
+];
+window.nomer = window.availableTaskNumbers.iz();
+window.comment='2750502';
