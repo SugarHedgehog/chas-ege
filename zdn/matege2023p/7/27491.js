@@ -2,115 +2,42 @@
 	retryWhileError(function() {
 		'use strict';
 
-		function f(x) {
-			return spline.at(x);
-		}
-		NAinfo.requireApiVersion(0, 2);
-		let maxX = sl(0, 10);
-		let minX = maxX - sl(8, 10);
-		let X = [];
-		let Y = [];
-		for (let i = minX; i <= maxX; i += sl(0.5, 4, 0.1))
-			X.push(i);
-		Y.push(sl(1, 6).pm());
-		for (let i = 1; i < X.length; i++) {
-			do {
-				Y[i] = Y[i - 1] + sl(2, 6).pm();
-			} while (Y[i].abs() > 5 || Y[i] == 0);
-		}
-		let spline = new Spline(X, Y);
-		let extremum = [];
-		let number = 0;
-
-		for (let i = minX; i < maxX; i += 0.1) {
-			genAssert(f(i).abs() < 8, 'Слишком большой горбик');
-			if (f(i) < f(i - 0.1) && f(i) < f(i + 0.1) || (f(i) > f(i - 0.1) && f(i) > f(i + 0.1))) {
-				extremum.push(f(i));
-			}
-			if (extremum.length)
-				genAssert((number - extremum[extremum.length - 1]).abs() > 1, 'Слишком близко к линии');
-
-		}
-		genAssert(extremum.length > 1, 'Минимумов недостаточно');
-
-		let root = [];
-		let step = 0.01;
-		for (let i = minX + step; i < maxX - step; i += step)
-			if ((f(i) >= number && f(i + step) <= number) || (f(i) <= number && f(i + step) >= number)) {
-				genAssert((i.round().abs() - i.abs()).abs() < 0.1, 'Кривые корни');
-				root.push(i.round());
-			}
-
-		genAssert(root.length <= 2, 'Слишком много корней');
-		genAssert(root.length > 0, 'Слишком много корней');
-
-
-		let condition = '';
-		root = root.iz();
-		
-		if (f(root) > f(root + 0.1) && f(root) < f(root - 0.1))
-			condition = 'наименьшее';
-		else
-			condition = 'наибольшее';
-
-		let paint1 = function(ct) {
-			let h = 380;
-			let w = 500;
-			ct.drawCoordinatePlane(w, h, {
-				hor: 1,
-				ver: 1
-			}, {
-				x1: '1',
-				y1: '1',
-				sh1: 13,
-			}, 20);
-
-			ct.font = "12px liberation_sans";
-			ct.drawLine(20 * maxX, 5, 20 * maxX, -5);
-			ct.drawLine(20 * minX, 5, 20 * minX, -5);
-
-			if (maxX != 0 && maxX != 1)
-				ct.fillText(maxX, 20 * maxX, 15);
-
-			if (minX != 0 && minX != 1)
-				ct.fillText(minX, 20 * minX - 13, 15);
-
-			ct.scale(20, -20);
-			ct.lineWidth = 0.15;
-
-			graph9AdrawFunction(ct, f, {
-				minX: minX,
-				maxX: maxX,
+		NAtask.setTaskWithGraphOfFunctionDerivative({
+			authors: 'Суматохина Александра',
+			type: 'derivative',
+			boundariesOfGraph: {
+				minX: sl(-11,-5),
+				maxX: sl(5,10),
 				minY: -9,
-				maxY: 9,
-				step: 0.01
-			});
-
-			graph9AmarkCircles(ct, [
-				[maxX, f(maxX)],
-				[minX, f(minX)]
-			], 2, 0.2);
-			ct.fillStyle = "white";
-			graph9AmarkCircles(ct, [
-				[maxX, f(maxX)],
-				[minX, f(minX)]
-			], 2, 0.1);
-		};
-		NAtask.setTask({
-			text: 'На рисунке изображён график $y=f\'(x)$ — производной функции $f(x)$, определенной на интервале $(' +
-				minX + ';' + maxX + ')$. ' +
-				'В какой точке отрезка $[' + [root, slKrome([root, maxX, minX], maxX, minX)].sortNumeric().join('; ') +
-				']$ функция $f(x)$ принимает ' + condition + ' значение?',
-			answers: root,
+				maxY: 8,
+				stepForX: 4,
+				stepForY: 0.1,
+			},
+			questionsF: {
+				main: 'point',
+				conditions: ['value_on_the_segment'],
+				variants: ['smallest_value', 'largest_value'],
+			},
+			canvasSettings: {
+				height: 400,
+				width: 500,
+				scale: 20,
+				lineWidth: 0.07,
+			},
+			minimumDifferenceBetweenExtremes: 1,
+			numberOfRoots: {min:2, max:10}, 
+			numberOfExtremes: {min: 2, max:10}, 
+			/*extremumsIsInteger: {
+				int: 'yes',
+				tolerance: 0.15
+			},*/
+			rootsIsInteger: {
+				int: 'yes',
+				tolerance: 0.1
+			},
 		});
-		chas2.task.modifiers.addCanvasIllustration({
-			width: 500,
-			height: 400,
-			paint: paint1,
-		});
-	});
+	}, 10000);
 })();
-//SugarHedgehog
 /*27492 27491 6413 6415 27493 508383 509395 513421 513440 548259 561723 561764 
 628360 628478 7551 7553 7555 7563 7565 7567 7569 7571 7573 7575 7577 7579 7583 
 7585 7589 7597 7599 7609 7611 7619 7627 7631 7641 7643 7645 7649 7657 7659 7663 
