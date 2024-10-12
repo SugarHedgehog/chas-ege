@@ -6,16 +6,16 @@
 			authors: 'Суматохина Александра',
 			type: 'derivative',
 			boundariesOfGraph: {
-				minX: sl(-11,-5),
-				maxX: sl(5,10),
+				minX: sl(-5,-0),
+				maxX: sl(2,5),
 				minY: -9,
 				maxY: 8,
-				stepForX: sl(6,8),
-				stepForY: 2,
+				stepForX: 4,
+				stepForY: 1,
 			},
 			questionsF: {
 				main: 'point',
-				conditions: ['tangent_to_graph'],
+				conditions: ['tangent_to_graph_const'],
 				variants: ['abscissa',],
 			},
 			canvasSettings: {
@@ -24,9 +24,9 @@
 				scale: 20,
 				lineWidth: 0.07,
 			},
-			minimumDifferenceBetweenExtremes: 4,
-			numberOfRoots: {min:0, max:1}, 
-			numberOfExtremes: {min: 0, max:0}, 
+			minimumDifferenceBetweenExtremes: 1,
+			numberOfRoots: {min:0, max:10}, 
+			numberOfExtremes: {min: 0, max:1}, 
 		});
 	}, 10000);
 })();

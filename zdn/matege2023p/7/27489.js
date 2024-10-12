@@ -15,7 +15,7 @@
 			},
 			questionsF: {
 				main: 'integer_points',
-				conditions: [ 'tangent_to_graph', 'derivative_is_zero', 'solutions_equation',],
+				conditions: [ 'tangent_to_graph_const', 'tangent_to_graph_abscissa', 'derivative_is_zero', 'solutions_equation',],
 				variants: ['sum', 'production', 'number'],
 			},
 			canvasSettings: {

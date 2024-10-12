@@ -24,19 +24,15 @@
 				scale: 20,
 				lineWidth: 0.07,
 			},
-			minimumDifferenceBetweenExtremes: 1,
+			minimumDifferenceBetweenExtremes: 0,
 			numberOfRoots: {min:2, max:10}, 
 			numberOfExtremes: {min: 2, max:10}, 
-			/*extremumsIsInteger: {
-				int: 'yes',
-				tolerance: 0.15
-			},*/
 			rootsIsInteger: {
 				int: 'yes',
-				tolerance: 0.1
+				tolerance: 0.09
 			},
 		});
-	}, 10000);
+	}, 1000);
 })();
 /*27492 27491 6413 6415 27493 508383 509395 513421 513440 548259 561723 561764 
 628360 628478 7551 7553 7555 7563 7565 7567 7569 7571 7573 7575 7577 7579 7583 
