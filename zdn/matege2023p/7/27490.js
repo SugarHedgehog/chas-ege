@@ -2,103 +2,39 @@
 	retryWhileError(function() {
 		'use strict';
 
-		function f(x) {
-			return spline.at(x);
-		}
-		NAinfo.requireApiVersion(0, 2);
-		let maxX = sl(8, 10);
-		let minX = maxX - sl(13, 18);
-		let X = [];
-		let Y = [];
-		for (let i = minX; i <= maxX; i += sl(1, 2))
-			X.push(i);
-		Y.push(sl(1, 4).pm());
-		for (let i = 1; i < X.length; i++) {
-			do {
-				if (i % 2)
-					Y[i] = Y[i - 1] + sl(3, 6).pm();
-				else
-					Y[i] = 0;
-			} while (Y[i].abs() > 5);
-		}
-		let spline = new Spline(X, Y);
-		let extremum = [];
-
-		for (let i = minX; i < maxX; i += 0.1) {
-			genAssert(f(i).abs() < 8, 'Слишком большой горбик');
-			if (f(i) < f(i - 0.1) && f(i) < f(i + 0.1) || (f(i) > f(i - 0.1) && f(i) > f(i + 0.1))) {
-				extremum.push([i, f(i)]);
-			}
-			if (extremum.length >= 2)
-				genAssert((extremum[extremum.length - 2][1] - extremum[extremum.length - 1][1]).abs() > 1,
-					'Горбики слишком близко');
-			if (extremum.length > 0) {
-				genAssert(extremum[extremum.length - 1][1].abs().round() != 0, 'Слишком непонятный экстремум');
-				genAssert(extremum[extremum.length - 1][0].round(0.1).isZ(), 'Не целый экстемум');
-			}
-		}
-		genAssert((extremum[extremum.length - 1][1] - f(maxX)).abs() > 2, 'Слишком близко к правому концу');
-		genAssert((extremum[0][1] - f(minX)).abs() > 2, 'Слишком близко к левому концу');
-		genAssert(extremum.length > 2, 'Экстремумов недостаточно');
-
-
-		let condition = [
-			['сумму точек', extremum.T()[0].sum()],
-			['количество точек', extremum.length]
-		].iz();
-
-		let paint1 = function(ct) {
-			let h = 380;
-			let w = 500;
-			ct.drawCoordinatePlane(w, h, {
-				hor: 1,
-				ver: 1
-			}, {
-				x1: '1',
-				y1: '1',
-				sh1: 13,
-			}, 20);
-			ct.font = "12px liberation_sans";
-			ct.drawLine(20 * maxX, 5, 20 * maxX, -5);
-			ct.drawLine(20 * minX, 5, 20 * minX, -5);
-			if (maxX != 0 && maxX != 1)
-				ct.fillText(maxX, 20 * maxX - 5, 15);
-			if (minX != 0 && minX != 1)
-				ct.fillText(minX, 20 * minX - 10, 15);
-			ct.scale(20, -20);
-			ct.lineWidth = 0.15;
-
-			graph9AdrawFunction(ct, f, {
-				minX: minX,
-				maxX: maxX,
+		NAtask.setTaskWithGraphOfFunctionDerivative({
+			authors: 'Суматохина Александра',
+			type: 'function',
+			boundariesOfGraph: {
+				minX: sl(-11,-5),
+				maxX: sl(5,10),
 				minY: -9,
-				maxY: 9,
-				step: 0.01
-			});
-			graph9AmarkCircles(ct, [
-				[maxX, f(maxX)],
-				[minX, f(minX)]
-			], 2, 0.2);
-			ct.fillStyle = "white";
-			graph9AmarkCircles(ct, [
-				[maxX, f(maxX)],
-				[minX, f(minX)]
-			], 2, 0.1);
-
-			ct.fillStyle = "blue";
-		};
-		NAtask.setTask({
-			text: 'На рисунке изображен график функции $y=f(x)$, определенной на интервале $(' + minX + ';' + maxX +
-				')$. Найдите ' + condition[0] + ' экстремума функции $f(x)$.',
-			answers: condition[1],
+				maxY: 8,
+				stepForX: 4,
+				stepForY: 0.3,
+			},
+			questionsF: {
+				main: 'integer_points',
+				conditions: ['extreme_points'],
+				variants: ['sum', 'production', 'number', 'smallest', 'largest'],
+			},
+			canvasSettings: {
+				height: 400,
+				width: 500,
+				scale: 20,
+				lineWidth: 0.07,
+			},
+			minimumDifferenceBetweenExtremes: 3,
+			numberOfRoots: {min:0, max:10}, 
+			numberOfExtremes: {min: 3, max:10}, 
+			extremumsIsInteger: {
+				int: 'yes',
+				tolerance: 0.15
+			},
 		});
-		chas2.task.modifiers.addCanvasIllustration({
-			width: 500,
-			height: 400,
-			paint: paint1,
-		});
-	});
+	}, 10000);
 })();
+
 /* 27490 7327 7545 520183 520202 621768 621898 624074 624108 7331 7333 7335 
 7337 7339 7341 7343 7345 7347 7349 7351 7353 7355 7357 7359 7361 7363 7365 
 7367 7369 7371 7373 7375 7377 7379 7381 7383 7385 7387 7389 7391 7393 7395 
