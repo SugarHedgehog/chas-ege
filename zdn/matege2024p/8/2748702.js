@@ -15,8 +15,8 @@
 			},
 			questionsF: {
 				main: 'integer_points',
-				conditions: ['derivative_is_positive', 'derivative_is_negative'],
-				variants: ['sum', 'production', 'number', 'largest', 'smallest'],
+				conditions: ['derivative_is_positive'],
+				variants: ['number',],
 			},
 			canvasSettings: {
 				height: 400,

@@ -16,7 +16,7 @@
 			},
 			questionsF: {
 				main: 'marked_points',
-				conditions: ['derivative_is_negative', 'derivative_is_positive'],
+				conditions: ['derivative_is_negative'],
 				variants: ['number'],
 			},
 			canvasSettings: {
@@ -42,5 +42,4 @@
 		});
 	}, 10000);
 })();
-//500248
-//Демонстрационный вариант ФИПИ
+//50024801

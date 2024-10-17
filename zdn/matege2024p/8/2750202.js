@@ -4,19 +4,18 @@
 
 		NAtask.setTaskWithGraphOfFunctionDerivative({
 			authors: 'Суматохина Александра',
-			definedOnInterval: false,
-			type: 'function',
+			type: 'derivative',
 			boundariesOfGraph: {
 				minX: sl(-11,-5),
 				maxX: sl(5,10),
 				minY: -9,
 				maxY: 8,
 				stepForX: 4,
-				stepForY: 0.3,
+				stepForY: 0.1,
 			},
 			questionsF: {
-				main: 'marked_points',
-				conditions: ['derivative_is_negative', 'derivative_is_positive'],
+				main: 'integer_points',
+				conditions: ['maximum_points_on_the_segment'],
 				variants: ['number'],
 			},
 			canvasSettings: {
@@ -24,23 +23,15 @@
 				width: 500,
 				scale: 20,
 				lineWidth: 0.07,
-				font: "16px liberation_sans",
-				markedPoints:{
-					type: 'symbol',/*['symbol', 'number'].iz()*/
-					step: 2,
-					fontMarkedPoints: "16px liberation_sans",
-					numberOfPoints: {min:4, max:10}
-				}
 			},
 			minimumDifferenceBetweenExtremes: 1,
-			numberOfRoots: {min:0, max:0}, 
+			numberOfRoots: {min:2, max:10}, 
 			numberOfExtremes: {min: 0, max:10}, 
-			extremumsIsInteger: {
+			rootsIsInteger: {
 				int: 'yes',
-				tolerance: 0.2
+				tolerance: 0.09
 			},
 		});
 	}, 10000);
 })();
-//500248
-//Демонстрационный вариант ФИПИ
+/* 2750201 */

@@ -4,19 +4,19 @@
 
 		NAtask.setTaskWithGraphOfFunctionDerivative({
 			authors: 'Суматохина Александра',
-			type: 'function',
+			type: 'derivative',
 			boundariesOfGraph: {
-				minX: sl(-11,0),
-				maxX: sl(5,10),
+				minX: sl(-5,-0),
+				maxX: sl(2,5),
 				minY: -9,
 				maxY: 8,
-				stepForX: sl(6,8),
-				stepForY: 0.3,
+				stepForX: 4,
+				stepForY: 1,
 			},
 			questionsF: {
 				main: 'point',
-				conditions: [ 'solution_equation_on_the_segment', 'derivative_is_zero_on_the_segment'],
-				variants: ['empty'],
+				conditions: ['tangent_to_graph_equation', 'tangent_to_graph_abscissa'],
+				variants: ['abscissa',],
 			},
 			canvasSettings: {
 				height: 400,
@@ -24,14 +24,12 @@
 				scale: 20,
 				lineWidth: 0.07,
 			},
-			minimumDifferenceBetweenExtremes: 2,
+			minimumDifferenceBetweenExtremes: 1,
 			numberOfRoots: {min:0, max:10}, 
-			numberOfExtremes: {min: 2, max:10}, 
-			extremumsIsInteger: {
-				int: 'yes',
-				tolerance: 0.1
-			},
+			numberOfExtremes: {min: 0, max:1}, 
 		});
 	}, 10000);
 })();
-//28 по Ширяевой
+
+//40131 514459 515184 515185 515186 515187 515188 515189 515190 515191 530666
+

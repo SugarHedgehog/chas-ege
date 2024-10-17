@@ -35,7 +35,7 @@
 			minimumDifferenceBetweenExtremes: 1,
 			numberOfRoots: {min:0, max:10}, 
 			numberOfExtremes: {min: 0, max:10}, 
-			rootIsInteger: {
+			rootsIsInteger: {
 				int: 'yes',
 				tolerance: 0.2
 			},

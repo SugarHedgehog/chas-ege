@@ -15,7 +15,7 @@
 			},
 			questionsF: {
 				main: 'integer_points',
-				conditions: ['tangent_to_graph_equation', 'tangent_to_graph_const'],
+				conditions: ['tangent_to_graph_const'],
 				variants: ['number',],
 			},
 			canvasSettings: {

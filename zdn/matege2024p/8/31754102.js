@@ -5,7 +5,7 @@
 		NAtask.setTaskWithGraphOfFunctionDerivative({
 			authors: 'Суматохина Александра',
 			definedOnInterval: false,
-			type: 'function',
+			type: 'derivative',
 			boundariesOfGraph: {
 				minX: sl(-11,-5),
 				maxX: sl(5,10),
@@ -16,7 +16,7 @@
 			},
 			questionsF: {
 				main: 'marked_points',
-				conditions: ['derivative_is_negative', 'derivative_is_positive'],
+				conditions: ['function_is_increasing'],
 				variants: ['number'],
 			},
 			canvasSettings: {
@@ -26,21 +26,20 @@
 				lineWidth: 0.07,
 				font: "16px liberation_sans",
 				markedPoints:{
-					type: 'symbol',/*['symbol', 'number'].iz()*/
+					type: 'symbol',
 					step: 2,
-					fontMarkedPoints: "16px liberation_sans",
-					numberOfPoints: {min:4, max:10}
+					fontMarkedPoints: "14px liberation_sans",
+					numberOfPoints: {min:4, max:4}
 				}
 			},
 			minimumDifferenceBetweenExtremes: 1,
-			numberOfRoots: {min:0, max:0}, 
+			numberOfRoots: {min:0, max:10}, 
 			numberOfExtremes: {min: 0, max:10}, 
-			extremumsIsInteger: {
+			rootsIsInteger: {
 				int: 'yes',
 				tolerance: 0.2
 			},
 		});
 	}, 10000);
 })();
-//500248
-//Демонстрационный вариант ФИПИ
+//31754102

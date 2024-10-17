@@ -15,8 +15,8 @@
 			},
 			questionsF: {
 				main: 'integer_points',
-				conditions: ['maximum_points_on_the_segment', 'minimum_points_on_the_segment'],
-				variants: ['number', 'largest', 'smallest'],
+				conditions: ['maximum_points_on_the_segment', 'minimum_points_on_the_segment', 'extreme_points_on_the_segment'],
+				variants: ['number','largest', 'smallest'],
 			},
 			canvasSettings: {
 				height: 400,

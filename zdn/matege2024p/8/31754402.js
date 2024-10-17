@@ -16,8 +16,8 @@
 			},
 			questionsF: {
 				main: 'marked_points',
-				conditions: ['derivative_is_negative', 'derivative_is_positive'],
-				variants: ['number'],
+				conditions: ['derivative_is_largest'],
+				variants: ['empty'],
 			},
 			canvasSettings: {
 				height: 400,
@@ -26,21 +26,17 @@
 				lineWidth: 0.07,
 				font: "16px liberation_sans",
 				markedPoints:{
-					type: 'symbol',/*['symbol', 'number'].iz()*/
+					type: 'number',
 					step: 2,
-					fontMarkedPoints: "16px liberation_sans",
-					numberOfPoints: {min:4, max:10}
+					fontMarkedPoints: "14px liberation_sans",
+					numberOfPoints: {min:4, max:4}
 				}
 			},
 			minimumDifferenceBetweenExtremes: 1,
 			numberOfRoots: {min:0, max:0}, 
 			numberOfExtremes: {min: 0, max:10}, 
-			extremumsIsInteger: {
-				int: 'yes',
-				tolerance: 0.2
-			},
 		});
 	}, 10000);
 })();
-//500248
-//Демонстрационный вариант ФИПИ
+//31754402
+

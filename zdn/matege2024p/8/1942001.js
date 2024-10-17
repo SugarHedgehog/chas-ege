@@ -42,7 +42,7 @@
 		genAssert(points.length>3);
 
 		let answer, condition;
-		if (sl1()) {
+		if (0) {
 			condition = 'отрицательна';
 			answer = findDecreasingIntervals(func, minX, maxX);
 		} else {
@@ -81,7 +81,7 @@
 			}
 		});
 		NAtask.setTask({
-			text: 'На рисунке изображён некоторой функции $F(x)$ одной из первообразных некоторой функции $f(x)$ и отмечены  '+ chislitlx(points.length, 'точка')+' на оси абсцисс ' +
+			text: 'На рисунке изображён график некоторой функции $F(x)$ одной из первообразных некоторой функции $f(x)$ и отмечены  '+ chislitlx(points.length, 'точка')+' на оси абсцисс ' +
 				': $'+xs+'$. В скольких из этих точек функция $f(x)$ ' + condition + '.',
 			answers: answer.length,
 			authors: 'Суматохина Александра',

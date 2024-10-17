@@ -23,13 +23,13 @@
 			stepForY: 1,
 			extremumsIsInteger: {
 				int: 'yes',
-				tolerance: 0.15
+				tolerance: 0.1
 			},
 			numberOfExtremes: {
-				min: 5,
+				min: 3,
 				max: 100
 			},
-			minimumDifferenceBetweenExtremes: 4,
+			minimumDifferenceBetweenExtremes: 1.5,
 		});
 
 		let paint1 = paintSpline({
@@ -43,7 +43,7 @@
 		});
 		NAtask.setTask({
 			text: 'На рисунке изображён график $y = F (x )$ одной из первообразных некоторой функции ' +
-				'$f (x )$, определённой на интервале $('+minX+';'+maxX+')$. ' +
+				'$f (x )$, определённой на интервале $(' + minX + ';' + maxX + ')$. ' +
 				'Пользуясь рисунком, определите количество целочисленных решений уравнения $f (x)= 0$ на отрезке $[' +
 				subSegment[0] + ';' + subSegment[1] + ']$.',
 			answers: extremumsX(func, subSegment[0] - stepForX * 0.1, subSegment[1] + stepForX * 0.1).length,

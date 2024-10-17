@@ -15,7 +15,7 @@
 			},
 			questionsF: {
 				main: 'point',
-				conditions: ['minimum_point_on_the_segment', 'maximum_point_on_the_segment', 'extreme_point_on_the_segment'],
+				conditions: ['extreme_point_on_the_segment'],
 				variants: ['empty',],
 			},
 			canvasSettings: {

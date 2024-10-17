@@ -6,17 +6,17 @@
 			authors: 'Суматохина Александра',
 			type: 'function',
 			boundariesOfGraph: {
-				minX: sl(-11,0),
+				minX: sl(-11,-5),
 				maxX: sl(5,10),
 				minY: -9,
 				maxY: 8,
-				stepForX: sl(6,8),
+				stepForX: 4,
 				stepForY: 0.3,
 			},
 			questionsF: {
-				main: 'point',
-				conditions: [ 'solution_equation_on_the_segment', 'derivative_is_zero_on_the_segment'],
-				variants: ['empty'],
+				main: 'integer_points',
+				conditions: ['solutions_equation_on_the_segment'],
+				variants: [/*'sum', 'production', */'number'],
 			},
 			canvasSettings: {
 				height: 400,
@@ -26,12 +26,13 @@
 			},
 			minimumDifferenceBetweenExtremes: 2,
 			numberOfRoots: {min:0, max:10}, 
-			numberOfExtremes: {min: 2, max:10}, 
+			numberOfExtremes: {min: 3, max:10}, 
 			extremumsIsInteger: {
 				int: 'yes',
-				tolerance: 0.1
+				tolerance: 0.09
 			},
 		});
 	}, 10000);
 })();
-//28 по Ширяевой
+
+//2542001
