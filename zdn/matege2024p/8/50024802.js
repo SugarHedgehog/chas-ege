@@ -37,7 +37,7 @@
 			numberOfExtremes: {min: 0, max:10}, 
 			extremumsIsInteger: {
 				int: 'yes',
-				tolerance: 0.2
+				tolerance: 0.1
 			},
 		});
 	}, 10000);
