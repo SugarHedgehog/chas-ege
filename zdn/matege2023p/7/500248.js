@@ -16,7 +16,7 @@
 			},
 			questionsF: {
 				main: 'marked_points',
-				conditions: ['derivative_is_negativeg', 'derivative_is_positive'],
+				conditions: ['derivative_is_negative', 'derivative_is_positive'],
 				variants: ['number'],
 			},
 			canvasSettings: {

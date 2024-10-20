@@ -15,7 +15,7 @@
 			},
 			questionsF: {
 				main: 'point',
-				conditions: [ 'solution_equation_on_the_segment',],
+				conditions: [ 'solution_equation_on_the_segment', 'derivative_is_zero_on_the_segment'],
 				variants: ['empty'],
 			},
 			canvasSettings: {

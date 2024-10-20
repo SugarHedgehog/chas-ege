@@ -14,9 +14,9 @@
 				stepForY: 0.1,
 			},
 			questionsF: {
-				main: 'integer_points',
-				conditions: ['maximum_points_on_the_segment', 'minimum_points_on_the_segment', 'extreme_points_on_the_segment'],
-				variants: ['sum', 'production', 'number', 'largest', 'smallest',],
+				main: 'point',
+				conditions: ['minimum_point_on_the_segment', 'maximum_point_on_the_segment', 'extreme_point_on_the_segment'],
+				variants: ['empty',],
 			},
 			canvasSettings: {
 				height: 400,
@@ -34,6 +34,7 @@
 		});
 	}, 10000);
 })();
+
 /*27502 6417 9045 9049 522116 522142 8801 8803 8805 8807 8809 8811 8813 8815 
 8817 8819 8821 8823 8825 8827 8829 8831 8833 8835 8837 8839 8841 8843 8845 
 8847 8849 8851 8853 8855 8857 8859 8861 8863 8865 8867 8869 8871 8873 8875 
