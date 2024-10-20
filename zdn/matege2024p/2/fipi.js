@@ -1,8 +1,5 @@
-window.nomer=[
-	4504,
-	644849,
+window.availableTaskNumbers = [
 	644850,
-	649891,
-	64485008,
-].iz()
-window.comment='Вектора';
+];
+window.nomer = window.availableTaskNumbers.iz();
+window.comment='644850';
