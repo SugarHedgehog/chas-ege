@@ -552,6 +552,10 @@ chas2.task = {
 			definedOnInterval: definedOnInterval
 		});
 
+		const functionFx = 'функция $f(x)$';
+		const functionsFx = 'функции $f(x)$';
+		const derivativeOfFx = 'производная ' + functionsFx;
+
 		task.text = ['На рисунке изображён график'];
 		switch (type) {
 			case 'function':
@@ -588,9 +592,6 @@ chas2.task = {
 
 		let find = '';
 		let deriv;
-		const functionFx = 'функция $f(x)$';
-		const functionsFx = 'функции $f(x)$';
-		const derivativeOfFx = 'производная ' + functionsFx;
 		let subSegment = getRandomSubSegment(minX + 1, maxX - 1, stepForX);
 		switch (type) {
 			case 'function':
