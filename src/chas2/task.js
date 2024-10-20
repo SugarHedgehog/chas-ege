@@ -1028,6 +1028,8 @@ chas2.task = {
 						task.text.push('наименьшую из');
 						answer = answer.minE();
 						break;
+					case 'empty':
+						break;
 					default:
 						throw new Error('variants: ' + variants + ' не найдено');
 				};
