@@ -72,5 +72,6 @@ do
      printf "window.nomer=[\n" >> main.js;
      printf "\t%s,\n" ${array[$index]} >> main.js
      printf "].iz()\nwindow.comment='"${array[$index]}"';\n" >> main.js;
+     printf "chas2.task.setMinimaxFunctionTask.forbidOpenEnds = true;\n" >> main.js;
      cd ..;
 done
