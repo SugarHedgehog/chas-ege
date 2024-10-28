@@ -2,8 +2,8 @@
 	retryWhileError(function () {
 		'use strict';
 		let linear = [sl(1, 100) + 'x ', ''];
-		let forbidMinY = false;
-		let forbidMaxY = false;
+		let forbidMinY = true;
+		let forbidMaxY = true;
 
 		console.log(nabor.preferences["77427"]);
 		if (nabor.preferences && "77427" in nabor.preferences) {
@@ -17,10 +17,10 @@
 			}
 			switch (nabor.preferences["77427"][1]) {
 				case 'minimum':
-					forbidMaxY = true;
+					forbidMinY = false;
 					break;
 				case 'maximum':
-					forbidMinY = true;
+					forbidMaxY = false;
 					break;
 			}
 		}
