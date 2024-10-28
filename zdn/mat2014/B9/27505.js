@@ -23,10 +23,14 @@ retryWhileUndefined(function() {
 		maxY: 5.5
 	});
 	let xk = sl(x0 - sl(0,4,0.1), x0 +sl(0,4,0.1) , 0.05);
+	console.log(xk);
 	if (xk.abs() > 5)
 		return;
+		
+	if (xk.abs() > 0 && xk.abs() < 1)
+		return;
 	let yk = f(xk);
-	if (yk.abs() > 6 || (xk.isZ() && yk.isZ()))
+	if (yk.abs() > 6 || (xk.isZ() && yk.isZ()) || yk.abs() < 1)
 		return;
 	let k = (2 * a * xk + b);
 	if (!k || !(k * 100).isZ())
@@ -80,18 +84,19 @@ retryWhileUndefined(function() {
 		});
 
 		graph9AmarkCircles(ct, pointsP, 2, 0.15);
-		ct.strokeStyle = 'blue';
+		ct.strokeStyle = om.primaryBrandColors.iz();
 		ct.setLineDash([0.5, 0.2]);
 		if (yk > 0)
 			ct.drawLine(xk, yk, xk, 0);
 		else
 			ct.drawLine(xk, 0, xk, yk);
-		ct.fillStyle = "red";
+		ct.fillStyle = om.secondaryBrandColors;
 		graph9AmarkCircles(ct, [
 			[xk, 0]
 		], 2, 0.15);
 		ct.font = "15px liberation_sans";
 		ct.scale(1 / 20, -1 / 20);
+		ct.fillStyle = 'black';
 		ct.fillText('a', 20 * xk + 10, -10);
 	};
 	NAtask.setTask({
@@ -109,5 +114,5 @@ retryWhileUndefined(function() {
 		paint: paint1,
 	});
 	return true;
-}, 100000);
+}, 200000);
 //27505 9101 9561 9603 505379 505400 524044 524066 9127 9135 9137 9147 9151 9157 9159 9175 9197 9213 9223 9243 9253 9269 9281 9299 9301 9351 9367 9371 9385 9389 9407 9423 9439 9461 9475 9481 9495 9513 9517 9547 9571
