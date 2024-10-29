@@ -1,5 +1,5 @@
 window.nomer=[
-	315127,
+	10,
 ].iz()
-window.comment='315127';
+window.comment='10';
 chas2.task.setMinimaxFunctionTask.forbidOpenEnds = true;
