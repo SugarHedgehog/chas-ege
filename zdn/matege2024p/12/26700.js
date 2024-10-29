@@ -6,6 +6,9 @@
 		let c = sl(1, 50);
 		let arr1 = ['+', '-'];
 		let arr2 = ['sin', 'cos'];
+		let forbidMinY = false;
+		let forbidMaxY = false;
+		
 		if (nabor.preferences && "26700" in nabor.preferences) {
 			switch (nabor.preferences["26700"][0]) {
 				case 'cos':

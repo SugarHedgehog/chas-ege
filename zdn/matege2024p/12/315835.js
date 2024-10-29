@@ -7,8 +7,8 @@
 		let d = sl(1, 100);
 		let arr1 = ['+', '-'];
 		let linear = [arr1.iz() + c + 'x', arr1.iz() + d];
-		let forbidMinY = true;
-		let forbidMaxY = true;
+		let forbidMinY = false;
+		let forbidMaxY = false;
 
 		if (nabor.preferences && "315835" in nabor.preferences) {
 			switch (nabor.preferences["315835"][0]) {
@@ -21,10 +21,10 @@
 			}
 			switch (nabor.preferences["315835"][1]) {
 				case 'minimum':
-					forbidMinY = false;
+					forbidMaxY = true;
 					break;
 				case 'maximum':
-					forbidMaxY = false;
+					forbidMinY = true;
 					break;
 			}
 		}
@@ -35,6 +35,8 @@
 			primaryStep: 1,
 			secondaryStep: 0.001,
 			authors: ['Алендарь Сергей'],
+			forbidMinY,
+			forbidMaxY,
 		});
 	}, 10);
 })();

@@ -726,7 +726,7 @@ chas2.task = {
 		}
 
 
-		console.log('minX: ' + minX + " ; minY: " + minY + " ;   maxX: " + maxX + " ; maxY: " + maxY);
+		//console.log('minX: ' + minX + " ; minY: " + minY + " ;   maxX: " + maxX + " ; maxY: " + maxY);
 
 		if (!(minY*1000).isAlmostInteger() || o.forbidMinY) {
 			minY = null;
@@ -868,11 +868,11 @@ chas2.task = {
 			eq = math.simplify(eq, [{l:'n1*n2 + n1*n3', r:'n1*(n2+n3)'}]);
 			eq = math.simplify(eq, [{l:'eq(n1*e^n2)', r:'eq(n1)'}]);
 			eq = eq.args[0];
-			console.log(eq.toString());
+			//console.log(eq.toString());
 			// Solve the equation eq using nerdamer
 
 			let roots = nerdamer.solve(eq.toString()+'=0', 'x').toString().replace(/^\[/,'').replace(/\]$/,'').split(',');
-			console.log(roots);
+			//console.log(roots);
 
 			o.extremums = [];
 			for (let root of roots) {
@@ -889,7 +889,7 @@ chas2.task = {
 
 		//sort extremums
 		for (let e of o.extremums) {
-			console.log(e);
+			//console.log(e);
 			sortedExtremums[
 				mathjs_helpers.testLocalExtremum(expr.toString(), ''+e, '1/100')
 			].push(e);
@@ -1095,7 +1095,7 @@ chas2.task = {
 				}
 			}
 			possibleMultipliers.shuffle();
-			console.log(possibleMultipliers);
+			//console.log(possibleMultipliers);
 			for (var i of possibleMultipliers){
 				if(sl1() && (ans/i.sqrt()*1000).isAlmostInteger()){
 					o.text += ' Ответ разделите на $' + i.texsqrt(opts.useMultiples) + '$.';
