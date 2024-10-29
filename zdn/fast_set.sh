@@ -18,8 +18,14 @@ array=(
     "77460 степень pow"
     "77460 корень sqrt"
     77490
-    26695
-    26700
+    "26695 косинус cos minimum"
+    "26695 косинус cos maximum"
+    "26695 синус sin minimum"
+    "26695 синус sin maximum"
+    "26700 косинус cos minimum"
+    "26700 косинус cos maximum"
+    "26700 синус sin minimum"
+    "26700 синус sin maximum"
     26702
     26704
     17
