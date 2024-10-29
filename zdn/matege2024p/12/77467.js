@@ -9,10 +9,10 @@
 
 		if (nabor.preferences && "77467" in nabor.preferences) {
 			switch (nabor.preferences["77467"][0]) {
-				case 'x/(x^2+c)':
+				case 'xfrac':
 					frac = frac.join('/');
 					break;
-				case '(x^2+c)/x':
+				case 'fracx':
 					frac = frac.reverse().join('/');
 					break;
 			}
@@ -27,7 +27,7 @@
 		}
 
 		NAtask.setLocalExtremumTask({
-			expr: ['-',''].iz() + '(' +  + ')',
+			expr: ['-',''].iz() + '(' + frac + ')',
 			extremums: [-a, a],
 			authors: ['Николай Авдеев'],
 			forbidMinY,

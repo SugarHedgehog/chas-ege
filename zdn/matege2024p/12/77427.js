@@ -5,7 +5,6 @@
 		let forbidMinY = true;
 		let forbidMaxY = true;
 
-		console.log(nabor.preferences["77427"]);
 		if (nabor.preferences && "77427" in nabor.preferences) {
 			switch (nabor.preferences["77427"][0]) {
 				case 'linear':

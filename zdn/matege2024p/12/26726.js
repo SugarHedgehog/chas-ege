@@ -4,8 +4,8 @@
 		let forbidMinY = false;
 		let forbidMaxY = false;
 
-		if (nabor.preferences && "77427" in nabor.preferences) {
-			switch (nabor.preferences["77427"]) {
+		if (nabor.preferences && "26726" in nabor.preferences) {
+			switch (nabor.preferences["26726"][0]) {
 				case 'minimum':
 					forbidMaxY = true;
 					break;

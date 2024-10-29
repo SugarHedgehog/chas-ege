@@ -3,7 +3,7 @@
 		'use strict';
 		let xsqrtx;
 		if (nabor.preferences && "77455" in nabor.preferences) {
-			const preference = nabor.preferences["77455"];
+			const preference = nabor.preferences["77455"][0];
 			xsqrtx = preference === 'pow' ? ['x^(3/2)'] : ['x sqrt(x)'];
 		} else {
 			xsqrtx = ['x^(3/2)', 'x sqrt(x)'];
