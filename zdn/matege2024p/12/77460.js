@@ -8,8 +8,15 @@
 		let arr1 = ['+', '-'];
 		let arr2 = ['-', '+'];
 		let maxmin = sl1();
+		let xsqrtx;
+		if (nabor.preferences && "77460" in nabor.preferences) {
+			const preference = nabor.preferences["77460"];
+			xsqrtx = preference === 'pow' ? ['x^(3/2)'] : ['x sqrt(x)'];
+		} else {
+			xsqrtx = ['x^(3/2)', 'x sqrt(x)'];
+		}
 		NAtask.setMinimaxFunctionTask({
-			expr: '' + a + arr1[maxmin] + b + ' x ' + arr2[maxmin] + [' x sqrt(x) ','x^(3/2)'].iz(),
+			expr: '' + a + arr1[maxmin] + b + ' x ' + arr2[maxmin] + xsqrtx.iz(),
 			leftEnd: '' + c,
 			rightEnd: '' + d,
 			primaryStep: 1,

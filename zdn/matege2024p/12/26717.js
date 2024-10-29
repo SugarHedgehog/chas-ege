@@ -12,6 +12,21 @@
 		let l = -b - 1 - sl(0, 1.5, 0.5);
 		let arr1 = ['+', '-'];
 		arr1.shuffle();
+
+		let forbidMinY = false;
+		let forbidMaxY = false;
+
+		if (nabor.preferences && "26717" in nabor.preferences) {
+			switch (nabor.preferences["26717"]) {
+				case 'minimum':
+					forbidMaxY = true;
+					break;
+				case 'maximum':
+					forbidMinY = true;
+					break;
+			}
+		}
+
 		NAtask.setMinimaxFunctionTask({
 			expr: arr1[0] + [a + 'log(x+' + b + ')', 'log((x+' + b + ')^' + c + ')'].iz() + '+' + arr1[1] + c + 'x+' + k,
 			leftEnd: '' + l,
@@ -19,6 +34,8 @@
 			primaryStep: 0.01,
 			secondaryStep: 0.001,
 			authors: ['Алендарь Сергей'],
+			forbidMinY,
+			forbidMaxY,
 		});
 	}, 1000);
 })();
