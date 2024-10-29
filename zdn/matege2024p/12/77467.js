@@ -24,6 +24,8 @@
 					forbidMinY = true;
 					break;
 			}
+		}else{
+			frac = frac.join('/');
 		}
 
 		NAtask.setLocalExtremumTask({

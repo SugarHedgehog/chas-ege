@@ -40,14 +40,14 @@ array=(
     26724
     77480
     77492
-    "77467 x/(x^2+c)_минимум minimum"
-    "77467 x/(x^2+c)_максимум maximum"
-    "77467 (x^2+c)/x_минимум minimum"
-    "77467 (x^2+c)/x_максимум maximum"
-    "77470 x/(x^2+c)_минимум minimum"
-    "77470 x/(x^2+c)_максимум maximum"
-    "77470 (x^2+c)/x_минимум minimum"
-    "77470 (x^2+c)/x_максимум maximum"
+    "77467 x/(x^2+c)_минимум xfrac minimum"
+    "77467 x/(x^2+c)_максимум xfrac maximum"
+    "77467 (x^2+c)/x_минимум fracx minimum"
+    "77467 (x^2+c)/x_максимум fracx maximum"
+    "77470 x/(x^2+c)_минимум xfrac minimum"
+    "77470 x/(x^2+c)_максимум xfrac maximum"
+    "77470 (x^2+c)/x_минимум fracx minimum"
+    "77470 (x^2+c)/x_максимум fracx maximum"
 )
 
 if [[ ${#array[@]} -eq 0 ]]; then
