@@ -12,8 +12,8 @@ array=(
     "77427 без_линейной_минимум not_linear minimum"
     "77427 без_линейной_максимум not_linear maximum"
     77438
-    "315835 с_линейной_минимум  linear minimum"
-    "315835 с_линейной_максимум  linear maximum"
+    "315835 с_линейной_минимум linear minimum"
+    "315835 с_линейной_максимум linear maximum"
     "315835 без_линейной_минимум not_linear minimum"
     "315835 без_линейной_максимум not_linear maximum"
     "77455 степень pow"
