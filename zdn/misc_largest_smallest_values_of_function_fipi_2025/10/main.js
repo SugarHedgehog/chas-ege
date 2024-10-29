@@ -1,6 +1,6 @@
 window.nomer=[
-	77455,
+	315835,
 ].iz()
-window.comment='77455 степень';
-window.nabor.preferences['77455'] = ['pow'];
+window.comment='315835 без линейной максимум';
+window.nabor.preferences['315835'] = ['not_linear','maximum'];
 chas2.task.setMinimaxFunctionTask.forbidOpenEnds = true;

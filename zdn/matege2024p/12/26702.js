@@ -8,6 +8,20 @@
 		let arr2 = ['',  '-'];
 		let maxmin1 = sl1();
 		let maxmin2 = (maxmin1 + 1) % 2;
+
+		let forbidMinY = false;
+		let forbidMaxY = false;
+
+		if (nabor.preferences && "26702" in nabor.preferences) {
+			switch (nabor.preferences["26702"][0]) {
+				case 'minimum':
+					forbidMaxY = true;
+					break;
+				case 'maximum':
+					forbidMinY = true;
+					break;
+			}
+		}
 		NAtask.setMinimaxFunctionTask({
 			expr: arr2[maxmin1] + a + 'tan(x)' + arr1[maxmin2] + a+ 'x'  + arr1.iz() + b,
 			leftEnd:  ['0','-pi/4','-pi/3'].iz(),
@@ -15,6 +29,8 @@
 			primaryStep: 0.01,
 			secondaryStep: 0.0001,
 			authors: ['Алендарь Сергей'],
+			forbidMinY,
+			forbidMaxY,
 		});
 	}, 100);
 })();
