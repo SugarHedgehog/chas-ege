@@ -1,6 +1,6 @@
 window.nomer=[
-	26695,
+	77460,
 ].iz()
-window.comment='26695 косинус максимум';
-window.nabor.preferences['26695'] = ['cos','maximum'];
+window.comment='77460 корень';
+window.nabor.preferences['77460'] = ['sqrt'];
 chas2.task.setMinimaxFunctionTask.forbidOpenEnds = true;
