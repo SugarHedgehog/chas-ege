@@ -7,32 +7,31 @@
 		let arr1 = [' ', '-'];
 		let arr2 = ['+', '-'];
 		let key = "77438";
-
-		let forbidMinY = false;
-		let forbidMaxY = false;
-
-		if (nabor.preferences && key in nabor.preferences) {
-			switch (nabor.preferences[key][0]) {
-				case 'minimum':
-					forbidMaxY = true;
-					break;
-				case 'maximum':
-					forbidMinY = true;
-					break;
-			}
-		}
+		let func = [arr1.iz() + 'x^3', arr1.iz() + a + 'x^2', arr1.iz() + b + 'x']
+		func = usePreference(key, [{
+			preference: 'cubic',
+			preferenceValue: [arr1.iz() + 'x^3', arr1.iz() + b + 'x'].shuffle(),
+		}, {
+			preference: 'cubic_and_quadratic',
+			preferenceValue: [arr1.iz() + 'x^3', arr1.iz() + a + 'x^2', arr1.iz() + b + 'x'].shuffle(),
+		}], func.iz(sl(2, 3)));
 
 		NAtask.setMinimaxFunctionTask({
-			expr: [arr1.iz() + 'x^3', arr1.iz() + a + 'x^2', arr1.iz() + b + 'x'].iz(sl(2, 3)).join('+') + arr2.iz() + c,
+			expr: func.join('+') + arr2.iz() + c,
 			leftEnd: '-' + sl(1, 9, 0.5),
 			rightEnd: '' + sl(1, 9, 0.5),
 			primaryStep: 1,
 			secondaryStep: 0.001,
 			authors: ['Алендарь Сергей'],
-			forbidMinY,
-			forbidMaxY,
+			forbidMinY: usePreference(key, {
+				preference: 'maximum',
+				preferenceValue: true,
+			},false),
+			forbidMaxY: usePreference(key, {
+				preference: 'minimum',
+				preferenceValue: true,
+			}, false),
 		});
 	}, 10);
 })();
 //77438
-
