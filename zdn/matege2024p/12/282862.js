@@ -6,6 +6,20 @@
 		let c = sl(-15, 15, 0.5);
 		let d = c + sl(3, 30, 0.5);
 		let arr = ['+', '-'];
+		let forbidMinY = false;
+		let forbidMaxY = false;
+
+		if (nabor.preferences && "282862" in nabor.preferences) {
+			switch (nabor.preferences["282862"][0]) {
+				case 'minimum':
+					forbidMaxY = true;
+					break;
+				case 'maximum':
+					forbidMinY = true;
+					break;
+			}
+		}
+
 		NAtask.setMinimaxFunctionTask({
 			expr: ['(x' + arr.iz() + a + ')^2','(' + ' x ' + arr.iz() + b + ')'].shuffle().join('') + arr.iz() + sl(1, 10),
 			leftEnd: '' + c,
@@ -13,6 +27,8 @@
 			primaryStep: 0.1,
 			secondaryStep: 0.001,
 			authors: ['Алендарь Сергей'],
+			forbidMinY,
+			forbidMaxY,
 		});
 	}, 10000);
 })();

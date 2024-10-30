@@ -10,6 +10,19 @@
 		let arr2 = ['-', '+'];
 		let arr3 = ['-', ''];
 		let maxmin = sl1();
+		let forbidMinY = false;
+		let forbidMaxY = false;
+
+		if (nabor.preferences && "77480" in nabor.preferences) {
+			switch (nabor.preferences["77480"][0]) {
+				case 'minimum':
+					forbidMaxY = true;
+					break;
+				case 'maximum':
+					forbidMinY = true;
+					break;
+			}
+		}
 		NAtask.setMinimaxFunctionTask({
 			expr: '' + '(' + a + 'x^2' + arr1[maxmin] + b + 'x' + arr2[maxmin] + b + ')' +
 				'e^(' + arr3[maxmin] + 'x' + [arr1[maxmin] + c, ''].iz() + ')',
@@ -18,6 +31,8 @@
 			primaryStep: 1,
 			secondaryStep: 0.01,
 			authors: ['Алендарь Сергей'],
+			forbidMinY,
+			forbidMaxY,
 		});
 	}, 1000);
 })();
