@@ -3,9 +3,10 @@
 		'use strict';
 		let forbidMinY = false;
 		let forbidMaxY = false;
+		let key = "77490";
 
-		if (nabor.preferences && "77490" in nabor.preferences) {
-			switch (nabor.preferences["77490"][0]) {
+		if (nabor.preferences && key in nabor.preferences) {
+			switch (nabor.preferences[key][0]) {
 				case 'minimum':
 					forbidMaxY = true;
 					break;
