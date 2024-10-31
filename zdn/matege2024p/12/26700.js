@@ -8,9 +8,10 @@
 		let arr2 = ['sin', 'cos'];
 		let forbidMinY = false;
 		let forbidMaxY = false;
+		let key = "26700";
 		
-		if (nabor.preferences && "26700" in nabor.preferences) {
-			switch (nabor.preferences["26700"][0]) {
+		if (nabor.preferences && key in nabor.preferences) {
+			switch (nabor.preferences[key][0]) {
 				case 'cos':
 					arr2 = ['cos'];
 					break;
@@ -18,7 +19,7 @@
 					arr2 = ['sin'];
 					break;
 			}
-			switch (nabor.preferences["26700"][1]) {
+			switch (nabor.preferences[key][1]) {
 				case 'minimum':
 					forbidMaxY = true;
 					break;
