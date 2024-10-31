@@ -9,9 +9,10 @@
 		let maxmin1 = sl1();
 		let forbidMinY = false;
 		let forbidMaxY = false;
+		let key = "26695";
 
-		if (nabor.preferences && "26695" in nabor.preferences) {
-			switch (nabor.preferences["26695"][0]) {
+		if (nabor.preferences && key in nabor.preferences) {
+			switch (nabor.preferences[key][0]) {
 				case 'cos':
 					arr2 = ['cos'];
 					break;
@@ -19,7 +20,7 @@
 					arr2 = ['sin'];
 					break;
 			}
-			switch (nabor.preferences["26695"][1]) {
+			switch (nabor.preferences[key][1]) {
 				case 'minimum':
 					forbidMaxY = true;
 					break;
