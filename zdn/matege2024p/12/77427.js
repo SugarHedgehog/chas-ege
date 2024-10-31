@@ -1,7 +1,7 @@
 (function () {
 	retryWhileError(function () {
 		'use strict';
-		let linear = [sl(1, 100) + 'x ', ''];
+		let linear = [['+', '-'].iz() + sl(1, 100) + 'x ', ''];
 		let forbidMinY = false;
 		let forbidMaxY = false;
 
