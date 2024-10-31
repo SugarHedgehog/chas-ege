@@ -8,9 +8,10 @@
 		let arr1 = ['+', '-'];
 		let forbidMinY = false;
 		let forbidMaxY = false;
+		let key = "315127";
 
-		if (nabor.preferences && "315127" in nabor.preferences) {
-			switch (nabor.preferences["315127"][0]) {
+		if (nabor.preferences && key in nabor.preferences) {
+			switch (nabor.preferences[key][0]) {
 				case 'minimum':
 					forbidMaxY = true;
 					break;
