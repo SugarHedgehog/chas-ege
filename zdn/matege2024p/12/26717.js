@@ -15,9 +15,10 @@
 
 		let forbidMinY = false;
 		let forbidMaxY = false;
+		let key = "26717";
 
-		if (nabor.preferences && "26717" in nabor.preferences) {
-			switch (nabor.preferences["26717"][0]) {
+		if (nabor.preferences && key in nabor.preferences) {
+			switch (nabor.preferences[key][0]) {
 				case 'minimum':
 					forbidMaxY = true;
 					break;
