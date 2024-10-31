@@ -9,9 +9,10 @@
 		let linear = [arr1.iz() + c + 'x', arr1.iz() + d];
 		let forbidMinY = false;
 		let forbidMaxY = false;
+		let key = "315835";
 
-		if (nabor.preferences && "315835" in nabor.preferences) {
-			switch (nabor.preferences["315835"][0]) {
+		if (nabor.preferences && key in nabor.preferences) {
+			switch (nabor.preferences[key][0]) {
 				case 'linear':
 					linear = [arr1.iz() + c + 'x'];
 					break;
@@ -19,7 +20,7 @@
 					linear = [arr1.iz() + d];
 					break;
 			}
-			switch (nabor.preferences["315835"][1]) {
+			switch (nabor.preferences[key][1]) {
 				case 'minimum':
 					forbidMaxY = true;
 					break;

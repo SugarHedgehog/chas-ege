@@ -6,12 +6,13 @@
 		let c = sl(1, 50);
 		let arr1 = [' ', '-'];
 		let arr2 = ['+', '-'];
+		let key = "77438";
 
 		let forbidMinY = false;
 		let forbidMaxY = false;
 
-		if (nabor.preferences && "77438" in nabor.preferences) {
-			switch (nabor.preferences["77438"][0]) {
+		if (nabor.preferences && key in nabor.preferences) {
+			switch (nabor.preferences[key][0]) {
 				case 'minimum':
 					forbidMaxY = true;
 					break;
