@@ -1,12 +1,28 @@
 (function() {
 	retryWhileError(function() {
 		'use strict';
-		let xsqrtx;
-		if (nabor.preferences && "77455" in nabor.preferences) {
-			const preference = nabor.preferences["77455"][0];
-			xsqrtx = preference === 'pow' ? ['x^(3/2)'] : ['x sqrt(x)'];
-		} else {
-			xsqrtx = ['x^(3/2)', 'x sqrt(x)'];
+		let xsqrtx = ['x^(3/2)', 'x sqrt(x)'];
+		let forbidMinY = false;
+		let forbidMaxY = false;
+
+		let key = "77455";
+		if (nabor.preferences && key in nabor.preferences) {
+			switch (nabor.preferences[key][0]) {
+				case 'pow':
+					xsqrtx = ['x^(3/2)'];
+					break;
+				case 'sqrt':
+					xsqrtx = ['x sqrt(x)'];
+					break;
+			}
+			switch (nabor.preferences[key][1]) {
+				case 'minimum':
+					forbidMaxY = true;
+					break;
+				case 'maximum':
+					forbidMinY = true;
+					break;
+			}
 		}
 		NAtask.setLocalExtremumTask({
 			expr: [
@@ -15,6 +31,8 @@
 				sl(0, 100)
 			].joinPlusMinus(),
 			authors: ['Николай Авдеев'],
+			forbidMinY: forbidMinY,
+			forbidMaxY: forbidMaxY,
 		});
 	}, 200);
 })();
