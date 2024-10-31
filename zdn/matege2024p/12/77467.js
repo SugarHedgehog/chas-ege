@@ -6,9 +6,10 @@
 		let frac = ['x', '(x^2 + ' + a*a + ')'];
 		let forbidMinY = false;
 		let forbidMaxY = false;
+		let key = "77467";
 
-		if (nabor.preferences && "77467" in nabor.preferences) {
-			switch (nabor.preferences["77467"][0]) {
+		if (nabor.preferences && key in nabor.preferences) {
+			switch (nabor.preferences[key][0]) {
 				case 'xfrac':
 					frac = frac.join('/');
 					break;
@@ -16,7 +17,7 @@
 					frac = frac.reverse().join('/');
 					break;
 			}
-			switch (nabor.preferences["77467"][1]) {
+			switch (nabor.preferences[key][1]) {
 				case 'minimum':
 					forbidMaxY = true;
 					break;
