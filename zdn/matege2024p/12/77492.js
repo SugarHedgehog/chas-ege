@@ -2,6 +2,18 @@
 	'use strict';
 
 	var arr1 = ['максимумa', 'минимумa'];
+	let key = "77492";
+
+		if (nabor.preferences && key in nabor.preferences) {
+			switch (nabor.preferences[key][0]) {
+				case 'minimum':
+					arr1 = ['минимумa'];
+					break;
+				case 'maximum':
+					arr1 = ['максимумa'];
+					break;
+			}
+		}
 	var arr2 = ['положительный', 'отрицательный'];
 	var maxmin1 = sl(0, 1);
 	var maxmin2 = (maxmin1 + 1) % 2;
