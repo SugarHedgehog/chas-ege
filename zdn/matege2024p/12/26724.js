@@ -4,9 +4,10 @@
 		let a = sl(1,20).pm();
 		let forbidMinY = false;
 		let forbidMaxY = false;
+		let key = "26724";
 
-		if (nabor.preferences && "26724" in nabor.preferences) {
-			switch (nabor.preferences["26724"][0]) {
+		if (nabor.preferences && key in nabor.preferences) {
+			switch (nabor.preferences[key][0]) {
 				case 'minimum':
 					forbidMaxY = true;
 					break;
