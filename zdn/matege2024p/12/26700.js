@@ -5,29 +5,17 @@
 		let b = sl(1, 100);
 		let c = sl(1, 50);
 		let arr1 = ['+', '-'];
-		let arr2 = ['sin', 'cos'];
-		let forbidMinY = false;
-		let forbidMaxY = false;
 		let key = "26700";
 		
-		if (nabor.preferences && key in nabor.preferences) {
-			switch (nabor.preferences[key][0]) {
-				case 'cos':
-					arr2 = ['cos'];
-					break;
-				case 'sin':
-					arr2 = ['sin'];
-					break;
-			}
-			switch (nabor.preferences[key][1]) {
-				case 'minimum':
-					forbidMaxY = true;
-					break;
-				case 'maximum':
-					forbidMinY = true;
-					break;
-			}
-		}
+		let arr2 = ['sin', 'cos'];
+		arr2 = usePreference(key, [{
+			preference: 'sin',
+			preferenceValue: ['sin'],
+		}, {
+			preference: 'cos',
+			preferenceValue: ['cos'],
+		}], arr2);
+
 		NAtask.setMinimaxFunctionTask({
 			expr: a + arr2.iz() + '(x)' + arr1.iz() + b + 'x/pi' + arr1.iz() + c,
 			leftEnd: ['-2pi/3', '-5pi/6'].iz(),
@@ -35,8 +23,14 @@
 			primaryStep: 0.1,
 			secondaryStep: 0.001,
 			authors: ['Алендарь Сергей'],
-			forbidMinY,
-			forbidMaxY,
+			forbidMinY: usePreference(key, {
+				preference: 'maximum',
+				preferenceValue: true,
+			}, false),
+			forbidMaxY: usePreference(key, {
+				preference: 'minimum',
+				preferenceValue: true,
+			}, false),
 		});
 	}, 10000);
 })();

@@ -14,21 +14,9 @@
 			a1 = 1;
 		}
 		genAssertIrreducible(a1, b1);
-
-		let forbidMinY = false;
-		let forbidMaxY = false;
+		
 		let key = "26719";
 
-		if (nabor.preferences && key in nabor.preferences) {
-			switch (nabor.preferences[key][0]) {
-				case 'minimum':
-					forbidMaxY = true;
-					break;
-				case 'maximum':
-					forbidMinY = true;
-					break;
-			}
-		}
 		NAtask.setMinimaxFunctionTask({
 			expr: arr1[maxmin] + 'log(' + b + 'x)+' + arr2[maxmin] + b + 'x+' + a,
 			leftEnd: '1/' + b * 2,
@@ -36,8 +24,14 @@
 			primaryStep: 0.01,
 			secondaryStep: 0.001,
 			authors: ['Алендарь Сергей'],
-			forbidMinY,
-			forbidMaxY,
+			forbidMinY: usePreference(key, {
+				preference: 'maximum',
+				preferenceValue: true,
+			}, false),
+			forbidMaxY: usePreference(key, {
+				preference: 'minimum',
+				preferenceValue: true,
+			}, false),
 		});
 	}, 1000);
 })();

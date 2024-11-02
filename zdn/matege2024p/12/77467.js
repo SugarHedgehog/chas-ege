@@ -3,38 +3,28 @@
 		'use strict';
 		let a = sl(1,20);
 
-		let frac = ['x', '(x^2 + ' + a*a + ')'];
-		let forbidMinY = false;
-		let forbidMaxY = false;
 		let key = "77467";
-
-		if (nabor.preferences && key in nabor.preferences) {
-			switch (nabor.preferences[key][0]) {
-				case 'xfrac':
-					frac = frac.join('/');
-					break;
-				case 'fracx':
-					frac = frac.reverse().join('/');
-					break;
-			}
-			switch (nabor.preferences[key][1]) {
-				case 'minimum':
-					forbidMaxY = true;
-					break;
-				case 'maximum':
-					forbidMinY = true;
-					break;
-			}
-		}else{
-			frac = frac.join('/');
-		}
+		let frac = ['x', '(x^2 + ' + a*a + ')'];
+		frac = usePreference(key, [{
+			preference: 'xfrac',
+			preferenceValue: frac.join('/'),
+		}, {
+			preference: 'fracx',
+			preferenceValue: frac.reverse().join('/'),
+		}], frac);
 
 		NAtask.setLocalExtremumTask({
 			expr: ['-',''].iz() + '(' + frac + ')',
 			extremums: [-a, a],
 			authors: ['Николай Авдеев'],
-			forbidMinY,
-			forbidMaxY,
+			forbidMinY: usePreference(key, {
+				preference: 'maximum',
+				preferenceValue: true,
+			}, false),
+			forbidMaxY: usePreference(key, {
+				preference: 'minimum',
+				preferenceValue: true,
+			}, false),
 		});
 	}, 2);
 })();

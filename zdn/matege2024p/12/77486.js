@@ -1,29 +1,17 @@
 (function() {
 	retryWhileError(function() {
 		'use strict';
-		let forbidMinY = false;
-		let forbidMaxY = false;
-		let pow = sl(2,30).pm();
 		let key = "77486";
 
-		if (nabor.preferences && key in nabor.preferences) {
-			switch (nabor.preferences[key][0]) {
-				case 'positive_pow':
-					pow = pow.abs();
-					break;
-				case 'negative_pow':
-					pow = (pow > 0) ? -pow : pow;
-					break;
-			}
-			switch (nabor.preferences[key][1]) {
-				case 'minimum':
-					forbidMaxY = true;
-					break;
-				case 'maximum':
-					forbidMinY = true;
-					break;
-			}
-		}
+		let pow = sl(2,30);
+		pow = usePreference(key, [{
+			preference: 'positive_pow',
+			preferenceValue: pow,
+		}, {
+			preference: 'negative_pow',
+			preferenceValue: -pow,
+		}], pow.pm());
+
 		NAtask.setLocalExtremumTask({
 			expr: [
 				'' + sl(1,30).pm() + 'x',
@@ -31,8 +19,14 @@
 				'' +  sl(1,30).pm(),
 			].joinPlusMinus(),
 			authors: ['Николай Авдеев'],
-			forbidMinY,
-			forbidMaxY,
+			forbidMinY: usePreference(key, {
+				preference: 'maximum',
+				preferenceValue: true,
+			}, false),
+			forbidMaxY: usePreference(key, {
+				preference: 'minimum',
+				preferenceValue: true,
+			}, false),
 		});
 	}, 200);
 })();

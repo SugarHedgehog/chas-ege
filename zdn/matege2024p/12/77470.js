@@ -6,31 +6,15 @@
 		let d = sl(-15, 15);
 		let e = d + sl(3, 30);
 
-		let frac = ['x', '(x^2 + ' + b + ')'];
-		let forbidMinY = false;
-		let forbidMaxY = false;
 		let key = "77470";
-
-		if (nabor.preferences && key in nabor.preferences) {
-			switch (nabor.preferences[key][0]) {
-				case 'xfrac':
-					frac = frac.join('/');
-					break;
-				case 'fracx':
-					frac = frac.reverse().join('/');
-					break;
-			}
-			switch (nabor.preferences[key][1]) {
-				case 'minimum':
-					forbidMaxY = true;
-					break;
-				case 'maximum':
-					forbidMinY = true;
-					break;
-			}
-		}else{
-			frac = frac.join('/');
-		}
+		let frac = ['x', '(x^2 + ' + b + ')'];
+		frac = usePreference(key, [{
+			preference: 'xfrac',
+			preferenceValue: frac.join('/'),
+		}, {
+			preference: 'fracx',
+			preferenceValue: frac.reverse().join('/'),
+		}], frac);
 
 		NAtask.setMinimaxFunctionTask({
 			expr: ['','-'].iz() + '('+ frac +')',
@@ -38,8 +22,14 @@
 			rightEnd: '' + e,
 			primaryStep: 0.1,
 			authors: ['Алендарь Сергей'],
-			forbidMinY,
-			forbidMaxY,
+			forbidMinY: usePreference(key, {
+				preference: 'maximum',
+				preferenceValue: true,
+			}, false),
+			forbidMaxY: usePreference(key, {
+				preference: 'minimum',
+				preferenceValue: true,
+			}, false),
 		});
 	}, 10000);
 })();

@@ -11,8 +11,10 @@ array=(
     "77427 с_линейной_максимум linear maximum"
     "77427 без_линейной_минимум not_linear minimum"
     "77427 без_линейной_максимум not_linear maximum"
+
     "77438 минимум minimum"
     "77438 максимум maximum"
+
     "315835 с_линейной_минимум linear minimum"
     "315835 с_линейной_максимум linear maximum"
     "315835 без_линейной_минимум not_linear minimum"
@@ -30,51 +32,69 @@ array=(
 
     "77490 минимум minimum"
     "77490 максимум maximum"
+
     "26695 косинус_минимум cos minimum"
     "26695 косинус_максимум cos maximum"
     "26695 синус_минимум sin minimum"
     "26695 синус_максимум sin maximum"
+
     "26700 косинус_минимум cos minimum"
     "26700 косинус_максимум cos maximum"
     "26700 синус_минимум sin minimum"
     "26700 синус_максимум sin maximum"
+
     "26702 минимум minimum"
     "26702 максимум maximum"
+
     "26704 минимум minimum"
     "26704 максимум maximum"
     17
     10
     27
-    "77486 положительная_степень_минимум popsitive_pow minimum"
-    "77486 положительная_степень_максимум popsitive_pow maximum"
+    
+    "77486 положительная_степень_минимум positive_pow minimum"
+    "77486 положительная_степень_максимум positive_pow maximum"
     "77486 отрицательная_степень_минимум negative_pow minimum" 
     "77486 отрицательная_степень_максимум negative_pow maximum"
+
     "26717 минимум minimum"
     "26717 максимум maximum"
+
     "26719 минимум minimum"
     "26719 максимум maximum"
+
     "315127 минимум minimum"
     "315127 максимум maximum"
+
     "282859 минимум minimum"
     "282859 максимум maximum"
+
     "282862 минимум minimum"
     "282862 максимум maximum"
+
     "26726 минимум minimum"
     "26726 максимум maximum"
+
     "26713 минимум minimum"
     "26713 максимум maximum"
+
     "26691 минимум minimum"
     "26691 максимум maximum"
+
     "26724 минимум minimum"
     "26724 максимум maximum"
+
     "77480 минимум minimum"
     "77480 максимум maximum"
+
     "77492 минимум minimum"
     "77492 максимум maximum"
+
     "77467 x/(x^2+c)_минимум xfrac minimum"
     "77467 x/(x^2+c)_максимум xfrac maximum"
     "77467 (x^2+c)/x_минимум fracx minimum"
     "77467 (x^2+c)/x_максимум fracx maximum"
+    
     "77470 x/(x^2+c)_минимум xfrac minimum"
     "77470 x/(x^2+c)_максимум xfrac maximum"
     "77470 (x^2+c)/x_минимум fracx minimum"

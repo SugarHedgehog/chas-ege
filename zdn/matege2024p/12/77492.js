@@ -1,21 +1,19 @@
 (function() {
 	'use strict';
 
-	var arr1 = ['максимумa', 'минимумa'];
 	let key = "77492";
 
-		if (nabor.preferences && key in nabor.preferences) {
-			switch (nabor.preferences[key][0]) {
-				case 'minimum':
-					arr1 = ['минимумa'];
-					break;
-				case 'maximum':
-					arr1 = ['максимумa'];
-					break;
-			}
-		}
+	var arr1 = ['максимумa', 'минимумa'];
+		arr1 = usePreference(key, [{
+			preference: 'maximum',
+			preferenceValue: ['максимумa'],
+		}, {
+			preference: 'minimum',
+			preferenceValue: ['минимумa'],
+		}], arr1);
+
 	var arr2 = ['положительный', 'отрицательный'];
-	var maxmin1 = sl(0, 1);
+	var maxmin1 = sl1();
 	var maxmin2 = (maxmin1 + 1) % 2;
 
 	var ans = sl(2, 14, 2) / 10;
