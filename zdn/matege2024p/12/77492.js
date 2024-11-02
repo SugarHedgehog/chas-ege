@@ -3,17 +3,17 @@
 
 	let key = "77492";
 
-	var arr1 = ['максимумa', 'минимумa'];
-		arr1 = usePreference(key, [{
-			preference: 'maximum',
-			preferenceValue: ['максимумa'],
-		}, {
-			preference: 'minimum',
-			preferenceValue: ['минимумa'],
-		}], arr1);
+	var arr1 = ['максимума', 'минимума'];
+	arr1 = usePreference(key, [{
+		preference: 'maximum',
+		preferenceValue: ['максимума'],
+	}, {
+		preference: 'minimum',
+		preferenceValue: ['минимума'],
+	}], arr1.iz());
 
 	var arr2 = ['положительный', 'отрицательный'];
-	var maxmin1 = sl1();
+	var maxmin1 = (arr1 == 'максимума') ? 0 : 1;
 	var maxmin2 = (maxmin1 + 1) % 2;
 
 	var ans = sl(2, 14, 2) / 10;
@@ -39,10 +39,10 @@
 	}
 
 	chas2.task.setTask({
-		text: 'Найдите точку ' + arr1[maxmin1] + ' функции' +
+		text: 'Найдите точку ' + arr1 + ' функции' +
 			'$$ y=(' + plusmin(b + 'x-' + a) + ')' + '\\cos ' + plusmin('x-' + b) + '\\sin ' + plusmin('x+' + d) + ', $$' +
 			'принадлежащую промежутку $(0; \\frac{\\pi}{2} )$.',
-		analys: '$$ y^{\'}=(' + plusmin(b + 'x-' + a) + ')^{\'}\\cos x+(' + plusmin(b + 'x-' + a) +')'+
+		analys: '$$ y^{\'}=(' + plusmin(b + 'x-' + a) + ')^{\'}\\cos x+(' + plusmin(b + 'x-' + a) + ')' +
 			'(\\cos x)^{\'}+(' + -b + '\\sin x)^{\'}$$' +
 			'$$ y^{\'}=' + b + '\\cos x-(' + plusmin(b + 'x-' + a) + ')' + '\\sin ' + plusmin('x-' + b) + '\\cos x' +
 			' \\Rightarrow\\ ' +
@@ -57,11 +57,9 @@
 			' знак, а на промежутке $(' + ans + '; \\frac{\\pi}{2} )$ ' + arr2[maxmin2] +
 			'. Производная функции меняет знак с ' +
 			sklonlxkand(arr2[maxmin1]).re + ' на ' + arr2[maxmin2] + ',' + ' значит, $' + ans +
-			'$ - это искомая точка ' + arr1[maxmin1] + '.',
+			'$ - это искомая точка ' + arr1 + '.',
 
 		answers: ans,
 	});
 })();
 //77492
-
-
