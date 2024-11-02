@@ -12,8 +12,10 @@ array=(
     "77427 без_линейной_минимум not_linear minimum"
     "77427 без_линейной_максимум not_linear maximum"
 
-    "77438 минимум minimum"
-    "77438 максимум maximum"
+    "77438 кубическая_минимум cubic minimum"
+    "77438 кубическая_максимум cubic maximum"
+    "77438 кубическая_и_квадратичная_минимум cubic_and_quadratic minimum"
+    "77438 кубическая_и_квадратичная_максимум cubic_and_quadratic maximum"
 
     "315835 с_линейной_минимум linear minimum"
     "315835 с_линейной_максимум linear maximum"
