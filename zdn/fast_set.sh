@@ -23,14 +23,14 @@ array=(
     "315835 без_линейной_максимум not_linear maximum"
 
     "77455 степень_минимум pow minimum"
-    "77455 степень_максимум pow maximim"
+    "77455 степень_максимум pow maximum"
     "77455 корень_минимум sqrt minimum"
-    "77455 корень_максимум sqrt maximim"
+    "77455 корень_максимум sqrt maximum"
 
     "77460 степень_минимум pow minimum"
-    "77460 степень_максимум pow maximim"
+    "77460 степень_максимум pow maximum"
     "77460 корень_минимум sqrt minimum"
-    "77460 корень_максимум sqrt maximim"
+    "77460 корень_максимум sqrt maximum"
 
     "77490 минимум minimum"
     "77490 максимум maximum"
