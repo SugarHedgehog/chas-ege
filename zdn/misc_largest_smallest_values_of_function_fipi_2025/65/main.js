@@ -1,6 +1,6 @@
 window.nomer=[
-	77467,
+	77492,
 ].iz()
-window.comment='77467 x/(x^2+c) максимум';
-window.nabor.preferences['77467'] = ['xfrac','maximum'];
+window.comment='77492 максимум';
+window.nabor.preferences['77492'] = ['maximum'];
 chas2.task.setMinimaxFunctionTask.forbidOpenEnds = true;
