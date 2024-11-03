@@ -84,8 +84,10 @@ array=(
     "26713 отрицательная_степень_минимум negative_pow minimum" 
     "26713 отрицательная_степень_максимум negative_pow maximum"
 
-    "26691 минимум minimum"
-    "26691 максимум maximum"
+    "26691 положительная_степень_минимум positive_pow minimum"
+    "26691 положительная_степень_максимум positive_pow maximum"
+    "26691 отрицательная_степень_минимум negative_pow minimum" 
+    "26691 отрицательная_степень_максимум negative_pow maximum"
 
     "26724 минимум minimum"
     "26724 максимум maximum"

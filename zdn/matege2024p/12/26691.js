@@ -8,11 +8,19 @@
 		let e = -b / a - a - sl(1, 10);
 		let arr1 = ['+', '-'];
 		let arr2 = ['-', '+'];
-		let maxmin = sl1();
 		let key = "26691";
+		
+		let sign = ['+', '-'];
+		sign = usePreference(key, [{
+			preference: 'positive_pow',
+			preferenceValue: ['+'],
+		}, {
+			preference: 'negative_pow',
+			preferenceValue: ['-'],
+		}], sign);
 
 		NAtask.setMinimaxFunctionTask({
-			expr: '' + '(' + a + 'x' + arr1[sl1()] + b + ')' + 'e^(' + arr1[maxmin] + 'x' + arr2[sl1()] + c + ')',
+			expr: '' + '(' + a + 'x' + arr1.iz() + b + ')' + 'e^(' + sign.iz() + 'x' + arr2.iz() + c + ')',
 			leftEnd: '' + e,
 			rightEnd: '' + d,
 			primaryStep: 1 / 6,
