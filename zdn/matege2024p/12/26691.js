@@ -10,13 +10,14 @@
 		let arr2 = ['-', '+'];
 		let key = "26691";
 		
-		let sign = ['+', '-'];
+		let v = sl(1,3)
+		let sign = [v, -v];
 		sign = usePreference(key, [{
 			preference: 'positive_pow',
-			preferenceValue: ['+'],
+			preferenceValue: [v],
 		}, {
 			preference: 'negative_pow',
-			preferenceValue: ['-'],
+			preferenceValue: [-v],
 		}], sign);
 
 		NAtask.setMinimaxFunctionTask({
