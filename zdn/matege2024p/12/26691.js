@@ -10,18 +10,23 @@
 		let arr2 = ['-', '+'];
 		let key = "26691";
 		
-		let v = sl(1,3)
-		let sign = [v, -v];
-		sign = usePreference(key, [{
+		let v = usePreference(key, [{
+			preference: 'exp',
+			preferenceValue: 1,
+		}, {
+			preference: 'cExp',
+			preferenceValue: sl(2,10),
+		}], sl(1,10));
+		let sign = usePreference(key, [{
 			preference: 'positive_pow',
-			preferenceValue: [v],
+			preferenceValue: v,
 		}, {
 			preference: 'negative_pow',
-			preferenceValue: [-v],
-		}], sign);
+			preferenceValue: -(v.abs()),
+		}], [v, -(v.abs())].iz());
 
 		NAtask.setMinimaxFunctionTask({
-			expr: '' + '(' + a + 'x' + arr1.iz() + b + ')' + 'e^(' + sign.iz() + 'x' + arr2.iz() + c + ')',
+			expr: '' + '(' + a + 'x' + arr1.iz() + b + ')' + 'e^(' + sign + 'x' + arr2.iz() + c + ')',
 			leftEnd: '' + e,
 			rightEnd: '' + d,
 			primaryStep: 1 / 6,

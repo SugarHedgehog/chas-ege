@@ -1,6 +1,6 @@
 window.nomer=[
-	26724,
+	26691,
 ].iz()
-window.comment='26724 минимум';
-window.nabor.preferences['26724'] = ['minimum'];
+window.comment='26691 cExp положительная степень минимум';
+window.nabor.preferences['26691'] = ['cExp','positive_pow','minimum'];
 chas2.task.setMinimaxFunctionTask.forbidOpenEnds = true;

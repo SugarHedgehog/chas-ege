@@ -84,10 +84,14 @@ array=(
     "26713 отрицательная_степень_минимум negative_pow minimum" 
     "26713 отрицательная_степень_максимум negative_pow maximum"
 
-    "26691 положительная_степень_минимум positive_pow minimum"
-    "26691 положительная_степень_максимум positive_pow maximum"
-    "26691 отрицательная_степень_минимум negative_pow minimum" 
-    "26691 отрицательная_степень_максимум negative_pow maximum"
+    "26691 exp_положительная_степень_минимум exp positive_pow minimum"
+    "26691 exp_положительная_степень_максимум exp positive_pow maximum"
+    "26691 exp_отрицательная_степень_минимум exp negative_pow minimum" 
+    "26691 exp_отрицательная_степень_максимум exp negative_pow maximum"
+    "26691 cExp_положительная_степень_минимум cExp positive_pow minimum"
+    "26691 cExp_положительная_степень_максимум cExp positive_pow maximum"
+    "26691 cExp_отрицательная_степень_минимум cExp negative_pow minimum" 
+    "26691 cExp_отрицательная_степень_максимум cExp negative_pow maximum"
 
     "26724 минимум minimum"
     "26724 максимум maximum"
