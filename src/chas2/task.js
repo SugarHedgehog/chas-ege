@@ -923,7 +923,7 @@ chas2.task = {
 				whatToFind = whatToFind.shuffle()[0];
 		}
 			
-		let theExtremum = sortedExtremums[whatToFind];
+		let theExtremum = sortedExtremums[whatToFind][0];
 
 		theExtremum = eval(theExtremum);
 		genAssertZ1000(theExtremum, 'Бесконечные десятичные дроби запрещены');
