@@ -7,110 +7,62 @@
 rm -rf *
 
 array=(
+        "77427 с_линейной_максимум linear maximum"
     "77427 с_линейной_минимум linear minimum"
-    "77427 с_линейной_максимум linear maximum"
-    "77427 без_линейной_минимум not_linear minimum"
-    "77427 без_линейной_максимум not_linear maximum"
-
-    "77438 кубическая_минимум cubic minimum"
-    "77438 кубическая_максимум cubic maximum"
-    "77438 кубическая_и_квадратичная_минимум cubic_and_quadratic minimum"
     "77438 кубическая_и_квадратичная_максимум cubic_and_quadratic maximum"
-
-    "315835 с_линейной_минимум linear minimum"
+    "77438 кубическая_и_квадратичная_минимум cubic_and_quadratic minimum"
+    "77438 кубическая_максимум cubic maximum"
+    "77438 кубическая_минимум cubic minimum"
     "315835 с_линейной_максимум linear maximum"
-    "315835 без_линейной_минимум not_linear minimum"
-    "315835 без_линейной_максимум not_linear maximum"
-
+    "315835 с_линейной_минимум linear minimum"
     "77455 степень_минимум pow minimum"
     "77455 степень_максимум pow maximum"
-    "77455 корень_минимум sqrt minimum"
-    "77455 корень_максимум sqrt maximum"
-
-    "77460 степень_минимум pow minimum"
-    "77460 степень_максимум pow maximum"
-    "77460 корень_минимум sqrt minimum"
     "77460 корень_максимум sqrt maximum"
-
-    "77490 минимум minimum"
+    "77460 корень_минимум sqrt minimum"
     "77490 максимум maximum"
-
-    "26695 косинус_минимум cos minimum"
-    "26695 косинус_максимум cos maximum"
-    "26695 синус_минимум sin minimum"
+    "77490 минимум minimum"
     "26695 синус_максимум sin maximum"
-
-    "26700 косинус_минимум cos minimum"
-    "26700 косинус_максимум cos maximum"
-    "26700 синус_минимум sin minimum"
+    "26695 синус_минимум sin minimum"
+    "26695 косинус_минимум cos minimum"
     "26700 синус_максимум sin maximum"
-
-    "26702 минимум minimum"
+    "26700 косинус_минимум cos minimum"
     "26702 максимум maximum"
-
-    "26704 минимум minimum"
+    "26702 минимум minimum"
     "26704 максимум maximum"
-    17
+    "26704 минимум minimum"
     10
     27
-    
-    "77486 положительная_степень_минимум positive_pow minimum"
+    "26717 максимум_неединичная_степень maximum"
+    "26717 минимум_неединичная_степень minimum"
+    "26717 максимум_единичная_степень maximum"
+    "26717 минимум_единичная_степень minimum"
     "77486 положительная_степень_максимум positive_pow maximum"
-    "77486 отрицательная_степень_минимум negative_pow minimum" 
-    "77486 отрицательная_степень_максимум negative_pow maximum"
-
-    "26717 минимум minimum"
-    "26717 максимум maximum"
-
-    "26719 минимум minimum"
+    "77486 положительная_степень_минимум positive_pow minimum"
     "26719 максимум maximum"
-
+    "26719 минимум minimum"
     "315127 минимум minimum"
-    "315127 максимум maximum"
-
-    "282859 минимум minimum"
     "282859 максимум maximum"
-
-    "282862 минимум minimum"
-    "282862 максимум maximum"
-
-    "26726 положительная_степень_минимум positive_pow minimum"
-    "26726 положительная_степень_максимум positive_pow maximum"
-    "26726 отрицательная_степень_минимум negative_pow minimum" 
-    "26726 отрицательная_степень_максимум negative_pow maximum"
-
-    "26713 положительная_степень_минимум positive_pow minimum"
+    "282859 минимум minimum"
     "26713 положительная_степень_максимум positive_pow maximum"
-    "26713 отрицательная_степень_минимум negative_pow minimum" 
-    "26713 отрицательная_степень_максимум negative_pow maximum"
-
-    "26691 exp_положительная_степень_минимум exp positive_pow minimum"
-    "26691 exp_положительная_степень_максимум exp positive_pow maximum"
-    "26691 exp_отрицательная_степень_минимум exp negative_pow minimum" 
-    "26691 exp_отрицательная_степень_максимум exp negative_pow maximum"
-    "26691 cExp_положительная_степень_минимум cExp positive_pow minimum"
-    "26691 cExp_положительная_степень_максимум cExp positive_pow maximum"
-    "26691 cExp_отрицательная_степень_минимум cExp negative_pow minimum" 
-    "26691 cExp_отрицательная_степень_максимум cExp negative_pow maximum"
-
+    "26713 отрицательная_степень_минимум negative_pow minimum"
+    "26726 отрицательная_степень_максимум negative_pow maximum"
     "26724 минимум minimum"
-    "26724 максимум maximum"
-
+    "282862 максимум maximum"
+    "282862 минимум minimum"
+    "26691 exp_отрицательная_степень_максимум exp negative_pow maximum"
     "77480 минимум minimum"
     "77480 максимум maximum"
-
-    "77492 минимум minimum"
+    "26691 exp_положительная_степень_минимум exp positive_pow minimum"
     "77492 максимум maximum"
-
-    "77467 x/(x^2+c)_минимум xfrac minimum"
+    "77492 минимум minimum"
     "77467 x/(x^2+c)_максимум xfrac maximum"
-    "77467 (x^2+c)/x_минимум fracx minimum"
+    "77467 x/(x^2+c)_минимум xfrac minimum"
     "77467 (x^2+c)/x_максимум fracx maximum"
-    
     "77470 x/(x^2+c)_минимум xfrac minimum"
     "77470 x/(x^2+c)_максимум xfrac maximum"
     "77470 (x^2+c)/x_минимум fracx minimum"
     "77470 (x^2+c)/x_максимум fracx maximum"
+
 )
 
 if [[ ${#array[@]} -eq 0 ]]; then

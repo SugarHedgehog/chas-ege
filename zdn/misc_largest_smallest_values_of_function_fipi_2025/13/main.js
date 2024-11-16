@@ -1,6 +1,6 @@
 window.nomer=[
-	77455,
+	77490,
 ].iz()
-window.comment='77455 степень минимум';
-window.nabor.preferences['77455'] = ['pow','minimum'];
+window.comment='77490 максимум';
+window.nabor.preferences['77490'] = ['maximum'];
 chas2.task.setMinimaxFunctionTask.forbidOpenEnds = true;

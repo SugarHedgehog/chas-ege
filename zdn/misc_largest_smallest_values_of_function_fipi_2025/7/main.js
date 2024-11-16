@@ -1,6 +1,6 @@
 window.nomer=[
-	77438,
+	315835,
 ].iz()
-window.comment='77438 кубическая и квадратичная минимум';
-window.nabor.preferences['77438'] = ['cubic_and_quadratic','minimum'];
+window.comment='315835 с линейной максимум';
+window.nabor.preferences['315835'] = ['linear','maximum'];
 chas2.task.setMinimaxFunctionTask.forbidOpenEnds = true;

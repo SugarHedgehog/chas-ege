@@ -1,6 +1,6 @@
 window.nomer=[
-	26726,
+	77470,
 ].iz()
-window.comment='26726 положительная степень минимум';
-window.nabor.preferences['26726'] = ['positive_pow','minimum'];
+window.comment='77470 x/(x^2+c) минимум';
+window.nabor.preferences['77470'] = ['xfrac','minimum'];
 chas2.task.setMinimaxFunctionTask.forbidOpenEnds = true;
