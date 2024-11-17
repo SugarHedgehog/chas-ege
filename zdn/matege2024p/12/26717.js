@@ -13,9 +13,17 @@
 		let arr1 = ['+', '-'].shuffle();
 
 		let key = "26717";
+		let pow = [a + 'log(x+' + b + ')', 'log((x+' + b + ')^' + c + ')'];
+		pow = usePreference(key, [{
+			preference: 'trivial',
+			preferenceValue: [pow[0]],
+		}, {
+			preference: 'not_trivial',
+			preferenceValue: [pow[1]],
+		}], pow);
 
 		NAtask.setMinimaxFunctionTask({
-			expr: arr1[0] + [a + 'log(x+' + b + ')', 'log((x+' + b + ')^' + c + ')'].iz() + '+' + arr1[1] + c + 'x+' + k,
+			expr: arr1[0] + pow.iz() + '+' + arr1[1] + c + 'x+' + k,
 			leftEnd: '' + l,
 			rightEnd: '0',
 			primaryStep: 0.01,
