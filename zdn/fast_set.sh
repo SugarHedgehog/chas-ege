@@ -14,7 +14,6 @@ array=(
     "77438 кубическая_максимум cubic maximum"
     "77438 кубическая_минимум cubic minimum"
     "315835 с_линейной_максимум linear maximum"
-    "315835 с_линейной_минимум linear minimum"
     "77455 степень_минимум pow minimum"
     "77455 степень_максимум pow maximum"
     "77460 корень_максимум sqrt maximum"
@@ -30,7 +29,6 @@ array=(
     "26702 минимум minimum"
     "26704 максимум maximum"
     "26704 минимум minimum"
-    10
     27
     "26717 максимум_неединичная_степень not_trivial maximum"
     "26717 минимум_неединичная_степень not_trivial minimum"
