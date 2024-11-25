@@ -19,7 +19,7 @@
 		let question = [
 			[letters.slice(0, 4).iz() + letters[4], pyr.sideEdge],
 			[
-				[letters[0] + letters[2], letters[1] + letters[3]].iz(), pyr.radiusOfCircumscribedCircle
+				[letters[0] + letters[2], letters[1] + letters[3]].iz(), 2 * pyr.radiusOfCircumscribedCircle
 			],
 			[letters.slice(4, 6).join(''), pyr.height],
 		].iz(3);
