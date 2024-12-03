@@ -1,6 +1,7 @@
 (function() {
 	'use strict';
 	NAinfo.requireApiVersion(0, 0);
+	let key = "320169";
 	let kol = [[4,'четырёх'],[5, `пяти`],[8, `восьми`]].iz();
 	let chislo=kol.pop();
 	let k = sluchch(1, kol-1);
@@ -11,7 +12,18 @@
 		`Ирина`, `Настя`, `Ирма`, `Кристина`, `Ира`, `Мила`, `Тома`, `Любовь`, `Вера`, `Надежда`, `Снежана`,
 	].iz(kol - k);
 	let persons = person1.concat(person2).shuffle();
-	let uslov = [`${persons.iz()}`, `девочка`, `мальчик`, ].iz();
+	let uslov = [`${persons.iz()}`, `девочка`, `мальчик`, ];
+	uslov = getListedPreference(key, [{
+			preference: 'person',
+			preferenceValue: uslov[0],
+		}, {
+			preference: 'girl',
+			preferenceValue: uslov[1],
+		}, {
+			preference: 'boy',
+			preferenceValue: uslov[2],
+		}],uslov.iz());
+	
 	let must = `должен`;
 	if (person2.includes(uslov) || uslov == `девочка`)
 		must = `должна`;
