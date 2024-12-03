@@ -1,5 +1,6 @@
 window.nomer=[
-	4,
+	2,
 ].iz()
-window.comment='4';
+window.comment='2 три броска';
+window.nabor.preferences['2'] = ['three_times'];
 chas2.task.setMinimaxFunctionTask.forbidOpenEnds = true;
