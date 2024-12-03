@@ -1,6 +1,5 @@
 window.nomer=[
-	6,
+	320193,
 ].iz()
-window.comment='6 запланировано в последние дни';
-window.nabor.preferences['6'] = ['last_day'];
+window.comment='320193';
 chas2.task.setMinimaxFunctionTask.forbidOpenEnds = true;

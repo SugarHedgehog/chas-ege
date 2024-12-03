@@ -1,6 +1,5 @@
 window.nomer=[
-	320183,
+	1,
 ].iz()
-window.comment='320183 три матча больше меньше';
-window.nabor.preferences['320183'] = ['three_games','more_less'];
+window.comment='1';
 chas2.task.setMinimaxFunctionTask.forbidOpenEnds = true;
