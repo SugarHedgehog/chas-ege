@@ -20,7 +20,7 @@
         preferenceValue: 2,
     }, {
         preference: 'three_games',
-        preferenceValue: 4,
+        preferenceValue: 3,
     }, {
         preference: 'four_games',
         preferenceValue: 4,
