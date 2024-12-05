@@ -26,8 +26,8 @@ array=(
 320192
 1
 "320183 три_матча_ровно three_games equal"
-"320183 три_матча_больше_меньше three_games more"
-"320183 три_матча_больше_меньше three_games less"
+"320183 три_матча_больше three_games more"
+"320183 три_матча_меньше three_games less"
 "2 два_броска two_times"
 "2 три_броска three_times"
 "4 не_имеет_дефект not_have_defect"
