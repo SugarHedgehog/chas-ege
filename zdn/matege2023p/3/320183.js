@@ -37,7 +37,7 @@
         preference: 'equal',
         preferenceValue: first_times,
     }, {
-        preference: 'more_less',
+        preference: 'more',
         preferenceValue: sl(1, kolvo_rush-1),
     }], first_times);
 
@@ -46,13 +46,13 @@
         preference: 'equal',
         preferenceValue: 0,
     }, {
-        preference: 'more_less',
+        preference: 'more',
         preferenceValue: 1,
     }], (kolvo_rush === first_times) ? 0: sl1()); // ровно %количество побед% = 0, больше = 1
 
     const kolvoOptions = [
         ['ровно один раз', 'ровно два раза', 'ровно три раза', 'ровно четыре раза', 'ровно пять раз'],
-        ['одного раза', 'двух раз', 'трёх раз', 'четырёх раз', 'пяти раз']
+        ['более одного раза', 'более двух раз', 'более трёх раз', 'более четырёх раз', 'более пяти раз']
     ];
 
     const probabilityMatrix = {
@@ -62,7 +62,7 @@
         5: [[0.15625, 0.3125, 0.3125, 0.15625, 0.03125], [0.8125, 0.5, 0.1875, 0.03125, 0]]
     };
 
-    const kolvo = ['более ','не менее '].iz().esli(rovno_ili_bol) + kolvoOptions[rovno_ili_bol][first_times - 1];
+    const kolvo = kolvoOptions[rovno_ili_bol][first_times - 1];
     const answers = probabilityMatrix[kolvo_rush][rovno_ili_bol][first_times - 1];
 
     NAtask.setTask({
