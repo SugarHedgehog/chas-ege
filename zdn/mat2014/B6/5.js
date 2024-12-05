@@ -5,10 +5,11 @@
 		var a = sluchiz([20, 25, 40, 80, 100, 125])[0];
 		var b = sluchch(2, a / 3);
 		var c = sluchch(2, a / 3 - 2);
-		var g = sluchch(2, a / 3 - 2);
-		var d = a - b - c;
-		genAssert(d>0);
+		var d = sluchch(2, a / 3 - 2);
+		var g = a - b - c - d;
 		var f = [b, c, d, g];
+		
+		f.forEach((elem) => genAssert(elem > 0));
 		var t1 = sluchiz(om.strany.re, 4);
 		let key = "5";
 		var v1 = getListedPreference(key, [{
@@ -17,7 +18,7 @@
 		}, {
 			preference: 'last',
 			preferenceValue: 3,
-		}], sl(3));
+		}], 3);
 		var t2 = sluchiz(om.sport.pe)[0];
 		genAssertZ1000(f[v1] / a);
 
