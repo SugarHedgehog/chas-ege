@@ -7,6 +7,7 @@
 		var c = sluchch(2, a / 3 - 2);
 		var g = sluchch(2, a / 3 - 2);
 		var d = a - b - c;
+		genAssert(d>0);
 		var f = [b, c, d, g];
 		var t1 = sluchiz(om.strany.re, 4);
 		let key = "5";
