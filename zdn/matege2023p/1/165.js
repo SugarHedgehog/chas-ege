@@ -6,14 +6,14 @@
 		let b = slKrome(a, 2, 100);
 
 		let paint1 = function(ctx) {
-			ctx.lineWidth = 2;
+			ctx.lineWidth = om.primaryLineWidth;
 			ctx.strokeStyle = om.secondaryBrandColors.iz();
 
 			ctx.beginPath();
 			ctx.arc(180, 200, 150, 0, 2 * Math.PI);
 			ctx.stroke();
 			
-			ctx.strokeStyle = ["#D777F2","#F2A2D6"].iz();
+			ctx.strokeStyle = om.primaryBrandColors.iz();
 
 			ctx.drawLine(20, 50, 35, 350);
 			ctx.drawLine(35, 350, 290, 350);

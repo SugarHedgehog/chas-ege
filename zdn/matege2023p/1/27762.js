@@ -7,7 +7,7 @@
 		let vertices = om.latbukv.iz(6);
 
 		let paint1 = function(ctx) {
-			ctx.lineWidth = 2;
+			ctx.lineWidth = om.primaryLineWidth;
 			ctx.strokeStyle = om.secondaryBrandColors.iz();
 			let arc = Math.PI / 2.9;
 

@@ -9,7 +9,7 @@
 		].iz();
 
 		let paint1 = function(ctx) {
-			ctx.lineWidth = 2;
+			ctx.lineWidth = om.primaryLineWidth;
 			
 			let angle = Math.PI/2.9;
 			

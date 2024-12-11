@@ -10,7 +10,7 @@
 		let vertices = om.latbukv.iz(4);
 
 		let paint1 = function(ctx) {
-			ctx.lineWidth = 2;
+			ctx.lineWidth = om.primaryLineWidth;
 			ctx.strokeStyle = om.secondaryBrandColors.iz();
 
 			ctx.drawLine(10, 370, 380, 370);

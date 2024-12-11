@@ -15,14 +15,14 @@
 		genAssertZ1000(4 * a / 3, 'Кривой ответ');
 
 		let paint1 = function(ctx) {
-			ctx.lineWidth = 2;
+			ctx.lineWidth = om.primaryLineWidth;
 			ctx.strokeStyle = om.secondaryBrandColors.iz();
 
 			ctx.drawLine(10, 350, 390, 350);
 			ctx.drawLine(10, 350, 180, 50);
 			ctx.drawLine(180, 50, 390, 350);
 			
-			ctx.strokeStyle = ["#D777F2","#F2A2D6"].iz();
+			ctx.strokeStyle = om.primaryBrandColors.iz();
 
 			ctx.drawLine(180, 50, 180, 350);
 
