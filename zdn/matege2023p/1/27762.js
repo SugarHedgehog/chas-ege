@@ -27,8 +27,8 @@
 			ctx.arcBetweenSegments([10, 355, ver2.x, ver2.y, 390 - 8, 355, ver1.x, ver1.y], 30);
 
 			//прямые углы
-			ctx.arcBetweenSegments([10, 355, ver2.x, ver2.y, ver3.x, ver3.y], 20);
-			ctx.arcBetweenSegments([390 - 8, 355, ver1.x, ver1.y, ver3.x, ver3.y], 20);
+			ctx.arcBetweenSegments([10, 355, ver2.x, ver2.y, ver3.x, ver3.y], 20, true);
+			ctx.arcBetweenSegments([390 - 8, 355, ver1.x, ver1.y, ver3.x, ver3.y], 20, true);
 
 			ctx.font = "23px liberation_sans";
 			ctx.fillText(vertices[0], 150, 70 - 10);
