@@ -43,7 +43,10 @@ function generateHtmlForTask(category, taskNumber, actionsArray) {
             htmlContent += currentTaskPath.vTag('h2');
 
             if (variants.length > 1) {
-                htmlContent += `<div class="variant-info">Вариант ${i + 1} из ${variants.length}</div>`;
+                const currentVariation = Array.isArray(variants[i])
+                    ? variants[i][0]
+                    : Object.values(variants[i])[0];
+                htmlContent += `<div class="variant-info">Вариация: ${currentVariation}</div>`;
             }
 
             vopr.template = currentTaskPath.replace(/^(\.\.\/)+/, '');
