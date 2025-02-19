@@ -33,7 +33,8 @@
 				'. Известно, что первый '+rab.ie+' '+['в','за'].iz()+' час делает на '+chislitlx(k, detail.ie,'v')+' больше, чем второй.'+
 				' Сколько '+detail.rm+' '+['в','за'].iz()+' час делает '+rab_num[v]+' '+rab.ie+'?',
 			answers: v==1 ? x : x+k,
-			authors: ['Aisse-258']
+			authors: ['Aisse-258'],
+			preference: ['first_worker', 'second_worker'],
 		});
 		NAtask.modifiers.allDecimalsToStandard();
 	}, 2000000);

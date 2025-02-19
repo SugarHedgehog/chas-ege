@@ -33,7 +33,8 @@
 				[' она '+['заполняет','опустошает'].iz()+' на '+chislitlx(n, 'минута','v')+' '+dol[1-v1][0]+', чем '+tub_num[v1]+' '+tub_naz.ie+'?',
 				 ' '+tub_num[v1]+' '+tub_naz.ie+' '+['заполняет','опустошает'].iz()+' на '+chislitlx(n, 'минута','v')+' '+dol[v1][0]+'?'].iz(),
 			answers: v1==1 ? x : x+b,
-			authors: ['Aisse-258']
+			authors: ['Aisse-258'],
+			preference: ['first_hose', 'second_hose'],
 		});
 		NAtask.modifiers.assertSaneDecimals();
 		NAtask.modifiers.allDecimalsToStandard();

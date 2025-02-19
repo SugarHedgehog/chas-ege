@@ -29,7 +29,8 @@
 				['Сколько '+detail.rm+' '+['в','за'].iz()+' час делает '+rab_num[v]+' '+rab.ie+', если известно, что '+rab_num[1-v]+' '+['в','за'].iz()+' час делает на '+chislitlx(b, detail.ie,'v')+' '+kolvo[v][1]+'?',
 				'Сколько '+detail.rm+' '+['в','за'].iz()+' час делает '+rab_num[v]+' '+rab.ie+', если известно, что он '+['в','за'].iz()+' час делает на '+chislitlx(b, detail.ie,'v')+' '+kolvo[1-v][1]+', чем '+rab_num[1-v]+'?'].iz(),
 			answers: v==1 ? x : x+b,
-			authors: ['Aisse-258']
+			authors: ['Aisse-258'],
+			preference: ['first_worker', 'second_worker'],
 		});
 		NAtask.modifiers.allDecimalsToStandard();
 		NAtask.modifiers.assertSaneDecimals();
