@@ -60,32 +60,35 @@ function vse0() {
 
 // Читает настройки из элементов управления и сохраняет их в объекте options
 function readOptions() {
-    options = {
-        editable: $('#redakt').is(':checked'),
-        largeFont: $('#largeFont').is(':checked'),
-        customNumber: $('#customNumber').is(':checked'),
-        variantPrefix: $('#variantPrefix').val(),
-        vanishVariants: $('#vanishVariants').is(':checked'),
-        nopagebreak: $('#nopagebreak').is(':checked'),
-        compactAnswers: $('#compact-answers').is(':checked'),
-        solutionsIntoAnswers: $('#solutions-into-answers').is(':checked'),
-        nobackground: $('#nobackground').is(':checked'),
-        firstTaskNumber: Number($('#first-task-number').val()),
-        transitTaskNumbers: $('#transitTaskNumbers').is(':checked'),
-        splitAnswersNumber: Number($('#split-answers-number').val()),
-        splitAnswerTables: $('#splitAnswerTables').is(':checked'),
-        uniqueAnswersAndSolutions: $('#uniqueAnswersAndSolutions').is(':checked'),
-        startTransitNumber: Number($('#start-transit-number').val()),
-        prepareLaTeX: $('#prepareLaTeX').is(':checked'),
-        forceIntegers: $('#forceIntegers').is(':checked'),
-        randomSeed: $('#randomSeed').val() || Date.now()
-    };
+	options.editable = $('#redakt').is(':checked');
+	options.largeFont = $('#largeFont').is(':checked');
+	options.customNumber = $('#customNumber').is(':checked');
+	options.variantPrefix = $('#variantPrefix').val();
+	options.vanishVariants = $('#vanishVariants').is(':checked');
+	options.nopagebreak = $('#nopagebreak').is(':checked');
+	options.compactAnswers = $('#compact-answers').is(':checked');
+	options.solutionsIntoAnswers = $('#solutions-into-answers').is(':checked');
+	options.nobackground = $('#nobackground').is(':checked');
+	options.firstTaskNumber = 1 * $('#first-task-number').val();
+	options.transitTaskNumbers = $('#transitTaskNumbers').is(':checked');
+	options.splitAnswersNumber = 1 * $('#split-answers-number').val();
+	options.splitAnswerTables = $('#splitAnswerTables').is(':checked');
+	options.uniqueAnswersAndSolutions = $('#uniqueAnswersAndSolutions').is(':checked');
+	options.startTransitNumber = 1 * $('#start-transit-number').val();
+	options.prepareLaTeX = $('#prepareLaTeX').is(':checked');
+	options.forceIntegers = $('#forceIntegers').is(':checked');
+	options.onlyIntegers = $('#onlyIntegers').is(':checked');
+	options.randomSeed = $('#randomSeed').val();
+	if (options.randomSeed === '') {
+		options.randomSeed = Date.now();
+	}
 
     if (options.customNumber) {
         variantNumber = $('#start-number').val() - 1;
     }
 
-    sluchch.forceIntegers = options.forceIntegers;
+	sluchch.forceIntegers = (options.forceIntegers) ? true : false;
+	sluchch.onlyIntegers = (options.onlyIntegers) ? true : false;
 
     if ($('#htmlcss').is(':checked')) {
         MathJax.Hub.setRenderer('HTML-CSS');
