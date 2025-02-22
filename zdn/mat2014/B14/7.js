@@ -1,18 +1,11 @@
 (function() {
 	let key = "7";
-	let variant = getListedPreference(key, [{
-		preference: 'river_speed',
-		preferenceValue: 0,
-	}, {
-		preference: 'boat_speed',
-		preferenceValue: 1,
-	}, {
-		preference: 'time_difference',
-		preferenceValue: 2,
-	}, {
-		preference: 'total_distance',
-		preferenceValue: 3,
-	}], sl(0, 3));
+	let preference = ['river_speed','boat_speed','time_difference','total_distance'];
+	let variant = getListedPreference(key, preference.map((pref, index) => ({
+		preference: pref,
+		preferenceValue: index
+	})), sl(preference.length - 1));
+
 	
 	var b = 0.5, x, a, s;
 	for (; !(b.isZ() && b > 0);) {
@@ -54,6 +47,7 @@
 		nmn: 'км'
 	}, ], {
 		preambula: 'Моторная лодка прошла против течения реки и вернулась в пункт отправления. ',
+		preference: preference,
 	});
 })();
 	 
