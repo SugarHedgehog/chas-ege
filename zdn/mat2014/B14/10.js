@@ -1,36 +1,58 @@
 (function() {
+	let key = '10';
+	let preference = ['number_of_parts_in_order', 'difference_in_details_is_per_hour', 'time_difference', 'first_speed', 'second_speed'];
+	let rand = getListedPreference(key, preference.map((pref, index) => ({
+		preference: pref,
+		preferenceValue: index
+	})), sl(preference.length - 1));
 
-for(var b=0.5;!(b.isZ()&&b>0);){
-	var x=sluchch(5,20);
-	var a=sluchch(1,10);
-	var s=sluchch(50,200);
-	var b=s/x-s/(x+a);
-}
-var t1=om.rusbukv.sluchiz(2);
-/*Заказ на 110 деталей первый рабочий выполняет на 1 час быстрее, чем второй. Сколько деталей в час делает второй рабочий,
- *  если известно, что первый за час делает на 1 деталь больше?
-*/
-var f=svVel([
-	{vel:'количество деталей в заказе',zna:s,rod:2,nah:1},
-	{	utv:'первый рабочий делает в час на '+a.chislitlx('деталь')+' больше, чем второй',
-		vpr:'на сколько деталей в час первый рабочий делает больше, чем второй',zna:a,nah:1},
-	{	utv:'первый рабочий выполняет заказ на '+b.chislitlx('час')+' быстрее, чем второй',
-		vpr:'на сколько часов первый рабочий выполнит заказ быстрее, чем второй',zna:b,nah:1},
-	[
-	{	utv:'первый рабочий делает в час '+(x+a).chislitlx('деталь'),
-		vpr:'сколько деталей делает в час первый рабочий',zna:x+a,nah:1},
-	{	utv:'второй рабочий делает в час '+x.chislitlx('деталь'),
-		vpr:'сколько деталей делает в час второй рабочий',zna:x,nah:1},
-	].iz()
-]);
+	for (var b = 0.5; !(b.isZ() && b > 0);) {
+		var x = sluchch(5, 20);
+		var a = sluchch(1, 10);
+		var s = sluchch(50, 200);
+		var b = s / x - s / (x + a);
+	}
+	var t1 = om.rusbukv.sluchiz(2);
+	/*Заказ на 110 деталей первый рабочий выполняет на 1 час быстрее, чем второй. Сколько деталей в час делает второй рабочий,
+	 *  если известно, что первый за час делает на 1 деталь больше?
+	 */
+	var f = svVel([{
+			vel: 'количество деталей в заказе',
+			zna: s,
+			rod: 2,
+			nah: rand==0
+		}, {
+			utv: 'первый рабочий делает в час на ' + a.chislitlx('деталь') + ' больше, чем второй',
+			vpr: 'на сколько деталей в час первый рабочий делает больше, чем второй',
+			zna: a,
+			nah: rand==1
+		}, {
+			utv: 'первый рабочий выполняет заказ на ' + b.chislitlx('час') + ' быстрее, чем второй',
+			vpr: 'на сколько часов первый рабочий выполнит заказ быстрее, чем второй',
+			zna: b,
+			nah: rand==2
+		},
+		[{
+			utv: 'первый рабочий делает в час ' + (x + a).chislitlx('деталь'),
+			vpr: 'сколько деталей делает в час первый рабочий',
+			zna: x + a,
+			nah: rand==3
+		}, {
+			utv: 'второй рабочий делает в час ' + x.chislitlx('деталь'),
+			vpr: 'сколько деталей делает в час второй рабочий',
+			zna: x,
+			nah: rand==4
+		}, ][rand>2?rand-3:sl1()]
+	]);
 
-window.vopr.ver=[''+f.splice(0,1)];
-window.vopr.txt=''+f.shuffle().soed();
+	window.vopr.ver = ['' + f.splice(0, 1)];
+	window.vopr.txt = '' + f.shuffle().soed();
+	window.vopr.preference = preference;
 
-window.vopr.kat['log']=0;
-window.vopr.kat['prz']=0;
-window.vopr.kat['drs']=0;
-window.vopr.kat['tri']=0;
+	window.vopr.kat['log'] = 0;
+	window.vopr.kat['prz'] = 0;
+	window.vopr.kat['drs'] = 0;
+	window.vopr.kat['tri'] = 0;
 })();
 
 //Обзад 26590 26591
