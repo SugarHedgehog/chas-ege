@@ -1,6 +1,6 @@
 (function() {
 	let key = "5";
-	let preference = ['speed_on_way_to_point_B', 'speed_on_way_to_point_A', 'time_on_way_to_point_B', 'time_on_way_to_point_A'];
+	let preference = ['speed_on_way_to_point_A_to_B', 'speed_on_way_to_point_B_to_A', 'time_on_way_to_point_B', 'time_on_way_to_point_A'];
 	let rand = getListedPreference(key, preference.map((pref, index) => ({
 		preference: pref,
 		preferenceValue: index
