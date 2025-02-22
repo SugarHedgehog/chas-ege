@@ -1,21 +1,10 @@
 (function() {
 	let key = "9";
-	let variant = getListedPreference(key, [{
-		preference: 'distance_between_marinas',
-		preferenceValue: 0,
-	}, {
-		preference: 'speed_difference',
-		preferenceValue: 1,
-	}, {
-		preference: 'time_difference',
-		preferenceValue: 2,
-	}, {
-		preference: 'speed_of_first',
-		preferenceValue: 3,
-	}, {
-		preference: 'speed_of_second',
-		preferenceValue: 4,
-	}, ], sl(0, 4));
+	let preference = ['distance_between_marinas', 'speed_difference','time_difference','speed_of_first','speed_of_second']
+	let variant = getListedPreference(key, preference.map((pref, index) => ({
+		preference: pref,
+		preferenceValue: index
+	})), sl(preference.length - 1));
 
 	let b = 0.5, x, a, s;
 	for (; !(b.isZ());) {
@@ -67,7 +56,8 @@
 	], {
 		preambula: 'От пристани ' + t1[0] + ' к пристани ' + t1[1] +
 			'  отправился с постоянной скоростью первый теплоход, ' +
-			'через некоторое время следом за ним отправился второй. '
+			'через некоторое время следом за ним отправился второй. ',
+		preference:preference,
 	});
 })();
 //Обзад 26590 26591
