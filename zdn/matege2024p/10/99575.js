@@ -3,15 +3,11 @@
 
 	retryWhileError(function() {
 		let key = '99575';
-		let largestMass = getListedPreference(key, [{
-			preference: 'second_largest',
-			preferenceValue: 0,
-		}, {
-			preference: 'first_largest',
-			preferenceValue: 1,
-		}], sl1());
-		
-		largestMass = 1;
+		let preference = ['second_largest', 'first_largest'];
+		let largestMass = getListedPreference(key, preference.map((pref, index) => ({
+			preference: pref,
+			preferenceValue: index
+		})), sl(preference.length - 1));
 
 		let massFirst = sl(10, 99, 0.01);
 		let massSecond = massFirst + slKrome(massFirst, 1, massFirst - 1, 0.01) * (-1).pow(largestMass);
@@ -62,6 +58,7 @@
             На сколько ${massUnits[2]} масса ${name[0]} сплава была ${moreLess[0]} массы ${name[1]}?`,
 			answers: massDifference.abs(),
 			authors: ['Николай Авдеев', 'Александра Суматохина'],
+			preference: preference,
 		});
 
 		NAtask.modifiers.allDecimalsToStandard();
