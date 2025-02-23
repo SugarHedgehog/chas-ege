@@ -12,7 +12,7 @@
 		
 		let t = sl(1, 10, 0.01);
 		let m = sl(1, 4, 0.01) * 60 + sl(1, 59, 1, 0.01);
-		let n = t - 1 / (1 / m - 1 / t);
+		let n = 60 * (t - 1 / (60 / m - 1 / t))
 
 		genAssert(n > 0.001, 'Время не может быть отрицательным');
 		genAssert(t != n, 'Время не может быть отрицательным');
@@ -33,10 +33,10 @@
 				].iz() +
 				'. ' + the_vehicleRacingOnRoad[1].ie.toZagl() + ' ' + ['приехал', 'прибыл'].iz() + ' в ' +
 				the_humanSettlementDestination.ve + ' B на ' +
-				n.toChMin() + ' раньше, ' + 'чем ' + the_vehicleRacingOnRoad[0].ie + ' ' + ['приехал', 'прибыл'].iz() + ' в ' +
+				n.toChMin('v') + ' раньше, ' + 'чем ' + the_vehicleRacingOnRoad[0].ie + ' ' + ['приехал', 'прибыл'].iz() + ' в ' +
 				the_humanSettlementDestination.ve +
-				' A, а встретились они через ' + m.toChMin() + ' после ' + ['выезда', 'начала движения'].iz() + '. ' +
-				'Сколько ' + ['часов', 'времени'].iz() + [' затратил на ' + ['путь', 'дорогу'].iz() + ' из ' +
+				' A, а встретились они через ' + m.toChMin('v') + ' после ' + ['выезда', 'начала движения'].iz() + '. ' +
+				'Сколько ' + ['часов', 'времени, выраженного в часах,'].iz() + [' затратил на ' + ['путь', 'дорогу'].iz() + ' из ' +
 					the_humanSettlementDestination.re + ' B в ' + the_humanSettlementDestination.ve + ' A ' +
 					the_vehicleRacingOnRoad[0].ie + '?',
 					' ' + the_vehicleRacingOnRoad[0].ie + ' затратил на ' + ['путь', 'дорогу'].iz() + ' из ' +
