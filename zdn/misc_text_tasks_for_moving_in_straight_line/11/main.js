@@ -1,5 +1,5 @@
 window.nomer=[
-	99594,
+	99592,
 ].iz()
-window.comment='99594';
+window.comment='99592';
 chas2.task.setTask.forbidDecimalFractions = true;

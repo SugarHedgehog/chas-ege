@@ -11,10 +11,8 @@ find . -mindepth 1 ! -name "$(basename "$0")" -exec rm -rf {} +
 rm -rf *
 
 array=(
-11
 99606
 99607
-323850
 99591
 "5 скорость_из_А_в_В speed_on_way_to_point_A_to_B"
 "5 скорость_из_В_в_А speed_on_way_to_point_B_to_A"
@@ -22,9 +20,11 @@ array=(
 "6 скорость_второго second_speed"
 26580
 99594
+323850
 99592
 
 99612
+11
 12
 )
 

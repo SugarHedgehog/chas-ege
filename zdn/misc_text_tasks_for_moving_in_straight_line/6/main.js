@@ -1,6 +1,6 @@
 window.nomer=[
-	5,
+	6,
 ].iz()
-window.comment='5 скорость из А в В';
-window.nabor.preferences['5'] = ['speed_on_way_to_point_A_to_B'];
+window.comment='6 скорость первого';
+window.nabor.preferences['6'] = ['first_speed'];
 chas2.task.setTask.forbidDecimalFractions = true;
