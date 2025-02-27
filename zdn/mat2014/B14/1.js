@@ -1,5 +1,11 @@
 (function() {
 
+let key = '1';
+let preference = ['first_mass', 'second_mass', 'third_mass'];
+let rand = getListedPreference(key, preference.map((pref, index) => ({
+	preference: pref,
+	preferenceValue: index
+})), sl(preference.length - 1));
 var x=sluchch(1,99);
 var f=[1,2,4,5,10,20,25].iz();
 var d=sluchch(30,50);
@@ -7,7 +13,6 @@ var b=f+d;
 var a=sluchch(1,d-f-1);
 var c=x*(2*d-a-b)/10/f;
 x/=10;
-var g=sluchch(0,2);
 var h=['первого','второго','третьего'];
 var m=[x,x+c,2*x+c];
 
@@ -35,10 +40,10 @@ window.vopr.txt=
 	'Первый ' + bulk.ie + ' содержит '+a.ts()+'% ' + mixin.re + ', второй содержит '+b.ts()+'% ' + mixin.re + '.' +
 	' Масса второго ' + bulk.re + ' больше массы первого ' + bulk.re + ' на '+c.ts()+' ' + massUnits[0] + '.' +
 	' ' + juncture + ' '+d.toFixedLess(4)+'% ' + mixin.re + '.' +
-	' Найдите массу '+h[g]+' ' + bulk.re + '.' +
+	' Найдите массу '+h[rand]+' ' + bulk.re + '.' +
 	' Ответ дайте ' + massUnits[1] + '.';
 
-window.vopr.ver=[''+m[g].ts()];
+window.vopr.ver=[''+m[rand].ts()];
 
 window.vopr.kat['log']=0;
 window.vopr.kat['prz']=0;
