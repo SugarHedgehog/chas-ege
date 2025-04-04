@@ -29,7 +29,7 @@
         [triangle.angleAInDegrees, triangle.angleBInDegrees, triangle.angleCInDegrees].forEach(angle => genAssert(angle < 80,
             'Треугольник не остроугольный'));
 
-        triangle.addVertex([triangle.midlinePointsAB, triangle.midlinePointsBC, triangle.midlinePointsCA][variant], 'E');
+        triangle.addVertexToConnectionMatrix([triangle.midlinePointsAB, triangle.midlinePointsBC, triangle.midlinePointsCA][variant], 'E');
         triangle.connectVertices([3, 4]);
 
         let letters = latbukv.slice(0, 5);

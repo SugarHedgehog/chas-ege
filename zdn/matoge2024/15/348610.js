@@ -36,7 +36,7 @@
 		genAssert(![triangle.lengthAB.round(), triangle.lengthBC.round(), triangle.lengthCA.round()].hasDubl(), 'Все стороны треугольника должны быть разными');
 
 		let valueAngle = [triangle.angleAInDegrees, triangle.angleBInDegrees, triangle.angleCInDegrees][variant];
-		triangle.addVertex([triangle.bisectorEndPointA, triangle.bisectorEndPointB, triangle.bisectorEndPointC][variant], ['A', 'B', 'C'][variant]);
+		triangle.addVertexToConnectionMatrix([triangle.bisectorEndPointA, triangle.bisectorEndPointB, triangle.bisectorEndPointC][variant], ['A', 'B', 'C'][variant]);
 
 		let points = autoScale(triangle.vertices);
 
