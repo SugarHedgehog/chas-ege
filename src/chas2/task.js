@@ -1702,20 +1702,35 @@ chas2.task = {
 					alph1 = alph1.filter(e => !o.preserve.includes(e));
 				}
 				var alph2 = alph1.slice().shuffle();
+			
+				var task = chas2.task.getTask();
+				
+				var originalPreference = task.preference || [];
+				var originalAuthors = task.authors || [];
+
+				var mappedTask = mapRecursive(
+					task,
+					function(str) {
+						return ('' + str).cepZamena(alph1, alph2);
+					}
+				);
+
 				if (variativeABCstrings) {
 					for (let i = 0; i < variativeABCstrings.length; i++) {
 						variativeABCstrings[i] =
 							variativeABCstrings[i].cepZamena(alph1, alph2);
 					}
 				}
-				chas2.task.setTask(
-					mapRecursive(
-						chas2.task.getTask(),
-						function(str) {
-							return ('' + str).cepZamena(alph1, alph2);
-						}
-					)
-				);
+				
+				if (originalPreference.length) {
+					mappedTask.preference = task.preference;
+				}
+
+				if (originalAuthors.length) {
+					mappedTask.authors = task.authors;
+				}
+				
+				chas2.task.setTask(mappedTask);
 			};
 		})(),
 
