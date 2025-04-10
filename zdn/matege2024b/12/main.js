@@ -3,5 +3,6 @@ window.nomer=[
 	6623,
 	10036,
 	10116,
+	11452,
 ].iz()
 window.comment='Планиметрия';
