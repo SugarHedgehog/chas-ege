@@ -1,6 +1,13 @@
 (function() {
 	retryWhileError(function() {
 		NAinfo.requireApiVersion(0, 2);
+		
+		let key = "26597";
+		let preference = ['first_hose', 'second_hose'];
+		let rand=getListedPreference(key, preference.map((pref, index) => ({
+			preference: pref,
+			preferenceValue: index
+		})), sl(preference.length-1));
 
 		let A = sl(30,900);//объем резервуара (базовый)
 		let b = sl(1,[A/30,29].minE(),0.01);//объем (разница)
@@ -13,7 +20,6 @@
 		let rez = sklonlxkand(['резервуар','бассейн','бак','цистерна','бойлер','ёмкость'].iz());
 		let v1=sl1();
 		let tub_num=['перв'+['ый','ая','ое','ые'][tub_naz.rod],'втор'+['ой','ая','ое','ые'][tub_naz.rod]];
-		let v2=sl1();
 		let dol=[[['медленнее','дольше'].iz(),'меньше'],['быстрее','больше']];
 		let esli=[', если известно, что ',', если '].iz();
 		let ono=['он'+['','а','о','и'][tub_naz.rod]];
@@ -24,7 +30,8 @@
 				[ono+' '+['заполняет','опустошает'].iz()+' на '+chislitlx(n, 'минута','v')+' '+dol[1-v1][0]+', чем '+tub_num[v1]+' '+tub_naz.ie+'?',
 				 ' '+tub_num[v1]+' '+tub_naz.ie+' '+['заполняет','опустошает'].iz()+' на '+chislitlx(n, 'минута','v')+' '+dol[v1][0]+'?'].iz(),
 			answers: v1==1 ? x : x+b,
-			authors: ['Aisse-258']
+			authors: ['Aisse-258'],
+			preference: preference,
 		});
 		NAtask.modifiers.assertSaneDecimals();
 		NAtask.modifiers.allDecimalsToStandard();

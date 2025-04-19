@@ -33,4 +33,4 @@
 	NAtask.modifiers.allDecimalsToStandard(/*true*/);
 }, 20000);})();
 //VeronikaKit
-//РешуЕГЭ525375
+//РешуЕГЭ 525375
