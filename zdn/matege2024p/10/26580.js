@@ -1,6 +1,13 @@
 (function() { 'use strict'; retryWhileError(function() {
 	/* Из пункта А в пункт В, расстояние между которыми 50 км, одновременно выехали автомобилист и велосипедист. За час автомобилист проезжает на 30 км больше, чем велосипедист. Определите скорость велосипедиста, если известно, что он прибыл в пункт В на 1 час 30 минут позже автомобилиста. Ответ дайте в км/ч. */
 
+	let key = "26580";
+	let preference = ['second_speed','first_speed'];
+	let rand = getListedPreference(key, preference.map((pref, index) => ({
+		preference: pref,
+		preferenceValue: index
+	})), sl(preference.length - 1));
+		
 	let n=[0, 0, sl(1, 10)].iz();
 	let k=[0, sl(1, 59)].iz();
 	genAssert(n || k, 'Время в пути должно быть ненулевым'); //Заготовочка!
@@ -27,7 +34,7 @@
 			'одновременно выехали ' + the_vehicleRacingOnRoad[0].ie + ' и ' + the_vehicleRacingOnRoad[1].ie + '. ' +
 			'За час ' + the_vehicleRacingOnRoad[0].ie +' проезжает на ' + a + ' км больше, '+
 			'чем ' + the_vehicleRacingOnRoad[1].ie + '. ',
-		questions: [
+		questions: [[
 			{
 				text:  the_orderToFind.toZagl() +' скорость ' + the_vehicleRacingOnRoad[1].re + ', если известно, что он прибыл в ' +
 					the_humanSettlementDestination.ve +' B на ' + (n*60 + k).toChMin() + ' позже ' + the_vehicleRacingOnRoad[0].re +'. ',
@@ -38,9 +45,10 @@
 					the_humanSettlementDestination.ve +' B на ' + (n*60 + k).toChMin() + ' раньше ' + the_vehicleRacingOnRoad[1].re +'. ',
 				answers: x + a,
 			},
-		],
+		][rand]],
 		postquestion: ' Ответ дайте в км/ч.',
 		authors: ['Николай Авдеев'],
+		preference:preference,
 	});
 	NAtask.modifiers.allDecimalsToStandard();
 	NAtask.modifiers.variativeABC();
