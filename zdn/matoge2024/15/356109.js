@@ -83,7 +83,7 @@
 			preference: preference,
 		});
 		NAtask.modifiers.variativeABC(letters);
-
+		NAtask.modifiers.allDecimalsToStandard(true);
 		NAtask.modifiers.addCanvasIllustration({
 			width: 400,
 			height: 400,
