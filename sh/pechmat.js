@@ -523,7 +523,7 @@ function replaceCanvasWithImgInTask(element, text) {
     console.log(element);
     const canvases = Array.from(element.getElementsByTagName('canvas'));
     for (let i = 0; i < canvases.length; i++) {
-        const imageName = canvases[i].getAttribute('data-nonce').substr(3) + "n" + i;
+        const imageName = (canvases[i].getAttribute('data-nonce').replace("\{,\}", ".").replaceAll(" ", "").substr(3).concat("n" + i));
         preparedImages[imageName] = canvases[i].toDataURL().replace('data:image/png;base64,', '');
         text = text.replace(/<canvas.*?<\/canvas>/, '\\addpictoright[\\imageSize][\\imageScale]{'+imageName+'}');
     }
