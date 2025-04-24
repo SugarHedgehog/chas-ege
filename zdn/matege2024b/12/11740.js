@@ -27,7 +27,7 @@
         
         genAssertZ1000(func);
 		
-		rect.connectVerticesInConnectionMatrix([0,2]);
+		rect.connectVerticesInConnectionMatrixInConnectionMatrix([0,2]);
 
 		let points = autoScale(rect.vertices);
 
