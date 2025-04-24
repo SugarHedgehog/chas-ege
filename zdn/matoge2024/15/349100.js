@@ -30,7 +30,7 @@
         let valueDano = [triangle.lengthBC, triangle.lengthCA, triangle.lengthAB][variant];
         genAssertZ1000(medianLength / 10);
 
-        triangle.addVertexToConnectionMatrix([triangle.medianEndPointA, triangle.medianEndPointB, triangle.medianEndPointC][variant], ['A', 'B', 'C'][variant]);
+        triangle.addVertexToConnectionMatrix([triangle.medianAEndPoint, triangle.medianBEndPoint, triangle.medianCEndPoint][variant], ['A', 'B', 'C'][variant]);
 
         let points = autoScale(triangle.vertices);
 
