@@ -48,7 +48,7 @@
 		[triangle.angleAInDegrees, triangle.angleBInDegrees, triangle.angleCInDegrees].forEach(angle => genAssert(angle < 80, 'Треугольник не остроугольный'));
 
 		let valueAngle = [triangle.angleAInDegrees, triangle.angleBInDegrees, triangle.angleCInDegrees][variant].ceil();
-		triangle.addVertexToConnectionMatrix([triangle.heightEndPointA, triangle.heightEndPointB, triangle.heightEndPointC][variant], ['A', 'B', 'C'][variant]);
+		triangle.addVertexToConnectionMatrix([triangle.heightAEndPoint, triangle.heightBEndPoint, triangle.heightCEndPoint][variant], ['A', 'B', 'C'][variant]);
 
 		let points = autoScale(triangle.vertices);
 
