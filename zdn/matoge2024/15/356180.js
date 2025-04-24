@@ -3,24 +3,17 @@
 		NAinfo.requireApiVersion(0, 2);
 
 		let key = "356180";
-		let variant = getListedPreference(key, [{
-			preference: 'A',
-			preferenceValue: 0,
-		}, {
-			preference: 'B',
-			preferenceValue: 1,
-		}, {
-			preference: 'C',
-			preferenceValue: 2,
-		}], sl(0, 2));
+		let preference1 = ['A', 'B', 'C'];
+		let variant = getListedPreference(key, preference1.map((pref, index) => ({
+            preference: pref,
+            preferenceValue: index
+        })), sl(preference1.length - 1));
 
-		let leftOrRightAngle = getListedPreference(key, [{
-			preference: 'left',
-			preferenceValue: 0,
-		}, {
-			preference: 'right',
-			preferenceValue: 1,
-		},], sl1());
+		let preference2 = ['left', 'right']
+		let leftOrRightAngle = getListedPreference(key, preference2.map((pref, index) => ({
+            preference: pref,
+            preferenceValue: index
+        })), sl(preference2.length - 1));
 
 		const offset = leftOrRightAngle === 0 ? 1 : 2;
 
@@ -88,6 +81,7 @@
 			Найдите угол $${angleQuestion.randomReverse().join('')}$. Ответ дайте в градусах.`,
 			answers: 90 - valueAngle,
 			authors: ['Александра Суматохина'],
+			preference: [preference1, preference2],
 		});
 		NAtask.modifiers.variativeABC(letters);
 

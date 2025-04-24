@@ -3,16 +3,11 @@
         NAinfo.requireApiVersion(0, 2);
 
         let key = "349100";
-        let variant = getListedPreference(key, [{
-            preference: 'A',
-            preferenceValue: 0,
-        }, {
-            preference: 'B',
-            preferenceValue: 1,
-        }, {
-            preference: 'C',
-            preferenceValue: 2,
-        }], sl(0, 2));
+        let preference = ['A', 'B', 'C'];
+        let variant = getListedPreference(key, preference.map((pref, index) => ({
+            preference: pref,
+            preferenceValue: index
+        })), sl(preference.length - 1));
 
         let letters = latbukv.slice(0, 4);
         let sideDano = letters.slice(0, 3);
@@ -71,6 +66,7 @@
             ].shuffleJoin(', ')}. Найдите $${[sideDano.iz(), pointMedian].shuffleJoin()}$.`,
             answers: valueDano / 2,
             authors: ['Александра Суматохина'],
+            preference,
         });
         NAtask.modifiers.variativeABC(letters);
 
