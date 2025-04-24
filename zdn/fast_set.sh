@@ -11,33 +11,58 @@ find . -mindepth 1 ! -name "$(basename "$0")" -exec rm -rf {} +
 rm -rf *
 
 array=(
-169853
-340384
-348593
-348758
-348885
-349580
-356109
-356180
-311680
-
-"348415 гипетенуза hypotenuse"
-"348415 площадь area"
-"348415 катет catheter"
-
-348610
-
-"348795 медиана find_median"
-"348795 биссектриса find_bisector"
-"348795 высота find_height"
-"348795 медиана find_side_from_median"
-"348795 биссектриса find_side_from_bisector"
-"348795 высота find_side_from_height"
-
-349100
-356079
-356159
-356190
+"169853 A A"
+"169853 B B"
+"169853 C C"
+"311680"
+"340384"
+"348415 hypotenuse hypotenuse"
+"348415 area area"
+"348415 catheter catheter"
+"348593"
+"348610 A A"
+"348610 B B"
+"348610 C C"
+"348758"
+"348795 find_median find_median"
+"348795 find_bisector find_bisector"
+"348795 find_height find_height"
+"348795 find_side_from_median find_side_from_median"
+"348795 find_side_from_bisector find_side_from_bisector"
+"348795 find_side_from_height find_side_from_height"
+"348885"
+"349100 A A"
+"349100 B B"
+"349100 C C"
+"349580 AB AB"
+"349580 BC BC"
+"349580 CA CA"
+"356079 sinA sinA"
+"356079 cosA cosA"
+"356079 tgA tgA"
+"356079 ctgA ctgA"
+"356079 sinC sinC"
+"356079 cosC cosC"
+"356079 tgC tgC"
+"356079 ctgC ctgC"
+"356109 side_from_sinA side_from_sinA"
+"356109 side_from_cosA side_from_cosA"
+"356109 side_from_tgA side_from_tgA"
+"356109 side_from_ctgA side_from_ctgA"
+"356109 side_from_sinC side_from_sinC"
+"356109 side_from_cosC side_from_cosC"
+"356109 side_from_tgC side_from_tgC"
+"356109 side_from_ctgC side_from_ctgC"
+"356159 B B"
+"356159 A A"
+"356159 C C"
+"356180 A_left A left"
+"356180 A_right A right"
+"356180 B_left B left"
+"356180 B_right B right"
+"356180 C_left C left"
+"356180 C_right C right"
+"356190"
 )
 
 if [[ ${#array[@]} -eq 0 ]]; then
