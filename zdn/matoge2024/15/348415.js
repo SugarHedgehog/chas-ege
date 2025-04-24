@@ -8,6 +8,7 @@
             preference: pref,
             preferenceValue: index
         })), sl(preference.length - 1));
+        variant= 1;
 
         let triangle = new Triangle({
             lengths: {
@@ -55,7 +56,7 @@
                     answer: triangle.lengthAB,
                 }, {
                     text: `площадь`,
-                    answer: triangle.area,
+                    answer: triangle.area(),
                 },{
                     text: `другой катет`,
                     answer: triangle.lengthBC,
