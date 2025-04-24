@@ -29,7 +29,7 @@
 
         genAssertZ1000([angleBAC.sin(), angleABD.sin(), angleBAC.sin(), angleBAC.tg(), angleBAC.tg()][rand]);
 
-        rhombus.connectVerticesInConnectionMatrixInConnectionMatrix([
+        rhombus.connectVerticesInConnectionMatrix([
             [0, 2],
             [1, 3]
         ]);
