@@ -25,7 +25,7 @@
             'Треугольник не остроугольный'));
 
         triangle.addVertexToConnectionMatrix([triangle.midlinePointsAB, triangle.midlinePointsBC, triangle.midlinePointsCA][variant], 'E');
-        triangle.connectVertices([3, 4]);
+        triangle.connectVerticesInConnectionMatrix([3, 4]);
 
         let letters = latbukv.slice(0, 5);
         let sidesMidle = letters.slice(0, 3);
