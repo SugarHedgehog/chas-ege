@@ -76,7 +76,7 @@
 					answers: triangle.lengthCA,
 				}, {
 					text: `треугольнике $ABC$ угол $C$ равен $120^\\circ$.
-                Медиана $CM$ делит угол $B$ пополам и равна $${triangle.heightCLength}$. 
+                Медиана $CM$ делит угол $C$ пополам и равна $${triangle.heightCLength}$. 
                 Найдите длину стороны $AC$.`,
 					answers: triangle.lengthCA,
 				}, {
@@ -86,6 +86,7 @@
 				}][rand]
 			],
 			authors: ['Александра Суматохина'],
+			preference,
 		});
 		NAtask.modifiers.variativeABC(letters);
 		NAtask.modifiers.allDecimalsToStandard(true);
