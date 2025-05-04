@@ -14,7 +14,7 @@
             preference: pref,
             preferenceValue: index
         })), sl(preference2.length - 1));
-
+        
         let letters = latbukv.slice(0, 3);
 
         let a = sl(1, 50);
@@ -86,7 +86,7 @@
 
         NAtask.setTask({
             text: `В прямоугольном треугольнике $ABC$ внешний угол при вершине $${['A', 'C'][angleAC]}$ равен $${180 - [triangle.angleAInDegrees, triangle.angleCInDegrees][angleAC]}^\\circ$. 
-			${name[rand].ie.toZagl()} $${[dano[rand][0], dano[rand][1].pow(2).texsqrt(true)].join(` =`)}$. Найдите длину ${name[1 - rand].re} $${dano[1 - rand][0]}$.`,
+			${name[rand].ie.toZagl()} $${[dano[rand][0], dano[rand][1].pow(2).texsqrt(true)].join(` =`)}$. Найдите длину ${name[angleAC].re} $${dano[1 - rand][0]}$.`,
             answers: dano[1 - rand][1],
             authors: ['Александра Суматохина'],
             preference: [preference1, preference2],
