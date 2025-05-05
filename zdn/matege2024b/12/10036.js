@@ -1,20 +1,21 @@
 (function () {
     retryWhileError(function () {
         NAinfo.requireApiVersion(0, 2);
-        
+       
         let key = "10036";
         let preference1 = ['A', 'C'];
         let preference2 = ['catheter', 'hypotenuse'];
+        
         let rand1 = getListedPreference(key, preference1.map((pref, index) => ({
             preference: pref,
             preferenceValue: index
         })), sl(preference1.length - 1));
-
+        
         let rand2 = getListedPreference(key, preference2.map((pref, index) => ({
             preference: pref,
             preferenceValue: index
         })), sl(preference2.length - 1));
-        
+
         let letters = latbukv.slice(0, 3);
 
         let a = sl(1, 50);
@@ -37,7 +38,7 @@
         ];
         let name = sklonlxkand([`катет`, `гипотенуза`]);
 
-        genAssertZ1000(dano[rand1][1]);
+        genAssertZ1000(dano[rand2][1]);
 
         triangle.addVertexToConnectionMatrix([{ x: triangle.pointA[0].x - triangle.lengthAB * 0.15, y: triangle.pointA[0].y }, { x: triangle.pointC[0].x, y: triangle.pointC[0].y + triangle.lengthBC * 0.15 }][rand1], ['A', 'C'][rand1]);
 
@@ -87,7 +88,7 @@
         NAtask.setTask({
             text: `В прямоугольном треугольнике $ABC$ внешний угол при вершине $${['A', 'C'][rand1]}$ равен $${180 - [triangle.angleAInDegrees, triangle.angleCInDegrees][rand1]}^\\circ$. 
 			${name[1-rand2].ie.toZagl()} $${[dano[1-rand2][0], dano[1-rand2][1].pow(2).texsqrt(1)].join(`=`)}$. Найдите ${name[rand2].ve} $${dano[rand2][0]}$.`,
-            answers: dano[rand1][1],
+            answers: dano[rand2][1],
             authors: ['Александра Суматохина'],
             preference: [preference1, preference2],
         });
