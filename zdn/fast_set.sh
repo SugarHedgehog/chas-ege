@@ -11,15 +11,11 @@ find . -mindepth 1 ! -name "$(basename "$0")" -exec rm -rf {} +
 rm -rf *
 
 array=(
-6563
-11512
-2547
-2650
-506683
-"512423 меньшая_диагональ small_diagonal"
-"512423 периметр perimeter"
-510126
-514394
+10173
+10954
+10952
+10953
+10233
 )
 
 if [[ ${#array[@]} -eq 0 ]]; then
