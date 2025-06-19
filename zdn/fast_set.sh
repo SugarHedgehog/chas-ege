@@ -104,6 +104,14 @@ array=(
 "11322 bisector bisector"
 "11452"
 "6603"
+#5 Подобные треугольники
+"11001"
+"11082"
+"11502 midline midline"
+"11502 side side"
+"506338"
+"511948" 
+
 )
 
 if [[ ${#array[@]} -eq 0 ]]; then
