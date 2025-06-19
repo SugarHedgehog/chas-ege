@@ -90,7 +90,20 @@ array=(
 "356109 side_from_tgC side_from_tgC"
 "356109 side_from_ctgC side_from_ctgC"
 "6708"
-
+#4 Биссектриса медиана
+"6623"
+"311680"
+"10036 A_catheter A catheter"
+"10036 A_hypotenuse A hypotenuse"
+"10036 C_catheter C catheter"
+"10036 C_hypotenuse C hypotenuse"
+"10116 side side"
+"10116 median median"
+"11322 side_AB_by_height side_AB_by_height"
+"11322 side_AB_by_median side_AB_by_median"
+"11322 bisector bisector"
+"11452"
+"6603"
 )
 
 if [[ ${#array[@]} -eq 0 ]]; then
