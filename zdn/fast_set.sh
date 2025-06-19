@@ -11,6 +11,7 @@ find . -mindepth 1 ! -name "$(basename "$0")" -exec rm -rf {} +
 rm -rf *
 
 array=(
+#1 Четырёхугольники
 6563
 11512
 2547
@@ -20,6 +21,8 @@ array=(
 "512423 периметр perimeter"
 510126
 514394
+#2 Теорема Пифагора
+
 )
 
 if [[ ${#array[@]} -eq 0 ]]; then
