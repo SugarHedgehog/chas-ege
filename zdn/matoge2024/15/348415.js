@@ -3,16 +3,12 @@
         NAinfo.requireApiVersion(0, 2);
 
         let key = "348415";
-        let variant = getListedPreference(key, [{
-            preference: 'hypotenuse',
-            preferenceValue: 0,
-        }, {
-            preference: 'area',
-            preferenceValue: 1,
-        },{
-            preference: 'catheter',
-            preferenceValue: 2,
-        }], sl(0,2));
+        let preference = ['hypotenuse', 'area', 'catheter'];
+        let variant = getListedPreference(key, preference.map((pref, index) => ({
+            preference: pref,
+            preferenceValue: index
+        })), sl(preference.length - 1));
+        variant= 1;
 
         let triangle = new Triangle({
             lengths: {
@@ -60,7 +56,7 @@
                     answer: triangle.lengthAB,
                 }, {
                     text: `площадь`,
-                    answer: triangle.area,
+                    answer: triangle.area(),
                 },{
                     text: `другой катет`,
                     answer: triangle.lengthBC,
@@ -68,8 +64,9 @@
             ],
             postquestion: ` этого треугольника.`,
             authors: ['Александра Суматохина'],
+            preference,
         });
-
+		NAtask.modifiers.allDecimalsToStandard(true);
         NAtask.modifiers.addCanvasIllustration({
             width: 400,
             height: 400,

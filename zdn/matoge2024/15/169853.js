@@ -3,16 +3,11 @@
 		NAinfo.requireApiVersion(0, 2);
 
 		let key = "169853";
-		let variant = getListedPreference(key, [{
-			preference: 'A',
-			preferenceValue: 0,
-		}, {
-			preference: 'B',
-			preferenceValue: 1,
-		}, {
-			preference: 'C',
-			preferenceValue: 2,
-		}], sl(0, 2));
+		let preference = ['A', 'B', 'C']
+		let variant = getListedPreference(key, preference.map((pref, index) => ({
+            preference: pref,
+            preferenceValue: index
+        })), sl(preference.length - 1));
 
 		let triangle = new Triangle({
 			lengths: {
@@ -61,6 +56,7 @@
 			$${height}$. Найдите площадь этого треугольника.`,
 			answers: triangle.area(),
 			authors: ['Александра Суматохина'],
+			preference,
 		});
 
 		NAtask.modifiers.addCanvasIllustration({

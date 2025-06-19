@@ -3,16 +3,11 @@
 		NAinfo.requireApiVersion(0, 2);
 
 		let key = "348610";
-		let variant = getListedPreference(key, [{
-			preference: 'A',
-			preferenceValue: 0,
-		}, {
-			preference: 'B',
-			preferenceValue: 1,
-		}, {
-			preference: 'C',
-			preferenceValue: 2,
-		}], sl(0, 2));
+		let preference = ['A', 'B', 'C']
+		let variant = getListedPreference(key, preference.map((pref, index) => ({
+            preference: pref,
+            preferenceValue: index
+        })), sl(preference.length - 1));
 		
 		let letters = latbukv.slice(0, 4);
 		let angleDano = letters.slice(0, 3);
@@ -36,7 +31,7 @@
 		genAssert(![triangle.lengthAB.round(), triangle.lengthBC.round(), triangle.lengthCA.round()].hasDubl(), 'Все стороны треугольника должны быть разными');
 
 		let valueAngle = [triangle.angleAInDegrees, triangle.angleBInDegrees, triangle.angleCInDegrees][variant];
-		triangle.addVertexToConnectionMatrix([triangle.bisectorEndPointA, triangle.bisectorEndPointB, triangle.bisectorEndPointC][variant], ['A', 'B', 'C'][variant]);
+		triangle.addVertexToConnectionMatrix([triangle.bisectorAEndPoint, triangle.bisectorBEndPoint, triangle.bisectorCEndPoint][variant], ['A', 'B', 'C'][variant]);
 
 		let points = autoScale(triangle.vertices);
 
@@ -69,6 +64,7 @@
 			Найдите угол $${angleFind}$. Ответ дайте в градусах.`,
 			answers: valueAngle.ceil() / 2,
 			authors: ['Александра Суматохина'],
+			preference,
 		});
 		NAtask.modifiers.variativeABC(letters);
 

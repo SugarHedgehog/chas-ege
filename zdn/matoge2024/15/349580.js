@@ -3,16 +3,11 @@
         NAinfo.requireApiVersion(0, 2);
 
         let key = "349580";
-        let variant = getListedPreference(key, [{
-            preference: 'AB',
-            preferenceValue: 0,
-        }, {
-            preference: 'BC',
-            preferenceValue: 1,
-        }, {
-            preference: 'CA',
-            preferenceValue: 2,
-        }], sl(0, 2));
+        let preference = ['AB', 'BC', 'CA']
+        let variant = getListedPreference(key, preference.map((pref, index) => ({
+            preference: pref,
+            preferenceValue: index
+        })), sl(preference.length - 1));
 
         let triangle = new Triangle({
             lengths: {
@@ -30,7 +25,7 @@
             'Треугольник не остроугольный'));
 
         triangle.addVertexToConnectionMatrix([triangle.midlinePointsAB, triangle.midlinePointsBC, triangle.midlinePointsCA][variant], 'E');
-        triangle.connectVertices([3, 4]);
+        triangle.connectVerticesInConnectionMatrix([3, 4]);
 
         let letters = latbukv.slice(0, 5);
         let sidesMidle = letters.slice(0, 3);
@@ -84,6 +79,7 @@
 			Найдите $DF$.`,
             answers: [triangle.midlineABLength, triangle.midlineBCLength, triangle.midlineCALength][variant],
             authors: ['Александра Суматохина'],
+            preference,
         });
         NAtask.modifiers.variativeABC(letters);
 

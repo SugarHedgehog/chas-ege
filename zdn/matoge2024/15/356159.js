@@ -4,16 +4,11 @@
         let letters = latbukv.slice(0, 3);
 
         let key = "356159";
-        let variant = getListedPreference(key, [{
-            preference: 'B',
-            preferenceValue: 0,
-        }, {
-            preference: 'A',
-            preferenceValue: 1,
-        }, {
-            preference: 'C',
-            preferenceValue: 2,
-        }], sl(0, 2));
+        let preference = ['B', 'A', 'C'];
+        let variant = getListedPreference(key, preference.map((pref, index) => ({
+            preference: pref,
+            preferenceValue: index
+        })), sl(preference.length - 1));
 
         let triangle = new Triangle({
             lengths: {
