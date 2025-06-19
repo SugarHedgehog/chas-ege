@@ -62,4 +62,3 @@
 
 })();
 // https://base.mathege.ru/clones/?position=16&parent=10915
-s
