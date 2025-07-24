@@ -493,15 +493,24 @@ function removeGridFields() {
 
 // Возвращает подтаблицу ответов в формате LaTeX
 function getAnswersSubtableLaTeX(cellsInFirstRow, answersParsedToTeX) {
-    const hline = "\n\\\\\n\\hline\n";
-    return (
-        `\\begin{tabular}{${new Array(cellsInFirstRow).fill('|l').join('')}|}` +
-        `\n\\hline\n${answersParsedToTeX.join(hline)}${hline}` +
-        '\\end{tabular}\n\n\n'
-    );
+	const maxRows = options.splitAnswersNumber || 60;
+	const hline = "\n\\\\\n\\hline\n";
+	const colFormat = (new Array(cellsInFirstRow)).fill('|l').join('') + '|';
+
+	let res = '';
+	for (let i = 0; i < answersParsedToTeX.length; i += maxRows) {
+		const chunk = answersParsedToTeX.slice(i, i + maxRows);
+		res += '\\begin{tabular}{' + colFormat + '}' +
+			'\n\\hline\n' +
+			chunk.join(hline) +
+			hline +
+			'\\end{tabular}' +
+			'\n\n\n';
+	}
+	return res;
 }
 
-// Создает пакет ответов в формате LaTeX
+
 function createLaTeXbunchAnswers(variantN) {
     const answerRows = $(`table#pech-answers-table-variant-${variantN} tr`);
     const answersParsedToTeX = [];
