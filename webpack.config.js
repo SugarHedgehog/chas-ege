@@ -56,9 +56,8 @@ module.exports = {
         // index.html
         { from: 'index.html', to: 'index.html' },
 
-        // ZDN raw tasks (JS); pack step will create build/zdn upak files after copy
-        { from: 'zdn/*/*.js', to: 'zdn/[1]/[name][ext]' },
-        { from: 'zdn/*/*/*.js', to: 'zdn/[1]/[2]/[name][ext]' },
+        // ZDN: copy directory tree as-is (JS, CPP, etc.)
+        { from: 'zdn', to: 'zdn' },
       ],
     }),
   ],

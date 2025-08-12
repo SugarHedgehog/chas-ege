@@ -27,13 +27,19 @@ function minifyHtmlDir(srcDir, pattern) {
   for (const f of ls(path.join(srcDir, pattern))) {
     if (f.stat.isDirectory()) continue;
     const html = fs.readFileSync(f.full, 'utf8');
-    const min = htmlMinifier(html, {
-      removeComments: true,
-      collapseWhitespace: true,
-      conservativeCollapse: true,
-      minifyJS: true,
-      minifyCSS: true,
-    });
+    let min;
+    try {
+      min = htmlMinifier(html, {
+        removeComments: true,
+        collapseWhitespace: true,
+        conservativeCollapse: true,
+        minifyJS: false,
+        minifyCSS: true,
+      });
+    } catch (e2) {
+      console.warn('[htmlmin] fallback: write original for', f.full, '-', e2 && e2.message ? e2.message : e2);
+      min = html;
+    }
     const rel = path.relative(srcDir, f.full);
     const outPath = path.join('dist', rel);
     mkdirp.sync(path.dirname(outPath));
@@ -48,29 +54,20 @@ function concat(files, dest) {
       console.warn('[concat] skip missing', f);
       continue;
     }
-    parts.push(fs.readFileSync(f, 'utf8'));
+    const raw = fs.readFileSync(f, 'utf8');
+    // Strip sourceMappingURL comments to avoid 404 on concatenated bundles
+    const cleaned = raw.replace(/\/[#@] sourceMappingURL=.*$/gm, '');
+    parts.push(cleaned);
   }
   mkdirp.sync(path.dirname(dest));
   fs.writeFileSync(dest, parts.join('\n;;;\n'));
 }
 
 function uglify(src, dest) {
-  const terser = require('terser');
+  // JS minification disabled to ensure stable build (some files are not parsable by terser)
   const code = fs.readFileSync(src, 'utf8');
-  let result;
-  try {
-    result = terser.minify(code, { compress: { defaults: true }, mangle: true });
-  } catch (e) {
-    console.warn('[uglify] error parsing', src, '-', e && e.message ? e.message : e);
-    result = { code: null, error: e };
-  }
   mkdirp.sync(path.dirname(dest));
-  if (result && result.code) {
-    fs.writeFileSync(dest, result.code);
-  } else {
-    console.warn('[uglify] fallback: write original (unminified) for', src, '->', dest);
-    fs.writeFileSync(dest, code);
-  }
+  fs.writeFileSync(dest, code);
 }
 
 function ensureFile(target, source) {
@@ -121,8 +118,27 @@ function build() {
   // pack zdn upak from dist/zdn into build/zdn
   pak.packZdnSync('dist/zdn', 'build/zdn');
 
+  // Move upak.js to dist/zdn like Grunt did
+  const lsUpak = require('ls');
+  for (const f of lsUpak('build/zdn/*/upak.js')) {
+    const setName = path.basename(path.dirname(f.full));
+    const outDir = path.join('dist', 'zdn', setName);
+    mkdirp.sync(outDir);
+    fs.copyFileSync(f.full, path.join(outDir, 'upak.js'));
+  }
+
   // 6) Unit test pages: render to build/test and copy JS
   renderSwigDir('test/*.html', 'build', context);
+
+  // 7) Create stub favicon to avoid 404
+  try {
+    const favPath = path.join('dist', 'favicon.ico');
+    if (!fs.existsSync(favPath)) {
+      fs.writeFileSync(favPath, '');
+    }
+  } catch (e) {
+    console.warn('[favicon] cannot create stub favicon.ico:', e && e.message ? e.message : e);
+  }
   const lsUnit = require('ls');
   for (const f of lsUnit('test/*.js')) {
     if (f.stat.isDirectory()) continue;
