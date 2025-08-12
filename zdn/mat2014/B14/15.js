@@ -1,24 +1,26 @@
 (function() {
-	NAinfo.requireApiVersion(0, 2);
+	'use strict';
+	retryWhileError(function() {
 
-	var stations = NLsets.alphabets.russian.getRandomItems(2);
-	stations[0] += '.';
-	stations[1] += '.';
+		let key = "15";
+		let preference = ['distance', 'ratio_of_speeds'];
+		let rand = getListedPreference(key, preference.map((pref, index) => ({
+			preference: pref,
+			preferenceValue: index
+		})), sl(preference.length - 1));
 
-	var name = sklonlxkand(window.imenaj.ie.iz());
+		var stations = om.rusbukv.iz(2).map(letter => letter + '.');
 
-	do{
-		var distanceBetweenStations = sl(1.5,10,0.5);
-		var distanceToLeftStation = sl(0.100,2.000,0.001);
-		var answer = distanceBetweenStations * distanceToLeftStation / (distanceBetweenStations - 2 * distanceToLeftStation)
-	}while(!(1000*answer).isZ() || answer <= 0 || answer >= 20);
+		var name = sklonlxkand(window.imenaj.ie.iz());
 
-	var questionsAndAnswers = [
-		[
-			'Каково сейчас расстояние (в км) между ' + name.te + ' и автобусом? ',
-			answer + distanceToLeftStation,
-		],
-	];
+		do {
+			var distanceBetweenStations = sl(1.5, 10, 0.5);
+			var distanceToLeftStation = sl(0.100, 2.000, 0.001);
+			var answer = distanceBetweenStations * distanceToLeftStation / (distanceBetweenStations - 2 *
+				distanceToLeftStation)
+		} while (!(1000 * answer).isZ() || answer <= 0 || answer >= 20);
+		
+		genAssertZ1000(answer / distanceToLeftStation);
 
 	if ( (1000*answer / distanceToLeftStation).isZ() ){
 		questionsAndAnswers.push([
@@ -49,6 +51,7 @@
 			' (Считайте, что автобус и велосипед движутся с постоянными скоростями и останавливаются мгновенно.)',
 		answers: questionsAndAnswers[1].ts(),
 		// TODO: во сколько раз cкорость призрака меньше скорости поезда?
+	});
 	});
 })();
 
