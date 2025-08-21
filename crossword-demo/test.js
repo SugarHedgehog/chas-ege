@@ -124,13 +124,14 @@ function placeBuildingInSector(sector, options = {}) {
  *   minW?: number,
  *   minH?: number,
  *   margin?: number,
- *   fillSector?: boolean
+ *   fillSector?: boolean,
+ *   cellScale?: number, // scale (price) of one grid cell side in units, e.g. 0.5..2; area uses cellScale^2
  * }} [config]
  * @returns {Array<{
  *   sectorId:number,
  *   sectorCol:number,
  *   sectorRow:number,
- *   rect:{x:number,y:number,w:number,h:number,area:number}
+ *   rect:{x:number,y:number,w:number,h:number,areaCells:number,area:number}
  * }>}
  */
 function generateBuildings(config = {}) {
@@ -144,7 +145,12 @@ function generateBuildings(config = {}) {
     minH = 1,
     margin = 0,
     fillSector = false,
+    cellScale = 2, // "цена деления клетки": 1 клетка = cellScale единиц по каждой оси
   } = config;
+
+  if (typeof cellScale !== 'number' || !isFinite(cellScale) || cellScale <= 0) {
+    throw new Error(`cellScale must be a positive number. Got: ${cellScale}`);
+  }
 
   const sectors = defineSectors(gridWidth, gridHeight, colsParts, rowsHeights);
   if (numBuildings > sectors.length) {
@@ -156,12 +162,13 @@ function generateBuildings(config = {}) {
   const chosen = pickKRandom(sectors, numBuildings);
   return chosen.map((sector) => {
     const rect = placeBuildingInSector(sector, { minW, minH, margin, fillSector });
-    const area = rect.w * rect.h;
+    const areaCells = rect.w * rect.h; // площадь в "клетках"
+    const area = areaCells * cellScale * cellScale; // физическая площадь с учетом цены деления
     return {
       sectorId: sector.id,
       sectorCol: sector.col,
       sectorRow: sector.row,
-      rect: { ...rect, area },
+      rect: { ...rect, areaCells, area },
     };
   });
 }
@@ -176,8 +183,8 @@ function randInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// CommonJS exports (optional, in case you want to import these in other files)
-if (typeof module !== "undefined") {
+// CommonJS exports (Node)
+if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     defineSectors,
     placeBuildingInSector,
@@ -185,26 +192,23 @@ if (typeof module !== "undefined") {
   };
 }
 
-// If run directly: print demo output.
+// Browser globals (optional convenience)
+if (typeof window !== "undefined") {
+  window.defineSectors = defineSectors;
+  window.placeBuildingInSector = placeBuildingInSector;
+  window.generateBuildings = generateBuildings;
+}
+
+// If run directly via Node: print demo output.
 if (typeof require !== "undefined" && require.main === module) {
   const buildings = generateBuildings({
     numBuildings: 6,
     minW: 1,
     minH: 1,
-    margin: 0, // set >0 to keep padding from sector borders
-    fillSector: false, // set to true if building must occupy the whole sector
+    margin: 0,
+    fillSector: false,
+    cellScale: 2, // try 0.5 .. 2
   });
 
   console.log(buildings);
 }
-
-// Example usage (uncomment to test):
-const buildings = generateBuildings({
-    numBuildings: 6,
-    minW: 1,
-    minH: 1,
-    margin: 0,       // set >0 to keep padding from sector borders
-    fillSector: false // set to true if building must occupy the whole sector
-});
-
-console.log(buildings);
