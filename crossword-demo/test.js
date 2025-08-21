@@ -20,6 +20,11 @@
  *    Accessories do not overlap each other (best-effort).
  * Constraint:
  *  - Sector 7 is banned by default and will not be used for main placements (configurable via bannedSectors).
+ *
+ * Roads:
+ *  - buildRoadNetwork connects all main buildings via a minimal spanning tree (by Manhattan metric),
+ *    routing each edge with BFS on the 12x16 grid while avoiding buildings (both main and accessory).
+ *  - generateMap returns both buildings and roads.
  */
 
 const OPTIONAL_POOL = ["будка", "клумба", "пруд", "бассейн"];
@@ -188,7 +193,6 @@ function placeAccessoryRectsInSector(
       }
       attempt++;
     }
-    // If couldn't find a non-overlapping spot, accept the last candidate (may overlap).
     if (!rect) {
       rect = placeBuildingInSector(sector, { minW, minH, margin, fillSector: false });
     }
@@ -269,11 +273,11 @@ function getAccessoryNames(count, used = new Set()) {
  *   minH?: number,
  *   margin?: number,
  *   fillSector?: boolean,
- *   cellScale?: number, // scale (price) of one grid cell side in units, e.g. 0.5..2; area uses cellScale^2
- *   buildingNames?: string[], // optional explicit main names; if omitted, generated as per rules above
- *   gardenAccessoryRange?: [number, number], // inclusive min/max count of accessories for "огород" (default [1,2])
- *   accessoryPlacementAttempts?: number, // attempts per accessory to avoid overlaps (default 50)
- *   bannedSectors?: number[] // sectors that cannot be used for main placements (default [7])
+ *   cellScale?: number,
+ *   buildingNames?: string[],
+ *   gardenAccessoryRange?: [number, number],
+ *   accessoryPlacementAttempts?: number,
+ *   bannedSectors?: number[]
  * }} [config]
  * @returns {Array<{
  *   id:string,
@@ -297,7 +301,7 @@ function generateBuildings(config = {}) {
     minH = 1,
     margin = 0,
     fillSector = false,
-    cellScale = 1, // "цена деления клетки": 1 клетка = cellScale единиц по каждой оси
+    cellScale = 1,
     buildingNames,
     gardenAccessoryRange = [1, 2],
     accessoryPlacementAttempts = 50,
@@ -365,8 +369,10 @@ function generateBuildings(config = {}) {
 
     // If garden, spawn accessories within the same sector
     if (isGarden) {
-      const [accMin, accMax] = gardenAccessoryRange;
-      const count = randInt(Math.min(accMin, accMax), Math.max(accMin, accMax));
+      const count = randInt(
+        Math.min(gardenAccessoryRange[0], gardenAccessoryRange[1]),
+        Math.max(gardenAccessoryRange[0], gardenAccessoryRange[1])
+      );
 
       const accessoryNames = getAccessoryNames(count, usedMainNames);
 
@@ -399,6 +405,385 @@ function generateBuildings(config = {}) {
   return result;
 }
 
+/* =========================
+   Roads and pathfinding
+   ========================= */
+
+/**
+ * Create a blocked grid (true = blocked) from building rectangles.
+ * Blocks cells occupied by any building (main or accessory).
+ * @param {number} gridW
+ * @param {number} gridH
+ * @param {Array<{rect:{x:number,y:number,w:number,h:number}}>} buildings
+ */
+function makeBlockedGrid(gridW, gridH, buildings) {
+  const blocked = Array.from({ length: gridH }, () => Array(gridW).fill(false));
+  for (const b of buildings) {
+    const { x, y, w, h } = b.rect;
+    for (let yy = y; yy < y + h; yy++) {
+      for (let xx = x; xx < x + w; xx++) {
+        if (yy >= 0 && yy < gridH && xx >= 0 && xx < gridW) {
+          blocked[yy][xx] = true;
+        }
+      }
+    }
+  }
+  return blocked;
+}
+
+/**
+ * BFS shortest path on grid avoiding blocked cells.
+ * Returns array of cells [{x,y},...] from start to goal, inclusive.
+ * If no path, returns empty array.
+ * @param {{x:number,y:number}} start
+ * @param {{x:number,y:number}} goal
+ * @param {boolean[][]} blocked
+ * @param {number} gridW
+ * @param {number} gridH
+ */
+function bfsPath(start, goal, blocked, gridW, gridH) {
+  const key = (x, y) => `${x},${y}`;
+  const q = [];
+  const visited = new Set();
+  const parent = new Map();
+
+  const enqueue = (x, y) => {
+    const k = key(x, y);
+    if (visited.has(k)) return;
+    visited.add(k);
+    q.push({ x, y });
+  };
+
+  if (
+    start.x < 0 || start.x >= gridW || start.y < 0 || start.y >= gridH ||
+    goal.x < 0 || goal.x >= gridW || goal.y < 0 || goal.y >= gridH
+  ) return [];
+
+  if (blocked[start.y][start.x] || blocked[goal.y][goal.x]) {
+    // cannot start or end on blocked
+    return [];
+  }
+
+  enqueue(start.x, start.y);
+
+  const dirs = [
+    [1, 0],
+    [-1, 0],
+    [0, 1],
+    [0, -1],
+  ];
+
+  while (q.length) {
+    const cur = q.shift();
+    if (cur.x === goal.x && cur.y === goal.y) {
+      // reconstruct
+      const path = [];
+      let k = key(cur.x, cur.y);
+      while (k) {
+        const [sx, sy] = k.split(",").map(Number);
+        path.push({ x: sx, y: sy });
+        k = parent.get(k);
+      }
+      path.reverse();
+      return path;
+    }
+
+    for (const [dx, dy] of dirs) {
+      const nx = cur.x + dx;
+      const ny = cur.y + dy;
+      if (nx < 0 || nx >= gridW || ny < 0 || ny >= gridH) continue;
+      if (blocked[ny][nx]) continue;
+      const nk = key(nx, ny);
+      if (!visited.has(nk)) {
+        parent.set(nk, key(cur.x, cur.y));
+        enqueue(nx, ny);
+      }
+    }
+  }
+
+  return [];
+}
+
+/**
+ * Find a "gate" cell adjacent to a building rectangle to attach a road.
+ * Prefers cells directly outside the rectangle on left/right/top/bottom near center.
+ * If all are blocked, searches nearest free via BFS from perimeter-adjacent candidates.
+ * @param {{x:number,y:number,w:number,h:number}} rect
+ * @param {boolean[][]} blocked
+ * @param {number} gridW
+ * @param {number} gridH
+ * @returns {{x:number,y:number}|null}
+ */
+function findGateCell(rect, blocked, gridW, gridH) {
+  const cx = rect.x + Math.floor(rect.w / 2);
+  const cy = rect.y + Math.floor(rect.h / 2);
+
+  // Helper to iterate positions along an edge, from center outward
+  function positionsAlongEdge(start, end, fixed, horizontal) {
+    const arr = [];
+    const mid = horizontal ? cy : cx;
+    for (let t = start; t <= end; t++) arr.push(t);
+    arr.sort((a, b) => Math.abs(a - mid) - Math.abs(b - mid));
+    return arr.map((t) => (horizontal ? { x: fixed, y: t } : { x: t, y: fixed }));
+  }
+
+  // Candidate cells just outside each side
+  const leftX = rect.x - 1;
+  const rightX = rect.x + rect.w;
+  const topY = rect.y - 1;
+  const bottomY = rect.y + rect.h;
+
+  const candidates = [];
+
+  if (leftX >= 0) {
+    candidates.push(
+      ...positionsAlongEdge(rect.y, rect.y + rect.h - 1, leftX, true)
+    );
+  }
+  if (rightX < gridW) {
+    candidates.push(
+      ...positionsAlongEdge(rect.y, rect.y + rect.h - 1, rightX, true)
+    );
+  }
+  if (topY >= 0) {
+    candidates.push(
+      ...positionsAlongEdge(rect.x, rect.x + rect.w - 1, topY, false)
+    );
+  }
+  if (bottomY < gridH) {
+    candidates.push(
+      ...positionsAlongEdge(rect.x, rect.x + rect.w - 1, bottomY, false)
+    );
+  }
+
+  // First, any immediately free candidate
+  for (const p of candidates) {
+    if (!blocked[p.y][p.x]) return p;
+  }
+
+  // Fallback: BFS from candidates to nearest free cell
+  const key = (x, y) => `${x},${y}`;
+  const q = [];
+  const visited = new Set();
+  for (const p of candidates) {
+    const k = key(p.x, p.y);
+    if (!visited.has(k)) {
+      visited.add(k);
+      q.push(p);
+    }
+  }
+  const dirs = [
+    [1, 0],
+    [-1, 0],
+    [0, 1],
+    [0, -1],
+  ];
+  while (q.length) {
+    const cur = q.shift();
+    if (!blocked[cur.y][cur.x]) {
+      return cur;
+    }
+    for (const [dx, dy] of dirs) {
+      const nx = cur.x + dx;
+      const ny = cur.y + dy;
+      if (nx < 0 || nx >= gridW || ny < 0 || ny >= gridH) continue;
+      const nk = key(nx, ny);
+      if (!visited.has(nk)) {
+        visited.add(nk);
+        q.push({ x: nx, y: ny });
+      }
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Build a minimal spanning tree (Prim) over gate points using Manhattan distance.
+ * @param {{x:number,y:number}[]} points
+ * @returns {Array<[number, number]>} list of undirected edges as index pairs (i,j) into points
+ */
+function buildMST(points) {
+  const n = points.length;
+  if (n <= 1) return [];
+
+  const inTree = Array(n).fill(false);
+  const dist = Array(n).fill(Infinity);
+  const parent = Array(n).fill(-1);
+
+  dist[0] = 0;
+
+  for (let it = 0; it < n; it++) {
+    // pick u not in tree with minimal dist
+    let u = -1;
+    let best = Infinity;
+    for (let i = 0; i < n; i++) {
+      if (!inTree[i] && dist[i] < best) {
+        best = dist[i];
+        u = i;
+      }
+    }
+    if (u === -1) break;
+    inTree[u] = true;
+
+    // update neighbors
+    for (let v = 0; v < n; v++) {
+      if (inTree[v]) continue;
+      const d =
+        Math.abs(points[u].x - points[v].x) +
+        Math.abs(points[u].y - points[v].y);
+      if (d < dist[v]) {
+        dist[v] = d;
+        parent[v] = u;
+      }
+    }
+  }
+
+  const edges = [];
+  for (let v = 1; v < n; v++) {
+    if (parent[v] !== -1) edges.push([v, parent[v]]);
+  }
+  return edges;
+}
+
+/**
+ * Connect all main buildings with roads.
+ * - Picks a "gate" cell adjacent to each main building.
+ * - Builds MST over gates and routes each edge via BFS avoiding buildings.
+ * @param {{
+ *   buildings: Array<{id:string, role:string, rect:{x:number,y:number,w:number,h:number}}},
+ *   gridWidth: number,
+ *   gridHeight: number
+ * }} params
+ * @returns {{
+ *   roads: Array<{ from:string, to:string, cells:Array<{x:number,y:number}>, length:number }>,
+ *   gates: Record<string, {x:number,y:number}>
+ * }}
+ */
+function buildRoadNetwork({ buildings, gridWidth, gridHeight }) {
+  const mains = buildings.filter((b) => b.role === "main");
+  const blocked = makeBlockedGrid(gridWidth, gridHeight, buildings);
+
+  // Gates for each main
+  const gates = {};
+  const gatePoints = [];
+  for (const b of mains) {
+    const gate = findGateCell(b.rect, blocked, gridWidth, gridHeight);
+    if (!gate) {
+      // As a last resort, put gate at nearest in-bounds unblocked cell to rect center
+      const cx = Math.max(0, Math.min(gridWidth - 1, b.rect.x + Math.floor(b.rect.w / 2)));
+      const cy = Math.max(0, Math.min(gridHeight - 1, b.rect.y + Math.floor(b.rect.h / 2)));
+      let fallback = null;
+      outer: for (let r = 0; r < gridWidth + gridHeight; r++) {
+        for (let dx = -r; dx <= r; dx++) {
+          const dy = r - Math.abs(dx);
+          const candidates = [
+            { x: cx + dx, y: cy + dy },
+            { x: cx + dx, y: cy - dy },
+          ];
+          for (const p of candidates) {
+            if (p.x >= 0 && p.x < gridWidth && p.y >= 0 && p.y < gridHeight && !blocked[p.y][p.x]) {
+              fallback = p;
+              break outer;
+            }
+          }
+        }
+      }
+      if (!fallback) continue;
+      gates[b.id] = fallback;
+      gatePoints.push(fallback);
+    } else {
+      gates[b.id] = gate;
+      gatePoints.push(gate);
+    }
+  }
+
+  // Build MST over gate points (keep index mapping to building ids)
+  const idByIndex = mains.map((b) => b.id);
+  const edgesIdx = buildMST(gatePoints);
+
+  // For each edge, route BFS path
+  const roads = [];
+  for (const [i, j] of edgesIdx) {
+    const fromId = idByIndex[i];
+    const toId = idByIndex[j];
+    const start = gatePoints[i];
+    const goal = gatePoints[j];
+
+    let path = bfsPath(start, goal, blocked, gridWidth, gridHeight);
+
+    // If BFS failed (extremely unlikely), fall back to simple L-shape ignoring obstacles (but still clamped)
+    if (!path.length) {
+      const intermediate = { x: goal.x, y: start.y };
+      const l1 = lineBetween(start, intermediate, gridWidth, gridHeight);
+      const l2 = lineBetween(intermediate, goal, gridWidth, gridHeight);
+      path = [...l1, ...l2.slice(1)];
+    }
+
+    // Mark road cells as passable (they already are), allowing reuse
+    roads.push({
+      from: fromId,
+      to: toId,
+      cells: path,
+      length: path.length,
+    });
+  }
+
+  return { roads, gates };
+}
+
+/**
+ * Returns 4-connected line cells between two points (inclusive).
+ * @param {{x:number,y:number}} a
+ * @param {{x:number,y:number}} b
+ * @param {number} gridW
+ * @param {number} gridH
+ * @returns {{x:number,y:number}[]}
+ */
+function lineBetween(a, b, gridW, gridH) {
+  const path = [];
+  let x = a.x, y = a.y;
+  while (x !== b.x) {
+    x += x < b.x ? 1 : -1;
+    if (x >= 0 && x < gridW && y >= 0 && y < gridH) path.push({ x, y });
+  }
+  while (y !== b.y) {
+    y += y < b.y ? 1 : -1;
+    if (x >= 0 && x < gridW && y >= 0 && y < gridH) path.push({ x, y });
+  }
+  // include start at beginning
+  return [{ x: a.x, y: a.y }, ...path];
+}
+
+/**
+ * High-level helper: generate both buildings and roads connecting all main buildings.
+ * @param {Parameters<typeof generateBuildings>[0] & { withRoads?: boolean }} config
+ * @returns {{
+ *   buildings: ReturnType<typeof generateBuildings>,
+ *   roads: Array<{ from:string, to:string, cells:Array<{x:number,y:number}>, length:number }>,
+ *   gates: Record<string, {x:number,y:number}>
+ * }}
+ */
+function generateMap(config = {}) {
+  const {
+    gridWidth = 12,
+    gridHeight = 16,
+  } = config;
+
+  const buildings = generateBuildings(config);
+  const { roads, gates } = buildRoadNetwork({
+    buildings,
+    gridWidth,
+    gridHeight,
+  });
+
+  return { buildings, roads, gates };
+}
+
+/* =========================
+   Exports / Globals / Demo
+   ========================= */
+
 // CommonJS exports (Node)
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
@@ -406,6 +791,9 @@ if (typeof module !== "undefined" && module.exports) {
     placeBuildingInSector,
     generateBuildings,
     getBuildingNames,
+    // Roads:
+    buildRoadNetwork,
+    generateMap,
   };
 }
 
@@ -415,11 +803,14 @@ if (typeof window !== "undefined") {
   window.placeBuildingInSector = placeBuildingInSector;
   window.generateBuildings = generateBuildings;
   window.getBuildingNames = getBuildingNames;
+  // Roads:
+  window.buildRoadNetwork = buildRoadNetwork;
+  window.generateMap = generateMap;
 }
 
 // If run directly via Node: print demo output.
 if (typeof require !== "undefined" && require.main === module) {
-  const buildings = generateBuildings({
+  const { buildings, roads } = generateMap({
     numBuildings: 6,
     minW: 1,
     minH: 1,
@@ -430,5 +821,5 @@ if (typeof require !== "undefined" && require.main === module) {
     bannedSectors: [7],
   });
 
-  console.log(buildings);
+  console.log(JSON.stringify({ buildings, roads }, null, 2));
 }
