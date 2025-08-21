@@ -23,7 +23,7 @@
  *
  * Roads:
  *  - buildRoadNetwork connects all main buildings via a minimal spanning tree (by Manhattan metric),
- *    routing each edge with BFS on the 12x16 grid while avoiding buildings (both main and accessory).
+ *    routing each edge with PathFinding.js (Breadth-First) on the 12x16 grid while avoiding buildings.
  *  - generateMap returns buildings, roads, gates.
  *
  * Tile platforms:
@@ -35,6 +35,11 @@
  *  - The platform is not a building (it may cross the banned S7 sector); it's an independent area object.
  *  - Each platform has areaCells (w*h) and area (scaled by cellScale^2).
  */
+
+const _ = require("lodash");
+const PF = require("pathfinding");
+const RBushModule = require('rbush'); 
+const RBush = RBushModule.default || RBushModule;
 
 const OPTIONAL_POOL = ["будка", "клумба", "пруд", "бассейн"];
 
@@ -90,7 +95,7 @@ function defineSectors(
 }
 
 /**
- * Pick k unique random items from an array using a partial Fisher-Yates shuffle.
+ * Pick k unique random items from an array using lodash.sampleSize.
  * @template T
  * @param {T[]} arr
  * @param {number} k
@@ -98,22 +103,17 @@ function defineSectors(
  */
 function pickKRandom(arr, k) {
   if (k > arr.length) throw new Error("k cannot be greater than array length");
-  const copy = arr.slice();
-  for (let i = 0; i < k; i++) {
-    const j = i + Math.floor(Math.random() * (copy.length - i));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy.slice(0, k);
+  return _.sampleSize(arr, k);
 }
 
 /**
- * Random integer in [min, max] inclusive.
+ * Random integer in [min, max] inclusive using lodash.random.
  * @param {number} min
  * @param {number} max
  */
 function randInt(min, max) {
   if (max < min) return min;
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  return _.random(min, max);
 }
 
 /**
@@ -165,18 +165,23 @@ function rectsOverlap(a, b) {
 /**
  * Place N non-overlapping accessory rectangles within a sector.
  * Best-effort: tries up to `maxAttemptsPerRect` for each rect.
+ * Uses RBush for fast intersection queries.
  * @param {{x:number,y:number,w:number,h:number}} sector
  * @param {number} count
  * @param {{minW?:number,minH?:number,margin?:number,maxAttemptsPerRect?:number}} [options]
  * @returns {{x:number,y:number,w:number,h:number}[]}
  */
-function placeAccessoryRectsInSector(
-  sector,
-  count,
-  options = {}
-) {
+function placeAccessoryRectsInSector(sector, count, options = {}) {
   const { minW = 1, minH = 1, margin = 0, maxAttemptsPerRect = 50 } = options;
   const placed = [];
+  const tree = new RBush();
+
+  const toBBox = (r) => ({
+    minX: r.x,
+    minY: r.y,
+    maxX: r.x + r.w - 1,
+    maxY: r.y + r.h - 1,
+  });
 
   for (let i = 0; i < count; i++) {
     let attempt = 0;
@@ -189,21 +194,25 @@ function placeAccessoryRectsInSector(
         fillSector: false,
       });
 
-      let overlaps = false;
-      for (const p of placed) {
-        if (rectsOverlap(candidate, p)) {
-          overlaps = true;
-          break;
-        }
-      }
-      if (!overlaps) {
+      const bbox = toBBox(candidate);
+      const hits = tree.search(bbox);
+      if (hits.length === 0) {
+        tree.insert(bbox);
         rect = candidate;
         break;
       }
       attempt++;
     }
     if (!rect) {
-      rect = placeBuildingInSector(sector, { minW, minH, margin, fillSector: false });
+      // Fallback: place even if overlapping (preserve original behavior)
+      const fallback = placeBuildingInSector(sector, {
+        minW,
+        minH,
+        margin,
+        fillSector: false,
+      });
+      rect = fallback;
+      tree.insert(toBBox(rect));
     }
     placed.push(rect);
   }
@@ -231,14 +240,14 @@ function getBuildingNames(numBuildings) {
   const needOptional = numBuildings - required.length;
 
   if (needOptional <= optionalPool.length) {
-    const picks = pickKRandom(optionalPool, needOptional);
+    const picks = _.sampleSize(optionalPool, needOptional);
     return required.concat(picks);
   }
 
   const all = required.concat(optionalPool);
   const extras = [];
   while (all.length + extras.length < numBuildings) {
-    extras.push(optionalPool[Math.floor(Math.random() * optionalPool.length)]);
+    extras.push(_.sample(optionalPool));
   }
   return all.concat(extras);
 }
@@ -255,11 +264,11 @@ function getAccessoryNames(count, used = new Set()) {
   const available = OPTIONAL_POOL.filter((n) => !used.has(n));
   const picks = [];
   if (count <= available.length) {
-    return pickKRandom(available, count);
+    return _.sampleSize(available, count);
   }
   picks.push(...available);
   while (picks.length < count) {
-    picks.push(OPTIONAL_POOL[Math.floor(Math.random() * OPTIONAL_POOL.length)]);
+    picks.push(_.sample(OPTIONAL_POOL));
   }
   return picks.slice(0, count);
 }
@@ -441,7 +450,7 @@ function makeBlockedGrid(gridW, gridH, buildings) {
 }
 
 /**
- * BFS shortest path on grid avoiding blocked cells.
+ * BFS shortest path on grid avoiding blocked cells using PathFinding.js.
  * Returns array of cells [{x,y},...] from start to goal, inclusive.
  * If no path, returns empty array.
  * @param {{x:number,y:number}} start
@@ -451,66 +460,32 @@ function makeBlockedGrid(gridW, gridH, buildings) {
  * @param {number} gridH
  */
 function bfsPath(start, goal, blocked, gridW, gridH) {
-  const key = (x, y) => `${x},${y}`;
-  const q = [];
-  const visited = new Set();
-  const parent = new Map();
-
-  const enqueue = (x, y) => {
-    const k = key(x, y);
-    if (visited.has(k)) return;
-    visited.add(k);
-    q.push({ x, y });
-  };
-
   if (
     start.x < 0 || start.x >= gridW || start.y < 0 || start.y >= gridH ||
     goal.x < 0 || goal.x >= gridW || goal.y < 0 || goal.y >= gridH
   ) return [];
 
   if (blocked[start.y][start.x] || blocked[goal.y][goal.x]) {
-    // cannot start or end on blocked
     return [];
   }
 
-  enqueue(start.x, start.y);
-
-  const dirs = [
-    [1, 0],
-    [-1, 0],
-    [0, 1],
-    [0, -1],
-  ];
-
-  while (q.length) {
-    const cur = q.shift();
-    if (cur.x === goal.x && cur.y === goal.y) {
-      // reconstruct
-      const path = [];
-      let k = key(cur.x, cur.y);
-      while (k) {
-        const [sx, sy] = k.split(",").map(Number);
-        path.push({ x: sx, y: sy });
-        k = parent.get(k);
-      }
-      path.reverse();
-      return path;
-    }
-
-    for (const [dx, dy] of dirs) {
-      const nx = cur.x + dx;
-      const ny = cur.y + dy;
-      if (nx < 0 || nx >= gridW || ny < 0 || ny >= gridH) continue;
-      if (blocked[ny][nx]) continue;
-      const nk = key(nx, ny);
-      if (!visited.has(nk)) {
-        parent.set(nk, key(cur.x, cur.y));
-        enqueue(nx, ny);
-      }
+  // Prepare PathFinding grid
+  const grid = new PF.Grid(gridW, gridH);
+  for (let y = 0; y < gridH; y++) {
+    for (let x = 0; x < gridW; x++) {
+      if (blocked[y][x]) grid.setWalkableAt(x, y, false);
     }
   }
 
-  return [];
+  const finder = new PF.BreadthFirstFinder({
+    allowDiagonal: false,
+    dontCrossCorners: true,
+  });
+
+  // PathFinding.js mutates grid; pass a clone
+  const rawPath = finder.findPath(start.x, start.y, goal.x, goal.y, grid.clone());
+  if (!rawPath || rawPath.length === 0) return [];
+  return rawPath.map(([x, y]) => ({ x, y }));
 }
 
 /**
@@ -711,7 +686,7 @@ function buildRoadNetwork({ buildings, gridWidth, gridHeight }) {
   const idByIndex = mains.map((b) => b.id);
   const edgesIdx = buildMST(gatePoints);
 
-  // For each edge, route BFS path
+  // For each edge, route BFS path via PathFinding.js
   const roads = [];
   for (const [i, j] of edgesIdx) {
     const fromId = idByIndex[i];

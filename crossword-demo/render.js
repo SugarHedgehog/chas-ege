@@ -14,6 +14,9 @@
   const ROWS = [6, 6, 4];
   const COLS_PARTS = 3;
 
+  // Visual tweaks
+  const BANNED_SECTORS = [7]; // keep in sync with generation config
+
   // UI bindings once DOM is ready
   window.addEventListener('DOMContentLoaded', () => {
     const btnRegen = document.getElementById('regen');
@@ -28,6 +31,9 @@
     inputMargin.addEventListener('change', onChange);
     inputMinW.addEventListener('change', onChange);
     inputMinH.addEventListener('change', onChange);
+
+    // Redraw on resize to honor DPR or CSS var changes
+    window.addEventListener('resize', onChange);
 
     regenerateAndRender();
   });
@@ -101,6 +107,44 @@
     });
   }
 
+  function drawBannedSectors(ctx, cellSize) {
+    if (!BANNED_SECTORS.length) return;
+    const colWidthCells = GRID_W / COLS_PARTS; // 4
+
+    ctx.save();
+    ctx.globalAlpha = 0.12;
+    ctx.fillStyle = css('--banned-fill', '#ff5252'); // light red overlay
+    for (const sid of BANNED_SECTORS) {
+      const { x, y, w, h } = sectorRectById(sid, colWidthCells);
+      ctx.fillRect(x * cellSize, y * cellSize, w * cellSize, h * cellSize);
+    }
+    ctx.restore();
+
+    // Hatch lines for clarity
+    ctx.save();
+    ctx.strokeStyle = css('--banned-hatch', '#ff5252');
+    ctx.lineWidth = 1;
+    ctx.setLineDash([6, 4]);
+    for (const sid of BANNED_SECTORS) {
+      const { x, y, w, h } = sectorRectById(sid, colWidthCells);
+      const px = x * cellSize;
+      const py = y * cellSize;
+      const pw = w * cellSize;
+      const ph = h * cellSize;
+
+      ctx.strokeRect(px + 0.5, py + 0.5, pw - 1, ph - 1);
+      // diagonal hatch
+      const step = 12;
+      for (let i = -ph; i < pw + ph; i += step) {
+        ctx.beginPath();
+        ctx.moveTo(px + i, py);
+        ctx.lineTo(px + i + ph, py + ph);
+        ctx.stroke();
+      }
+    }
+    ctx.restore();
+  }
+
   function drawSectorLabels(ctx, cellSize) {
     const colWidthCells = GRID_W / COLS_PARTS; // 4
     const labelFill = css('--label-fill', '#1a1a1a');
@@ -134,7 +178,9 @@
   }
 
   function drawBuildings(ctx, buildings, cellSize) {
-    const fill = css('--building-fill', '#4caf50');
+    const mainFill = css('--building-main-fill', '#4caf50');
+    const gardenFill = css('--building-garden-fill', '#8bc34a');
+    const accessoryFill = css('--building-accessory-fill', '#81c784');
     const stroke = css('--building-stroke', '#2e7d32');
 
     for (const b of buildings) {
@@ -145,33 +191,44 @@
       const ph = h * cellSize;
 
       // Color tweak for roles
-      const roleFill = b.role === 'accessory' ? withAlpha(fill, 0.7) : fill;
+      let roleFill = mainFill;
+      if (b.role === 'accessory') roleFill = accessoryFill;
+      if (b.name === 'огород') roleFill = gardenFill;
 
+      ctx.save();
       ctx.fillStyle = roleFill;
       ctx.strokeStyle = stroke;
       ctx.lineWidth = 2;
+
+      if (b.role === 'accessory') {
+        ctx.setLineDash([4, 3]);
+      } else {
+        ctx.setLineDash([]);
+      }
+
       ctx.fillRect(px, py, pw, ph);
       ctx.strokeRect(px + 0.5, py + 0.5, pw - 1, ph - 1);
 
       // Optional: draw name centered on main buildings
       if (b.role === 'main') {
-        ctx.save();
         ctx.fillStyle = '#000';
         ctx.font = `bold ${Math.max(10, Math.round(cellSize * 0.4))}px system-ui, -apple-system, Segoe UI`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(b.name, px + pw / 2, py + ph / 2);
-        ctx.restore();
+        const label = b.name;
+        ctx.fillText(label, px + pw / 2, py + ph / 2);
       }
+
+      ctx.restore();
     }
   }
 
   function drawRoads(ctx, roads, gates, cellSize) {
     if (!roads || !roads.length) return;
 
-    const roadColor = '#6d4c41'; // brown-ish
+    const roadColor = css('--road-color', '#6d4c41'); // brown-ish
     const roadWidth = Math.max(2, Math.round(cellSize * 0.25));
-    const gateColor = '#ff6d00';
+    const gateColor = css('--gate-color', '#ff6d00');
 
     ctx.save();
     ctx.lineJoin = 'round';
@@ -214,9 +271,9 @@
   function drawTilePlatforms(ctx, platforms, cellSize) {
     if (!platforms || !platforms.length) return;
 
-    const tileA = '#d7ccc8'; // light stone
-    const tileB = '#bcaaa4'; // darker stone
-    const edge = '#8d6e63';
+    const tileA = css('--platform-tile-a', '#d7ccc8'); // light stone
+    const tileB = css('--platform-tile-b', '#bcaaa4'); // darker stone
+    const edge = css('--platform-edge', '#8d6e63');
 
     ctx.save();
     for (const r of platforms) {
@@ -239,6 +296,58 @@
         r.rect.h * cellSize - 1
       );
     }
+    ctx.restore();
+  }
+
+  function drawLegend(ctx, cellSize) {
+    const pad = Math.round(cellSize * 0.4);
+    const line = Math.max(14, Math.round(cellSize * 0.7));
+    const colW = Math.max(12, Math.round(cellSize * 0.6));
+    const x0 = pad;
+    const y0 = pad;
+    const entries = [
+      { label: 'Main building', color: css('--building-main-fill', '#4caf50'), stroke: css('--building-stroke', '#2e7d32'), dash: [] },
+      { label: 'Garden (огород)', color: css('--building-garden-fill', '#8bc34a'), stroke: css('--building-stroke', '#2e7d32'), dash: [] },
+      { label: 'Accessory', color: css('--building-accessory-fill', '#81c784'), stroke: css('--building-stroke', '#2e7d32'), dash: [4, 3] },
+      { label: 'Road', color: css('--road-color', '#6d4c41'), stroke: null, dash: [] },
+      { label: 'Gate', color: css('--gate-color', '#ff6d00'), stroke: null, dash: [] },
+      { label: 'Banned sector', color: css('--banned-fill', '#ff5252'), stroke: css('--banned-hatch', '#ff5252'), dash: [6, 4] },
+      { label: 'Tile platform', color: css('--platform-tile-a', '#d7ccc8'), stroke: css('--platform-edge', '#8d6e63'), dash: [] },
+    ];
+    const width = Math.max(180, Math.round(cellSize * 7));
+    const height = pad * 2 + entries.length * line;
+
+    ctx.save();
+    // Panel background
+    ctx.fillStyle = withAlpha('#ffffff', 0.9);
+    ctx.strokeStyle = withAlpha('#000000', 0.2);
+    ctx.lineWidth = 1;
+    ctx.fillRect(x0 - pad * 0.6, y0 - pad * 0.6, width, height);
+    ctx.strokeRect(x0 - pad * 0.6 + 0.5, y0 - pad * 0.6 + 0.5, width - 1, height - 1);
+
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.font = `${Math.max(10, Math.round(cellSize * 0.45))}px system-ui, -apple-system, Segoe UI`;
+
+    entries.forEach((e, i) => {
+      const yy = y0 + i * line + line / 2;
+      // swatch
+      const sw = colW;
+      const sh = Math.round(line * 0.6);
+      const sy = yy - sh / 2;
+      ctx.fillStyle = e.color;
+      ctx.fillRect(x0, sy, sw, sh);
+      if (e.stroke) {
+        ctx.save();
+        if (e.dash && e.dash.length) ctx.setLineDash(e.dash);
+        ctx.strokeStyle = e.stroke;
+        ctx.strokeRect(x0 + 0.5, sy + 0.5, sw - 1, sh - 1);
+        ctx.restore();
+      }
+      ctx.fillStyle = css('--label-fill', '#1a1a1a');
+      ctx.fillText(e.label, x0 + sw + pad, yy);
+    });
+
     ctx.restore();
   }
 
@@ -292,7 +401,7 @@
         fillSector,
         cellScale: 1,
         gardenAccessoryRange: [1, 2],
-        bannedSectors: [7],
+        bannedSectors: BANNED_SECTORS,
       });
       buildings = b;
       roads = r;
@@ -316,7 +425,7 @@
         fillSector,
         cellScale: 1,
         gardenAccessoryRange: [1, 2],
-        bannedSectors: [7],
+        bannedSectors: BANNED_SECTORS,
       });
 
       if (typeof window.buildRoadNetwork === 'function') {
@@ -352,10 +461,12 @@
     const ctx = setupCanvas(canvas, cssW, cssH);
 
     drawGrid(ctx, cellSize);
+    drawBannedSectors(ctx, cellSize);
     drawTilePlatforms(ctx, platforms, cellSize); // platforms under roads/buildings
     drawRoads(ctx, roads, gates, cellSize);
     drawBuildings(ctx, buildings, cellSize);
     drawSectorLabels(ctx, cellSize);
+    drawLegend(ctx, cellSize);
 
     // Output
     const output = document.getElementById('output');
@@ -393,6 +504,16 @@
       }];
     }
     return [];
+  }
+
+  function sectorRectById(id, colWidthCells) {
+    const row = Math.floor(id / COLS_PARTS);
+    const col = id % COLS_PARTS;
+    const x = col * colWidthCells;
+    const y = (ROWS.slice(0, row).reduce((a, b) => a + b, 0));
+    const w = colWidthCells;
+    const h = ROWS[row] || 0;
+    return { x, y, w, h };
   }
 
   function css(varName, fallback) {
