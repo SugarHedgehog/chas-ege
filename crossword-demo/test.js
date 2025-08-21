@@ -18,6 +18,8 @@
  *  - Object named "огород" always fills its sector (ignores margin/min sizes).
  *  - In the sector with "огород", place 1–2 extra accessory objects (from optional pool) inside the same sector.
  *    Accessories do not overlap each other (best-effort).
+ * Constraint:
+ *  - Sector 7 is banned by default and will not be used for main placements (configurable via bannedSectors).
  */
 
 const OPTIONAL_POOL = ["будка", "клумба", "пруд", "бассейн"];
@@ -254,6 +256,8 @@ function getAccessoryNames(count, used = new Set()) {
  * Special rules:
  *  - any building with name "огород" fills its sector (full cell)
  *  - and spawns 1..2 accessory objects (from OPTIONAL_POOL) within the same sector
+ * Constraint:
+ *  - sector 7 cannot be used (unless you override bannedSectors)
  *
  * @param {{
  *   gridWidth?: number,
@@ -268,7 +272,8 @@ function getAccessoryNames(count, used = new Set()) {
  *   cellScale?: number, // scale (price) of one grid cell side in units, e.g. 0.5..2; area uses cellScale^2
  *   buildingNames?: string[], // optional explicit main names; if omitted, generated as per rules above
  *   gardenAccessoryRange?: [number, number], // inclusive min/max count of accessories for "огород" (default [1,2])
- *   accessoryPlacementAttempts?: number // attempts per accessory to avoid overlaps (default 50)
+ *   accessoryPlacementAttempts?: number, // attempts per accessory to avoid overlaps (default 50)
+ *   bannedSectors?: number[] // sectors that cannot be used for main placements (default [7])
  * }} [config]
  * @returns {Array<{
  *   id:string,
@@ -296,6 +301,7 @@ function generateBuildings(config = {}) {
     buildingNames,
     gardenAccessoryRange = [1, 2],
     accessoryPlacementAttempts = 50,
+    bannedSectors = [7],
   } = config;
 
   if (typeof cellScale !== "number" || !isFinite(cellScale) || cellScale <= 0) {
@@ -303,9 +309,14 @@ function generateBuildings(config = {}) {
   }
 
   const sectors = defineSectors(gridWidth, gridHeight, colsParts, rowsHeights);
-  if (numBuildings > sectors.length) {
+
+  // Filter out banned sectors
+  const banned = new Set(bannedSectors);
+  const availableSectors = sectors.filter((s) => !banned.has(s.id));
+
+  if (numBuildings > availableSectors.length) {
     throw new Error(
-      `numBuildings cannot exceed number of sectors (${sectors.length})`
+      `numBuildings (${numBuildings}) cannot exceed available sectors (${availableSectors.length}) after excluding banned sectors [${[...banned].join(", ")}]`
     );
   }
 
@@ -314,7 +325,7 @@ function generateBuildings(config = {}) {
       ? buildingNames.slice(0, numBuildings)
       : getBuildingNames(numBuildings);
 
-  const chosenSectors = pickKRandom(sectors, numBuildings);
+  const chosenSectors = pickKRandom(availableSectors, numBuildings);
   const shuffledNames = pickKRandom(names, names.length);
 
   /** @type {ReturnType<typeof generateBuildings>} */
@@ -355,7 +366,6 @@ function generateBuildings(config = {}) {
     // If garden, spawn accessories within the same sector
     if (isGarden) {
       const [accMin, accMax] = gardenAccessoryRange;
-      const accCount = Math.max(accMin | 0, Math.min(accMax | 0, accMax | 0));
       const count = randInt(Math.min(accMin, accMax), Math.max(accMin, accMax));
 
       const accessoryNames = getAccessoryNames(count, usedMainNames);
@@ -417,6 +427,7 @@ if (typeof require !== "undefined" && require.main === module) {
     fillSector: false,
     cellScale: 1, // try 0.5 .. 2
     gardenAccessoryRange: [1, 2],
+    bannedSectors: [7],
   });
 
   console.log(buildings);
