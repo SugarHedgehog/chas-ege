@@ -1,5 +1,5 @@
 /**
- * Random placement of 6 buildings into 9 sectors on a 12x16 grid.
+ * Random placement of buildings into 9 sectors on a 12x16 grid.
  * Grid:
  *  - width: 12 columns
  *  - height: 16 rows
@@ -9,6 +9,7 @@
  *
  * Coordinates are in grid cells:
  *  - x in [0..11], y in [0..15], w,h >=1
+ * Each returned building includes a "name", rect.areaCells (in cells) and rect.area (scaled by cellScale^2).
  */
 
 /**
@@ -63,7 +64,7 @@ function defineSectors(
 }
 
 /**
- * Pick k unique random items from an array using Fisher-Yates.
+ * Pick k unique random items from an array using a partial Fisher-Yates shuffle.
  * @template T
  * @param {T[]} arr
  * @param {number} k
@@ -72,7 +73,6 @@ function defineSectors(
 function pickKRandom(arr, k) {
   if (k > arr.length) throw new Error("k cannot be greater than array length");
   const copy = arr.slice();
-  // Partial Fisher-Yates shuffle for first k elements
   for (let i = 0; i < k; i++) {
     const j = i + Math.floor(Math.random() * (copy.length - i));
     [copy[i], copy[j]] = [copy[j], copy[i]];
@@ -97,7 +97,6 @@ function placeBuildingInSector(sector, options = {}) {
   const usableH = Math.max(0, sector.h - 2 * margin);
 
   if (usableW < 1 || usableH < 1) {
-    // No space left after margins; fallback to minimum 1x1 at the sector origin
     return { x: sector.x, y: sector.y, w: 1, h: 1 };
   }
 
@@ -114,6 +113,40 @@ function placeBuildingInSector(sector, options = {}) {
 }
 
 /**
+ * Build a list of building names.
+ * Required: жилой дом, баня, теплица, сарай
+ * Plus random picks from: будка, клумба, пруд, бассейн to reach numBuildings.
+ * If numBuildings < 4, returns first numBuildings from the required list.
+ * If numBuildings > 8, extra names will repeat from the optional pool.
+ * @param {number} numBuildings
+ * @returns {string[]}
+ */
+function getBuildingNames(numBuildings) {
+  const required = ["жилой дом", "баня", "теплица", "сарай"];
+  const optionalPool = ["будка", "клумба", "пруд", "бассейн"];
+
+  if (numBuildings <= required.length) {
+    return required.slice(0, numBuildings);
+  }
+
+  const needOptional = numBuildings - required.length;
+
+  // If we need <= optionalPool.length, take unique random picks.
+  if (needOptional <= optionalPool.length) {
+    const picks = pickKRandom(optionalPool, needOptional);
+    return required.concat(picks);
+  }
+
+  // Need more than optional uniques: take all and then add random repeats.
+  const all = required.concat(optionalPool);
+  const extras = [];
+  while (all.length + extras.length < numBuildings) {
+    extras.push(optionalPool[Math.floor(Math.random() * optionalPool.length)]);
+  }
+  return all.concat(extras);
+}
+
+/**
  * Generate N buildings randomly placed in distinct sectors of the 3x3 layout.
  * @param {{
  *   gridWidth?: number,
@@ -126,11 +159,13 @@ function placeBuildingInSector(sector, options = {}) {
  *   margin?: number,
  *   fillSector?: boolean,
  *   cellScale?: number, // scale (price) of one grid cell side in units, e.g. 0.5..2; area uses cellScale^2
+ *   buildingNames?: string[] // optional explicit names; if omitted, generated as per rules above
  * }} [config]
  * @returns {Array<{
  *   sectorId:number,
  *   sectorCol:number,
  *   sectorRow:number,
+ *   name:string,
  *   rect:{x:number,y:number,w:number,h:number,areaCells:number,area:number}
  * }>}
  */
@@ -146,9 +181,10 @@ function generateBuildings(config = {}) {
     margin = 0,
     fillSector = false,
     cellScale = 2, // "цена деления клетки": 1 клетка = cellScale единиц по каждой оси
+    buildingNames,
   } = config;
 
-  if (typeof cellScale !== 'number' || !isFinite(cellScale) || cellScale <= 0) {
+  if (typeof cellScale !== "number" || !isFinite(cellScale) || cellScale <= 0) {
     throw new Error(`cellScale must be a positive number. Got: ${cellScale}`);
   }
 
@@ -159,8 +195,16 @@ function generateBuildings(config = {}) {
     );
   }
 
-  const chosen = pickKRandom(sectors, numBuildings);
-  return chosen.map((sector) => {
+  const names =
+    Array.isArray(buildingNames) && buildingNames.length
+      ? buildingNames.slice(0, numBuildings)
+      : getBuildingNames(numBuildings);
+
+  // Randomly choose sectors and also shuffle names for extra randomness
+  const chosenSectors = pickKRandom(sectors, numBuildings);
+  const shuffledNames = pickKRandom(names, names.length);
+
+  return chosenSectors.map((sector, i) => {
     const rect = placeBuildingInSector(sector, { minW, minH, margin, fillSector });
     const areaCells = rect.w * rect.h; // площадь в "клетках"
     const area = areaCells * cellScale * cellScale; // физическая площадь с учетом цены деления
@@ -168,6 +212,7 @@ function generateBuildings(config = {}) {
       sectorId: sector.id,
       sectorCol: sector.col,
       sectorRow: sector.row,
+      name: shuffledNames[i] ?? `Здание ${i + 1}`,
       rect: { ...rect, areaCells, area },
     };
   });
@@ -189,6 +234,7 @@ if (typeof module !== "undefined" && module.exports) {
     defineSectors,
     placeBuildingInSector,
     generateBuildings,
+    getBuildingNames,
   };
 }
 
@@ -197,6 +243,7 @@ if (typeof window !== "undefined") {
   window.defineSectors = defineSectors;
   window.placeBuildingInSector = placeBuildingInSector;
   window.generateBuildings = generateBuildings;
+  window.getBuildingNames = getBuildingNames;
 }
 
 // If run directly via Node: print demo output.
@@ -207,7 +254,7 @@ if (typeof require !== "undefined" && require.main === module) {
     minH: 1,
     margin: 0,
     fillSector: false,
-    cellScale: 2, // try 0.5 .. 2
+    cellScale: 1, // try 0.5 .. 2
   });
 
   console.log(buildings);
