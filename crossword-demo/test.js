@@ -10,11 +10,17 @@
  * Coordinates are in grid cells:
  *  - x in [0..11], y in [0..15], w,h >=1
  * Each returned building includes:
+ *  - id, role ("main" | "accessory"), optional groupId (for accessories grouped with "огород")
  *  - name
  *  - rect.areaCells (in cells)
  *  - rect.area (scaled by cellScale^2)
- * Rule: object named "огород" always fills its sector cell (ignores margin/min sizes).
+ * Special rules:
+ *  - Object named "огород" always fills its sector (ignores margin/min sizes).
+ *  - In the sector with "огород", place 1–2 extra accessory objects (from optional pool) inside the same sector.
+ *    Accessories do not overlap each other (best-effort).
  */
+
+const OPTIONAL_POOL = ["будка", "клумба", "пруд", "бассейн"];
 
 /**
  * Define 3x3 sectors on the grid.
@@ -85,6 +91,16 @@ function pickKRandom(arr, k) {
 }
 
 /**
+ * Random integer in [min, max] inclusive.
+ * @param {number} min
+ * @param {number} max
+ */
+function randInt(min, max) {
+  if (max < min) return min;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+/**
  * Place one building rectangle inside a sector.
  * @param {{x:number,y:number,w:number,h:number}} sector
  * @param {{minW?:number,minH?:number,margin?:number,fillSector?:boolean}} [options]
@@ -117,6 +133,70 @@ function placeBuildingInSector(sector, options = {}) {
 }
 
 /**
+ * Axis-aligned rectangle overlap test.
+ * @param {{x:number,y:number,w:number,h:number}} a
+ * @param {{x:number,y:number,w:number,h:number}} b
+ */
+function rectsOverlap(a, b) {
+  return !(
+    a.x + a.w <= b.x ||
+    b.x + b.w <= a.x ||
+    a.y + a.h <= b.y ||
+    b.y + b.h <= a.y
+  );
+}
+
+/**
+ * Place N non-overlapping accessory rectangles within a sector.
+ * Best-effort: tries up to `maxAttemptsPerRect` for each rect.
+ * @param {{x:number,y:number,w:number,h:number}} sector
+ * @param {number} count
+ * @param {{minW?:number,minH?:number,margin?:number,maxAttemptsPerRect?:number}} [options]
+ * @returns {{x:number,y:number,w:number,h:number}[]}
+ */
+function placeAccessoryRectsInSector(
+  sector,
+  count,
+  options = {}
+) {
+  const { minW = 1, minH = 1, margin = 0, maxAttemptsPerRect = 50 } = options;
+  const placed = [];
+
+  for (let i = 0; i < count; i++) {
+    let attempt = 0;
+    let rect = null;
+    while (attempt < maxAttemptsPerRect) {
+      const candidate = placeBuildingInSector(sector, {
+        minW,
+        minH,
+        margin,
+        fillSector: false,
+      });
+
+      let overlaps = false;
+      for (const p of placed) {
+        if (rectsOverlap(candidate, p)) {
+          overlaps = true;
+          break;
+        }
+      }
+      if (!overlaps) {
+        rect = candidate;
+        break;
+      }
+      attempt++;
+    }
+    // If couldn't find a non-overlapping spot, accept the last candidate (may overlap).
+    if (!rect) {
+      rect = placeBuildingInSector(sector, { minW, minH, margin, fillSector: false });
+    }
+    placed.push(rect);
+  }
+
+  return placed;
+}
+
+/**
  * Build a list of building names.
  * Required: жилой дом, баня, теплица, сарай, огород
  * Plus random picks from: будка, клумба, пруд, бассейн to reach numBuildings.
@@ -127,7 +207,7 @@ function placeBuildingInSector(sector, options = {}) {
  */
 function getBuildingNames(numBuildings) {
   const required = ["жилой дом", "баня", "теплица", "сарай", "огород"];
-  const optionalPool = ["будка", "клумба", "пруд", "бассейн"];
+  const optionalPool = OPTIONAL_POOL;
 
   if (numBuildings <= required.length) {
     return required.slice(0, numBuildings);
@@ -135,13 +215,11 @@ function getBuildingNames(numBuildings) {
 
   const needOptional = numBuildings - required.length;
 
-  // If we need <= optionalPool.length, take unique random picks.
   if (needOptional <= optionalPool.length) {
     const picks = pickKRandom(optionalPool, needOptional);
     return required.concat(picks);
   }
 
-  // Need more than optional uniques: take all and then add random repeats.
   const all = required.concat(optionalPool);
   const extras = [];
   while (all.length + extras.length < numBuildings) {
@@ -151,8 +229,32 @@ function getBuildingNames(numBuildings) {
 }
 
 /**
- * Generate N buildings randomly placed in distinct sectors of the 3x3 layout.
- * Special rule: any building with name "огород" fills its sector (full cell).
+ * Choose accessory names for the garden ("огород").
+ * Prefers unique picks from OPTIONAL_POOL, avoiding names already used as main names.
+ * Falls back to random with repetition if needed.
+ * @param {number} count
+ * @param {Set<string>} used
+ * @returns {string[]}
+ */
+function getAccessoryNames(count, used = new Set()) {
+  const available = OPTIONAL_POOL.filter((n) => !used.has(n));
+  const picks = [];
+  if (count <= available.length) {
+    return pickKRandom(available, count);
+  }
+  picks.push(...available);
+  while (picks.length < count) {
+    picks.push(OPTIONAL_POOL[Math.floor(Math.random() * OPTIONAL_POOL.length)]);
+  }
+  return picks.slice(0, count);
+}
+
+/**
+ * Generate buildings randomly placed in distinct sectors of the 3x3 layout.
+ * Special rules:
+ *  - any building with name "огород" fills its sector (full cell)
+ *  - and spawns 1..2 accessory objects (from OPTIONAL_POOL) within the same sector
+ *
  * @param {{
  *   gridWidth?: number,
  *   gridHeight?: number,
@@ -164,9 +266,14 @@ function getBuildingNames(numBuildings) {
  *   margin?: number,
  *   fillSector?: boolean,
  *   cellScale?: number, // scale (price) of one grid cell side in units, e.g. 0.5..2; area uses cellScale^2
- *   buildingNames?: string[] // optional explicit names; if omitted, generated as per rules above
+ *   buildingNames?: string[], // optional explicit main names; if omitted, generated as per rules above
+ *   gardenAccessoryRange?: [number, number], // inclusive min/max count of accessories for "огород" (default [1,2])
+ *   accessoryPlacementAttempts?: number // attempts per accessory to avoid overlaps (default 50)
  * }} [config]
  * @returns {Array<{
+ *   id:string,
+ *   role:'main'|'accessory',
+ *   groupId?:string,
  *   sectorId:number,
  *   sectorCol:number,
  *   sectorRow:number,
@@ -185,8 +292,10 @@ function generateBuildings(config = {}) {
     minH = 1,
     margin = 0,
     fillSector = false,
-    cellScale = 2, // "цена деления клетки": 1 клетка = cellScale единиц по каждой оси
+    cellScale = 1, // "цена деления клетки": 1 клетка = cellScale единиц по каждой оси
     buildingNames,
+    gardenAccessoryRange = [1, 2],
+    accessoryPlacementAttempts = 50,
   } = config;
 
   if (typeof cellScale !== "number" || !isFinite(cellScale) || cellScale <= 0) {
@@ -205,16 +314,20 @@ function generateBuildings(config = {}) {
       ? buildingNames.slice(0, numBuildings)
       : getBuildingNames(numBuildings);
 
-  // Randomly choose sectors and also shuffle names for extra randomness
   const chosenSectors = pickKRandom(sectors, numBuildings);
   const shuffledNames = pickKRandom(names, names.length);
 
-  return chosenSectors.map((sector, i) => {
+  /** @type {ReturnType<typeof generateBuildings>} */
+  const result = [];
+  let uid = 0;
+  const usedMainNames = new Set(shuffledNames);
+
+  for (let i = 0; i < chosenSectors.length; i++) {
+    const sector = chosenSectors[i];
     const name = shuffledNames[i] ?? `Здание ${i + 1}`;
+    const isGarden = name === "огород";
 
-    // Force "огород" to fill its entire sector
-    const fillThis = fillSector || name === "огород";
-
+    const fillThis = fillSector || isGarden;
     const rect = placeBuildingInSector(sector, {
       minW,
       minH,
@@ -222,27 +335,58 @@ function generateBuildings(config = {}) {
       fillSector: fillThis,
     });
 
-    const areaCells = rect.w * rect.h; // площадь в "клетках"
-    const area = areaCells * cellScale * cellScale; // физическая площадь с учетом цены деления
+    const areaCells = rect.w * rect.h;
+    const area = areaCells * cellScale * cellScale;
 
-    return {
+    const groupId = isGarden ? `garden:${sector.id}` : undefined;
+
+    // Push the main building
+    result.push({
+      id: `b${uid++}`,
+      role: "main",
+      groupId,
       sectorId: sector.id,
       sectorCol: sector.col,
       sectorRow: sector.row,
       name,
       rect: { ...rect, areaCells, area },
-    };
-  });
-}
+    });
 
-/**
- * Random integer in [min, max] inclusive.
- * @param {number} min
- * @param {number} max
- */
-function randInt(min, max) {
-  if (max < min) return min;
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+    // If garden, spawn accessories within the same sector
+    if (isGarden) {
+      const [accMin, accMax] = gardenAccessoryRange;
+      const accCount = Math.max(accMin | 0, Math.min(accMax | 0, accMax | 0));
+      const count = randInt(Math.min(accMin, accMax), Math.max(accMin, accMax));
+
+      const accessoryNames = getAccessoryNames(count, usedMainNames);
+
+      const accessoryRects = placeAccessoryRectsInSector(sector, count, {
+        minW,
+        minH,
+        margin,
+        maxAttemptsPerRect: accessoryPlacementAttempts,
+      });
+
+      for (let j = 0; j < count; j++) {
+        const accRect = accessoryRects[j];
+        const accAreaCells = accRect.w * accRect.h;
+        const accArea = accAreaCells * cellScale * cellScale;
+
+        result.push({
+          id: `b${uid++}`,
+          role: "accessory",
+          groupId,
+          sectorId: sector.id,
+          sectorCol: sector.col,
+          sectorRow: sector.row,
+          name: accessoryNames[j],
+          rect: { ...accRect, areaCells: accAreaCells, area: accArea },
+        });
+      }
+    }
+  }
+
+  return result;
 }
 
 // CommonJS exports (Node)
@@ -272,6 +416,7 @@ if (typeof require !== "undefined" && require.main === module) {
     margin: 0,
     fillSector: false,
     cellScale: 1, // try 0.5 .. 2
+    gardenAccessoryRange: [1, 2],
   });
 
   console.log(buildings);
