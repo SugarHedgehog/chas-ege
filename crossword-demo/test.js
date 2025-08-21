@@ -9,7 +9,11 @@
  *
  * Coordinates are in grid cells:
  *  - x in [0..11], y in [0..15], w,h >=1
- * Each returned building includes a "name", rect.areaCells (in cells) and rect.area (scaled by cellScale^2).
+ * Each returned building includes:
+ *  - name
+ *  - rect.areaCells (in cells)
+ *  - rect.area (scaled by cellScale^2)
+ * Rule: object named "огород" always fills its sector cell (ignores margin/min sizes).
  */
 
 /**
@@ -114,15 +118,15 @@ function placeBuildingInSector(sector, options = {}) {
 
 /**
  * Build a list of building names.
- * Required: жилой дом, баня, теплица, сарай
+ * Required: жилой дом, баня, теплица, сарай, огород
  * Plus random picks from: будка, клумба, пруд, бассейн to reach numBuildings.
- * If numBuildings < 4, returns first numBuildings from the required list.
- * If numBuildings > 8, extra names will repeat from the optional pool.
+ * If numBuildings < 5, returns first numBuildings from the required list.
+ * If numBuildings > 9, extra names will repeat from the optional pool.
  * @param {number} numBuildings
  * @returns {string[]}
  */
 function getBuildingNames(numBuildings) {
-  const required = ["жилой дом", "баня", "теплица", "сарай"];
+  const required = ["жилой дом", "баня", "теплица", "сарай", "огород"];
   const optionalPool = ["будка", "клумба", "пруд", "бассейн"];
 
   if (numBuildings <= required.length) {
@@ -148,6 +152,7 @@ function getBuildingNames(numBuildings) {
 
 /**
  * Generate N buildings randomly placed in distinct sectors of the 3x3 layout.
+ * Special rule: any building with name "огород" fills its sector (full cell).
  * @param {{
  *   gridWidth?: number,
  *   gridHeight?: number,
@@ -205,14 +210,26 @@ function generateBuildings(config = {}) {
   const shuffledNames = pickKRandom(names, names.length);
 
   return chosenSectors.map((sector, i) => {
-    const rect = placeBuildingInSector(sector, { minW, minH, margin, fillSector });
+    const name = shuffledNames[i] ?? `Здание ${i + 1}`;
+
+    // Force "огород" to fill its entire sector
+    const fillThis = fillSector || name === "огород";
+
+    const rect = placeBuildingInSector(sector, {
+      minW,
+      minH,
+      margin,
+      fillSector: fillThis,
+    });
+
     const areaCells = rect.w * rect.h; // площадь в "клетках"
     const area = areaCells * cellScale * cellScale; // физическая площадь с учетом цены деления
+
     return {
       sectorId: sector.id,
       sectorCol: sector.col,
       sectorRow: sector.row,
-      name: shuffledNames[i] ?? `Здание ${i + 1}`,
+      name,
       rect: { ...rect, areaCells, area },
     };
   });
