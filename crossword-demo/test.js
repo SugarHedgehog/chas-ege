@@ -24,7 +24,16 @@
  * Roads:
  *  - buildRoadNetwork connects all main buildings via a minimal spanning tree (by Manhattan metric),
  *    routing each edge with BFS on the 12x16 grid while avoiding buildings (both main and accessory).
- *  - generateMap returns both buildings and roads.
+ *  - generateMap returns buildings, roads, gates.
+ *
+ * Tile platforms:
+ *  - For bottom-row sectors S6 (left) and S8 (right), create a filled tile platform on the bottom row (y = sum of first two rows).
+ *    The platform extends:
+ *      * if both S6 and S8 main buildings exist: from right edge of the S6 building to left edge of the S8 building
+ *      * if only S6 exists: from right edge of the S6 building to the far right grid edge
+ *      * if only S8 exists: from the far left grid edge to the left edge of the S8 building
+ *  - The platform is not a building (it may cross the banned S7 sector); it's an independent area object.
+ *  - Each platform has areaCells (w*h) and area (scaled by cellScale^2).
  */
 
 const OPTIONAL_POOL = ["будка", "клумба", "пруд", "бассейн"];
@@ -720,7 +729,6 @@ function buildRoadNetwork({ buildings, gridWidth, gridHeight }) {
       path = [...l1, ...l2.slice(1)];
     }
 
-    // Mark road cells as passable (they already are), allowing reuse
     roads.push({
       from: fromId,
       to: toId,
@@ -755,19 +763,94 @@ function lineBetween(a, b, gridW, gridH) {
   return [{ x: a.x, y: a.y }, ...path];
 }
 
+/* =========================
+   Tile platforms (S6/S8 bottom row)
+   ========================= */
+
 /**
- * High-level helper: generate both buildings and roads connecting all main buildings.
+ * Compute tile platforms near sector 6 (left) and/or sector 8 (right) on the bottom row.
+ * Rules:
+ *  - If main buildings exist in both S6 and S8: platform spans from right edge of S6 rect to left edge of S8 rect.
+ *  - If only S6 exists: platform spans from right edge of S6 rect to the right grid boundary.
+ *  - If only S8 exists: platform spans from the left grid boundary to the left edge of S8 rect.
+ *  - If neither exists: no platform.
+ *  - Platform y equals start of bottom sector row; height equals bottom row height.
+ *  - Platforms are not buildings; they may cross banned sectors.
+ *
+ * @param {{
+ *   buildings: ReturnType<typeof generateBuildings>,
+ *   gridWidth: number,
+ *   rowsHeights: number[],
+ *   cellScale: number
+ * }} params
+ * @returns {Array<{
+ *   id:string,
+ *   kind:'tile-platform',
+ *   attachedTo:{ leftSector?:number, rightSector?:number },
+ *   rect:{x:number,y:number,w:number,h:number,areaCells:number,area:number}
+ * }>}
+ */
+function computeTilePlatforms({ buildings, gridWidth, rowsHeights, cellScale }) {
+  const platforms = [];
+
+  const y0 = (rowsHeights[0] || 0) + (rowsHeights[1] || 0);
+  const h = rowsHeights[2] || 0;
+
+  const mainBySector = (sid) => buildings.find(b => b.role === 'main' && b.sectorId === sid);
+  const b6 = mainBySector(6);
+  const b8 = mainBySector(8);
+
+  let xStart = null;
+  let xEnd = null;
+  let attached = {};
+
+  if (b6 && b8) {
+    xStart = b6.rect.x + b6.rect.w;
+    xEnd = b8.rect.x;
+    attached = { leftSector: 6, rightSector: 8 };
+  } else if (b6 && !b8) {
+    xStart = b6.rect.x + b6.rect.w;
+    xEnd = gridWidth;
+    attached = { leftSector: 6 };
+  } else if (!b6 && b8) {
+    xStart = 0;
+    xEnd = b8.rect.x;
+    attached = { rightSector: 8 };
+  } else {
+    return platforms; // none
+  }
+
+  if (xEnd > xStart && h > 0) {
+    const rect = { x: xStart, y: y0, w: xEnd - xStart, h };
+    const areaCells = rect.w * rect.h;
+    const area = areaCells * cellScale * cellScale;
+    platforms.push({
+      id: `platform:${xStart}-${xEnd}@y${y0}`,
+      kind: 'tile-platform',
+      attachedTo: attached,
+      rect: { ...rect, areaCells, area },
+    });
+  }
+
+  return platforms;
+}
+
+/**
+ * High-level helper: generate buildings, roads and platforms.
  * @param {Parameters<typeof generateBuildings>[0] & { withRoads?: boolean }} config
  * @returns {{
  *   buildings: ReturnType<typeof generateBuildings>,
  *   roads: Array<{ from:string, to:string, cells:Array<{x:number,y:number}>, length:number }>,
- *   gates: Record<string, {x:number,y:number}>
+ *   gates: Record<string, {x:number,y:number}>,
+ *   platforms: ReturnType<typeof computeTilePlatforms>
  * }}
  */
 function generateMap(config = {}) {
   const {
     gridWidth = 12,
     gridHeight = 16,
+    rowsHeights = [6, 6, 4],
+    cellScale = 1,
   } = config;
 
   const buildings = generateBuildings(config);
@@ -777,7 +860,14 @@ function generateMap(config = {}) {
     gridHeight,
   });
 
-  return { buildings, roads, gates };
+  const platforms = computeTilePlatforms({
+    buildings,
+    gridWidth,
+    rowsHeights,
+    cellScale,
+  });
+
+  return { buildings, roads, gates, platforms };
 }
 
 /* =========================
@@ -794,6 +884,8 @@ if (typeof module !== "undefined" && module.exports) {
     // Roads:
     buildRoadNetwork,
     generateMap,
+    // Platforms:
+    computeTilePlatforms,
   };
 }
 
@@ -806,11 +898,13 @@ if (typeof window !== "undefined") {
   // Roads:
   window.buildRoadNetwork = buildRoadNetwork;
   window.generateMap = generateMap;
+  // Platforms:
+  window.computeTilePlatforms = computeTilePlatforms;
 }
 
 // If run directly via Node: print demo output.
 if (typeof require !== "undefined" && require.main === module) {
-  const { buildings, roads } = generateMap({
+  const { buildings, roads, platforms } = generateMap({
     numBuildings: 6,
     minW: 1,
     minH: 1,
@@ -821,5 +915,5 @@ if (typeof require !== "undefined" && require.main === module) {
     bannedSectors: [7],
   });
 
-  console.log(JSON.stringify({ buildings, roads }, null, 2));
+  console.log(JSON.stringify({ buildings, roads, platforms }, null, 2));
 }

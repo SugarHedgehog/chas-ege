@@ -2,8 +2,9 @@
  * Render script for index.html:
  * - draws grid, sector labels, buildings
  * - builds and draws roads connecting all main buildings
+ * - draws tile platforms (near sectors 6/8) with area info
  * Relies on functions exposed by test.js:
- *   - Prefer window.generateMap(); fallback to window.generateBuildings() + window.buildRoadNetwork()
+ *   - Prefer window.generateMap(); fallback to window.generateBuildings() + window.buildRoadNetwork() (+ window.computeTilePlatforms())
  */
 
 (function () {
@@ -209,12 +210,52 @@
     ctx.restore();
   }
 
-  function formatOutput(buildings, roads) {
+  // Draw tiled platforms
+  function drawTilePlatforms(ctx, platforms, cellSize) {
+    if (!platforms || !platforms.length) return;
+
+    const tileA = '#d7ccc8'; // light stone
+    const tileB = '#bcaaa4'; // darker stone
+    const edge = '#8d6e63';
+
+    ctx.save();
+    for (const r of platforms) {
+      for (let yy = r.rect.y; yy < r.rect.y + r.rect.h; yy++) {
+        for (let xx = r.rect.x; xx < r.rect.x + r.rect.w; xx++) {
+          const px = xx * cellSize;
+          const py = yy * cellSize;
+          const useA = ((xx + yy) & 1) === 0;
+          ctx.fillStyle = useA ? tileA : tileB;
+          ctx.fillRect(px, py, cellSize, cellSize);
+        }
+      }
+      // Outline the platform
+      ctx.strokeStyle = edge;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(
+        r.rect.x * cellSize + 0.5,
+        r.rect.y * cellSize + 0.5,
+        r.rect.w * cellSize - 1,
+        r.rect.h * cellSize - 1
+      );
+    }
+    ctx.restore();
+  }
+
+  function formatOutput(buildings, roads, platforms) {
     const lines = [];
     lines.push('Main buildings:');
     for (const b of buildings.filter(x => x.role === 'main')) {
       const r = b.rect;
       lines.push(`- ${b.name} [S${b.sectorId} r${b.sectorRow} c${b.sectorCol}] x:${r.x} y:${r.y} w:${r.w} h:${r.h} area:${r.area}`);
+    }
+    if (platforms && platforms.length) {
+      lines.push('');
+      lines.push('Tile platforms:');
+      for (const p of platforms) {
+        const r = p.rect;
+        lines.push(`- x:${r.x} y:${r.y} w:${r.w} h:${r.h} area:${r.area} (cells:${r.areaCells})`);
+      }
     }
     if (roads && roads.length) {
       lines.push('');
@@ -236,9 +277,10 @@
     let buildings = [];
     let roads = [];
     let gates = {};
+    let platforms = [];
 
     if (typeof window.generateMap === 'function') {
-      const { buildings: b, roads: r, gates: g } = window.generateMap({
+      const { buildings: b, roads: r, gates: g, platforms: pf } = window.generateMap({
         gridWidth: GRID_W,
         gridHeight: GRID_H,
         colsParts: COLS_PARTS,
@@ -255,8 +297,9 @@
       buildings = b;
       roads = r;
       gates = g || {};
+      platforms = pf || [];
     } else {
-      // Fallback to generateBuildings + buildRoadNetwork
+      // Fallback to generateBuildings + buildRoadNetwork + computeTilePlatforms (if available)
       if (typeof window.generateBuildings !== 'function') {
         console.error('generateMap or generateBuildings is required from test.js');
         return;
@@ -285,8 +328,19 @@
         roads = res.roads;
         gates = res.gates || {};
       } else {
-        // No roads support available
         roads = [];
+      }
+
+      if (typeof window.computeTilePlatforms === 'function') {
+        platforms = window.computeTilePlatforms({
+          buildings,
+          gridWidth: GRID_W,
+          rowsHeights: ROWS,
+          cellScale: 1,
+        }) || [];
+      } else {
+        // Minimal inline fallback (no area scaling beyond cells)
+        platforms = computePlatformsInline(buildings);
       }
     }
 
@@ -298,13 +352,47 @@
     const ctx = setupCanvas(canvas, cssW, cssH);
 
     drawGrid(ctx, cellSize);
+    drawTilePlatforms(ctx, platforms, cellSize); // platforms under roads/buildings
     drawRoads(ctx, roads, gates, cellSize);
     drawBuildings(ctx, buildings, cellSize);
     drawSectorLabels(ctx, cellSize);
 
     // Output
     const output = document.getElementById('output');
-    output.textContent = formatOutput(buildings, roads);
+    output.textContent = formatOutput(buildings, roads, platforms);
+  }
+
+  // Simple inline platforms calculator in case computeTilePlatforms isn't available
+  function computePlatformsInline(buildings) {
+    const y0 = (ROWS[0] || 0) + (ROWS[1] || 0);
+    const h = ROWS[2] || 0;
+    const mainBySector = (sid) => buildings.find(b => b.role === 'main' && b.sectorId === sid);
+    const b6 = mainBySector(6);
+    const b8 = mainBySector(8);
+
+    let xStart = null, xEnd = null;
+    if (b6 && b8) {
+      xStart = b6.rect.x + b6.rect.w;
+      xEnd = b8.rect.x;
+    } else if (b6 && !b8) {
+      xStart = b6.rect.x + b6.rect.w;
+      xEnd = GRID_W;
+    } else if (!b6 && b8) {
+      xStart = 0;
+      xEnd = b8.rect.x;
+    } else {
+      return [];
+    }
+    if (xEnd > xStart && h > 0) {
+      const w = xEnd - xStart;
+      return [{
+        id: `platform:${xStart}-${xEnd}@y${y0}`,
+        kind: 'tile-platform',
+        attachedTo: {},
+        rect: { x: xStart, y: y0, w, h, areaCells: w * h, area: w * h }
+      }];
+    }
+    return [];
   }
 
   function css(varName, fallback) {
