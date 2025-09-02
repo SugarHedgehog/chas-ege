@@ -46,5 +46,5 @@
 				'$\\' + givenFn + ' ' + angle + '=' + givenSgn + value.toTex() + '$ и $' + interval + '$.',
 			answers: answ,
 		});
-	}, 10000);
+	}, 1000);
 })();
