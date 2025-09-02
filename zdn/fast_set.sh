@@ -9,14 +9,21 @@
 array=(
 #1
 26740
-#2
-77394
+#2 same_base
+'77394 same_base same_base'
+#2 diff_base
+'77394 diff_base diff_base'
+#2 pow_base
+'77394 pow_base pow_base'
 #3
 5
 #4
 6
 #6
 8
+#7
+'2674101 positive_degree positive_degree'
+'2674101 negative_degree negative_degree'
 #9
 4
 #11
@@ -29,16 +36,24 @@ array=(
 26857
 #24
 26856
-#31
-26848
+#31 a
+'26848 integer integer' 
+#31 b
+'26848 not_integer not_integer'
 #33
 2684901
 #39
 26859
 #42
 26759
-#45
-26777
+#45 a
+'26777 sin_cos sin cos'
+#45 b
+'26777 cos_sin cos sin'
+#45 c
+'26777 tg_sin tg sin'
+#45 d
+'26777 tg_cos tg cos'
 #47
 316350
 #48
@@ -52,7 +67,7 @@ array=(
 #52
 245171
 #54
-11
+'11 integer integer'
 #55
 26755
 )
