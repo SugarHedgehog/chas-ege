@@ -1,15 +1,21 @@
 (function () {
     retryWhileError(function () {
         'use strict';
+        
+        let key = '245171';
+		let preference = ['sin', 'cos'];
+		let rand = getSelectedPreferenceFromList(key, preference);
+        
         let base = sl(2, 3);
         let sqrt1 = base.pow(sl(1, 5));
         let sqrt2 = base.pow(sl(1, 5));
         let frac = [[1, 7, 13].iz(), [8, 12].iz()];
 
         NAtask.setEvaluationTask({
-            expr: ['sqrt(' + sqrt2 + ')', 'sqrt(' + sqrt1 + ')' + ['sin', 'cos'].iz() + 'pow((' + frac[0] + 'pi)/(' + frac[1] + '),2)'].joinPlusMinus(),
+            expr: ['sqrt(' + sqrt2 + ')', 'sqrt(' + sqrt1 + ')' + ['sin', 'cos'][rand] + 'pow((' + frac[0] + 'pi)/(' + frac[1] + '),2)'].joinPlusMinus(),
             //forbiddenAnswers: [0],
             authors: ['Суматохина Александра'],
+            preference: preference,
         });
     }, 10000);
 })();
