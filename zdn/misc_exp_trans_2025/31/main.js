@@ -1,6 +1,6 @@
 window.nomer=[
-	11,
+	245171,
 ].iz()
-window.comment='11 integer';
-window.nabor.preferences['11'] = ['integer'];
+window.comment='245171 cos';
+window.nabor.preferences['245171'] = ['cos'];
 
