@@ -1,4 +1,4 @@
-(function () {
+  (function () {
     retryWhileError(function () {
         'use strict';
         
