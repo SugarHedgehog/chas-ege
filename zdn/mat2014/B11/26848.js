@@ -26,7 +26,7 @@
 		genAssert((c + '').length < 5, '');
 
 		NAtask.setTask({
-			text: 'Найдите значение выражения $\\log_{' + bText + '}{' + a + '} - \\log_{' + bText + '}{' + c + '} $',
+			text: 'Найдите значение выражения: $$\\log_{' + bText + '}{' + a + '} - \\log_{' + bText + '}{' + c + '} $$',
 			answers: answ,
 		}, {
 			tags: {
