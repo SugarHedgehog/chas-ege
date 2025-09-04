@@ -3,15 +3,17 @@
 		NAinfo.requireApiVersion(0, 2);
 		'use strict';
 		let key = '26755';
-		let preference = ['integer', 'not_integer'];
-		let rand = getSelectedPreferenceFromList(key, preference);
+		let preference1 = ['integer', 'not_integer'];
+		let preference2 = ['double_angle', 'reduction_formula'];
+		let rand1 = getSelectedPreferenceFromList(key, preference1);
+		let rand2 = getSelectedPreferenceFromList(key, preference2);
 
 		var a = slKrome([90, 180, 270], 1, 359);
 		var at = '{' + a.ts() + '^\\circ}';
-		var b = [sl(2, 400), sl(2, 400)+sl(1, 9)/10][rand].pm();
+		var b = [sl(2, 400), sl(2, 400)+sl(1, 9)/10][rand1].pm();
 		var c = (2).pow(sl(-2, 4)) * (5).pow(sl(-2, 4)).pm();
 		
-		if(rand==0){
+		if(rand1==0){
 			genAssertAlmostInteger(c);
 		}
 
@@ -27,7 +29,7 @@
 				'\\sin' + (360 + 2 * a).ts() + '^\\circ',
 				'\\cos' + (90 - 2 * a).negativeBrackets() + '^\\circ',
 				'\\cos' + (450 - 2 * a).negativeBrackets() + '^\\circ',
-			].iz()
+			][[0, sl(1,3)][rand2]]
 			.replace(')^\\circ', '^\\circ)'); // A sever co-style! TODO!
 
 		var y, answer;
@@ -51,6 +53,7 @@
 				'drs': 0,
 				'tri': 1,
 			},
+			preference: [preference1, preference2],
 		});
 	}, 1000);
 })();
