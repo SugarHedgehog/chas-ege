@@ -1,5 +1,6 @@
 window.nomer=[
-	2684901,
+	26848,
 ].iz()
-window.comment='2684901';
+window.comment='26848 not integer';
+window.nabor.preferences['26848'] = ['not_integer'];
 

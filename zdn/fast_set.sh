@@ -38,12 +38,12 @@ array=(
 26857
 #24
 26856
+#33
+2684901
 #31 a
 '26848 integer integer' 
 #31 b
 '26848 not_integer not_integer'
-#33
-2684901
 #39
 26859
 #42
