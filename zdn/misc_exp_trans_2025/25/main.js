@@ -1,5 +1,6 @@
 window.nomer=[
-	316350,
+	26777,
 ].iz()
-window.comment='316350';
+window.comment='26777 tg cos';
+window.nabor.preferences['26777'] = ['tg','cos'];
 

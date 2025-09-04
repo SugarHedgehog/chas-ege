@@ -1,5 +1,5 @@
 window.nomer=[
-	508966,
+	316350,
 ].iz()
-window.comment='508966';
+window.comment='316350';
 

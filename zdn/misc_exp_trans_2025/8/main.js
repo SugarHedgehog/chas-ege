@@ -1,6 +1,5 @@
 window.nomer=[
-	2674101,
+	8,
 ].iz()
-window.comment='2674101 positive degree';
-window.nabor.preferences['2674101'] = ['positive_degree'];
+window.comment='8';
 

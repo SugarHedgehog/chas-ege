@@ -1,5 +1,6 @@
 window.nomer=[
-	26755,
+	11,
 ].iz()
-window.comment='26755';
+window.comment='11 integer double angle';
+window.nabor.preferences['11'] = ['integer','double_angle'];
 

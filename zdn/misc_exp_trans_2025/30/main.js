@@ -1,6 +1,5 @@
 window.nomer=[
-	245171,
+	245170,
 ].iz()
-window.comment='245171 sin';
-window.nabor.preferences['245171'] = ['sin'];
+window.comment='245170';
 
