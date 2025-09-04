@@ -15,8 +15,10 @@ array=(
 '77394 diff_base diff_base'
 #2 pow_base
 '77394 pow_base pow_base'
-#3
-5
+#3 same_base
+'5 same_base same_base'
+#3 diff_base
+'5 diff_base diff_base'
 #4
 6
 #6
@@ -68,8 +70,8 @@ array=(
 '245171 sin sin'
 #52 ba
 '245171 cos cos'
-#54
-'11 integer integer'
+#54 integer double_angle
+'11 integer_double_angle integer double_angle'
 #55
 26755
 )
