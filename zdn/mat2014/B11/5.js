@@ -1,5 +1,6 @@
 (function() {
-	'use strict';
+	retryWhileError(function() {
+		'use strict';
 	let key = '26738';
 	let preference = ['same_base', 'diff_base'];
 	let rand = getSelectedPreferenceFromList(key, preference);
@@ -13,13 +14,15 @@
 		m = [
 			[
 				a.pow(b).toFixedLess(5).toStandart(),
-				c.toFixedLess(5).toStandart()
+				c.ts()
 			],
 			[
 				a.pow(d).toFixedLess(5).toStandart(),
-				f.toFixedLess(5).toStandart()
+				f.ts()
 			],
 		].shuffle();
+		
+	genAssertZ1000(f);
 
 	chas2.task.setTask({
 		text: ('Найдите значение выражения $$' + m[0][0] + '^{' + m[0][1] + '}\\cdot' + m[1][0] + '^{' + m[1][1] + '}$$').plusminus(),
@@ -30,8 +33,8 @@
 			'drs': 1,
 			'tri': 0,
 		},
-	});
-
+		});
+	},100);
 })();
 
 //https://math-ege.sdamgia.ru/problem?id=26738
