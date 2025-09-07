@@ -59,7 +59,7 @@
 				'drs': 0,
 				'tri': 1,
 			},
-			preference: [preference1, preference2],
+			preference: [preference1, preference2, preference3],
 		});
 	}, 1000);
 })();
