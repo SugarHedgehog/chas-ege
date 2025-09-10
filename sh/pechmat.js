@@ -18,6 +18,7 @@ var variantsGenerated = [];
 var generatedTasks = {};
 var tasksInLaTeX = {};
 var preparedImages = {};
+var crosswordAnswers = {};
 
 var options = {};
 
@@ -67,6 +68,7 @@ function readOptions() {
 	if ($('#htmlcss').is(':checked')) {
 		MathJax.Hub.setRenderer('HTML-CSS');
 	}
+	options.crosswordAnswers = $('#crosswordAnswers').is(':checked');
 }
 
 
@@ -208,6 +210,11 @@ function appendVariantAnswersEnding() {
 function endCurrentVariant() {
 	nV--;
 	nZ = 0;
+
+	if (options.crosswordAnswers && crosswordAnswers[variantNumber]) {
+        appendCrosswordAnswers();
+    }
+
 	appendVariantTasksEnding();
 	appendVariantAnswersEnding();
 	if(options.uniqueAnswersOnlyInOneVariant){
@@ -268,6 +275,21 @@ function createHtmlForTask(nazvzad) {
 	vopr.taskNumber = nZ;
 	vopr.taskCategory = nazvzad;
 	vopr.variantNumber = variantNumber;
+
+	if (options.crosswordAnswers && window.vopr.ver) {
+        crosswordAnswers[variantNumber] = crosswordAnswers[variantNumber] || {};
+        crosswordAnswers[variantNumber][nazvzad] = window.vopr.ver.map(answer => {
+            // Преобразуем ответ в строковый массив
+            if (typeof answer === 'number') {
+                return answer.toString().split('');
+            } else if (typeof answer === 'string') {
+                return answer.split('');
+            } else if (Array.isArray(answer)) {
+                return answer.map(item => item.toString());
+            }
+            return [answer.toString()];
+        });
+    }
 
 	return {
 		txt:
@@ -496,6 +518,32 @@ function getAnswersSubtableLaTeX(cellsInFirstRow, answersParsedToTeX) {
 			'\n\n\n';
 	}
 	return res;
+}
+
+function appendCrosswordAnswers() {
+    const variantAnswers = crosswordAnswers[variantNumber];
+    let crosswordHTML = '<div class="crossword-answers" style="margin: 20px 0; padding: 10px; border: 1px solid #ccc;">';
+    crosswordHTML += '<h3>Ответы для кроссворда (Вариант ' + options.variantPrefix + variantNumber + ')</h3>';
+    crosswordHTML += '<table class="crossword-table" style="width: 100%; border-collapse: collapse;">';
+    
+    for (const [taskName, answers] of Object.entries(variantAnswers)) {
+        crosswordHTML += '<tr>';
+        crosswordHTML += '<td style="padding: 5px; border: 1px solid #eee; font-weight: bold;">' + taskName + '</td>';
+        
+        answers.forEach((answerArray, index) => {
+            crosswordHTML += '<td style="padding: 5px; border: 1px solid #eee; font-family: monospace;">';
+            if (index > 0) crosswordHTML += ' или ';
+            crosswordHTML += answerArray.join(' | ');
+            crosswordHTML += '</td>';
+        });
+        
+        crosswordHTML += '</tr>';
+    }
+    
+    crosswordHTML += '</table></div>';
+    
+    // Добавляем в конец варианта
+    strVopr += crosswordHTML;
 }
 
 
