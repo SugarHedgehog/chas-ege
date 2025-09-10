@@ -512,7 +512,7 @@ function createLaTeXbunchAnswers(variantN) {
 		var tdCells = row.getElementsByTagName('td');
 		if (tdCells.length) {
 			//TODO: reverse-decode LaTeX from MathJax
-			answersParsedToTeX.push(Array.from(tdCells).map(x => x.innerHTML).join(' & ') + '\\\\');
+			answersParsedToTeX.push(Array.from(tdCells).map(x => x.innerHTML).join(' & '));
 			if (count % 50 == 0 && count < kZ)
 				answersParsedToTeX.push('\\end{tabular}&\\begin{tabular}[t]{' + (new Array(cellsInFirstRow)).fill('|l').join('') + '|' + '}')
 		}
