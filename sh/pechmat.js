@@ -19,208 +19,436 @@ var generatedTasks = {};
 var tasksInLaTeX = {};
 var preparedImages = {};
 var crosswordAnswers = {};
+var crosswordData = {}; // Добавляем для хранения данных кроссворда
 
 var options = {};
 
-
 var largeFontStyle = 'div.z{font-size:128%}\n .MathJax_SVG_Display {font-size: 128%;}'.vTag('style');
 
+// Функция для создания данных кроссворда из массива ответов
+function createCrosswordDataFromAnyArray(flatArray) {
+    // Фильтруем только допустимые символы: цифры, запятые, минусы, точки (для десятичных)
+    const filteredAnswers = flatArray.map(answer => {
+        // Преобразуем в строку и оставляем только разрешенные символы
+        const strAnswer = answer.toString();
+        let cleanedAnswer = '';
+        
+        for (let i = 0; i < strAnswer.length; i++) {
+            const char = strAnswer[i];
+            // Разрешаем: цифры (0-9), запятая, минус, точка, пробел
+            if (/[0-9,-.\s]/.test(char)) {
+                cleanedAnswer += char;
+            }
+        }
+        
+        return cleanedAnswer;
+    }).filter(answer => answer.length > 0); // Убираем пустые ответы
+
+    return filteredAnswers.map(answer => ({
+        clue: "", // Пустая строка для вопроса
+        answer: answer // Очищенный ответ
+    }));
+}
+
+// Функция для создания HTML таблицы кроссворда БЕЗ ответов (только сетка с номерами)
+function createCrosswordTableWithoutAnswers(crosswordData) {
+    if (!crosswordData || !crosswordData.table) return '';
+    
+    let crosswordHTML = '<div class="crossword-container" style="margin: 20px 0; page-break-inside: avoid;">';
+    crosswordHTML += '<h3>Кроссворд для заполнения (без ответов)</h3>';
+    crosswordHTML += '<table class="crossword-table" style="border-collapse: collapse; border: 2px solid #000; background-color: white; margin: 0 auto;">';
+    
+    // Создаем массив для хранения номеров ячеек
+    const cellNumbers = Array(crosswordData.rows).fill().map(() =>
+        Array(crosswordData.cols).fill(0)
+    );
+
+    // Помечаем ячейки с началами слов (с проверкой границ)
+    crosswordData.result.forEach(word => {
+        const x = word.startx - 1;
+        const y = word.starty - 1;
+        
+        // Проверяем, что координаты в пределах массива
+        if (y >= 0 && y < crosswordData.rows && x >= 0 && x < crosswordData.cols) {
+            cellNumbers[y][x] = word.position;
+        }
+    });
+
+    // Создаем строки таблицы
+    for (let y = 0; y < crosswordData.rows; y++) {
+        crosswordHTML += '<tr>';
+        for (let x = 0; x < crosswordData.cols; x++) {
+            const cellValue = crosswordData.table[y][x];
+            let cellContent = '';
+            let cellStyle = 'width: 35px; height: 35px; text-align: center; vertical-align: middle; position: relative; font-size: 16px;';
+            
+            if (cellValue === '-' || cellValue === '' || cellValue === undefined) {
+                // Пустая клетка - серая обводка, белый фон
+                cellStyle += ' background-color: white; border: 1px solid #ccc;';
+                cellContent = '&nbsp;'; // Неразрывный пробел
+            } else {
+                // Клетка должна содержать ответ, но мы его скрываем - черная обводка
+                cellStyle += ' background-color: white; border: 2px solid #000;';
+                
+                // Добавляем номер ячейки, если это начало слова (ВСЕГДА, независимо от содержимого)
+                if (cellNumbers[y] && cellNumbers[y][x] > 0) {
+                    cellContent = '<span style="position: absolute; top: 2px; left: 2px; font-size: 10px; font-weight: normal; color: #000;">' + 
+                                 cellNumbers[y][x] + '</span>';
+                } else {
+                    cellContent = '&nbsp;';
+                }
+            }
+            
+            crosswordHTML += '<td style="' + cellStyle + '">' + cellContent + '</td>';
+        }
+        crosswordHTML += '</tr>';
+    }
+    
+    crosswordHTML += '</table>';
+    
+    // Добавляем список вопросов (пустые поля для заполнения)
+    crosswordHTML += '<div style="margin-top: 20px;">';
+    crosswordHTML += '<h4>Вопросы для заполнения:</h4>';
+    crosswordHTML += '<ol>';
+    
+    crosswordData.result.forEach((word, index) => {
+        // Проверяем, что ответ содержит только разрешенные символы
+        let validAnswer = true;
+        for (let i = 0; i < word.answer.length; i++) {
+            if (!/[0-9,-.]/.test(word.answer[i])) {
+                validAnswer = false;
+                break;
+            }
+        }
+        
+        if (validAnswer) {
+            crosswordHTML += '<li style="margin-bottom: 10px;">' + 
+                           '____________________' + // Пустая строка для ответа
+                           ' (' + (word.orientation === 'across' ? 'по горизонтали' : 'по вертикали') + 
+                           ', длина: ' + word.answer.length + ' символов)' +
+                           '</li>';
+        }
+    });
+    
+    crosswordHTML += '</ol>';
+    crosswordHTML += '</div>';
+    crosswordHTML += '</div>';
+    
+    return crosswordHTML;
+}
+
+// Функция для создания HTML таблицы кроссворда (с ответами) - тоже исправляем
+function createCrosswordTable(crosswordData) {
+    if (!crosswordData || !crosswordData.table) return '';
+    
+    let crosswordHTML = '<div class="crossword-container" style="margin: 20px 0; page-break-inside: avoid;">';
+    crosswordHTML += '<h3>Кроссворд из ответов</h3>';
+    crosswordHTML += '<table class="crossword-table" style="border-collapse: collapse; border: 2px solid #000; background-color: white; margin: 0 auto;">';
+    
+    // Создаем массив для хранения номеров ячеек
+    const cellNumbers = Array(crosswordData.rows).fill().map(() =>
+        Array(crosswordData.cols).fill(0)
+    );
+
+    // Помечаем ячейки с началами слов (с проверкой границ)
+    crosswordData.result.forEach(word => {
+        const x = word.startx - 1;
+        const y = word.starty - 1;
+        
+        // Проверяем, что координаты в пределах массива
+        if (y >= 0 && y < crosswordData.rows && x >= 0 && x < crosswordData.cols) {
+            cellNumbers[y][x] = word.position;
+        }
+    });
+
+    // Создаем строки таблицы
+    for (let y = 0; y < crosswordData.rows; y++) {
+        crosswordHTML += '<tr>';
+        for (let x = 0; x < crosswordData.cols; x++) {
+            const cellValue = crosswordData.table[y][x];
+            let cellContent = '';
+            let cellStyle = 'width: 35px; height: 35px; text-align: center; vertical-align: middle; position: relative; font-size: 16px;';
+            
+            if (cellValue === '-' || cellValue === '' || cellValue === undefined) {
+                // Пустая клетка - серая обводка, белый фон
+                cellStyle += ' background-color: white; border: 1px solid #ccc;';
+                cellContent = '&nbsp;'; // Неразрывный пробел
+            } else {
+                // Клетка с символом - черная обводка, белый фон
+                cellStyle += ' background-color: white; border: 2px solid #000; font-weight: bold;';
+                
+                // Проверяем, что символ разрешен (цифра, запятая, минус, точка)
+                if (/[0-9,-.]/.test(cellValue)) {
+                    cellContent = cellValue;
+                } else {
+                    // Если символ не разрешен, заменяем на пустую клетку
+                    cellStyle = 'width: 35px; height: 35px; background-color: white; border: 1px solid #ccc;';
+                    cellContent = '&nbsp;';
+                }
+                
+                // Добавляем номер ячейки, если это начало слова (ВСЕГДА, даже если символ не разрешен)
+                if (cellNumbers[y] && cellNumbers[y][x] > 0) {
+                    cellContent = '<span style="position: absolute; top: 2px; left: 2px; font-size: 10px; font-weight: normal; color: #000;">' + 
+                                 cellNumbers[y][x] + '</span><span style="display: inline-block; margin-top: 8px;">' + 
+                                 (cellContent === '&nbsp;' ? '&nbsp;' : cellValue) + '</span>';
+                }
+            }
+            
+            crosswordHTML += '<td style="' + cellStyle + '">' + cellContent + '</td>';
+        }
+        crosswordHTML += '</tr>';
+    }
+    
+    crosswordHTML += '</table>';
+    
+    // Добавляем список ответов (только разрешенные символы)
+    crosswordHTML += '<div style="margin-top: 20px;">';
+    crosswordHTML += '<h4>Ответы (только числа и математические символы):</h4>';
+    crosswordHTML += '<ol>';
+    
+    crosswordData.result.forEach((word, index) => {
+        // Проверяем, что ответ содержит только разрешенные символы
+        let validAnswer = true;
+        for (let i = 0; i < word.answer.length; i++) {
+            if (!/[0-9,-.]/.test(word.answer[i])) {
+                validAnswer = false;
+                break;
+            }
+        }
+        
+        if (validAnswer) {
+            crosswordHTML += '<li style="margin-bottom: 10px;">' + 
+                           '<strong>' + word.answer + '</strong>' + 
+                           ' (' + (word.orientation === 'across' ? 'по горизонтали' : 'по вертикали') + ')' +
+                           '</li>';
+        }
+    });
+    
+    crosswordHTML += '</ol>';
+    crosswordHTML += '</div>';
+    crosswordHTML += '</div>';
+    
+    return crosswordHTML;
+}
+
 function vse1() {
-	$('.kolvo').val(1);
+    $('.kolvo').val(1);
 }
 
 function vse0() {
-	$('.kolvo').val(0);
-	$('#cV').val(1);
+    $('.kolvo').val(0);
+    $('#cV').val(1);
 }
 
 function readOptions() {
-	options.editable = $('#redakt').is(':checked');
-	options.largeFont = $('#largeFont').is(':checked');
-	options.customNumber = $('#customNumber').is(':checked');
-	options.variantPrefix = $('#variantPrefix').val();
-	options.vanishVariants = $('#vanishVariants').is(':checked');
-	options.nopagebreak = $('#nopagebreak').is(':checked');
-	options.compactAnswers = $('#compact-answers').is(':checked');
-	options.solutionsIntoAnswers = $('#solutions-into-answers').is(':checked');
-	options.nobackground = $('#nobackground').is(':checked');
-	options.firstTaskNumber = 1 * $('#first-task-number').val();
-	options.transitTaskNumbers = $('#transitTaskNumbers').is(':checked');
-	options.splitAnswersNumber = 1 * $('#split-answers-number').val();
-	options.splitAnswerTables = $('#splitAnswerTables').is(':checked');
-	options.uniqueAnswersAndSolutions = $('#uniqueAnswersAndSolutions').is(':checked');
-	options.startTransitNumber = 1 * $('#start-transit-number').val();
-	options.prepareLaTeX = $('#prepareLaTeX').is(':checked');
-	options.forceIntegers = $('#forceIntegers').is(':checked');
-	options.onlyIntegers = $('#onlyIntegers').is(':checked');
-	options.randomSeed = $('#randomSeed').val();
-	if (options.randomSeed === '') {
-		options.randomSeed = Date.now();
-	}
+    options.editable = $('#redakt').is(':checked');
+    options.largeFont = $('#largeFont').is(':checked');
+    options.customNumber = $('#customNumber').is(':checked');
+    options.variantPrefix = $('#variantPrefix').val();
+    options.vanishVariants = $('#vanishVariants').is(':checked');
+    options.nopagebreak = $('#nopagebreak').is(':checked');
+    options.compactAnswers = $('#compact-answers').is(':checked');
+    options.solutionsIntoAnswers = $('#solutions-into-answers').is(':checked');
+    options.nobackground = $('#nobackground').is(':checked');
+    options.firstTaskNumber = 1 * $('#first-task-number').val();
+    options.transitTaskNumbers = $('#transitTaskNumbers').is(':checked');
+    options.splitAnswersNumber = 1 * $('#split-answers-number').val();
+    options.splitAnswerTables = $('#splitAnswerTables').is(':checked');
+    options.uniqueAnswersAndSolutions = $('#uniqueAnswersAndSolutions').is(':checked');
+    options.startTransitNumber = 1 * $('#start-transit-number').val();
+    options.prepareLaTeX = $('#prepareLaTeX').is(':checked');
+    options.forceIntegers = $('#forceIntegers').is(':checked');
+    options.onlyIntegers = $('#onlyIntegers').is(':checked');
+    options.randomSeed = $('#randomSeed').val();
+    if (options.randomSeed === '') {
+        options.randomSeed = Date.now();
+    }
 
-	if (options.customNumber) {
-		variantNumber = $('#start-number').val() - 1;
-	}
+    if (options.customNumber) {
+        variantNumber = $('#start-number').val() - 1;
+    }
 
-	sluchch.forceIntegers = !!options.forceIntegers;
-	sluchch.onlyIntegers = !!options.onlyIntegers;
+    sluchch.forceIntegers = !!options.forceIntegers;
+    sluchch.onlyIntegers = !!options.onlyIntegers;
 
-	if ($('#htmlcss').is(':checked')) {
-		MathJax.Hub.setRenderer('HTML-CSS');
-	}
-	options.crosswordAnswers = $('#crosswordAnswers').is(':checked');
+    if ($('#htmlcss').is(':checked')) {
+        MathJax.Hub.setRenderer('HTML-CSS');
+    }
+    options.crosswordAnswers = $('#crosswordAnswers').is(':checked');
 }
 
 
 async function zapusk() {
 	//Если файлы подгружены, то запускаем их сразу
 	//Например, чтобы выставить ими количество вариантов.
-	await processArbitraryCodeFiles();
+    await processArbitraryCodeFiles();
 
 	//Сохраняем параметры генерации
-	chasStorage.domData.save();
+    chasStorage.domData.save();
 
 	//Читаем настройки
-	readOptions();
+    readOptions();
 
 	//Читаем количество заданий
-	aV = nV = 1 * $('#cV').val();
-	for (var i = 1; i <= nabor.nZad; i++)
-		aZ[i] = 1 * ($('#cB' + i).val());
+    aV = nV = 1 * $('#cV').val();
+    for (var i = 1; i <= nabor.nZad; i++)
+        aZ[i] = 1 * ($('#cB' + i).val());
 
-	cacheKat();
-	kZ = aZ.sum() * aV;
-	if (!kZ) {
-		alert('Ни одно задание не выбрано.');
-		return;
-	}
-	iZ = aZ.slice();
-	nZ = 0;
-	$('#panel').html('Тесты составляются, подождите...');
-	$('#gotov').show();
-	zadan();
+    cacheKat();
+    kZ = aZ.sum() * aV;
+    if (!kZ) {
+        alert('Ни одно задание не выбрано.');
+        return;
+    }
+    iZ = aZ.slice();
+    nZ = 0;
+    $('#panel').html('Тесты составляются, подождите...');
+    $('#gotov').show();
+    zadan();
 }
 
 function testGotov() {
-	$('#gotov').hide();
-	if (options.editable) {
-		$('#rez, #otv, #rsh').attr('contenteditable', 'true');
-	}
-	$('#dopoln').show();
-	alert('Тесты составлены.\nТеперь Вы можете распечатать их с помощью Вашего браузера.');
-	specCounter('pech');
+    $('#gotov').hide();
+    if (options.editable) {
+        $('#rez, #otv, #rsh').attr('contenteditable', 'true');
+    }
+    $('#dopoln').show();
+    alert('Тесты составлены.\nТеперь Вы можете распечатать их с помощью Вашего браузера.');
+    specCounter('pech');
 }
 
 function udalPanel() {
-	$('#panel, #menucenter, #inf').remove();
+    $('#panel, #menucenter, #inf').remove();
 }
 
 function konecSozd() {
-	strOtv = '<h2>Ответы</h2>' + strOtv;
+    strOtv = '<h2>Ответы</h2>' + strOtv;
 
-	if (options.largeFont) {
-		strOtv = largeFontStyle + strOtv;
-	}
+    if (options.largeFont) {
+        strOtv = largeFontStyle + strOtv;
+    }
 
-	$('#otv').html(strOtv);
-	$('#rez').html(strVopr);
-	if (strResh) {
-		$('#rsh').html('<h2>Решения</h2>' + strResh);
-	}
+    $('#otv').html(strOtv);
+    $('#rez').html(strVopr);
+    if (strResh) {
+        $('#rsh').html('<h2>Решения</h2>' + strResh);
+    }
 
-	for (var id in generatedTasks) {
-		try {
-			generatedTasks[id].dey();
-		} catch (e) { };
-	}
-	convertCanvasToImagesIfNeeded();
-	if (options.prepareLaTeX) {
-		for (var id in generatedTasks) {
-			tasksInLaTeX[id] = replaceCanvasWithImgInTask(
-				getTaskTextContainerByTaskId(id),
-				generatedTasks[id].txt
-			).
+    for (var id in generatedTasks) {
+        try {
+            generatedTasks[id].dey();
+        } catch (e) { };
+    }
+    convertCanvasToImagesIfNeeded();
+    if (options.prepareLaTeX) {
+        for (var id in generatedTasks) {
+            tasksInLaTeX[id] = replaceCanvasWithImgInTask(
+                getTaskTextContainerByTaskId(id),
+                generatedTasks[id].txt
+            ).
 			 // Escape LaTeX comments,
 			 // but don't ruin if they've been already escaped!
-			 replace(/\\?%/g, '\\%').replace(/<br>/g, '\\\\').replace(/<br\/>/g, '\\\\').replace(/<b>/g, '\\textbf{').replace(/<\/b>/g, '}').replace(/\" /g, '"\\space ');
-		}
-	}
+             replace(/\\?%/g, '\\%').replace(/<br>/g, '\\\\').replace(/<br\/>/g, '\\\\').replace(/<b>/g, '\\textbf{').replace(/<\/b>/g, '}').replace(/\" /g, '"\\space ');
+        }
+    }
 
-	refreshLaTeXarchive();
-	MathJax.Hub.Typeset(testGotov);
-	udalPanel();
-	spoiler();
-	$('.spoiler-show').click();
-	$("hr:first").remove();
-	$("hr:first").remove();
-	document.body.style.backgroundColor = "white";
-	$('body').append('<script>udalPanel()</script>');
+    refreshLaTeXarchive();
+    MathJax.Hub.Typeset(testGotov);
+    udalPanel();
+    spoiler();
+    $('.spoiler-show').click();
+    $("hr:first").remove();
+    $("hr:first").remove();
+    document.body.style.backgroundColor = "white";
+    $('body').append('<script>udalPanel()</script>');
 
-	$('button.renewbutton[data-already-inited!=true]').click(renewTask).attr('data-already-inited', true);
+    $('button.renewbutton[data-already-inited!=true]').click(renewTask).attr('data-already-inited', true);
 }
 
 function convertCanvasToImagesIfNeeded() {
-	if (!options.nobackground) {
-		allCanvasToBackgroundImage();
-	}
+    if (!options.nobackground) {
+        allCanvasToBackgroundImage();
+    }
 }
 
 function bumpVariantNumber() {
-	if (options.customNumber) {
-		variantNumber++;
-	} else {
-		variantNumber = new Date().getTime();
-	}
-	variantsGenerated.push(variantNumber);
+    if (options.customNumber) {
+        variantNumber++;
+    } else {
+        variantNumber = new Date().getTime();
+    }
+    variantsGenerated.push(variantNumber);
 }
 
 function appendVariantTasksCaption() {
-	if (!options.vanishVariants) {
-		strVopr += '<h2 class="d">Вариант №' + options.variantPrefix + variantNumber + '</h2>';
-	}
+    if (!options.vanishVariants) {
+        strVopr += '<h2 class="d">Вариант №' + options.variantPrefix + variantNumber + '</h2>';
+    }
 }
 
 function appendVariantTasksEnding() {
-	if (!options.nopagebreak)
-		strVopr += '<p style="page-break-before: always"></p>';
+    if (!options.nopagebreak)
+        strVopr += '<p style="page-break-before: always"></p>';
 }
 
 function appendVariantAnswersCaption() {
-	strOtv +=
-		'<table ' +
-		'class="normtabl tablpech pech-answers-table" ' +
-		'id="pech-answers-table-variant-' + variantNumber +
-		'">';
+    strOtv +=
+        '<table ' +
+        'class="normtabl tablpech pech-answers-table" ' +
+        'id="pech-answers-table-variant-' + variantNumber +
+        '">';
 
-	if (!options.vanishVariants) {
-		strOtv += '<tr><th colspan="10">';
-		if (options.compactAnswers) {
-			strOtv += 'Вар. ' + options.variantPrefix + variantNumber;
-		} else {
-			strOtv += 'Ответы к варианту<br/>№' + options.variantPrefix + variantNumber;
-		}
-		strOtv += '</th></tr>';
-	}
+    if (!options.vanishVariants) {
+        strOtv += '<tr><th colspan="10">';
+        if (options.compactAnswers) {
+            strOtv += 'Вар. ' + options.variantPrefix + variantNumber;
+        } else {
+            strOtv += 'Ответы к варианту<br/>№' + options.variantPrefix + variantNumber;
+        }
+        strOtv += '</th></tr>';
+    }
 }
 
 function appendVariantAnswersEnding() {
-	strOtv += '</table>';
+    strOtv += '</table>';
 }
 
 function endCurrentVariant() {
-	nV--;
-	nZ = 0;
+    nV--;
+    nZ = 0;
 
-	if (options.crosswordAnswers && crosswordAnswers[variantNumber]) {
-        appendCrosswordAnswers();
+    // Генерируем кроссворд из ответов, если включена опция
+    if (options.crosswordAnswers && crosswordAnswers[variantNumber]) {
+        // Собираем все ответы в плоский массив
+        let allAnswers = [];
+        for (const taskName in crosswordAnswers[variantNumber]) {
+            crosswordAnswers[variantNumber][taskName].forEach(answerArray => {
+                allAnswers.push(answerArray.join(''));
+            });
+        }
+        
+        // Создаем данные для кроссворда
+        const crosswordInput = createCrosswordDataFromAnyArray(allAnswers);
+        
+        try {
+            // Генерируем layout кроссворда
+            crosswordData[variantNumber] = generateLayout(crosswordInput);
+            
+            // Добавляем таблицу кроссворда в конец варианта
+            strVopr += createCrosswordTable(crosswordData[variantNumber]);
+			strVopr += createCrosswordTableWithoutAnswers(crosswordData[variantNumber]);
+        } catch (error) {
+            console.error('Ошибка при создании кроссворда:', error);
+            strVopr += '<div style="color: red;">Ошибка при создании кроссворда из ответов</div>';
+        }
     }
 
-	appendVariantTasksEnding();
-	appendVariantAnswersEnding();
-	if(options.uniqueAnswersOnlyInOneVariant){
-		unqDict={};
-	}
-	zadan();
+    appendVariantTasksEnding();
+    appendVariantAnswersEnding();
+    if(options.uniqueAnswersOnlyInOneVariant){
+        unqDict={};
+    }
+    zadan();
 }
 
 function zadan() {
