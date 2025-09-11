@@ -5,7 +5,7 @@
 	let preference1 = ['power_2', 'power_3', 'power_4', 'power_5'];
 	let rand1 = getSelectedPreferenceFromList(key, preference1);
 	let preference2 = ['no_frac', 'inverse_frac', 'frac'];
-	let rand2 = getSelectedPreferenceFromList(key, preference1);
+	let rand2 = getSelectedPreferenceFromList(key, preference2);
 
 	var b = sluchch(1, 9).pm();
 	var power = rand1 + 2;
