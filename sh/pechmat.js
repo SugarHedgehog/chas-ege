@@ -58,35 +58,8 @@ function createCrosswordTableWithoutAnswers(crosswordData) {
         }
     });
 
-    // Создаем строки таблицы
-    for (let y = 0; y < crosswordData.rows; y++) {
-        crosswordHTML += '<tr>';
-        for (let x = 0; x < crosswordData.cols; x++) {
-            const cellValue = crosswordData.table[y][x];
-            let cellContent = '';
-            let cellStyle = 'width: 35px; height: 35px; text-align: center; vertical-align: middle; position: relative; font-size: 16px;';
-            
-            if (cellValue === emptySymbol) {
-                // Пустая клетка - серая обводка, белый фон
-                cellStyle += ' background-color: white; border: 1px solid #ccc;';
-                cellContent = '&nbsp;'; // Неразрывный пробел
-            } else {
-                // Клетка должна содержать ответ, но мы его скрываем - черная обводка
-                cellStyle += ' background-color: white; border: 2px solid #000;';
-                
-                // Добавляем номер ячейки, если это начало слова (ВСЕГДА, независимо от содержимого)
-                if (cellNumbers[y] && cellNumbers[y][x] > 0) {
-                    cellContent = '<span style="position: absolute; top: 2px; left: 2px; font-size: 10px; font-weight: normal; color: #000;">' + 
-                                 cellNumbers[y][x] + '</span>';
-                } else {
-                    cellContent = '&nbsp;';
-                }
-            }
-            
-            crosswordHTML += '<td style="' + cellStyle + '">' + cellContent + '</td>';
-        }
-        crosswordHTML += '</tr>';
-    }
+    // Создаем строки таблицы без слов
+    crosswordHTML += addTable(crosswordData, cellNumbers);
     
     crosswordHTML += '</table>';
     
@@ -94,24 +67,14 @@ function createCrosswordTableWithoutAnswers(crosswordData) {
     crosswordHTML += '<div style="margin-top: 20px;">';
     crosswordHTML += '<h4>Вопросы для заполнения:</h4>';
     crosswordHTML += '<ol>';
-    
-    crosswordData.result.forEach((word, index) => {
-        // Проверяем, что ответ содержит только разрешенные символы
-        let validAnswer = true;
-        for (let i = 0; i < word.answer.length; i++) {
-            if (!/[0-9,-.]/.test(word.answer[i])) {
-                validAnswer = false;
-                break;
-            }
-        }
-        
-        if (validAnswer) {
-            crosswordHTML += '<li style="margin-bottom: 10px;">' + 
-                           '____________________' + // Пустая строка для ответа
-                           ' (' + (word.orientation === 'across' ? 'по горизонтали' : 'по вертикали') + 
-                           ', длина: ' + word.answer.length + ' символов)' +
-                           '</li>';
-        }
+
+    crosswordData.result.forEach((word) => {
+
+    crosswordHTML += '<li style="margin-bottom: 10px;">' +
+            '____________________' + // Пустая строка для ответа
+            ' (' + (word.orientation === 'across' ? 'по горизонтали' : 'по вертикали') +
+            ', длина: ' + word.answer.length + ' символов)' +
+            '</li>';
     });
     
     crosswordHTML += '</ol>';
@@ -121,7 +84,39 @@ function createCrosswordTableWithoutAnswers(crosswordData) {
     return crosswordHTML;
 }
 
-// Функция для создания HTML таблицы кроссворда (с ответами) - тоже исправляем
+function addTable(crosswordData, cellNumbers, word = false) {
+    let crosswordHTML = '';
+    for (let y = 0; y < crosswordData.rows; y++) {
+        crosswordHTML += '<tr>';
+        for (let x = 0; x < crosswordData.cols; x++) {
+            const cellValue = crosswordData.table[y][x];
+            let cellContent = '';
+            let cellStyle = 'width: 35px; height: 35px; text-align: center; vertical-align: middle; position: relative; font-size: 16px;';
+            
+            if (cellValue === emptySymbol) {
+                // Пустая клетка - серая закраска, черные края
+                cellStyle += ' background-color: #6e6e6eff; border: 1px solid #000;';
+                cellContent = '&nbsp;'; // Неразрывный пробел
+            } else {
+                // Клетка с символом - черная обводка, белый фон
+                cellStyle += ' background-color: white; border: 2px solid #000; font-weight: bold;';
+                cellContent = word? cellValue: '&nbsp;';
+                
+                // Добавляем номер ячейки, если это начало слова (ВСЕГДА, даже если символ не разрешен)
+                if (cellNumbers[y] && cellNumbers[y][x] > 0) {
+                    cellContent = '<span style="position: absolute; top: 2px; left: 2px; font-size: 10px; font-weight: normal; color: #000;">' + 
+                                 cellNumbers[y][x] + '</span><span style="display: inline-block; margin-top: 8px;">' + 
+                                 ((cellContent === '&nbsp;' && !word) ? '&nbsp;' : cellValue) + '</span>';
+                }
+            }
+            
+            crosswordHTML += '<td style="' + cellStyle + '">' + cellContent + '</td>';
+        }
+        crosswordHTML += '</tr>';
+    }
+    return crosswordHTML;
+}
+
 function createCrosswordTable(crosswordData) {
     if (!crosswordData || !crosswordData.table) return '';
     
@@ -145,43 +140,8 @@ function createCrosswordTable(crosswordData) {
         }
     });
 
-    // Создаем строки таблицы
-    for (let y = 0; y < crosswordData.rows; y++) {
-        crosswordHTML += '<tr>';
-        for (let x = 0; x < crosswordData.cols; x++) {
-            const cellValue = crosswordData.table[y][x];
-            let cellContent = '';
-            let cellStyle = 'width: 35px; height: 35px; text-align: center; vertical-align: middle; position: relative; font-size: 16px;';
-            
-            if (cellValue === '-' || cellValue === '' || cellValue === undefined) {
-                // Пустая клетка - серая обводка, белый фон
-                cellStyle += ' background-color: white; border: 1px solid #ccc;';
-                cellContent = '&nbsp;'; // Неразрывный пробел
-            } else {
-                // Клетка с символом - черная обводка, белый фон
-                cellStyle += ' background-color: white; border: 2px solid #000; font-weight: bold;';
-                
-                // Проверяем, что символ разрешен (цифра, запятая, минус, точка)
-                if (/[0-9,-.]/.test(cellValue)) {
-                    cellContent = cellValue;
-                } else {
-                    // Если символ не разрешен, заменяем на пустую клетку
-                    cellStyle = 'width: 35px; height: 35px; background-color: white; border: 1px solid #ccc;';
-                    cellContent = '&nbsp;';
-                }
-                
-                // Добавляем номер ячейки, если это начало слова (ВСЕГДА, даже если символ не разрешен)
-                if (cellNumbers[y] && cellNumbers[y][x] > 0) {
-                    cellContent = '<span style="position: absolute; top: 2px; left: 2px; font-size: 10px; font-weight: normal; color: #000;">' + 
-                                 cellNumbers[y][x] + '</span><span style="display: inline-block; margin-top: 8px;">' + 
-                                 (cellContent === '&nbsp;' ? '&nbsp;' : cellValue) + '</span>';
-                }
-            }
-            
-            crosswordHTML += '<td style="' + cellStyle + '">' + cellContent + '</td>';
-        }
-        crosswordHTML += '</tr>';
-    }
+    // Создаем строки таблицы со словами
+    crosswordHTML += addTable(crosswordData, cellNumbers, true);
     
     crosswordHTML += '</table>';
     
@@ -190,7 +150,7 @@ function createCrosswordTable(crosswordData) {
     crosswordHTML += '<h4>Ответы (только числа и математические символы):</h4>';
     crosswordHTML += '<ol>';
     
-    crosswordData.result.forEach((word, index) => {
+    crosswordData.result.forEach((word) => {
         // Проверяем, что ответ содержит только разрешенные символы
         let validAnswer = true;
         for (let i = 0; i < word.answer.length; i++) {
