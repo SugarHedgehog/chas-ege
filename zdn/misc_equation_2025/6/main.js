@@ -1,5 +1,5 @@
 window.nomer=[
-	509570,
+	5,
 ].iz()
-window.comment='509570';
-chas2.task.setMinimaxFunctionTask.forbidOpenEnds = true;
+window.comment='5 no frac';
+window.nabor.preferences['26652'] = ['no_frac'];

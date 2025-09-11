@@ -1,5 +1,5 @@
 window.nomer=[
-	77384,
+	6,
 ].iz()
-window.comment='77384';
-chas2.task.setMinimaxFunctionTask.forbidOpenEnds = true;
+window.comment='6 power 2 no frac';
+window.nabor.preferences['501205'] = ['power_2','no_frac'];
