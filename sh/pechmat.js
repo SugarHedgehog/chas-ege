@@ -24,29 +24,13 @@ var crosswordData = {}; // Добавляем для хранения данны
 var options = {};
 
 var largeFontStyle = 'div.z{font-size:128%}\n .MathJax_SVG_Display {font-size: 128%;}'.vTag('style');
+var emptySymbol = '*';
 
 // Функция для создания данных кроссворда из массива ответов
 function createCrosswordDataFromAnyArray(flatArray) {
-    // Фильтруем только допустимые символы: цифры, запятые, минусы, точки (для десятичных)
-    const filteredAnswers = flatArray.map(answer => {
-        // Преобразуем в строку и оставляем только разрешенные символы
-        const strAnswer = answer.toString();
-        let cleanedAnswer = '';
-        
-        for (let i = 0; i < strAnswer.length; i++) {
-            const char = strAnswer[i];
-            // Разрешаем: цифры (0-9), запятая, минус, точка, пробел
-            if (/[0-9,-.\s]/.test(char)) {
-                cleanedAnswer += char;
-            }
-        }
-        
-        return cleanedAnswer;
-    }).filter(answer => answer.length > 0); // Убираем пустые ответы
-
-    return filteredAnswers.map(answer => ({
+    return flatArray.map(answer => ({
         clue: "", // Пустая строка для вопроса
-        answer: answer // Очищенный ответ
+        answer: answer
     }));
 }
 
@@ -82,7 +66,7 @@ function createCrosswordTableWithoutAnswers(crosswordData) {
             let cellContent = '';
             let cellStyle = 'width: 35px; height: 35px; text-align: center; vertical-align: middle; position: relative; font-size: 16px;';
             
-            if (cellValue === '-' || cellValue === '' || cellValue === undefined) {
+            if (cellValue === emptySymbol) {
                 // Пустая клетка - серая обводка, белый фон
                 cellStyle += ' background-color: white; border: 1px solid #ccc;';
                 cellContent = '&nbsp;'; // Неразрывный пробел
@@ -429,10 +413,12 @@ function endCurrentVariant() {
         
         // Создаем данные для кроссворда
         const crosswordInput = createCrosswordDataFromAnyArray(allAnswers);
+        console.log(crosswordInput);
         
         try {
             // Генерируем layout кроссворда
-            crosswordData[variantNumber] = generateLayout(crosswordInput);
+            crosswordData[variantNumber] = generateLayout(crosswordInput, emptySymbol);
+            console.log(crosswordData[variantNumber]);
             
             // Добавляем таблицу кроссворда в конец варианта
             strVopr += createCrosswordTable(crosswordData[variantNumber]);
