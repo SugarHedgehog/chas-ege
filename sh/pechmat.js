@@ -58,6 +58,8 @@ function createCrosswordTableWithoutAnswers(crosswordData) {
         }
     });
 
+    console.log(cellNumbers);
+
     // Создаем строки таблицы без слов
     crosswordHTML += addTable(crosswordData, cellNumbers);
     
@@ -69,12 +71,8 @@ function createCrosswordTableWithoutAnswers(crosswordData) {
     crosswordHTML += '<ol>';
 
     crosswordData.result.forEach((word) => {
-
-    crosswordHTML += '<li style="margin-bottom: 10px;">' +
-            '____________________' + // Пустая строка для ответа
-            ' (' + (word.orientation === 'across' ? 'по горизонтали' : 'по вертикали') +
-            ', длина: ' + word.answer.length + ' символов)' +
-            '</li>';
+        // Формируем элемент списка с номером слова
+    crosswordHTML += addList(word);
     });
     
     crosswordHTML += '</ol>';
@@ -85,6 +83,9 @@ function createCrosswordTableWithoutAnswers(crosswordData) {
 }
 
 function addTable(crosswordData, cellNumbers, word = false) {
+    console.log(crosswordData);
+
+    
     let crosswordHTML = '';
     for (let y = 0; y < crosswordData.rows; y++) {
         crosswordHTML += '<tr>';
@@ -106,7 +107,7 @@ function addTable(crosswordData, cellNumbers, word = false) {
                 if (cellNumbers[y] && cellNumbers[y][x] > 0) {
                     cellContent = '<span style="position: absolute; top: 2px; left: 2px; font-size: 10px; font-weight: normal; color: #000;">' + 
                                  cellNumbers[y][x] + '</span><span style="display: inline-block; margin-top: 8px;">' + 
-                                 ((cellContent === '&nbsp;' && !word) ? '&nbsp;' : cellValue) + '</span>';
+                                 ((cellContent === '&nbsp;') ? '&nbsp;' : cellValue) + '</span>';
                 }
             }
             
@@ -149,30 +150,45 @@ function createCrosswordTable(crosswordData) {
     crosswordHTML += '<div style="margin-top: 20px;">';
     crosswordHTML += '<h4>Ответы (только числа и математические символы):</h4>';
     crosswordHTML += '<ol>';
-    
+
     crosswordData.result.forEach((word) => {
-        // Проверяем, что ответ содержит только разрешенные символы
-        let validAnswer = true;
-        for (let i = 0; i < word.answer.length; i++) {
-            if (!/[0-9,-.]/.test(word.answer[i])) {
-                validAnswer = false;
-                break;
-            }
-        }
-        
-        if (validAnswer) {
-            crosswordHTML += '<li style="margin-bottom: 10px;">' + 
-                           '<strong>' + word.answer + '</strong>' + 
-                           ' (' + (word.orientation === 'across' ? 'по горизонтали' : 'по вертикали') + ')' +
-                           '</li>';
-        }
+        // Формируем элемент списка с номером слова
+        crosswordHTML += addList(word, true); 
     });
-    
+
     crosswordHTML += '</ol>';
     crosswordHTML += '</div>';
     crosswordHTML += '</div>';
     
     return crosswordHTML;
+}
+
+function getOrientation(word) {
+    let orientationText;
+    switch (word.orientation) {
+        case 'across':
+            orientationText = 'по горизонтали';
+            break;
+        case 'down':
+            orientationText = 'по вертикали';
+            break;
+        case 'none':
+            orientationText = '';
+            break;
+        default:
+            orientationText = word.orientation; // на случай других значений
+    }
+    return orientationText;
+}
+
+function addList(word, withAnswers = false) {
+    let string = (word.position ? word.position + ' ' + getOrientation(word) : 'не присутствует в кроссворде');
+    if (withAnswers) {
+        string += ' Ответ :' + word.answer;
+    } else {
+        string += ' ____________________';
+    }
+    return '<li style="margin-bottom: 10px;">' + string + '</li>';
 }
 
 function vse1() {
@@ -372,7 +388,8 @@ function endCurrentVariant() {
         }
         
         // Создаем данные для кроссворда
-        const crosswordInput = createCrosswordDataFromAnyArray(allAnswers);
+        let crosswordInput = createCrosswordDataFromAnyArray(allAnswers);
+        
         console.log(crosswordInput);
         
         try {
