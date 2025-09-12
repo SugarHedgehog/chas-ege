@@ -34,12 +34,21 @@ function createCrosswordDataFromAnyArray(flatArray) {
     }));
 }
 
-// Функция для создания HTML таблицы кроссворда БЕЗ ответов (только сетка с номерами)
-function createCrosswordTableWithoutAnswers(crosswordData) {
-    if (!crosswordData || !crosswordData.table) return '';
+// Функция для создания HTML таблицы кроссворда
+function createCrosswordTable(crosswordData, showAnswers = false) {
+	if (!crosswordData || !crosswordData.table)
+		return '';
+
+    const title = showAnswers 
+        ? 'Кроссворд из ответов' 
+        : 'Кроссворд для заполнения (без ответов)';
+    
+    const listTitle = showAnswers 
+        ? 'Ответы (только числа и математические символы):' 
+        : 'Вопросы для заполнения:';
     
     let crosswordHTML = '<div class="crossword-container" style="margin: 20px 0; page-break-inside: avoid;">';
-    crosswordHTML += '<h3>Кроссворд для заполнения (без ответов)</h3>';
+    crosswordHTML += `<h3>${title}</h3>`;
     crosswordHTML += '<table class="crossword-table" style="border-collapse: collapse; border: 2px solid #000; background-color: white; margin: 0 auto;">';
     
     // Создаем массив для хранения номеров ячеек
@@ -57,22 +66,20 @@ function createCrosswordTableWithoutAnswers(crosswordData) {
             cellNumbers[y][x] = word.position;
         }
     });
-
+	
     console.log(cellNumbers);
-
-    // Создаем строки таблицы без слов
-    crosswordHTML += addTable(crosswordData, cellNumbers);
+    // Создаем строки таблицы
+    crosswordHTML += addTable(crosswordData, cellNumbers, showAnswers);
     
     crosswordHTML += '</table>';
     
-    // Добавляем список вопросов (пустые поля для заполнения)
+    // Добавляем список вопросов/ответов
     crosswordHTML += '<div style="margin-top: 20px;">';
-    crosswordHTML += '<h4>Вопросы для заполнения:</h4>';
+    crosswordHTML += `<h4>${listTitle}</h4>`;
     crosswordHTML += '<ol>';
 
     crosswordData.result.forEach((word) => {
-        // Формируем элемент списка с номером слова
-    crosswordHTML += addList(word);
+        crosswordHTML += addList(word, showAnswers);
     });
     
     crosswordHTML += '</ol>';
@@ -115,51 +122,6 @@ function addTable(crosswordData, cellNumbers, word = false) {
         }
         crosswordHTML += '</tr>';
     }
-    return crosswordHTML;
-}
-
-function createCrosswordTable(crosswordData) {
-    if (!crosswordData || !crosswordData.table) return '';
-    
-    let crosswordHTML = '<div class="crossword-container" style="margin: 20px 0; page-break-inside: avoid;">';
-    crosswordHTML += '<h3>Кроссворд из ответов</h3>';
-    crosswordHTML += '<table class="crossword-table" style="border-collapse: collapse; border: 2px solid #000; background-color: white; margin: 0 auto;">';
-    
-    // Создаем массив для хранения номеров ячеек
-    const cellNumbers = Array(crosswordData.rows).fill().map(() =>
-        Array(crosswordData.cols).fill(0)
-    );
-
-    // Помечаем ячейки с началами слов (с проверкой границ)
-    crosswordData.result.forEach(word => {
-        const x = word.startx - 1;
-        const y = word.starty - 1;
-        
-        // Проверяем, что координаты в пределах массива
-        if (y >= 0 && y < crosswordData.rows && x >= 0 && x < crosswordData.cols) {
-            cellNumbers[y][x] = word.position;
-        }
-    });
-
-    // Создаем строки таблицы со словами
-    crosswordHTML += addTable(crosswordData, cellNumbers, true);
-    
-    crosswordHTML += '</table>';
-    
-    // Добавляем список ответов (только разрешенные символы)
-    crosswordHTML += '<div style="margin-top: 20px;">';
-    crosswordHTML += '<h4>Ответы (только числа и математические символы):</h4>';
-    crosswordHTML += '<ol>';
-
-    crosswordData.result.forEach((word) => {
-        // Формируем элемент списка с номером слова
-        crosswordHTML += addList(word, true); 
-    });
-
-    crosswordHTML += '</ol>';
-    crosswordHTML += '</div>';
-    crosswordHTML += '</div>';
-    
     return crosswordHTML;
 }
 
@@ -377,41 +339,42 @@ function endCurrentVariant() {
     nV--;
     nZ = 0;
 
-    // Генерируем кроссворд из ответов, если включена опция
-    if (options.crosswordAnswers && crosswordAnswers[variantNumber]) {
-        // Собираем все ответы в плоский массив
-        let allAnswers = [];
-        for (const taskName in crosswordAnswers[variantNumber]) {
-            crosswordAnswers[variantNumber][taskName].forEach(answerArray => {
-                allAnswers.push(answerArray.join(''));
-            });
-        }
-        
-        // Создаем данные для кроссворда
-        let crosswordInput = createCrosswordDataFromAnyArray(allAnswers);
-        
-        console.log(crosswordInput);
-        
-        try {
-            // Генерируем layout кроссворда
-            crosswordData[variantNumber] = generateLayout(crosswordInput, emptySymbol);
-            console.log(crosswordData[variantNumber]);
-            
-            // Добавляем таблицу кроссворда в конец варианта
-            strVopr += createCrosswordTable(crosswordData[variantNumber]);
-			strVopr += createCrosswordTableWithoutAnswers(crosswordData[variantNumber]);
-        } catch (error) {
-            console.error('Ошибка при создании кроссворда:', error);
-            strVopr += '<div style="color: red;">Ошибка при создании кроссворда из ответов</div>';
-        }
-    }
-
     appendVariantTasksEnding();
     appendVariantAnswersEnding();
     if(options.uniqueAnswersOnlyInOneVariant){
         unqDict={};
     }
     zadan();
+}
+
+function addCrosswords() {
+	if (options.crosswordAnswers && crosswordAnswers[variantNumber]) {
+		// Собираем все ответы в плоский массив
+		let allAnswers = [];
+		for (const taskName in crosswordAnswers[variantNumber]) {
+			crosswordAnswers[variantNumber][taskName].forEach(answerArray => {
+				allAnswers.push(answerArray.join(''));
+			});
+		}
+
+		// Создаем данные для кроссворда
+		let crosswordInput = createCrosswordDataFromAnyArray(allAnswers);
+
+		console.log(crosswordInput);
+
+		try {
+			// Генерируем layout кроссворда
+			crosswordData[variantNumber] = generateLayout(crosswordInput, emptySymbol);
+            console.log(crosswordData[variantNumber]);
+
+			// Добавляем таблицу кроссворда в конец варианта
+			strVopr += createCrosswordTable(crosswordData[variantNumber], true);
+			strVopr += createCrosswordTable(crosswordData[variantNumber], false);
+		} catch (error) {
+			console.error('Ошибка при создании кроссворда:', error);
+			strVopr += '<div style="color: red;">Ошибка при создании кроссворда из ответов</div>';
+		}
+	}
 }
 
 function zadan() {
@@ -430,6 +393,7 @@ function zadan() {
 			bumpVariantNumber();
 			appendVariantTasksCaption();
 			appendVariantAnswersCaption();
+			addCrosswords();
 
 			nZ = 1;
 			zadan();
