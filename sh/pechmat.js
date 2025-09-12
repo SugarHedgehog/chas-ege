@@ -134,7 +134,7 @@ function konecSozd() {
 	
 	// Добавляем кроссворд с ответами в соответствующую вкладку
 	if (strCross && options.crosswordAnswers) {
-		$('#cross').html('<h2>Кроссворды с ответами</h2>' + strCross);
+		$('#cross').html('<h2>Кроссворды</h2>' + strCross);
 		// Показываем кнопку для вкладки с кроссвордами
 		$('#cross-tab').show();
 	}
@@ -226,13 +226,9 @@ function endCurrentVariant() {
 	appendVariantTasksEnding();
 	appendVariantAnswersEnding();
 	
-	// Добавляем кроссворд БЕЗ ответов в основной контент после варианта
+	// Добавляем кроссворды переменную для вкладки
 	if (options.crosswordAnswers) {
-		strVopr += addCrossword(false); // false - без ответов
-	}
-	
-	// Добавляем кроссворд С ответами в отдельную переменную для вкладки
-	if (options.crosswordAnswers) {
+		strCross += addCrossword(false); // false - без ответов
 		strCross += addCrossword(true); // true - с ответами
 	}
 	
