@@ -353,6 +353,11 @@ function endCurrentVariant() {
 	appendVariantTasksEnding();
 	appendVariantAnswersEnding();
 	
+	// Добавляем кроссворд БЕЗ ответов в основной контент после варианта
+	if (options.crosswordAnswers) {
+		strVopr += addCrossword(false);
+	}
+	
 	if (options.crosswordAnswers) {
 		strCross += addCrossword(true);
 	}
