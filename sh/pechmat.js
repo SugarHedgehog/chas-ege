@@ -13,6 +13,7 @@ var kZ;
 var strVopr = '';
 var strOtv = '';
 var strResh = '';
+var strCross = '';
 
 var variantsGenerated = [];
 var generatedTasks = {};
@@ -41,7 +42,7 @@ function createCrosswordTable(crosswordData, showAnswers = false) {
 
 	const title = (showAnswers
 		? 'Кроссворд из ответов'
-		: 'Кроссворд для заполнения (без ответов)') + ' для Варианта № ' + variantNumber;
+		: 'Кроссворд без ответов') + ' для Варианта № ' + variantNumber;
 
 	const listTitle = showAnswers
 		? 'Ответы: '
@@ -246,15 +247,23 @@ function udalPanel() {
 
 function konecSozd() {
 	strOtv = '<h2>Ответы</h2>' + strOtv;
-
+	
 	if (options.largeFont) {
 		strOtv = largeFontStyle + strOtv;
+		strResh = largeFontStyle + strResh;
+		strCross = largeFontStyle + strCross; // Применяем большой шрифт и к кроссворду
 	}
 
 	$('#otv').html(strOtv);
 	$('#rez').html(strVopr);
+	
 	if (strResh) {
 		$('#rsh').html('<h2>Решения</h2>' + strResh);
+	}
+	
+	// Добавляем кроссворд в соответствующую вкладку
+	if (strCross && options.crosswordAnswers) {
+		$('#cross').html('<h2>Кроссворды</h2>' + strCross);
 	}
 
 	for (var id in generatedTasks) {
@@ -343,6 +352,11 @@ function endCurrentVariant() {
 
 	appendVariantTasksEnding();
 	appendVariantAnswersEnding();
+	
+	if (options.crosswordAnswers) {
+		strCross += addCrossword(true);
+	}
+	
 	if (options.uniqueAnswersOnlyInOneVariant) {
 		unqDict = {};
 	}
@@ -360,18 +374,25 @@ function addCrossword(withAnswers = false) {
 	// Создаем данные для кроссворда
 	let crosswordInput = createCrosswordDataFromAnyArray(allAnswers);
 
-	console.log(crosswordInput);
-
 	try {
 		// Генерируем layout кроссворда
 		crosswordData[variantNumber] = generateLayout(crosswordInput, emptySymbol);
-		console.log(crosswordData[variantNumber]);
 
-		// Добавляем таблицу кроссворда в конец варианта
-		return createCrosswordTable(crosswordData[variantNumber], withAnswers);
+		// Добавляем заголовок варианта перед кроссвордом
+		let crosswordHTML = '<div class="variant-crossword" style="page-break-before: always; margin-bottom: 30px;">';
+		if (!options.vanishVariants) {
+			crosswordHTML += '<h3>Вариант №' + options.variantPrefix + variantNumber + '</h3>';
+		}
+		
+		// Добавляем таблицу кроссворда
+		crosswordHTML += createCrosswordTable(crosswordData[variantNumber], withAnswers);
+		crosswordHTML += '</div>';
+		
+		return crosswordHTML;
 	} catch (error) {
 		console.error('Ошибка при создании кроссворда:', error);
-		return '<div style="color: red;">Ошибка при создании кроссворда из ответов</div>';
+		return '<div style="color: red;">Ошибка при создании кроссворда из ответов для варианта ' + 
+			   options.variantPrefix + variantNumber + '</div>';
 	}
 }
 
