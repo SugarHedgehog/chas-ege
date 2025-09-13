@@ -641,41 +641,48 @@ function createLaTeXbunchTasks(variantN) {
 }
 
 function refreshLaTeXarchive() {
-	if (!options.prepareLaTeX) {
-		return;
-	}
-	var zip = new JSZip();
-	var bunchTasks = "";
-	var answers = "\\begin{document}\n\n\\begin{multicols}{" + ((variantsGenerated.length > 6) ? 6 : variantsGenerated.length) + "}";
+    if (!options.prepareLaTeX) {
+        return;
+    }
+    var zip = new JSZip();
+    var bunchTasks = "";
+    var answers = "\\begin{document}\n\n\\begin{multicols}{" + ((variantsGenerated.length > 6) ? 6 : variantsGenerated.length) + "}";
 
-	for (var variantN of variantsGenerated) {
-		var head =
-			'\n\n' +
-			'\\ifdefined\\OnBeforeVariant\\OnBeforeVariant\\fi\n' +
-			'\\def\\examvart{\\varianttitle ' + options.variantPrefix + variantN + '}\n' +
-			'\\ifdefined\\OnStartVariant\\OnStartVariant\\fi' +
-			'\n\n';
-		var tail =
-			'\\ifdefined\\OnAfterVariant\\OnAfterVariant\\fi';
-		bunchTasks += head + createLaTeXbunchTasks(variantN) + tail;
-		answers += createLaTeXbunchAnswers(variantN);
-	}
+    for (var variantN of variantsGenerated) {
+        var head =
+            '\n\n' +
+            '\\ifdefined\\OnBeforeVariant\\OnBeforeVariant\\fi\n' +
+            '\\def\\examvart{\\varianttitle ' + options.variantPrefix + variantN + '}\n' +
+            '\\ifdefined\\OnStartVariant\\OnStartVariant\\fi' +
+            '\n\n';
+        var tail =
+            '\\ifdefined\\OnAfterVariant\\OnAfterVariant\\fi';
+        bunchTasks += head + createLaTeXbunchTasks(variantN) + tail;
+        answers += createLaTeXbunchAnswers(variantN);
+    }
 
-	answers += "\n\n\\end{multicols}\n\n\\end{document}";
+    answers += "\n\n\\end{multicols}\n\n\\end{document}";
 
-	bunchTasks += "\n\n%Random seed:" + options.randomSeed;
+    bunchTasks += "\n\n%Random seed:" + options.randomSeed;
 
-	zip.file("tasks.tex", bunchTasks);
-	zip.file("answers.tex", "\\documentclass[a4paper]{article}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{multicol}\n\n\\setlength{\\columnsep}{0pt}\n\\usepackage[\n\tleft = 0.5cm,\n\tright = 0.5cm,\n\ttop = 0.5cm,\n\tbottom = 0.5cm,\n]{geometry}" + answers);
+    zip.file("tasks.tex", bunchTasks);
+    zip.file("answers.tex", "\\documentclass[a4paper]{article}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{multicol}\n\n\\setlength{\\columnsep}{0pt}\n\\usepackage[\n\tleft = 0.5cm,\n\tright = 0.5cm,\n\ttop = 0.5cm,\n\tbottom = 0.5cm,\n]{geometry}" + answers);
+    
+    // Добавляем файлы с кроссвордами
+    if (options.crosswordAnswers && Object.keys(crosswordData).length > 0) {
+        zip.file("crosswords_with_answers.tex", createCrosswordLaTeX(true));
+        zip.file("crosswords_without_answers.tex", createCrosswordLaTeX(false));
+    }
 
-	var img = zip.folder("images");
-	for (var i in preparedImages) {
-		img.file(i + ".png", preparedImages[i], { base64: true });
-	}
-	zip.generateAsync({ type: "base64" }).then(function (base64) {
-		$('#latex-archive-placeholder').show();
-		$('#latex-archive-placeholder')[0].href = "data:application/zip;base64," + base64;
-	});
+    var img = zip.folder("images");
+    for (var i in preparedImages) {
+        img.file(i + ".png", preparedImages[i], { base64: true });
+    }
+    
+    zip.generateAsync({ type: "base64" }).then(function (base64) {
+        $('#latex-archive-placeholder').show();
+        $('#latex-archive-placeholder')[0].href = "data:application/zip;base64," + base64;
+    });
 }
 
 function processArbitraryCodeFiles() {
