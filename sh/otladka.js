@@ -10,6 +10,9 @@ function updateQuestion(){
 	$("#answer").html(window.vopr.ver.join(";;"));
 	$("#wrongAnswer").html(window.vopr.nev.join(";;"));
 	MathJax.Hub.Typeset('typesettable-wrap');
+	if (document.body && document.body.classList.contains('lite')) {
+		$("#answer").show();
+	}
 }
 
 function createFromFile(){
@@ -30,9 +33,24 @@ function createFromFile(){
 	dvig.startxt=window.vopr.txt;
 	dvig.obnov(updateQuestion);
 	$("#answer-input").val("");
-	$("#answer").hide();
-	setVKI();
-	VKI_attach(document.getElementById("answer-input"));
+	if (!(document.body && document.body.classList.contains('lite'))) {
+		$("#answer").hide();
+	} else {
+		$("#answer").show();
+	}
+	try {
+		var answerEl = document.getElementById("answer-input");
+		if (answerEl && typeof VKI_attach === 'function') {
+			if (typeof setVKI === 'function') setVKI();
+			VKI_attach(answerEl);
+		}
+	} catch(e) {
+		console.warn('Virtual keyboard attach failed:', e);
+	}
+	// Запуск автообновления после первой загрузки шаблона
+	if (typeof window.__chas_startAutoReload === 'function') {
+		window.__chas_startAutoReload();
+	}
 }
 
 function checkAnswer(){
@@ -230,6 +248,30 @@ var startShell = function (){
 	if ($("#textarea-script").val() == "") {
 		$("#textarea-script").val(templateTemplate);
 		chasStorage.domData.save();
+	}
+	// Read filepath/autorun from both query and hash (supports Firefox file://)
+	try {
+		var rawSearch = window.location.search || '';
+		var rawHash = window.location.hash || '';
+		var combined = rawSearch.replace(/^\?/, '');
+		if (rawHash) {
+			var h = rawHash.replace(/^#/, '');
+			if (h.charAt(0) === '?') h = h.slice(1);
+			combined += (combined ? '&' : '') + h;
+		}
+		var params = new URLSearchParams(combined);
+		var fp = params.get('filepath') || params.get('file') || params.get('template');
+		var autorun = params.get('autorun');
+		if (fp && fp.indexOf('${') !== -1) { fp = ''; }
+		if (fp) {
+			$("#filepath").val(fp);
+			chasStorage.domData.save();
+			if (autorun === null || autorun === '' || autorun === '1' || autorun === 'true') {
+				setTimeout(function(){ createFromFile(); }, 0);
+			}
+		}
+	} catch (e) {
+		console.error(e);
 	}
 }
 
