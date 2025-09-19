@@ -74,7 +74,7 @@ chas2.task = {
 			o.wrongAnswers = chaslib.toStringsArray((('wrongAnswers' in o) && (o.wrongAnswers !== undefined)) ? o.wrongAnswers : []);
 			// Просто o.answers || [] нельзя - ноль не будет передаваться
 			o.authors = chaslib.toStringsArray(o.authors || o.author || []);
-			o.preference = o.preference || [];
+			o.preference = chaslib.toStringsArray(o.preference || o.preferencepreference || []);
 		},
 
 
