@@ -15,10 +15,9 @@ array=(
 27964
 27979
 27980
-27982
-27982
-27984
-27984
+'27982 findV findV'
+'27982 findS findS'
+'27984 formula_2Rh formula_2Rh'
 7
 12
 27990
@@ -28,7 +27,8 @@ array=(
 28012
 27963
 317096
-317097
+'317097 power power'
+'317097 multiply multiply'
 324467
 27973
 27975
