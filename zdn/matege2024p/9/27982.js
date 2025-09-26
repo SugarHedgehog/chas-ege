@@ -1,4 +1,8 @@
 (function() { 'use strict'; retryWhileError(function() {
+	
+	let key = '27982';
+	let preference = ['findV', 'findS'];
+	let rand = getSelectedPreferenceFromList(key, preference);
 
 	let v=sl(20, 300, 0.01);//скорость
 	let l=sl(50, 3000, 0.1);//путь
@@ -16,7 +20,7 @@
 		text:
 			the_vehicleRacingOnRoad.ie.toZagl() +' разгоняется на прямолинейном участке '+the_RacingRoad+' с постоянным ускорением',
 		questions: [
-			{
+			[{
 				text: ' $a$ км/ч${}^2$.'+ formula +
 					the_orderToFind.toZagl() +' ускорение, с которым должен двигаться ' + the_vehicleRacingOnRoad.ie +', '+
 					'чтобы, проехав '+[chislitlx(l, 'метр'), l +' м',chislitlx(l/1000, 'километр'), (l/1000) +' км'].iz()+', приобрести скорость ' + v + ' км/ч. '+
@@ -27,9 +31,10 @@
 				text: ' $a$ = '+a+' км/ч${}^2$.'+ formula +
 					the_orderToFind.toZagl() +', сколько километров проедет ' + the_vehicleRacingOnRoad.ie +' к моменту, когда он разгонится до скорости '+v+' км/ч.',
 				answers: l/1000,
-			}
+			}][rand]
 		],
 		authors: ['Aisse-258'],
+		preference: preference,
 	});
 	NAtask.modifiers.allDecimalsToStandard();
 }, 200000);})();
