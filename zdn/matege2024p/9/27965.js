@@ -2,9 +2,9 @@
 	retryWhileError(function() {
 		NAinfo.requireApiVersion(0, 2);
 
-		let a = sl(10,100)/10;//ускорение
-		let v0 = sl(a*10,300)/10;//скорость
-		let t = sl(10,v0/a*10)/10;//время
+		let a = sl(10,100, 0.1);//ускорение
+		let v0 = sl(a,30, 0.1);//скорость
+		let t = sl(1,v0/a, 0.1);//время
 		let S = v0*t-a*t*t/2;//путь
 		let transp = decor.vehicleRacingOnRoad.iz();
 		let transp_skl=sklonlxkand(transp);

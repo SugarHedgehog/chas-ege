@@ -11,7 +11,7 @@
 		let den = (K + 1);
 		den = rand ? den * power : den ** power;
 
-		let rExp = sl(0.01, 0.99, 0.01);
+		let rExp = sl(1, 99)/100;
 
 		genAssert(rPok > 0, 'число не должно быть отрицательным');
 		genAssert(Math.abs(rPok - rExp) < 1, 'оценки экспертов и покупателей не должны сильно отличаться');

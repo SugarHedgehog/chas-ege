@@ -47,6 +47,7 @@
 			answers: V2,
 			analys: '$\\log_2 \\dfrac{' + V1 + '}{' + vp + '_2}=' + log_2 + '$',
 			authors: ['Aisse-258'],
+			preference: preference,
 		});
 		NAtask.modifiers.allDecimalsToStandard(true);
 	}, 20000);
