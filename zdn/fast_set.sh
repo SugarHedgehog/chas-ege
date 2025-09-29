@@ -11,37 +11,38 @@ find . -mindepth 1 ! -name "$(basename "$0")" -exec rm -rf {} +
 rm -rf *
 
 array=(
+324467
 27965
 27964
 27979
-27980
 '27982 findV findV'
 '27982 findS findS'
 '27984 formula_2Rh formula_2Rh'
+27980
+27973
+27975
+27981
+9
 7
 12
 27990
 525114
-27996
+'27996 findV findV'
+'27996 findP findP'
 27995
-28012
-27963
+1
 317096
 '317097 power power'
 '317097 multiply multiply'
-324467
-27973
-27975
-27981
-1
-9
-11
-28009
 5
 27960
 27962
 27957
 8
+28012
+27963
+11
+28009
 28003
 )
 
