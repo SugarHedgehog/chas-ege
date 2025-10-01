@@ -1,14 +1,16 @@
 (function() { 'use strict'; retryWhileError(function() {
-
-	let key='27982';
-	let preference=['decimalNumbers','integerNumbers'];
-	let variant=getSelectedPreferenceFromList(key,preference);
+	
+	let key = '27982';
+	let preference1 = ['findV', 'findS'];
+	let randFind = getSelectedPreferenceFromList(key, preference1);
+	let preference2=['decimalNumbers','integerNumbers'];
+	let randDecimal=getSelectedPreferenceFromList(key,preference2);
 
 	let v;//скорость
 	let l;//путь
 	let a;//ускорение
 
-	if(variant){
+	if(randDecimal){
 		let distanceKm=sl(1,3);
 		v=2*sl(10,150);
 		l=1000*distanceKm;
@@ -33,7 +35,7 @@
 		text:
 			the_vehicleRacingOnRoad.ie.toZagl() +' разгоняется на прямолинейном участке '+the_RacingRoad+' с постоянным ускорением',
 		questions: [
-			{
+			[{
 				text: ' $a$ км/ч${}^2$.'+ formula +
 					the_orderToFind.toZagl() +' ускорение, с которым должен двигаться ' + the_vehicleRacingOnRoad.ie +', '+
 					'чтобы, проехав '+[chislitlx(l, 'метр'), l +' м',chislitlx(l/1000, 'километр'), (l/1000) +' км'].iz()+', приобрести скорость ' + v + ' км/ч. '+
@@ -49,14 +51,11 @@
 				text: ' $a$ = '+a+' км/ч${}^2$.'+ formula +
 					the_orderToFind.toZagl() +', сколько километров проедет ' + the_vehicleRacingOnRoad.ie +' к моменту, когда он разгонится до скорости '+v+' км/ч.',
 				answers: l/1000,
-				analys:
-					'Из формулы $v=\\sqrt{2la}$ получаем $v^2=2la$, откуда $l=\\frac{v^2}{2a}$. '+
-					'Подставим значения: $l=\\frac{'+v+'^2}{2\\cdot '+a+'}='+(l/1000)+'$ км. '+
-					'Ответ: '+(l/1000)+'.',
-			}
+			}][randFind]
 		],
 		preference,
 		authors: ['Aisse-258'],
+		preference: [preference1, preference2],
 	});
 	NAtask.modifiers.allDecimalsToStandard();
 }, 200000);})();
