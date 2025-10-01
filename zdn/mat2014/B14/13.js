@@ -1,6 +1,14 @@
 (function() {
 	NAinfo.requireApiVersion(0, 2);
 
+	let key = "99566";
+	let preference = ['increases', 'decrease'];
+	let rand = getListedPreference(key, preference.map((pref, index) => ({
+		preference: pref,
+		preferenceValue: index
+	})), sl(preference.length - 1));
+
+
 	var days = chaslib.sets.weekDays;
 	var den = sluchch(0, 6);
 	var den1 = sklonlxkand(days[den]);
@@ -9,7 +17,10 @@
 
 	// Порядок неважен
 	// (a+b)*(a-b) = a^2 - b^2 < a^2
-	var actions = ['подорожали', 'подешевели'].shuffle();
+	var actions = ['подорожали', 'подешевели'];
+
+	if(rand)
+		actions = actions.reverse();
 
 	NAtask.setTask({
 		//.toZagl() делает заглавной первую букву строки, к которой вызвана
@@ -22,6 +33,7 @@
 			'. ' +
 			'На сколько процентов ' + actions[0] + ' акции компании ' + lxcompose('в', den1.ve) + '?',
 		answers: a,
+		preference: preference,
 
 	});
 })();
