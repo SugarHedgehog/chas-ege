@@ -1,22 +1,6 @@
 (function() {
 	retryWhileError(function() {
 		NAinfo.requireApiVersion(0, 2);
-		
-		let key = "26595";
-		let v=getListedPreference(key, [{
-			preference: 'first_worker',
-			preferenceValue: 0,
-		}, {
-			preference: 'second_worker',
-			preferenceValue: 1,
-		}], sl1());
-
-		let key = "26595";
-		let preference = ['first_worker', 'second_worker'];
-		let v=getListedPreference(key, preference.map((pref, index) => ({
-			preference: pref,
-			preferenceValue: index
-		})), sl(preference.length-1));
 
 		let key = "26595";
 		let preference = ['first_worker', 'second_worker'];
