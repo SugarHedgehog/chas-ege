@@ -3,4 +3,4 @@ window.nomer=[
 ].iz()
 window.comment='1 первый больше, масса третьего сплава';
 window.nabor.preferences['1'] = ['first_largest','find_third_mass'];
-chas2.task.setTask.forbidDecimalFractions = true;
+

@@ -3,4 +3,4 @@ window.nomer=[
 ].iz()
 window.comment='26597 вопрос про вторый шланг';
 window.nabor.preferences['26597'] = ['second_hose'];
-chas2.task.setTask.forbidDecimalFractions = true;
+

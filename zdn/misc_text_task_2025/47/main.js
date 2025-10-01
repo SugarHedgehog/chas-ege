@@ -3,4 +3,4 @@ window.nomer=[
 ].iz()
 window.comment='13 на сколько подорожали';
 window.nabor.preferences['13'] = ['increases'];
-chas2.task.setTask.forbidDecimalFractions = true;
+

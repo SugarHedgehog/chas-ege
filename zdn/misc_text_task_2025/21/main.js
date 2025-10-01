@@ -3,4 +3,4 @@ window.nomer=[
 ].iz()
 window.comment='8 собственная скорость';
 window.nabor.preferences['8'] = ['boat_speed'];
-chas2.task.setTask.forbidDecimalFractions = true;
+

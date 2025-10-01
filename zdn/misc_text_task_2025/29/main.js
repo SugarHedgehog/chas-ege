@@ -3,4 +3,4 @@ window.nomer=[
 ].iz()
 window.comment='26592 вопрос про второго работника';
 window.nabor.preferences['26592'] = ['second_worker'];
-chas2.task.setTask.forbidDecimalFractions = true;
+
