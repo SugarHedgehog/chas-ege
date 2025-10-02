@@ -5,8 +5,14 @@
 #array=("8 < comment> <prefernece...>" "3 < comment> <prefernece...>" 23 11 76)
 #относительный путь до скрипта и до обрабатываемой папки
 #../fast_set.sh ../../matege2023p/4
-
-array=()
+array=(
+    '1 numbersOfTrue1 numbersOfTrue1'
+    '1 numbersOfTrue2 numbersOfTrue2'
+    '1 numberOfTrue numberOfTrue'
+    '1 numbersOfFalse1 numbersOfFalse1'
+    '1 numbersOfFalse2 numbersOfFalse2'
+    '1 numberOfFalse numberOfFalse'
+)
 
 if [[ ${#array[@]} -eq 0 ]]; then
      echo "change array in file"
