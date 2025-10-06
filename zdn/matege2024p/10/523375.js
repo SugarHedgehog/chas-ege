@@ -17,7 +17,7 @@
 			'' + the_activeFloatingVehicle.ie.toZagl() +' в  ' + a + ':00 вышел по течению реки из пункта A в пункт B, расположенный в '+
 			s + ' км от A. Пробыв в пункте B ' + chislitlx(n, 'час') + ', ' +  the_activeFloatingVehicle.ie +
 			' отправился назад и вернулся в пункт A в ' + b + ':00 того же дня. ' + the_orderToFind.toZagl() + ' собственную скорость ' + 
-			the_activeFloatingVehicle.re +'(в км/ч), если известно, что скорость течения реки ' + k + ' км/ч. Ответ дайте в км/ч.',
+			the_activeFloatingVehicle.re +' (в км/ч), если известно, что скорость течения реки ' + k + ' км/ч. Ответ дайте в км/ч.',
 		answers: x,
 		authors: ['VeronikaKit'],
 	});
