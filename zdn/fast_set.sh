@@ -12,27 +12,29 @@ rm -rf *
 #2-6, 8-15, 17, 18, 25-28, 30, 32
 
 array=(
-27965
-27964
-27979
-'27982 findV findV'
-'27982 findS findS'
-27980
-27973
-27975
-27981
-9
-7
-12
-27990
-'27996 findV findV'
-'27996 findP findP'
-27960
-27962
-27957
-8
-27963
-28009
+99606
+99591
+'6 first_speed first_speed'
+9961201
+'9 speed_of_first speed_of_first'
+27482
+'7 river_speed river_speed'
+'7 boat_speed boat_speed'
+'8 river_speed river_speed'
+'8 boat_speed boat_speed'
+523375
+99602
+'26592 first_worker first_worker'
+'26592 second_worker second_worker'
+'26597 first_hose'
+'26597 second_hose'
+99614
+99617
+99615
+'1 second_largest_find_third_mass second_largest find_third_mass'
+'1 first_largest_find_third_mass first_largest find_third_mass'
+'99578 mass_of_mixin_in_first mass_of_mixin_in_first'
+'99577 first_mass first_mass'
 )
 
 if [[ ${#array[@]} -eq 0 ]]; then
