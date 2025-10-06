@@ -17,7 +17,7 @@ array=(
 99591
 '6 first_speed first_speed'
 9961201
-'9 speed_of_first speed_of_first'
+'9 speed_of_second speed_of_second'
 27482
 '7 river_speed_have_half_distance river_speed have_half_distance'
 '7 boat_speed_have_half_distance boat_speed have_half_distance'
