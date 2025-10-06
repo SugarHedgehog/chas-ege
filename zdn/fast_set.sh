@@ -36,6 +36,7 @@ array=(
 '1 first_largest_find_third_mass first_largest find_third_mass'
 '99578 procent_of_mixin_in_first procent_of_mixin_in_first'
 '99577 first_mass first_mass'
+'77344 findAll findAll'
 )
 
 if [[ ${#array[@]} -eq 0 ]]; then
