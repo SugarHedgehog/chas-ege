@@ -13,6 +13,7 @@ rm -rf *
 
 array=(
 99606
+99607
 99591
 '6 first_speed first_speed'
 9961201
