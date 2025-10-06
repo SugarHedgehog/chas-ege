@@ -34,7 +34,7 @@ array=(
 99615
 '1 second_largest_find_third_mass second_largest find_third_mass'
 '1 first_largest_find_third_mass first_largest find_third_mass'
-'99578 mass_of_mixin_in_first mass_of_mixin_in_first'
+'99578 procent_of_mixin_in_first procent_of_mixin_in_first'
 '99577 first_mass first_mass'
 )
 
