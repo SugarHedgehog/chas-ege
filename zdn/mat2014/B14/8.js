@@ -1,6 +1,6 @@
 (function() {
 	let key = "8";
-	let preference = ['river_speed','boat_speed','parking_duration','total_time','distance_between_points'];
+	let preference = ['river_speed','boat_speed','parking_duration','total_time','distance_between_points','sum_distance_between_points'];
 	let variant = getSelectedPreferenceFromList(key, preference);
 
 	
@@ -41,13 +41,19 @@
 		vpr: 'через сколько часов после отплытия теплоход возвращается в пункт отправления',
 		zna: b,
 		nah: (variant == 3)
-	}, {
+	}, [{
 		vel: 'расстояние от пункта отправления до пункта назначения',
 		zna: s,
 		rod: 2,
 		nah: (variant == 4),
 		nmn: 'км'
-	}, ]);
+	},{
+		vel: 'расстояние, которое проходит теплоход за весь рейс',
+		zna: 2*s,
+		rod: 2,
+		nah: (variant == 5),
+		nmn: 'км'
+	}][variant>3?variant%2:sl1()], ]);
 
 	window.vopr.ver = ['' + f.splice(0, 1)];
 	window.vopr.txt =
