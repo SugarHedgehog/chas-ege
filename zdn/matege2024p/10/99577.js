@@ -7,10 +7,10 @@
         let rand = getSelectedPreferenceFromList(key, preference);
 
         let firstProcent = sl(1, 60);
-        let firstMass = slKrome(firstProcent, 60);
+        let firstMass = slKrome(firstProcent, 1, 60);
 
         let secondProcent = slKrome(firstProcent, 1, 60);
-        let secondMass = slKrome([firstProcent, secondProcent], 60);
+        let secondMass = slKrome([firstProcent, secondProcent], 1, 60);
 
         let waterMass = sl(1, 50);
         let firstFinalProcent = (firstProcent * firstMass + secondProcent * secondMass) / (firstMass + secondMass + waterMass);
