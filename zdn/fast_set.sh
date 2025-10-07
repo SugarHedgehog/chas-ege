@@ -14,15 +14,16 @@ rm -rf *
 array=(
 99606
 99607
-99591
 '6 first_speed first_speed'
 9961201
-'9 speed_of_second speed_of_second'
+99591
 27482
+'9 speed_of_second speed_of_second'
 '7 river_speed_have_half_distance river_speed have_half_distance'
 '7 boat_speed_have_half_distance boat_speed have_half_distance'
 '8 river_speed river_speed'
 '8 boat_speed boat_speed'
+'8 sum_distance_between_points sum_distance_between_points'
 523375
 99602
 '26592 first_worker first_worker'
@@ -32,11 +33,11 @@ array=(
 99614
 99617
 99615
+'77344 findAll findAll'
 '1 second_largest_find_third_mass second_largest find_third_mass'
 '1 first_largest_find_third_mass first_largest find_third_mass'
 '99578 procent_of_mixin_in_first procent_of_mixin_in_first'
 '99577 first_mass first_mass'
-'77344 findAll findAll'
 )
 
 if [[ ${#array[@]} -eq 0 ]]; then
