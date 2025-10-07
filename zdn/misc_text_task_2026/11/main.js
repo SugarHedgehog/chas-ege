@@ -1,5 +1,6 @@
 window.nomer=[
-	523375,
+	8,
 ].iz()
-window.comment='523375';
+window.comment='8 boat speed';
+window.nabor.preferences['8'] = ['boat_speed'];
 chas2.task.setTask.forbidDecimalFractions = true;

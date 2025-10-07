@@ -1,6 +1,6 @@
 window.nomer=[
-	99578,
+	77344,
 ].iz()
-window.comment='99578 mass of mixin in first';
-window.nabor.preferences['99578'] = ['mass_of_mixin_in_first'];
+window.comment='77344 findAll';
+window.nabor.preferences['77344'] = ['findAll'];
 chas2.task.setTask.forbidDecimalFractions = true;

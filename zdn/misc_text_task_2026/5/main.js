@@ -1,6 +1,5 @@
 window.nomer=[
-	9,
+	99591,
 ].iz()
-window.comment='9 speed of first';
-window.nabor.preferences['9'] = ['speed_of_first'];
+window.comment='99591';
 chas2.task.setTask.forbidDecimalFractions = true;

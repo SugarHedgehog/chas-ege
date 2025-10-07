@@ -1,6 +1,5 @@
 window.nomer=[
-	26592,
+	523375,
 ].iz()
-window.comment='26592 first worker';
-window.nabor.preferences['26592'] = ['first_worker'];
+window.comment='523375';
 chas2.task.setTask.forbidDecimalFractions = true;

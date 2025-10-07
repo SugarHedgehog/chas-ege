@@ -1,6 +1,6 @@
 window.nomer=[
-	99577,
+	1,
 ].iz()
-window.comment='99577 first mass';
-window.nabor.preferences['99577'] = ['first_mass'];
+window.comment='1 second largest find third mass';
+window.nabor.preferences['1'] = ['second_largest','find_third_mass'];
 chas2.task.setTask.forbidDecimalFractions = true;
