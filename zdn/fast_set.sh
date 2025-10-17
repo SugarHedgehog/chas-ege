@@ -6,7 +6,25 @@
 #относительный путь до скрипта и до обрабатываемой папки
 #../fast_set.sh ../../matege2023p/4
 
-array=()
+array=(
+506630
+"509729 FarToCel FarToCel"
+"509729 CelToFar CelToFar"
+509609
+'510306 boost boost'
+'523098 amperageTask amperageTask'
+'523098 voltageTask voltageTask'
+'510314 volt_lessWords volt lessWords' 
+'510314 ampereP_lessWords ampereP lessWords'
+'510314 ampereR_lessWords ampereR lessWords' 
+'509769 lessWords_findE lessWords findE'
+'513771 useQ_lessWords useQ lessWords'
+'513771 useU_lessWords useU lessWords'
+512712
+510020
+'512176 findM findM'
+512937
+)
 
 if [[ ${#array[@]} -eq 0 ]]; then
      echo "change array in file"
