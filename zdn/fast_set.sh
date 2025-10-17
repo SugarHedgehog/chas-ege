@@ -6,7 +6,34 @@
 #относительный путь до скрипта и до обрабатываемой папки
 #../fast_set.sh ../../matege2023p/4
 
-array=()
+array=(98
+124
+511648
+506299
+509669
+50703501
+506387
+'506276 geometric geometric'
+'506276 quadratic quadratic'
+'506276 harmonic harmonic'
+'506550 m_c m_c'
+'506550 l_c l_c'
+509589
+'506300 findR findR'
+'506300 findA findA'
+2939
+'514383 findS findS'
+'514383 findB findB'
+'338238 findS findS'
+'338238 findD1 findD1'
+'510303 findS findS' 
+'510303 findSinA findSinA' 
+'530329 findSin findSin'
+'530329 findSide findSide'
+512412
+'311535 findC findC'
+'311535 findR findR'
+506301)
 
 if [[ ${#array[@]} -eq 0 ]]; then
      echo "change array in file"
