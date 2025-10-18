@@ -1,17 +1,13 @@
-(function() {
+(function () {
 
 
 	var a = sluchiz([100, 200, 250, 400, 500, 1000, 2000])[0];
 	var b = sluchch(2, 20);
 	let key = "4";
-	var v1 = getListedPreference(key, [{
-		preference: 'not_have_defect',
-		preferenceValue: 0,
-	}, {
-		preference: 'have_defect',
-		preferenceValue: 1,
-	}], sl1());
-	var v2 = sluchch(1);
+	let preference1 = ['notHaveDefectInQuest', 'haveDefectInQuest'];
+	let preference2 = ['haveDefect', 'notHaveDefect'];
+	let v1 = getSelectedPreferenceFromList(key, preference1);
+	let v2 = getSelectedPreferenceFromList(key, preference2);
 	var c = (v1 ? b : a - b) / a;
 	var d = v2 ? a - b : b;
 	var f = sluchch(om.tovary.ie.length - 1);
