@@ -49,7 +49,7 @@
 				'Его сторона $' + [vertices[0], vertices[2]].shuffle().join('') + '$ касается окружности. ' +
 				'Сторона $' + vertices.slice(2, 4).shuffle().join('') + '$ пересекает окружность в точке $' + vertices[1] +
 				'$ ' +
-				'(см. рис.).' + question.join(' ') + '.',
+				'(см. рис.). ' + question.join(' ') + '.',
 			answers: 90 - a, //
 		});
 		NAtask.modifiers.addCanvasIllustration({
