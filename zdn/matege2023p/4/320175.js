@@ -9,7 +9,7 @@
         
         let zeroCounts = eventMatrix.map(event => event.pop());
         let lampDescriptions = ['двумя', 'тремя', 'четырьмя', 'пятью', 'шестью'];
-        let failureProbability = sl(0.1, 0.5, 0.01);
+        let failureProbability = sl(10, 50)/100;
         let requiredFailures = sl(1, numberOfLamps);
         
         let probabilitySum = 0;
