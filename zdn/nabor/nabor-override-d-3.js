@@ -50,6 +50,7 @@ window.nabor.upak[10].main = function(){
 
 window.nabor.upak[11].main = function(){
 	window.nomer = 509149;
+	chas2.task.setTask.forbidDecimalFractions = false;
 }
 
 window.nabor.upak[12].main = function(){
