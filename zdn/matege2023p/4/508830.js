@@ -1,9 +1,9 @@
 (function() {
 	retryWhileError(function() {
 		NAinfo.requireApiVersion(0, 2);
-		let probability = sl(0.1, 0.9, 0.01);
+		let probability = sl(10, 90)/100;
 		let antiProbability = 1 - probability;
-		let probabilityInQuestion = sl(0.1, 0.9, 0.01);
+		let probabilityInQuestion = sl(10, 90)/100;
 		let power = 0;
 		do {
 			power++;
