@@ -40,4 +40,4 @@ $('#first-task-number').val(1);
 // Возможность выгрузки в LaTeX
 $('#prepareLaTeX').prop("checked", true);
 // Зерно ГПСЧ
-$('#randomSeed').val(1761819179352);
+//$('#randomSeed').val(Date.now());
