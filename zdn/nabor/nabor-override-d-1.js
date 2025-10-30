@@ -6,7 +6,7 @@ console.log('Overriding...');
 //$('#variantPrefix').val('1.');
 
 // Количество вариантов
-$('#cV').val('1');
+$('#cV').val('5');
 window.nabor.upak[1].main = function(){
 	window.nomer = 135;
 }
