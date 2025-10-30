@@ -45,6 +45,7 @@ window.nabor.upak[9].main = function(){
 
 window.nabor.upak[10].main = function(){
 	window.nomer = 26592;
+	chas2.task.setTask.forbidDecimalFractions = true;
 }
 
 window.nabor.upak[11].main = function(){
