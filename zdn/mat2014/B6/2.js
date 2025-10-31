@@ -1,7 +1,14 @@
 (function() {
 	retryWhileError(function() {
 		NAinfo.requireApiVersion(0, 2);
-		let b = sl(2, 3);
+		let key = "2";
+		let b = getListedPreference(key, [{
+			preference: 'two_times',
+			preferenceValue: 2,
+		}, {
+			preference: 'three_times',
+			preferenceValue: 3,
+		}], sl(2,3));
 		let a = 0;
 		for (let i = 0; i < b; i++)
 			a += sl(1, 6);
