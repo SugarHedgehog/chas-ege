@@ -12,7 +12,7 @@
             if (noHasDublValue(wasStop, true)) {
                 answ[index].solution.push(text);
             }            
-      }
+        }
 
         function answAboutMax(intervals, answ) {
             let maxIndex = findMaxInIntervals(intervals, value);
@@ -122,8 +122,8 @@
                 maxX: 25,
                 maxY: 100,
                 stepByCeilX: 2,
-                intervalowLengthX: 24.5,
-                intervalowLengthY: 5.8,
+                arrowLengthX: 24.5,
+                arrowLengthY: 5.8,
             });
 
             ctx.translate(30, 30 * 6);
@@ -152,6 +152,6 @@
             height: 400,
             paint: paint1,
         });
-    }, 100);
+    }, 1000);
 })();
 // https://ege314.ru/14-analiz-grafikov-i-diagramm/reshenie-3357/
