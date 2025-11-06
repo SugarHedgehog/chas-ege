@@ -2,11 +2,11 @@
 	'use strict';
 	retryWhileError(function () {
 		/* На рисунке точками показано атмосферное давление в некотором городе на протяжении трёх суток с 4 по 6 апреля 2013 года. В течение суток давление измеряется 4 раза: в 0:00, в 6:00, в 12:00 и в 18:00.По горизонтали указывается время и дата, по вертикали – давление в миллиметрах ртутного столба. Для наглядности точки соединены линиями.*/
-		
-		function convert(P){
+
+		function convert(P) {
 			return 752 + P * 2 + ' мм рт. ст.';
 		}
-		
+
 		function answAboutMax(intervals, answ) {
 			let maxIndex = findMaxInIntervals(intervals, value);
 			let wasMax = intervals.map((_, i) => i === maxIndex);
@@ -29,10 +29,17 @@
 			let wasMinFall = intervals.map((_, i) => deltaP[i] === minED);
 			let wasMaxFall = intervals.map((_, i) => deltaP[i] === maxED);
 
-			addUniqueAnsw(wasMinRise, answ, 'наименьший рост давления');
-			addUniqueAnsw(wasMaxRise, answ, 'наибольший рост давления');
-			addUniqueAnsw(wasMinFall, answ, 'наибольшее падение давления');
-			addUniqueAnsw(wasMaxFall, answ, 'наименьшее падение давления');
+			if (sl1()) {
+				addUniqueAnsw(wasMinRise, answ, 'наименьший рост давления');
+			} else {
+				addUniqueAnsw(wasMaxRise, answ, 'наибольший рост давления');
+			}
+			
+			if (sl1()) {
+				addUniqueAnsw(wasMinFall, answ, 'наибольшее падение давления');
+			} else {
+				addUniqueAnsw(wasMaxFall, answ, 'наименьшее падение давления');
+			}			
 		}
 
 		function answAboutNonMore(intervals, answ, more) {
@@ -56,12 +63,12 @@
 		}
 
 		function answAboutIncreasingNonMore(intervals, answ, more) {
-			let wasCondition = intervals.map(interval => isIncreasing(interval) && isNonMore(interval, more));
+			let wasCondition = intervals.map(interval => isIncreasing(interval) && isNonLess(interval, more));
 			addUniqueAnsw(wasCondition, answ, 'давление росло, но не превышало ' + convert(more));
 		}
 
 		function answAboutDecreasingNonLess(intervals, answ, less) {
-			let wasCondition = intervals.map(interval => isDecreasing(interval) && isNonLess(interval, less));
+			let wasCondition = intervals.map(interval => isDecreasing(interval) && isNonMore(interval, less));
 			addUniqueAnsw(wasCondition, answ, 'давление упало, но осталось больше ' + convert(less));
 		}
 
@@ -72,12 +79,12 @@
 
 		function answAboutConstNotLess(intervals, answ, less) {
 			let wasCondition = intervals.map(interval => constValueByFirst(interval) && isNonLess(interval, less));
-			addUniqueAnsw(wasCondition, answ, 'давление не изменилось и было выше ' + convert(less) + ' мм рт. ст');
+			addUniqueAnsw(wasCondition, answ, 'давление не изменилось и было выше ' + convert(less));
 		}
 
 		function answAboutConstNotMore(intervals, answ, more) {
 			let wasCondition = intervals.map(interval => constValueByFirst(interval) && isNonMore(interval, more));
-			addUniqueAnsw(wasCondition, answ, 'давление не изменилось и было ниже ' + convert(more) + ' мм рт. ст');
+			addUniqueAnsw(wasCondition, answ, 'давление не изменилось и было ниже ' + convert(more));
 		}
 
 		let mounth = sklonlxkand(om.months.iz()).re;
@@ -114,44 +121,52 @@
 				solution: [],
 			};
 		});
-		let varianbleConst = sl1();
 
 		let LessP1 = sl(0, 7);
 		let LessP2 = sl(0, 7);
 		let MoreP1 = sl(0, 7);
 		let MoreP2 = sl(0, 7);
 
-		function addAllAnswers(intervals, listOfIntervals) {
+		
+		if (sl1()) {
 			// добавляем ответ про повышение давления
-			answAboutIncreasing(intervals, listOfIntervals);
+		answAboutIncreasing(intervals, listOfIntervals);
+		} else {
 			// добавляем ответ про понижение давления
-			answAboutDecreasing(intervals, listOfIntervals);
+		answAboutDecreasing(intervals, listOfIntervals);
+		}
+		
+		if (sl1()) {
 			// добавляем ответ про повышение давления но меньше
-			answAboutIncreasingNonMore(intervals, listOfIntervals, MoreP1);
+		answAboutIncreasingNonMore(intervals, listOfIntervals, MoreP1);
+		} else {
 			// добавляем ответ про понижение давления но больше
-			answAboutDecreasingNonLess(intervals, listOfIntervals, LessP1);
+		answAboutDecreasingNonLess(intervals, listOfIntervals, LessP1);
+		}
+		
+		if (sl1()) {
 			// добавляем ответ про давление было не более
-			answAboutNonMore(intervals, listOfIntervals, MoreP2);
+		answAboutNonMore(intervals, listOfIntervals, MoreP2);
+		} else {
 			// добавляем ответ про давление было не менее
-			answAboutNonLess(intervals, listOfIntervals, LessP2);
+		answAboutNonLess(intervals, listOfIntervals, LessP2);
+		}		
 
-			if (varianbleConst) {
-				// добавляем ответ про давление не изменилось
-				answAboutConstP(intervals, listOfIntervals);
-			} else {
-				//давление не изменилось и было ниже
-				answAboutConstNotMore(intervals, listOfIntervals, MoreP1);
-				//давление не изменилось и было выше
-				answAboutConstNotLess(intervals, listOfIntervals, LessP1);
-			}
+		if (sl1()) {
+			// добавляем ответ про давление не изменилось
+			answAboutConstP(intervals, listOfIntervals);
+		} else {
+			//давление не изменилось и было ниже
+			answAboutConstNotMore(intervals, listOfIntervals, MoreP1);
+			//давление не изменилось и было выше
+			answAboutConstNotLess(intervals, listOfIntervals, LessP1);
 		}
 
 		// добавляем ответ про максимальное давление
 		answAboutMax(intervals, listOfIntervals);
 		// добавляем ответ про максимальный и минимальный рост
 		answAboutMaxMinDelta(intervals, listOfIntervals);
-		addAllAnswers(intervals, listOfIntervals);
-
+		
 		listOfIntervals.forEach(item => item.solution = item.solution.iz());
 
 		let solutions = listOfIntervals.map(item => item.solution);
