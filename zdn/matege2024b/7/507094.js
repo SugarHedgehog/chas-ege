@@ -2,7 +2,7 @@
 	'use strict';
 	retryWhileError(function () {
 		/* На рисунке точками показано потребление воды городской ТЭЦ на протяжении суток. По горизонтали указывается время, по вертикали – объём воды в кубометрах в час. Для наглядности точки соединены линией.*/
-			
+
 		function answAboutMax(intervals, answ) {
 			let maxIndex = findMaxInIntervals(intervals, p);
 			let wasMax = intervals.map((_, i) => i === maxIndex);
@@ -17,12 +17,12 @@
 					return 0;
 				}
 			});
-			
+
 			let maxEI = incr.maxE();
 			let wasMaxDeltaI = intervals.map((_, i) => incr[i] === maxEI);
-			addUniqueAnsw(wasMaxDeltaI, answ, 'наибольший рост потребления воды за сутки');						
+			addUniqueAnsw(wasMaxDeltaI, answ, 'наибольший рост потребления воды за сутки');
 		}
-		
+
 		function answAboutMaxDeltaD(intervals, answ) {
 			let decr = intervals.map(int => {
 				if (isDecreasing(int)) {
@@ -31,10 +31,10 @@
 					return 0;
 				}
 			});
-			
+
 			let maxED = decr.maxE();
 			let wasMaxDeltaD = intervals.map((_, i) => decr[i] === maxED);
-			addUniqueAnsw(wasMaxDeltaD, answ, 'наибольшее падение потребления воды за сутки');				
+			addUniqueAnsw(wasMaxDeltaD, answ, 'наибольшее падение потребления воды за сутки');
 		}
 
 		function answAboutIncreasing(intervals, answ) {
@@ -88,7 +88,7 @@
 				}
 				return 0;
 			});
-			
+
 			wasCondition.forEach((condition, i) => {
 				if (condition) {
 					let deltaFlour = deltaValues[i];
@@ -120,7 +120,7 @@
 				}
 				return 0;
 			});
-			
+
 			wasCondition.forEach((condition, i) => {
 				if (condition) {
 					let deltaFlour = deltaValues[i];
@@ -171,31 +171,39 @@
 		let LessP = sl(2, 4);
 		let MoreP = sl(3, 5);
 
-		function addAllAnswers(intervals, listOfIntervals) {
+		if (sl1()) {
 			// добавляем ответ про повышение потребления воды
 			answAboutIncreasing(intervals, listOfIntervals);
+		} else {
 			// добавляем ответ про понижение потребления воды
 			answAboutDecreasing(intervals, listOfIntervals);
-
-			if (varianbleML) {
-				// добавляем ответ про потребления воды меньше
-				answAboutLessP(intervals, listOfIntervals, LessP);
-			} else {
-				// добавляем ответ про потребления воды больше
-				answAboutMoreP(intervals, listOfIntervals, MoreP);
-			}
-
-			if (varianbleDIT) {
-				answAboutIncrTimes(intervals, listOfIntervals);
-			} else {
-				answAboutDecrTimes(intervals, listOfIntervals);
-			}
 		}
+
+
+
+		if (varianbleML) {
+			// добавляем ответ про потребления воды меньше
+			answAboutLessP(intervals, listOfIntervals, LessP);
+		} else {
+			// добавляем ответ про потребления воды больше
+			answAboutMoreP(intervals, listOfIntervals, MoreP);
+		}
+
+		if (varianbleDIT) {
+			answAboutIncrTimes(intervals, listOfIntervals);
+		} else {
+			answAboutDecrTimes(intervals, listOfIntervals);
+		}
+
 		// добавляем ответ про максимальное потребление воды
 		answAboutMax(intervals, listOfIntervals);
 		// добавляем ответ про максимальный и минимальный рост
-		answAboutMaxDeltaI(intervals, listOfIntervals)
-		answAboutMaxDeltaD(intervals, listOfIntervals)
+		if (sl1()) {
+			answAboutMaxDeltaI(intervals, listOfIntervals)
+		} else {
+			answAboutMaxDeltaD(intervals, listOfIntervals)
+		}
+
 		if (varianbleDI) {
 			// добавляем ответ про понижение потребления воды а потом увеличение
 			answAboutDecreasingAfterIncreasing(intervals, listOfIntervals);
@@ -203,7 +211,6 @@
 			// добавляем ответ про увеличение потребления воды а потом понижение
 			answAboutIncreasingAfterDecreasing(intervals, listOfIntervals);
 		}
-		addAllAnswers(intervals, listOfIntervals);
 
 		listOfIntervals.forEach(item => {
 			item.solution = item.solution.iz()
