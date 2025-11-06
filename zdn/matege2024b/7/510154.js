@@ -2,26 +2,30 @@
     'use strict';
     retryWhileError(function () { 
         /* 'На рисунке точками показан годовой объём добычи угля в России открытым способом в период с 2001 по 2010 год. По горизонтали указывается год, по вертикали – объём добычи угля в миллионах тонн. Для наглядности точки соединены линиями.' */
+        
+        function convert(value){   
+            return 150 + value * 25+ ' млн т';
+        }
 
-        function answAboutMinV(intervals, answ) {
+        function answAboutMin(intervals, answ) {
             let minIndex = findMinInIntervals(intervals, production);
             let wasMin = intervals.map((_, i) => i === minIndex);
             addUniqueAnsw(wasMin, answ, 'период с минимальным показателем добычи за 10 лет');
         }
 
-        function answAboutMoreVButLess(intervals, answ, MoreP, LessP) {
+        function answAboutMoreButLess(intervals, answ, MoreP, LessP) {
             let wasCondition = intervals.map(interval => isLess(interval, LessP) && isMore(interval, MoreP));
-            addUniqueAnsw(wasCondition, answ, 'годовой объём добычи составлял больше ' + (150+MoreP * 25) + ' млн т, но меньше ' + (150+LessP * 25) + ' млн');
+            addUniqueAnsw(wasCondition, answ, 'годовой объём добычи составлял больше ' + convert(MoreP) + ', но меньше ' + convert(LessP) );
         }
 
         function answAboutMore(intervals, answ, MoreP) {
             let wasMore = intervals.map(interval => isMore(interval, MoreP));
-            addUniqueAnsw(wasMore, answ, 'объём добычи ежегодно составлял больше ' + (150+MoreP * 25) + ' млн т');
+            addUniqueAnsw(wasMore, answ, 'объём добычи ежегодно составлял больше ' + convert(MoreP));
         }
 
         function answAboutLess(intervals, answ, LessP) {
             let wasLess = intervals.map(interval => isLess(interval, LessP));
-            addUniqueAnsw(wasLess, answ, 'объём добычи ежегодно составлял меньше ' + (150 + LessP * 25) + ' млн т');
+            addUniqueAnsw(wasLess, answ, 'объём добычи ежегодно составлял меньше ' + convert(LessP));
         }
 
         function answAboutIncreasing(intervals, answ) {
@@ -48,7 +52,7 @@
             });
             addUniqueAnsw(wasSharpRise, answ, 'объём добычи в первые два года почти не менялся, а затем значительно вырос');
         }
-        
+
         function answAboutSlowRise(intervals, answ) {
             let wasSlowRise = intervals.map((interval) => {
                 let delta = [];
@@ -96,7 +100,7 @@
             length: 4
         }, (_, i) =>
             production.slice(i * 2 + beginYear, i * 2 + 3 + beginYear));
-            
+
         let listOfIntervals = intervals.map((interval, i) => {
             return {
                 expr: `${2001 + i * 2 + beginYear}-${2001 + i * 2 + 2 + beginYear}`,
@@ -110,32 +114,29 @@
         let lessP = sl(2, 3);
         let moreP = slKrome(lessP, 1, 2);
 
-        function addAllAnswers(intervals, listOfIntervals) {
-            if (aAboutIncrOrDecr) {
-                // добавляем ответ про повышение добычи
-                answAboutIncreasing(intervals, listOfIntervals);
-            } else {
-                // добавляем ответ про понижение добычи
-                answAboutDecreasing(intervals, listOfIntervals);
-            }
-            if (aIncrAfterDecr) {
-                // добавляем ответ про понижение добычи а потом увеличение
-                answAboutDecreasingAfterIncreasing(intervals, listOfIntervals);
-            } else {
-                // добавляем ответ про увеличение добычи а потом понижение
-                answAboutIncreasingAfterDecreasing(intervals, listOfIntervals);
-            }
-
-            answAboutLess(intervals, listOfIntervals, lessP);
-            answAboutMore(intervals, listOfIntervals, moreP);
-            answAboutMoreVButLess(intervals, listOfIntervals, moreP, lessP);
+        if (aAboutIncrOrDecr) {
+            // добавляем ответ про повышение добычи
+            answAboutIncreasing(intervals, listOfIntervals);
+        } else {
+            // добавляем ответ про понижение добычи
+            answAboutDecreasing(intervals, listOfIntervals);
+        }
+        if (aIncrAfterDecr) {
+            // добавляем ответ про понижение добычи а потом увеличение
+            answAboutDecreasingAfterIncreasing(intervals, listOfIntervals);
+        } else {
+            // добавляем ответ про увеличение добычи а потом понижение
+            answAboutIncreasingAfterDecreasing(intervals, listOfIntervals);
         }
 
+        answAboutLess(intervals, listOfIntervals, lessP);
+        answAboutMore(intervals, listOfIntervals, moreP);
+        answAboutMoreButLess(intervals, listOfIntervals, moreP, lessP);
+
         // добавляем ответ про минимальный показатель
-        answAboutMinV(intervals, listOfIntervals);
+        answAboutMin(intervals, listOfIntervals);
         answAboutSharpRise(intervals, listOfIntervals);
         answAboutSlowRise(intervals, listOfIntervals);
-        addAllAnswers(intervals, listOfIntervals);
 
         listOfIntervals.forEach(item => item.solution = item.solution.iz());
 
