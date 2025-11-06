@@ -1,167 +1,101 @@
 (function () {
     'use strict';
-    retryWhileError(function () { /* На графике изображена зависимость скорости движения рейсового автобуса от времени. На вертикальной оси отмечена скорость автобуса в км/ч, на горизонтальной – время в минутах, прошедшее с началадвижения автобуса. */
+    retryWhileError(function () { 
+        /* На графике изображена зависимость скорости движения рейсового автобуса от времени. На вертикальной оси отмечена скорость автобуса в км/ч, на горизонтальной – время в минутах, прошедшее с начала движения автобуса. */
 
-        function lengthOfZeroInterval(arr) {
-            let maxZeros = 0;
-            let currentZeros = 0;
-
-            for (let i = 0; i < arr.length; i++) {
-                if (arr[i] === 0) {
-                    currentZeros++;
-                    maxZeros = Math.max(maxZeros, currentZeros);
-                } else {
-                    currentZeros = 0;
-                }
-            }
-
-            return maxZeros;
+        function answAboutStop(intervals, answ) {
+            let wasStop = intervals.map(interval => lengthOfZeroInterval(interval) > 1);
+            addUniqueAnsw(wasStop, answ, 'автобус сделал остановку длительностью ' + chislitlx(lengthOfZeroInterval(interval) - 1, 'минута'));
         }
 
-        function answAboutStop(interval, answ) {
-            if (lengthOfZeroInterval(interval) > 1)
-                answ.push('автобус сделал остановку длительностью ' + chislitlx(lengthOfZeroInterval(interval) - 1, 'минута'));
+        function answAboutMax(intervals, answ) {
+            let maxIndex = findMaxInIntervals(intervals, value);
+            let wasMax = intervals.map((_, i) => i === maxIndex);
+            addUniqueAnsw(wasMax, answ, 'скорость автобуса достигла максимума за всё время движения');
         }
 
-        function answAbouMaxV(intervals, answ) {
-            let maxV = v.maxE();
-            let maxIndex = null;
-            let maxCount = 0;
-
-            for (let i = 0; i < intervals.length; i++) {
-                for (let j = 0; j < intervals[i].length; j++) {
-                    if (intervals[i][j] === maxV) {
-                        maxCount++;
-                        if (maxCount > 1) {
-                            return;
-                        }
-                        maxIndex = i;
-                    }
-                }
-            }
-
-            if (maxIndex)
-                answ[maxIndex].solution.push('скорость автобуса достигла максимума за всё время движения');
+        function answAboutNonLess(intervals, answ, value) {
+            let wasNonLess = intervals.map(interval => isNonLess(interval, value));
+            addUniqueAnsw(wasNonLess, answ, 'скорость автобуса была не меньше ' + value * 20 + ' км/ч на всём интервале');
         }
 
-        function answAbouNonLessV(interval, answ, V) {
-            if ((interval.filter((int) => int > V).length == interval.length)) {
-                answ.push('скорость автобуса была не меньше ' + V * 20 + ' км/ч на всём интервале');
-            }
+        function answAboutNonMore(intervals, answ, value) {
+            let wasNonMore = intervals.map(interval => isNonMore(interval, value));
+            addUniqueAnsw(wasNonMore, answ, 'скорость автобуса была не больше ' + value * 20 + ' км/ч на всём интервале');
         }
 
-        function answAbouNonMoreV(interval, answ, V) {
-            if ((interval.filter((int) => int < V)).length == interval.length) {
-                answ.push('скорость автобуса была не больше ' + V * 20 + ' км/ч на всём интервале');
-            }
+        function answAboutNonIncreasing(intervals, answ) {
+            let wasNonIncreasing = intervals.map(interval => isNonIncreasing(interval));
+            addUniqueAnsw(wasNonIncreasing, answ, 'автобус не увеличивал скорость на всём интервале');
         }
 
-        function isNonIncreasing(interval) {
-            return interval.slice(1).every((current, index) =>
-                current <= interval[index]
-            );
+        function answAboutNonDecreasing(intervals, answ) {
+            let wasNonDecreasing = intervals.map(interval => isNonDecreasing(interval));
+            addUniqueAnsw(wasNonDecreasing, answ, 'автобус не уменьшал скорость на всём интервале');
         }
 
-        function isNonDecreasing(interval) {
-            return interval.slice(1).every((current, index) =>
-                current >= interval[index]
-            );
+        function answAboutConst(intervals, answ) {
+            let wasConst = intervals.map(interval => lengthConst(interval) > 2);
+            addUniqueAnsw(wasConst, answ, chislitlx(lengthConst(interval), 'минута') + ' автобус двигался с постоянной ненулевой скоростью');
         }
 
-        function answAboutNonIncreasing(interval, answ) {
-            if (isNonIncreasing(interval)) {
-                answ.push('автобус не увеличивал скорость на всём интервале');
-            }
-        }
+        let time = [0].zapMonot(25, 0, 1, 1); // шкала времени
+        let value = [0]; // шкала скорости
 
-        function answAboutNonDecreasing(interval, answ) {
-            if (isNonDecreasing(interval)) {
-                answ.push('автобус не уменьшал скорость на всём интервале');
-            }
-        }
-
-        function answAbouConstV(intervals, answ) {
-            let length = 0;
-
-            for (let i = 0; i < intervals.length; i++) {
-                for (let j = 1; j < intervals[i].length; j++) {
-                    if (intervals[i][j] === intervals[i][j - 1] && intervals[i][j - 1]!==0) {
-                        length++;
-                    }
-                }
-                if(length>2)
-                    answ[i].solution.push(chislitlx(length, 'минута') + ' автобус двигался с постоянной ненулевой скоростью');
-                length = 0;
-            }
-        }
-
-        let t = [0].zapMonot(25, 0, 1, 1); // шкала времени
-        let v = [0]; // шкала скорости
-
-        for (; v.length <= t.length || v.length == t.length;) {
-            let interI = sl(2, (t.length / sl(3, 4)).floor());
+        for (; value.length <= time.length || value.length == time.length;) {
+            let interI = sl(2, (time.length / sl(3, 4)).floor());
             for (let j = 0; j < interI; j++) {
-                if (v.length + 1 == t.length) {
-                    v.push(0);
+                if (value.length + 1 == time.length) {
+                    value.push(0);
                     break;
                 }
-                v.push([sl(1, 5), v[v.length - 1]][Number(sl1() && v[v.length - 1] != 0)]);
+                value.push([sl(1, 5), value[value.length - 1]][Number(sl1() && value[value.length - 1] != 0)]);
             }
 
             let interD = sl(2, 3);
             for (let j = 0; j < interD; j++) {
-                v.push(0);
+                value.push(0);
             }
         }
-        v = v.slice(0, 25);
+        value = value.slice(0, 25);
 
         let beginTime = sl(0, 4);
 
         let intervals = Array.from({ length: 4 }, (_, i) =>
-            v.slice(beginTime + i * 4, beginTime + i * 4 + 5));
+            value.slice(beginTime + i * 4, beginTime + i * 4 + 5));
 
-        let listOfIntervals = [{
-            expr: beginTime + '-' + (beginTime + 4) + ' мин.',
-            solution: [],
-        }, {
-            expr: (beginTime + 4) + '-' + (beginTime + 8) + ' мин.',
-            solution: [],
-        }, {
-            expr: (beginTime + 8) + '-' + (beginTime + 12) + ' мин.',
-            solution: [],
-        }, {
-            expr: (beginTime + 12) + '-' + (beginTime + 16) + ' мин.',
-            solution: [],
-        },];
+        let listOfIntervals = Array.from({ length: 4 }, (_, i) => {
+            let startTime = beginTime + i * 4;
+            let endTime = startTime + 4;
+            return {
+                expr: startTime + '-' + endTime + ' мин.',
+                solution: [],
+            };
+        });
+        
+        let lessV = sl(1, 2);
+        let moreV = sl(3, 4);
 
         // добавляем ответы про остановку
-        intervals.forEach((interval, i) => { answAboutStop(interval, listOfIntervals[i].solution); });
-
-        // добавляем ответ про максимальную скорость
-        answAbouMaxV(intervals, listOfIntervals);
-
+        answAboutStop(intervals, listOfIntervals);
         // добавляем ответы про скорость не менее
-        let lessV = sl(1, 2);
-        intervals.forEach((interval, i) => { answAbouNonLessV(interval, listOfIntervals[i].solution, lessV); });
-
+        answAboutNonLess(intervals, listOfIntervals, lessV);
         // добавляем ответы про скорость не более
-        let moreV = sl(3, 4);
-        intervals.forEach((interval, i) => { answAbouNonMoreV(interval, listOfIntervals[i].solution, moreV); });
-
+        answAboutNonMore(intervals, listOfIntervals, moreV);
         // добавляем ответы про не повышение скорости
-        intervals.forEach((interval, i) => { answAboutNonIncreasing(interval, listOfIntervals[i].solution); });
+        answAboutNonIncreasing(intervals, listOfIntervals);
         // добавляем ответы про не понижение скорости
-        intervals.forEach((interval, i) => { answAboutNonDecreasing(interval, listOfIntervals[i].solution); });
-        
+        answAboutNonDecreasing(intervals, listOfIntervals);
+        // добавляем ответ про максимальную скорость
+        answAboutMax(intervals, listOfIntervals);
         // добавляем ответы про постоянную скорость
-        answAbouConstV(intervals, listOfIntervals);
+        answAboutConst(intervals, listOfIntervals);
 
         listOfIntervals.forEach(item => item.solution = item.solution.iz());
 
         let solutions = listOfIntervals.map(item => item.solution);
         solutions.forEach(item => genAssertNonempty(item));
         genAssert(!solutions.hasDubl(), 'Дубликаты решений');
-        console.log(solutions, listOfIntervals);
 
         let listView = listOfIntervals.map(list => list.expr + ':' + list.solution);
 
@@ -176,16 +110,16 @@
                 maxX: 25,
                 maxY: 100,
                 stepByCeilX: 2,
-                arrowLengthX: 24.5,
-                arrowLengthY: 5.8,
+                intervalowLengthX: 24.5,
+                intervalowLengthY: 5.8,
             });
 
             ctx.translate(30, 30 * 6);
             ctx.scale(30, -30);
             ctx.lineWidth = 2 / 30;
 
-            for (let i = 0; i < t.length - 1; i++) {
-                ctx.drawLine(t[i], v[i], t[i + 1], v[i + 1]);
+            for (let i = 0; i < time.length - 1; i++) {
+                ctx.drawLine(time[i], value[i], time[i + 1], value[i + 1]);
             }
         };
 

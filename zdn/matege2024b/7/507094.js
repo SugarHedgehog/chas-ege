@@ -3,26 +3,13 @@
 	retryWhileError(function () {
 		/* На рисунке точками показано потребление воды городской ТЭЦ на протяжении суток. По горизонтали указывается время, по вертикали – объём воды в кубометрах в час. Для наглядности точки соединены линией.*/
 			
-		function answAbouMaxP(intervals, answ) {
-			let maxV = p.maxE();
-			let maxIndex = null;
-
-			for (let i = 0; i < intervals.length; i++) {
-				for (let j = 0; j < intervals[i].length; j++) {
-					if (intervals[i][j] === maxV) {
-						maxIndex = i;
-						break;
-					}
-				}
-				if (maxIndex != null)
-					break;
-			}
-
-			if (maxIndex)
-				answ[maxIndex].solution.push('потребление воды достигло максимума за сутки');
+		function answAboutMax(intervals, answ) {
+			let maxIndex = findMaxInIntervals(intervals, p);
+			let wasMax = intervals.map((_, i) => i === maxIndex);
+			addUniqueAnsw(wasMax, answ, 'потребление воды достигло максимума за сутки');
 		}
 
-		function answAbouMaxDeltaI(intervals, answ) {
+		function answAboutMaxDeltaI(intervals, answ) {
 			let incr = intervals.map(int => {
 				if (isIncreasing(int)) {
 					return int.maxE() - int.minE();
@@ -32,16 +19,11 @@
 			});
 			
 			let maxEI = incr.maxE();
-			let maxI = incr.max();
-			
-			let length = (inter, value) => inter.filter(item => item === value).length == 1;
-			
-			if (length(incr, maxEI))
-				answ[maxI].solution.push('наибольший рост потребления воды за сутки');						
+			let wasMaxDeltaI = intervals.map((_, i) => incr[i] === maxEI);
+			addUniqueAnsw(wasMaxDeltaI, answ, 'наибольший рост потребления воды за сутки');						
 		}
 		
-		function answAbouMaxDeltaD(intervals, answ) {
-
+		function answAboutMaxDeltaD(intervals, answ) {
 			let decr = intervals.map(int => {
 				if (isDecreasing(int)) {
 					return int.maxE() - int.minE();
@@ -51,151 +33,112 @@
 			});
 			
 			let maxED = decr.maxE();
-			let maxD = decr.max();
-			
-			let length = (inter, value) => inter.filter(item => item === value).length == 1;
-			
-			if (length(decr, maxED))
-				answ[maxD].solution.push('наибольшее падение потребления воды за сутки');				
+			let wasMaxDeltaD = intervals.map((_, i) => decr[i] === maxED);
+			addUniqueAnsw(wasMaxDeltaD, answ, 'наибольшее падение потребления воды за сутки');				
 		}
 
-		function isIncreasing(interval) {
-			return interval.slice(1).every((current, index) =>
-				current > interval[index]
-			);
+		function answAboutIncreasing(intervals, answ) {
+			let wasIncreasing = intervals.map(interval => isIncreasing(interval));
+			addUniqueAnsw(wasIncreasing, answ, 'потребление воды росло в течение всего периода');
 		}
 
-		function isDecreasing(interval) {
-			return interval.slice(1).every((current, index) =>
-				current < interval[index]
-			);
+		function answAboutDecreasing(intervals, answ) {
+			let wasDecreasing = intervals.map(interval => isDecreasing(interval));
+			addUniqueAnsw(wasDecreasing, answ, 'потребление воды падало в течение всего периода');
 		}
 
-		function answAboutIncreasing(interval, answ) {
-			if (isIncreasing(interval)) {
-				answ.push('потребление воды росло в течение всего периода');
-			}
+		function answAboutLessP(intervals, answ, P) {
+			let wasLess = intervals.map(interval => isLess(interval, P));
+			addUniqueAnsw(wasLess, answ, 'в течение всего периода потребление воды было меньше ' + P * 10 + ' кубометров в час');
 		}
 
-		function answAboutDecreasing(interval, answ) {
-			if (isDecreasing(interval)) {
-				answ.push('потребление воды падало в течение всего периода');
-			}
-		}
-
-		function iLessV(interval, P) {
-			return interval.filter((int) => int < P).length == interval.length;
-		}
-
-		function answAbouLessP(interval, answ, P) {
-			if (iLessV(interval, P)) {
-				answ.push('в течение всего периода потребление воды было меньше ' + P * 10 + ' кубометров в час');
-			}
-		}
-
-		function iMoreV(interval, P) {
-			return interval.filter((int) => int > P).length == interval.length;
-		}
-
-		function answAbouMoreP(interval, answ, P) {
-			if (iMoreV(interval, P)) {
-				answ.push('в течение всего периода потребление воды было больше ' + P * 10 + ' кубометров в час');
-			}
-		}
-
-		function isDecreasingAfterIsIncreasing(interval) {
-			let minIndex = interval.min();
-
-			if (minIndex === 0 || minIndex === interval.length - 1) {
-				return false;
-			}
-
-			for (let i = 1; i <= minIndex; i++) {
-				if (interval[i] >= interval[i - 1]) {
-					return false;
-				}
-			}
-
-			for (let i = minIndex + 1; i < interval.length; i++) {
-				if (interval[i] <= interval[i - 1]) {
-					return false;
-				}
-			}
-
-			return true;
+		function answAboutMoreP(intervals, answ, P) {
+			let wasMore = intervals.map(interval => isMore(interval, P));
+			addUniqueAnsw(wasMore, answ, 'в течение всего периода потребление воды было больше ' + P * 10 + ' кубометров в час');
 		}
 
 		function answAboutDecreasingAfterIncreasing(intervals, answ) {
-
-			let rightInter = intervals.map(int => isDecreasingAfterIsIncreasing(int));
-
-			if (!rightInter.hasDubl()) {
-				answ[rightInter.indexOf(true)].solution.push('потребление воды сначала падало, а потом росло');
-			}
-		}
-
-		function isIncreasingAfterIsDecreasing(interval) {
-			let maxIndex = interval.max();
-
-			if (maxIndex === 0 || maxIndex === interval.length - 1) {
-				return false;
-			}
-
-			for (let i = 1; i <= maxIndex; i++) {
-				if (interval[i] <= interval[i - 1]) {
-					return false;
-				}
-			}
-
-			for (let i = maxIndex + 1; i < interval.length; i++) {
-				if (interval[i] >= interval[i - 1]) {
-					return false;
-				}
-			}
-
-			return true;
+			let wasCondition = intervals.map(int => isDecreasingAfterIsIncreasing(int));
+			addUniqueAnsw(wasCondition, answ, 'потребление воды сначала падало, а потом росло');
 		}
 
 		function answAboutIncreasingAfterDecreasing(intervals, answ) {
-			let rightInter = intervals.map(int => isIncreasingAfterIsDecreasing(int));
-
-			if (!rightInter.hasDubl()) {
-				answ[rightInter.indexOf(true)].solution.push('потребление воды сначала росло, а потом падало');
-			}
+			let wasCondition = intervals.map(int => isIncreasingAfterIsDecreasing(int));
+			addUniqueAnsw(wasCondition, answ, 'потребление воды сначала росло, а потом падало');
 		}
 
-		function answAboutIncrTimes(interval, answ) {
-			if (isIncreasing(interval)) {
-				let min = interval.minE();
-				let max = interval.maxE();
-				let delta = max / min;
-				let deltaFlour = delta.floor();
-				if (!delta.isZ() && deltaFlour > 1 && deltaFlour < 6) {
-					answ.push('в течение всего периода потребление воды выросло более чем ' + times[(deltaFlour - 2)]);
+		function answAboutIncrTimes(intervals, answ) {
+			let wasCondition = intervals.map(interval => {
+				if (isIncreasing(interval)) {
+					let min = interval.minE();
+					let max = interval.maxE();
+					let delta = max / min;
+					let deltaFlour = delta.floor();
+					return !delta.isZ() && deltaFlour > 1 && deltaFlour < 6;
 				}
-			}
-		}
-
-		function answAboutDecrTimes(interval, answ) {
-			if (isDecreasing(interval)) {
-				let min = interval.minE();
-				let max = interval.maxE();
-				let delta = max / min;
-				let deltaFlour = delta.floor();
-				if (!delta.isZ() && deltaFlour > 1 && deltaFlour < 6) {
-					answ.push('в течение всего периода потребление воды упало более чем ' + times[(deltaFlour - 2)]);
+				return false;
+			});
+			let times = ['вдвое', 'втрое', 'вчетверо', 'впятеро', 'вшестеро', 'всемеро', 'восьмеро'];
+			let deltaValues = intervals.map(interval => {
+				if (isIncreasing(interval)) {
+					let min = interval.minE();
+					let max = interval.maxE();
+					let delta = max / min;
+					return delta.floor();
 				}
-			}
+				return 0;
+			});
+			
+			wasCondition.forEach((condition, i) => {
+				if (condition) {
+					let deltaFlour = deltaValues[i];
+					let text = 'в течение всего периода потребление воды выросло более чем ' + times[(deltaFlour - 2)];
+					if (noHasDublValue(wasCondition, true) || wasCondition.filter(c => c).length === 1) {
+						answ[i].solution.push(text);
+					}
+				}
+			});
 		}
 
+		function answAboutDecrTimes(intervals, answ) {
+			let wasCondition = intervals.map(interval => {
+				if (isDecreasing(interval)) {
+					let min = interval.minE();
+					let max = interval.maxE();
+					let delta = max / min;
+					let deltaFlour = delta.floor();
+					return !delta.isZ() && deltaFlour > 1 && deltaFlour < 6;
+				}
+				return false;
+			});
+			let deltaValues = intervals.map(interval => {
+				if (isDecreasing(interval)) {
+					let min = interval.minE();
+					let max = interval.maxE();
+					let delta = max / min;
+					return delta.floor();
+				}
+				return 0;
+			});
+			
+			wasCondition.forEach((condition, i) => {
+				if (condition) {
+					let deltaFlour = deltaValues[i];
+					let text = 'в течение всего периода потребление воды упало более чем ' + times[(deltaFlour - 2)];
+					if (noHasDublValue(wasCondition, true) || wasCondition.filter(c => c).length === 1) {
+						answ[i].solution.push(text);
+					}
+				}
+			});
+		}
 
-		let t = [1].zapMonot(25, 0, 1, 1); // шкала времени
+		let time = [1].zapMonot(25, 0, 1, 1); // шкала времени
 		let p = [sl(1, 6, 0.1)]; // шкала потребления воды
 		let count = 0;
 		let times = ['вдвое', 'втрое', 'вчетверо', 'впятеро', 'вшестеро', 'всемеро', 'восьмеро'];
 
-		for (; p.length <= t.length || p.length == t.length;) {
-			let interI = ((t.length / (sl(1.5, 2.5, 0.5))).floor());
+		for (; p.length <= time.length || p.length == time.length;) {
+			let interI = ((time.length / (sl(1.5, 2.5, 0.5))).floor());
 			for (let j = 0; j < interI; j++) {
 				let newPoint = p[p.length - 1] + sl(0.1, 1, 0.1) * [-1, 1][count % 2];
 				if (newPoint > 0 && newPoint < 6)
@@ -221,8 +164,6 @@
 			};
 		});
 
-		console.log('listOfIntervals', listOfIntervals);
-
 		let varianbleDI = sl1();
 		let varianbleML = sl1();
 		let varianbleDIT = sl1();
@@ -231,35 +172,30 @@
 		let MoreP = sl(3, 5);
 
 		function addAllAnswers(intervals, listOfIntervals) {
-			intervals.forEach((interval, i) => {
-				let solution = listOfIntervals[i].solution;
-				// добавляем ответ про повышение потребления воды
-				answAboutIncreasing(interval, solution);
+			// добавляем ответ про повышение потребления воды
+			answAboutIncreasing(intervals, listOfIntervals);
+			// добавляем ответ про понижение потребления воды
+			answAboutDecreasing(intervals, listOfIntervals);
 
-				// добавляем ответ про понижение потребления воды
-				answAboutDecreasing(interval, solution);
+			if (varianbleML) {
+				// добавляем ответ про потребления воды меньше
+				answAboutLessP(intervals, listOfIntervals, LessP);
+			} else {
+				// добавляем ответ про потребления воды больше
+				answAboutMoreP(intervals, listOfIntervals, MoreP);
+			}
 
-				if (varianbleML) {
-					// добавляем ответ про потребления воды меньше
-					answAbouLessP(interval, solution, LessP);
-				} else {
-					// добавляем ответ про потребления воды больше
-					answAbouMoreP(interval, solution, MoreP);
-				}
-
-				if (varianbleDIT) {
-					answAboutIncrTimes(interval, solution);
-				} else {
-					answAboutDecrTimes(interval, solution);
-				}
-
-			});
+			if (varianbleDIT) {
+				answAboutIncrTimes(intervals, listOfIntervals);
+			} else {
+				answAboutDecrTimes(intervals, listOfIntervals);
+			}
 		}
 		// добавляем ответ про максимальное потребление воды
-		answAbouMaxP(intervals, listOfIntervals);
+		answAboutMax(intervals, listOfIntervals);
 		// добавляем ответ про максимальный и минимальный рост
-		answAbouMaxDeltaI(intervals, listOfIntervals)
-		answAbouMaxDeltaD(intervals, listOfIntervals)
+		answAboutMaxDeltaI(intervals, listOfIntervals)
+		answAboutMaxDeltaD(intervals, listOfIntervals)
 		if (varianbleDI) {
 			// добавляем ответ про понижение потребления воды а потом увеличение
 			answAboutDecreasingAfterIncreasing(intervals, listOfIntervals);
@@ -270,7 +206,6 @@
 		addAllAnswers(intervals, listOfIntervals);
 
 		listOfIntervals.forEach(item => {
-			console.log(item);
 			item.solution = item.solution.iz()
 		});
 
@@ -304,10 +239,10 @@
 			ctx.scale(20, -30);
 			ctx.lineWidth = 2 / 30;
 
-			for (let i = 0; i < t.length; i++) {
-				ctx.drawFilledCircle(t[i], p[i], 3 / 30);
-				if (i < t.length - 1)
-					ctx.drawLine(t[i], p[i], t[i + 1], p[i + 1]);
+			for (let i = 0; i < time.length; i++) {
+				ctx.drawFilledCircle(time[i], p[i], 3 / 30);
+				if (i < time.length - 1)
+					ctx.drawLine(time[i], p[i], time[i + 1], p[i + 1]);
 			}
 		};
 

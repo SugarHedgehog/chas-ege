@@ -1,246 +1,107 @@
 (function () {
     'use strict';
-    retryWhileError(function () { /* На графике изображена зависимость скорости движения легкового автомобиля от времени. На вертикальной оси отмечена скоростьлегкового автомобиля в км/ч, на горизонтальной – время в секундах, прошедшее с начала движения автомобиля. */
+    retryWhileError(function () {
+        /* На графике изображена зависимость скорости движения легкового автомобиля от времени. На вертикальной оси отмечена скорость легкового автомобиля в км/ч, на горизонтальной – время в секундах, прошедшее с начала движения автомобиля. */
 
-        function lengthOfZeroInterval(arr) {
-            let maxZeros = 0;
-            let currentZeros = 0;
-
-            for (let i = 0; i < arr.length; i++) {
-                if (arr[i] === 0) {
-                    currentZeros++;
-                    maxZeros = Math.max(maxZeros, currentZeros);
-                } else {
-                    currentZeros = 0;
-                }
-            }
-
-            return maxZeros;
+        function answAboutStop(intervals, answ) {
+            let wasStop = intervals.map(interval => lengthOfZeroInterval(interval) > 1);
+            addUniqueAnsw(wasStop, answ, 'автомобиль сделал остановку на ' + chislitlx((lengthOfZeroInterval(interval) - 1) * 15, 'секунда', 'value'));
         }
 
-        function answAboutStop(interval, answ) {
-            if (lengthOfZeroInterval(interval) > 1)
-                answ.push('автомобиль сделал остановку на ' + chislitlx((lengthOfZeroInterval(interval) - 1) * 15, 'секунда', 'v'));
+        function answAboutMax(intervals, answ) {
+            let maxIndex = findMaxInIntervals(intervals, value);
+            let wasMax = intervals.map((_, i) => i === maxIndex);
+            addUniqueAnsw(wasMax, answ, 'скорость автомобиля достигла максимума за всё время движения');
         }
 
-        function answAbouMaxV(intervals, answ) {
-            let maxV = v.maxE();
-            let maxIndex = null;
-            let maxCount = 0;
-
-            for (let i = 0; i < intervals.length; i++) {
-                for (let j = 0; j < intervals[i].length; j++) {
-                    if (intervals[i][j] === maxV) {
-                        maxCount++;
-                        if (maxCount > 1) {
-                            return;
-                        }
-                        maxIndex = i;
-                    }
-                }
-            }
-
-            if (maxIndex)
-                answ[maxIndex].solution.push('скорость автомобиля достигла максимума за всё время движения');
+        function answAboutNonIncreasingNonMoreV(intervals, answ, V) {
+            let wasCondition = intervals.map(interval => isNonIncreasing(interval) && isNonMore(interval, V));
+            addUniqueAnsw(wasCondition, answ, 'скорость автомобиля не увеличивалась и не превышала ' + V * 20 + ' км/ч');
         }
 
-        function isNonMoreV(interval, V) {
-            return (interval.filter((int) => int < V)).length == interval.length;
+        function answAboutNonDecreasingNonLessV(intervals, answ, V) {
+            let wasCondition = intervals.map(interval => isNonDecreasing(interval) && isNonLess(interval, V));
+            addUniqueAnsw(wasCondition, answ, 'скорость автомобиля не уменьшалась и не была менее ' + V * 20 + ' км/ч');
         }
 
-        function answAbouNonIncreasingNonMoreV(interval, answ, V) {
-            if (isNonIncreasing(interval) && isNonMoreV(interval, V)) {
-                answ.push('скорость автомобиля не увеличивалась и не превышала ' + V * 20 + ' км/ч');
-            }
+        function answAboutIncreasing(intervals, answ) {
+            let wasIncreasing = intervals.map(interval => isIncreasing(interval));
+            addUniqueAnsw(wasIncreasing, answ, 'скорость автомобиля постоянно увеличивалась');
         }
 
-        function isNonLessV(interval, V) {
-            return interval.filter((int) => int > V).length == interval.length;
+        function answAboutDecreasing(intervals, answ) {
+            let wasDecreasing = intervals.map(interval => isDecreasing(interval));
+            addUniqueAnsw(wasDecreasing, answ, 'скорость автомобиля постоянно уменьшалась');
         }
 
-        function answAbouNonDecreasingNonLessV(interval, answ, V) {
-            if (isNonDecreasing(interval) && isNonLessV(interval, V)) {
-                answ.push('скорость автомобиля не уменьшалась и не была менее ' + V * 20 + ' км/ч');
-            }
+        function answAboutNonIncreasingAndWasConst(intervals, answ) {
+            let wasCondition = intervals.map(interval => isNonIncreasing(interval) && wasConst(interval));
+            addUniqueAnsw(wasCondition, answ, 'автомобиль не увеличивал скорость на всём интервале и некоторое время ехал с постоянной скоростью');
         }
 
-        function isNonIncreasing(interval) {
-            return interval.slice(1).every((current, index) =>
-                current <= interval[index]
-            );
+        function answAboutNonDecreasingAndWasConst(intervals, answ) {
+            let wasCondition = intervals.map(interval => isNonDecreasing(interval) && wasConst(interval));
+            addUniqueAnsw(wasCondition, answ, 'автомобиль не уменьшал скорость на всём интервале и некоторое время ехал с постоянной скоростью');
         }
 
-        function isIncreasing(interval) {
-            return interval.slice(1).every((current, index) =>
-                current > interval[index]
-            );
+        function answAboutNonIncreasing(intervals, answ) {
+            let wasNonIncreasing = intervals.map(interval => isNonIncreasing(interval));
+            addUniqueAnsw(wasNonIncreasing, answ, 'автомобиль не увеличивал скорость на всём интервале');
         }
 
-        function isNonDecreasing(interval) {
-            return interval.slice(1).every((current, index) =>
-                current >= interval[index]
-            );
+        function answAboutNonDecreasing(intervals, answ) {
+            let wasNonDecreasing = intervals.map(interval => isNonDecreasing(interval));
+            addUniqueAnsw(wasNonDecreasing, answ, 'автомобиль не уменьшал скорость на всём интервале');
         }
 
-        function isDecreasing(interval) {
-            return interval.slice(1).every((current, index) =>
-                current < interval[index]
-            );
+        function answAboutDecreasingAfterIncreasing(intervals, answ) {
+            let wasCondition = intervals.map(interval => isDecreasingAfterIsIncreasing(interval));
+            addUniqueAnsw(wasCondition, answ, 'скорость автомобиля сначала уменьшалась, а потом увеличивалась');
         }
 
-        function answAboutIncreasing(interval, answ) {
-            if (isIncreasing(interval)) {
-                answ.push('скорость автомобиля постоянно увеличивалась');
-            }
+        function answAboutIncreasingAfterDecreasing(intervals, answ) {
+            let wasCondition = intervals.map(interval => isIncreasingAfterIsDecreasing(interval));
+            addUniqueAnsw(wasCondition, answ, 'скорость автомобиля сначала увеличивалась, а потом уменьшалась');
         }
 
-        function answAboutDecreasing(interval, answ) {
-            if (isDecreasing(interval)) {
-                answ.push('скорость автомобиля постоянно уменьшалась');
-            }
+        function answAboutConstNSec(intervals, answ) {
+            let wasConst = intervals.map(interval => lengthConst(interval) > 1);
+            addUniqueAnsw(wasConst, answ, 'автомобиль ровно ' + chislitlx(lengthConst(interval) * 15, 'секунда') + ' ехал с постоянной скоростью');
         }
 
-        function answAboutNonIncreasingAndWasConst(interval, answ) {
-            if (isNonIncreasing(interval) && wasConstV(interval)) {
-                answ.push('автомобиль не увеличивал скорость на всём интервале и некоторое время ехал с постоянной скоростью');
-            }
+        function answAboutConstMoreNSec(intervals, answ) {
+            let wasConst = intervals.map(interval => lengthConst(interval) > 2);
+            addUniqueAnsw(wasConst, answ, 'автомобиль более ' + chislitlx((lengthConst(interval) - 1) * 15, 'секунда', 'r') + ' ехал с постоянной скоростью');
         }
 
-        function answAboutNonDecreasingAndWasConst(interval, answ) {
-            if (isNonDecreasing(interval) && wasConstV(interval)) {
-                answ.push('автомобиль не уменьшал скорость на всём интервале и некоторое время ехал с постоянной скоростью');
-            }
-        }
+        let time = [0].zapMonot(11, 0, 1, 1); // шкала времени
+        let value = [0]; // шкала скорости
 
-        function answAboutNonIncreasing(interval, answ) {
-            if (isNonIncreasing(interval)) {
-                answ.push('автомобиль не увеличивал скорость на всём интервале');
-            }
-        }
-
-        function answAboutNonDecreasing(interval, answ) {
-            if (isNonDecreasing(interval)) {
-                answ.push('автомобиль не уменьшал скорость на всём интервале');
-            }
-        }
-
-        function isDecreasingAfterIsIncreasing(interval) {
-            let minIndex = interval.min();
-
-            if (minIndex === 0 || minIndex === interval.length - 1) {
-                return false;
-            }
-
-            for (let i = 1; i <= minIndex; i++) {
-                if (interval[i] >= interval[i - 1]) {
-                    return false;
-                }
-            }
-
-            for (let i = minIndex + 1; i < interval.length; i++) {
-                if (interval[i] <= interval[i - 1]) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        function answAboutDecreasingAfterIncreasing(interval, answ) {
-            if (isDecreasingAfterIsIncreasing(interval)) {
-                answ.push('скорость автомобиля сначала уменьшалась, а потом увеличивалась');
-            }
-        }
-
-        function isIncreasingAfterIsDecreasing(interval) {
-            let maxIndex = interval.max();
-
-            if (maxIndex === 0 || maxIndex === interval.length - 1) {
-                return false;
-            }
-
-            for (let i = 1; i <= maxIndex; i++) {
-                if (interval[i] <= interval[i - 1]) {
-                    return false;
-                }
-            }
-
-            for (let i = maxIndex + 1; i < interval.length; i++) {
-                if (interval[i] >= interval[i - 1]) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        function answAboutIncreasingAfterDecreasing(interval, answ) {
-            if (isIncreasingAfterIsDecreasing(interval)) {
-                answ.push('скорость автомобиля сначала увеличивалась, а потом уменьшалась');
-            }
-        }
-
-        function wasConstV(interval) {
-            let length = 0;
-            for (let j = 1; j < interval.length; j++) {
-                if (interval[j] === interval[j - 1] && interval[j - 1] !== 0) {
-                    length++;
-                }
-            }
-
-            return length > 0;
-        }
-
-        function lengthConstV(interval) {
-            let length = 0;
-            for (let j = 1; j < interval.length; j++) {
-                if (interval[j] === interval[j - 1] && interval[j - 1] !== 0) {
-                    length++;
-                }
-            }
-            return length;
-        }
-
-        function answAbouConstVNSec(interval, answ) {
-            let length = lengthConstV(interval);
-            if (length > 1)
-                answ.push('автомобиль ровно ' + chislitlx(length * 15, 'секунда') + ' ехал с постоянной скоростью');
-        }
-
-        function answAbouConstVMoreNSec(interval, answ) {
-            let length = lengthConstV(interval);
-            if (length > 2)
-                answ.push('автомобиль более ' + chislitlx((length - 1) * 15, 'секунда', 'r') + ' ехал с постоянной скоростью');
-        }
-
-        let t = [0].zapMonot(11, 0, 1, 1); // шкала времени
-        let v = [0]; // шкала скорости
-
-        for (; v.length <= t.length || v.length == t.length;) {
-            let interI = (t.length / sl(2, 4).floor());
+        for (; value.length <= time.length || value.length == time.length;) {
+            let interI = (time.length / sl(2, 4).floor());
             for (let j = 0; j < interI; j++) {
-                if (v.length + 1 == t.length) {
-                    v.push(0);
+                if (value.length + 1 == time.length) {
+                    value.push(0);
                     break;
                 }
-                v.push([sl(1, 4), v[v.length - 1]][Number(sl1() && v[v.length - 1] != 0)]);
+                value.push([sl(1, 4), value[value.length - 1]][Number(sl1() && value[value.length - 1] != 0)]);
             }
 
             let interD = sl(2, 3);
-            if (v.length + interD !== t.length)
+            if (value.length + interD !== time.length)
                 for (let j = 0; j < interD; j++) {
-                    v.push(0);
+                    value.push(0);
                 }
         }
-        genAssert(v[9] != 0, 'Предпоследняя точка 0');
-        v = v.slice(0, 11);
+        genAssert(value[9] != 0, 'Предпоследняя точка 0');
+        value = value.slice(0, 11);
 
         let beginTime = sl1();
 
         let intervals = Array.from({
             length: 4
         }, (_, i) =>
-            v.slice(beginTime + i * 2, beginTime + i * 2 + 3));
+            value.slice(beginTime + i * 2, beginTime + i * 2 + 3));
 
         let listOfIntervals = intervals.map((interval, i) => {
             return {
@@ -254,72 +115,64 @@
         let aAboutNonDecr = sl1();
         let aIncrAfterDecr = sl1();
         let aLessVMoreV = sl1();
-        let aAbouConst = sl1();
+        let aAboutConst = sl1();
 
         let lessV = sl(1, 2);
         let moreV = sl(2, 3);
 
-        function addAllAnswers(intervals, listOfIntervals) {
-            intervals.forEach((interval, i) => {
-                const solution = listOfIntervals[i].solution;
-                // добавляем ответ про остановку
-                answAboutStop(interval, solution);
-                if (aAboutIncrOrDecr) {
-                    // добавляем ответ про повышение скорости
-                    answAboutIncreasing(interval, solution);
-                } else {
-                    // добавляем ответ про понижение скорости
-                    answAboutDecreasing(interval, solution);
-                }
-                if (aAboutNonIncr) {
-                    // добавляем ответ про не повышение скорости
-                    answAboutNonIncreasing(interval, solution);
-                } else {
-                    // добавляем ответ про не повышение скорости и сохранении скорости некоторое время
-                    answAboutNonIncreasingAndWasConst(interval, solution);
-                }
-                if (aAboutNonDecr) {
-                    // добавляем ответ про не понижение скорости
-                    answAboutNonDecreasing(interval, solution);
-                } else {
-                    // добавляем ответ про не понижение скорости и сохранении скорости некоторое время
-                    answAboutNonDecreasingAndWasConst(interval, solution);
-                }
-                if (aIncrAfterDecr) {
-                    // добавляем ответ про понижение скорости а потом увеличение
-                    answAboutDecreasingAfterIncreasing(interval, solution);
-                } else {
-                    // добавляем ответ про увеличение скорости а потом понижение
-                    answAboutIncreasingAfterDecreasing(interval, solution);
-                }
-                if (aLessVMoreV) {
-                    // добавляем ответ про скорость не повышалась и была не более n км/ч
-                    answAbouNonIncreasingNonMoreV(interval, solution, moreV);
-                } else {
-                    // добавляем ответ про скорость не понижалась и была не менее n км/ч
-                    answAbouNonDecreasingNonLessV(interval, solution, lessV);
-                }
-                if (aAbouConst) {
-                    // добавляем ответ про постоянную скорость ровно n секунд
-                    answAbouConstVNSec(interval, solution);
-                } else {
-                    // добавляем ответ про постоянную скорость более n секунд
-                    answAbouConstVMoreNSec(interval, solution);
-                }
-            });
+        // добавляем ответ про остановку
+        answAboutStop(intervals, listOfIntervals);
+        if (aAboutIncrOrDecr) {
+            // добавляем ответ про повышение скорости
+            answAboutIncreasing(intervals, listOfIntervals);
+        } else {
+            // добавляем ответ про понижение скорости
+            answAboutDecreasing(intervals, listOfIntervals);
+        }
+        if (aAboutNonIncr) {
+            // добавляем ответ про не повышение скорости
+            answAboutNonIncreasing(intervals, listOfIntervals);
+        } else {
+            // добавляем ответ про не повышение скорости и сохранении скорости некоторое время
+            answAboutNonIncreasingAndWasConst(intervals, listOfIntervals);
+        }
+        if (aAboutNonDecr) {
+            // добавляем ответ про не понижение скорости
+            answAboutNonDecreasing(intervals, listOfIntervals);
+        } else {
+            // добавляем ответ про не понижение скорости и сохранении скорости некоторое время
+            answAboutNonDecreasingAndWasConst(intervals, listOfIntervals);
+        }
+        if (aIncrAfterDecr) {
+            // добавляем ответ про понижение скорости а потом увеличение
+            answAboutDecreasingAfterIncreasing(intervals, listOfIntervals);
+        } else {
+            // добавляем ответ про увеличение скорости а потом понижение
+            answAboutIncreasingAfterDecreasing(intervals, listOfIntervals);
+        }
+        if (aLessVMoreV) {
+            // добавляем ответ про скорость не повышалась и была не более n км/ч
+            answAboutNonIncreasingNonMoreV(intervals, listOfIntervals, moreV);
+        } else {
+            // добавляем ответ про скорость не понижалась и была не менее n км/ч
+            answAboutNonDecreasingNonLessV(intervals, listOfIntervals, lessV);
+        }
+        if (aAboutConst) {
+            // добавляем ответ про постоянную скорость ровно n секунд
+            answAboutConstNSec(intervals, listOfIntervals);
+        } else {
+            // добавляем ответ про постоянную скорость более n секунд
+            answAboutConstMoreNSec(intervals, listOfIntervals);
         }
 
         // добавляем ответ про максимальную скорость
-        answAbouMaxV(intervals, listOfIntervals);
-        addAllAnswers(intervals, listOfIntervals);
+        answAboutMax(intervals, listOfIntervals);
 
         listOfIntervals.forEach(item => item.solution = item.solution.iz());
 
         let solutions = listOfIntervals.map(item => item.solution);
         solutions.forEach(item => genAssertNonempty(item));
         genAssert(!solutions.hasDubl(), 'Дубликаты решений');
-
-        console.log(listOfIntervals);
 
         let listView = listOfIntervals.map(list => list.expr + ':' + list.solution);
 
@@ -342,8 +195,8 @@
             ctx.scale(60, -60);
             ctx.lineWidth = 2 / 60;
 
-            for (let i = 0; i < t.length - 1; i++) {
-                ctx.drawLine(t[i], v[i], t[i + 1], v[i + 1]);
+            for (let i = 0; i < time.length - 1; i++) {
+                ctx.drawLine(time[i], value[i], time[i + 1], value[i + 1]);
             }
         };
 

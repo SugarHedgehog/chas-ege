@@ -14,128 +14,62 @@
                     length++;
                 }
             }
-
             return length;
-        }
-
-        function noHasDublValue(interval, value) {
-            let index = interval.indexOf(value);
-            return index === interval.lastIndexOf(value) && index != -1;
-        }
-
-        function addUniqueAnsw(rightIntervals, answ, text) {
-            let index = rightIntervals.indexOf(true);
-            if (noHasDublValue(rightIntervals, true)) {
-                answ[index].solution.push(text);
-            }
         }
 
         function answAboutConstN(intervals, answ) {
             let lengthConsts = intervals.map(interval => wasLengthConstValue(interval));
             let maxLength = lengthConsts.maxE();
-            let maxIndex = lengthConsts.indexOf(maxLength);
-            if (noHasDublValue(lengthConsts, maxLength) && (maxLength == 3 || maxLength == 4)) {
-                answ[maxIndex].solution.push(['три', 'четыре'][maxLength - 3] + ' дня подряд среднесуточная температура принимала одно и то же значение');
-            }
+            let wasConstN = intervals.map((_, i) => lengthConsts[i] === maxLength && (maxLength == 3 || maxLength == 4));
+            let constTexts = intervals.map((_, i) => {
+                let days = ['три', 'четыре'][lengthConsts[i] - 3];
+                return days + ' дня подряд среднесуточная температура принимала одно и то же значение';
+            });
+            
+            wasConstN.forEach((condition, i) => {
+                if (condition) {
+                    if (noHasDublValue(lengthConsts, maxLength)) {
+                        answ[i].solution.push(constTexts[i]);
+                    }
+                }
+            });
         }
 
         function answAboutMin(intervals, answ) {
-            let minV = values.minE();
-            let minIndex = null;
-            let minCount = 0;
-
-            for (let i = 0; i < intervals.length; i++) {
-                for (let j = 0; j < intervals[i].length; j++) {
-                    if (intervals[i][j] === minV) {
-                        minCount++;
-                        if (minCount > 1) {
-                            return;
-                        }
-                        minIndex = i;
-                    }
-                }
-            }
-
-            if (minIndex)
-                answ[minIndex].solution.push('среднесуточная температура достигла месячного минимума');
+            let minIndex = findMinInIntervals(intervals, values);
+            let wasMin = intervals.map((_, i) => i === minIndex);
+            addUniqueAnsw(wasMin, answ, 'среднесуточная температура достигла месячного минимума');
         }
 
         function answAboutMax(intervals, answ) {
-            let maxV = values.maxE();
-            let maxIndex = null;
-            let maxCount = 0;
-
-            for (let i = 0; i < intervals.length; i++) {
-                for (let j = 0; j < intervals[i].length; j++) {
-                    if (intervals[i][j] === maxV) {
-                        maxCount++;
-                        if (maxCount > 1) {
-                            return;
-                        }
-                        maxIndex = i;
-                    }
-                }
-            }
-
-            if (maxIndex)
-                answ[maxIndex].solution.push('среднесуточная температура достигла месячного максимума');
-        }
-
-        function isMore(interval, values) {
-            return (interval.filter((int) => int > values)).length == interval.length;
-        }
-
-        function isLess(interval, values) {
-            return interval.filter((int) => int < values).length == interval.length;
+            let maxIndex = findMaxInIntervals(intervals, values);
+            let wasMax = intervals.map((_, i) => i === maxIndex);
+            addUniqueAnsw(wasMax, answ, 'среднесуточная температура достигла месячного максимума');
         }
 
         function answAboutMoreButLess(intervals, answ, more, less) {
-            let rightIntervals = intervals.map(interval => isLess(interval, less) && isMore(interval, more));
-            addUniqueAnsw(rightIntervals, answ, 'температура находилась в пределах от ' + convert(more) + ' до ' + convert(less));
+            let wasCondition = intervals.map(interval => isLess(interval, less) && isMore(interval, more));
+            addUniqueAnsw(wasCondition, answ, 'температура находилась в пределах от ' + convert(more) + ' до ' + convert(less));
         }
 
         function answAboutMore(intervals, answ, more) {
-            let rightIntervals = intervals.map(interval => isMore(interval, more));
-            addUniqueAnsw(rightIntervals, answ, 'среднесуточная температура оставалась выше ' + convert(more));
+            let wasMore = intervals.map(interval => isMore(interval, more));
+            addUniqueAnsw(wasMore, answ, 'среднесуточная температура оставалась выше ' + convert(more));
         }
 
         function answAboutLess(intervals, answ, less) {
-            let rightIntervals = intervals.map(interval => isLess(interval, less));
-            addUniqueAnsw(rightIntervals, answ, 'среднесуточная температура не превышала ' + convert(less));
-        }
-
-        function isIncreasing(interval) {
-            return interval.slice(1).every((current, index) =>
-                current > interval[index]
-            );
-        }
-
-        function isDecreasing(interval) {
-            return interval.slice(1).every((current, index) =>
-                current < interval[index]
-            );
-        }
-
-        function isNonIncreasing(interval) {
-            return interval.slice(1).every((current, index) =>
-                current <= interval[index]
-            );
-        }
-
-        function isNonDecreasing(interval) {
-            return interval.slice(1).every((current, index) =>
-                current >= interval[index]
-            );
+            let wasLess = intervals.map(interval => isLess(interval, less));
+            addUniqueAnsw(wasLess, answ, 'среднесуточная температура не превышала ' + convert(less));
         }
 
         function answAboutNonIncreasing(intervals, answ) {
-            let rightIntervals = intervals.map(interval => isNonIncreasing(interval));
-            addUniqueAnsw(rightIntervals, answ, 'среднесуточная температура не повышалась в течение периода');
+            let wasNonIncreasing = intervals.map(interval => isNonIncreasing(interval));
+            addUniqueAnsw(wasNonIncreasing, answ, 'среднесуточная температура не повышалась в течение периода');
         }
 
         function answAboutNonDecreasing(intervals, answ) {
-            let rightIntervals = intervals.map(interval => isNonDecreasing(interval));
-            addUniqueAnsw(rightIntervals, answ, 'среднесуточная температура не снижалась в течение периода');
+            let wasNonDecreasing = intervals.map(interval => isNonDecreasing(interval));
+            addUniqueAnsw(wasNonDecreasing, answ, 'среднесуточная температура не снижалась в течение периода');
         }
 
         function answAboutIncrDescr(intervals, answ) {
@@ -264,7 +198,7 @@
             ctx.font = "14px serif";
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText('t,°C', -3, 10)
+            ctx.fillText('time,°C', -3, 10)
 
             ctx.translate(15, 20 * 15);
             ctx.scale(15, -15);

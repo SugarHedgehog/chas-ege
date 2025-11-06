@@ -1,105 +1,50 @@
 (function () {
     'use strict';
-    retryWhileError(function () { /* На рисунке точками показан прирост населения Китая в период с 2004 по 2013 год. По горизонтали указывается год, по вертикали –прирост населения в процентах (увеличение численности населения относительно прошлого года). Для наглядности точки соединены линией */
+    retryWhileError(function () { 
+        /* На рисунке точками показан прирост населения Китая в период с 2004 по 2013 год. По горизонтали указывается год, по вертикали –прирост населения в процентах (увеличение численности населения относительно прошлого года). Для наглядности точки соединены линией */
 
         function convert(value) {
             return 0.47 + value * 0.02 + '%';
         }
 
-        function answAbouMin(intervals, answ) {
-            let minV = values.minE();
-            let minIndex = null;
-            let minCount = 0;
-
-            for (let i = 0; i < intervals.length; i++) {
-                for (let j = 0; j < intervals[i].length; j++) {
-                    if (intervals[i][j] === minV) {
-                        minCount++;
-                        if (minCount > 1) {
-                            return;
-                        }
-                        minIndex = i;
-                    }
-                }
-            }
-
-            if (minIndex)
-                answ[minIndex].solution.push('прирост населения достиг минимума');
+        function answAboutMin(intervals, answ) {
+            let minIndex = findMinInIntervals(intervals, values);
+            let wasMin = intervals.map((_, i) => i === minIndex);
+            addUniqueAnsw(wasMin, answ, 'прирост населения достиг минимума');
         }
 
-        function answAbouMax(intervals, answ) {
-            let maxV = values.maxE();
-            let maxIndex = null;
-            let maxCount = 0;
-
-            for (let i = 0; i < intervals.length; i++) {
-                for (let j = 0; j < intervals[i].length; j++) {
-                    if (intervals[i][j] === maxV) {
-                        maxCount++;
-                        if (maxCount > 1) {
-                            return;
-                        }
-                        maxIndex = i;
-                    }
-                }
-            }
-
-            if (maxIndex)
-                answ[maxIndex].solution.push('прирост населения достиг максимума');
+        function answAboutMax(intervals, answ) {
+            let maxIndex = findMaxInIntervals(intervals, values);
+            let wasMax = intervals.map((_, i) => i === maxIndex);
+            addUniqueAnsw(wasMax, answ, 'прирост населения достиг максимума');
         }
 
-        function isMore(interval, values) {
-            return (interval.filter((int) => int > values)).length == interval.length;
+        function answAboutMoreButLess(intervals, answ, more, less) {
+            let wasCondition = intervals.map(interval => isLess(interval, less) && isMore(interval, more));
+            addUniqueAnsw(wasCondition, answ, 'прирост населения находился в пределах от ' + convert(more) + ' до ' + convert(less));
         }
 
-        function isLess(interval, values) {
-            return interval.filter((int) => int < values).length == interval.length;
+        function answAboutMore(intervals, answ, more) {
+            let wasMore = intervals.map(interval => isMore(interval, more));
+            addUniqueAnsw(wasMore, answ, 'прирост населения оставался выше ' + convert(more));
         }
 
-        function answAbouMoreButLess(interval, answ, more, less) {
-            if (isLess(interval, less) && isMore(interval, more)) {
-                answ.push('прирост населения находился в пределах от ' + convert(more) + ' до ' + convert(less));
-            }
+        function answAboutLess(intervals, answ, less) {
+            let wasLess = intervals.map(interval => isLess(interval, less));
+            addUniqueAnsw(wasLess, answ, 'прирост населения оставался ниже ' + convert(less));
         }
 
-        function answAbouMore(interval, answ, more) {
-            if (isMore(interval, more)) {
-                answ.push('прирост населения оставался выше ' + convert(more));
-            }
+        function answAboutIncreasing(intervals, answ) {
+            let wasIncreasing = intervals.map(interval => isIncreasing(interval));
+            addUniqueAnsw(wasIncreasing, answ, 'прирост населения увеличивался');
         }
 
-        function answAbouLess(interval, answ, less) {
-            if (isLess(interval, less)) {
-                answ.push('прирост населения оставался ниже ' + convert(less));
-            }
+        function answAboutDecreasing(intervals, answ) {
+            let wasDecreasing = intervals.map(interval => isDecreasing(interval));
+            addUniqueAnsw(wasDecreasing, answ, 'прирост населения уменьшался');
         }
 
-        function isIncreasing(interval) {
-            return interval.slice(1).every((current, index) =>
-                current > interval[index]
-            );
-        }
-
-        function isDecreasing(interval) {
-            return interval.slice(1).every((current, index) =>
-                current < interval[index]
-            );
-        }
-
-        function answAboutIncreasing(interval, answ) {
-            if (isIncreasing(interval)) {
-                answ.push('прирост населения увеличивался');
-            }
-        }
-
-        function answAboutDecreasing(interval, answ) {
-            if (isDecreasing(interval)) {
-                answ.push('прирост населения уменьшался');
-            }
-        }
-
-        function answAbouMaxDeltaD(intervals, answ) {
-
+        function answAboutMaxDeltaD(intervals, answ) {
             let decr = intervals.map(int => {
                 if (isDecreasing(int)) {
                     return int.maxE() - int.minE();
@@ -109,29 +54,13 @@
             });
 
             let maxED = decr.maxE();
-            let maxD = decr.max();
-
-            let length = (inter, value) => inter.filter(item => item === value).length == 1;
-
-            if (length(decr, maxED))
-                answ[maxD].solution.push('наибольшее падение прироста населения за один год');
+            let wasMaxDeltaD = intervals.map((_, i) => decr[i] === maxED);
+            addUniqueAnsw(wasMaxDeltaD, answ, 'наибольшее падение прироста населения за один год');
         }
 
-        function wasConstV(interval) {
-            let length = 0;
-            for (let j = 1; j < interval.length; j++) {
-                if (interval[j] === interval[j - 1] && interval[j - 1] !== 0) {
-                    length++;
-                }
-            }
-
-            return length > 0;
-        }
-
-        function answAboutDecreasingAndWasConst(interval, answ) {
-            if (isDecreasing(interval) && wasConstV(interval)) {
-                answ.push('падение прироста остановилось');
-            }
+        function answAboutDecreasingAndWasConst(intervals, answ) {
+            let wasCondition = intervals.map(interval => isDecreasing(interval) && wasConst(interval));
+            addUniqueAnsw(wasCondition, answ, 'падение прироста остановилось');
         }
 
         let time = [0].zapMonot(10, 0, 1, 1); // шкала времени
@@ -157,10 +86,6 @@
         }, (_, i) =>
             values.slice(i * 2 + beginYear, i * 2 + 3 + beginYear));
 
-        console.log(values);
-        console.log(intervals);
-
-
         let listOfIntervals = intervals.map((interval, i) => {
             return {
                 expr: `${2004 + i * 2 + beginYear}-${2004 + i * 2 + 2 + beginYear}`,
@@ -177,28 +102,24 @@
         let more2 = slKrome([less1, more1, less2], 3, 6);
 
         function addAllAnswers(intervals, listOfIntervals) {
-            intervals.forEach((interval, i) => {
-                const solution = listOfIntervals[i].solution;
-                if (aAboutIncrOrDecr) {
-                    // добавляем ответ про повышение прироста
-                    answAboutIncreasing(interval, solution);
-                    answAbouMore(interval, solution, more1);
-
-                } else {
-                    // добавляем ответ про понижение прироста
-                    answAbouLess(interval, solution, less1);
-                    answAboutDecreasing(interval, solution);
-                }
-                answAboutDecreasingAndWasConst(interval, solution);
-                answAbouMoreButLess(interval, solution, more2, less2);
-            });
+            if (aAboutIncrOrDecr) {
+                // добавляем ответ про повышение прироста
+                answAboutIncreasing(intervals, listOfIntervals);
+                answAboutMore(intervals, listOfIntervals, more1);
+            } else {
+                // добавляем ответ про понижение прироста
+                answAboutLess(intervals, listOfIntervals, less1);
+                answAboutDecreasing(intervals, listOfIntervals);
+            }
+            answAboutDecreasingAndWasConst(intervals, listOfIntervals);
+            answAboutMoreButLess(intervals, listOfIntervals, more2, less2);
         }
 
         // добавляем ответ про минимальный показатель
-        answAbouMin(intervals, listOfIntervals);
-        answAbouMax(intervals, listOfIntervals);
+        answAboutMin(intervals, listOfIntervals);
+        answAboutMax(intervals, listOfIntervals);
         if (aAboutIncrOrDecr)
-            answAbouMaxDeltaD(intervals, listOfIntervals);
+            answAboutMaxDeltaD(intervals, listOfIntervals);
         addAllAnswers(intervals, listOfIntervals);
 
         listOfIntervals.forEach(item => item.solution = item.solution.iz());
