@@ -1,7 +1,7 @@
 (function () {
     'use strict';
     retryWhileError(function () {
-        /* На графике изображена зависимость цены погружения батискафа от времени. На вертикальной оси отмечена цена в м/с, на горизонтальной – время в секундах, прошедшее с начала погружения. */
+        /* На графике изображена зависимость цены погружения батискафа от времени. На вертикальной оси отмечена цена в м/с, нагоризонтальной – время в секундах, прошедшее с начала погружения. */
 
         function convert(p) {
             return minY + p * stepY;
@@ -68,15 +68,11 @@
 
         function answAboutMaxDeltaIDay(intervals, answ) {
             let incr = intervals.map(interval => {
-                if (isIncreasing(interval)) {
                     let delta = [];
                     for (let i = 1; i < interval.length; i++) {
                         delta.push(interval[i] - interval[i - 1]);
                     }
                     return delta.maxE();
-                } else {
-                    return 0;
-                }
             });
 
             let maxEI = incr.maxE();
@@ -86,15 +82,11 @@
 
         function answAboutMaxDeltaDDay(intervals, answ) {
             let decr = intervals.map(interval => {
-                if (isDecreasing(interval)) {
                     let delta = [];
                     for (let i = 1; i < interval.length; i++) {
                         delta.push(interval[i - 1] - interval[i]);
                     }
                     return delta.maxE();
-                } else {
-                    return 0;
-                }
             });
 
             let maxED = decr.maxE();
@@ -122,6 +114,9 @@
             });
             
             let minE = deltaMin.minE();
+            if (minE === 0)
+                return;           
+            
             let wasMinDeltas = intervals.map((_, i) => deltaMin[i] === minE);
             addUniqueAnsw(wasMinDeltas, answ, 'минимальное колебание цены акций');
         }
@@ -191,7 +186,6 @@
         let LessP = sl(3, 5);
         let MoreP = slKrome(LessP, 4, 7);
 
-        function addAllAnswers(intervals, listOfIntervals) {
             if (aAboutIncrOrDecr) {
                 // добавляем ответ про повышение цены
                 answAboutIncreasing(intervals, listOfIntervals);
@@ -208,7 +202,6 @@
                 // добавляем ответ про цена была не менее
                 answAboutNonLessP(intervals, listOfIntervals, LessP);
             }
-        }
 
         // добавляем ответ про максимальную цена
         answAboutMax(intervals, listOfIntervals);
@@ -220,10 +213,13 @@
             answAboutMaxDeltaD(intervals, listOfIntervals);
         }
 
-        answAboutMaxDeltaIDay(intervals, listOfIntervals);
-        answAboutMaxDeltaDDay(intervals, listOfIntervals);
+        if (sl1()) {
+            answAboutMaxDeltaIDay(intervals, listOfIntervals);
+        } else {
+            answAboutMaxDeltaDDay(intervals, listOfIntervals);
+        }
+        
         answAboutMinDeltas(intervals, listOfIntervals);
-        addAllAnswers(intervals, listOfIntervals);
 
         listOfIntervals.forEach(item => item.solution = item.solution.iz());
 
