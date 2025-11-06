@@ -77,25 +77,29 @@
                 let first = interval.slice(0, 4);
                 return isNonIncreasing(first);
             });
-            addUniqueAnsw(isIncreasingFirst, answ, 'в первой половине периода среднесуточная температура не повышалась');
+            if(sl1())
+                addUniqueAnsw(isIncreasingFirst, answ, 'в первой половине периода среднесуточная температура не повышалась');
 
             let isDecreasingFirst = intervals.map(interval => {
                 let first = interval.slice(0, 4);
                 return isNonDecreasing(first);
             });
-            addUniqueAnsw(isDecreasingFirst, answ, 'в первой половине периода среднесуточная температура не понижалась');
+            if(sl1())
+                addUniqueAnsw(isDecreasingFirst, answ, 'в первой половине периода среднесуточная температура не понижалась');
 
             let isIncreasingSecond = intervals.map(interval => {
                 let second = interval.slice(4);
                 return isNonIncreasing(second);
             });
-            addUniqueAnsw(isIncreasingSecond, answ, 'во второй половине периода среднесуточная температура не повышалась');
+            if(sl1())
+                addUniqueAnsw(isIncreasingSecond, answ, 'во второй половине периода среднесуточная температура не повышалась');
 
             let isDecreasingSecond = intervals.map(interval => {
                 let second = interval.slice(4);
                 return isNonDecreasing(second);
             });
-            addUniqueAnsw(isDecreasingSecond, answ, 'во второй половине периода среднесуточная температура не понижалась');
+            if(sl1())
+                addUniqueAnsw(isDecreasingSecond, answ, 'во второй половине периода среднесуточная температура не понижалась');
         }
 
         function answAboutWasConstAtEnd(intervals, answ) {
@@ -150,23 +154,33 @@
             };
         });
 
-        let aAboutIncrOrDecr = sl1();
         let less1 = sl(9, 15);
         let more1 = slKrome(less1, 2, 9);
         let less2 = slKrome([less1, more1], 9, 15);
         let more2 = slKrome([less1, more1, less2], 2, 9);
 
-        answAboutIncrDescr(intervals, listOfIntervals);
-        answAboutNonIncreasing(intervals, listOfIntervals);
-        answAboutNonDecreasing(intervals, listOfIntervals);
+        if(sl1())
+            answAboutIncrDescr(intervals, listOfIntervals);
+        if (sl1()) {
+            answAboutNonIncreasing(intervals, listOfIntervals);
+        } else {
+            answAboutNonDecreasing(intervals, listOfIntervals);
+        }
+        if (sl1()) {
+            answAboutMore(intervals, listOfIntervals, more1);
+        } else {
+            answAboutLess(intervals, listOfIntervals, less1);
+        }
+        if (sl1()) {
+            answAboutIncreasingAtEnd(intervals, listOfIntervals);
+        } else {
+            answAboutDescrisingAtEnd(intervals, listOfIntervals);
+        }
+    
         answAboutMin(intervals, listOfIntervals);
         answAboutMax(intervals, listOfIntervals);
-        answAboutMore(intervals, listOfIntervals, more1);
-        answAboutLess(intervals, listOfIntervals, less1);
         answAboutMoreButLess(intervals, listOfIntervals, more2, less2);
         answAboutWasConstAtEnd(intervals, listOfIntervals);
-        answAboutIncreasingAtEnd(intervals, listOfIntervals);
-        answAboutDescrisingAtEnd(intervals, listOfIntervals);
         answAboutConstN(intervals, listOfIntervals);
 
         listOfIntervals.forEach(item => item.solution = item.solution.iz());
@@ -198,7 +212,7 @@
             ctx.font = "14px serif";
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText('time,°C', -3, 10)
+            ctx.fillText('t,°C', -3, 10)
 
             ctx.translate(15, 20 * 15);
             ctx.scale(15, -15);
