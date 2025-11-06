@@ -5,12 +5,15 @@
 
         function answAboutStop(intervals, answ, variable) {
             let wasStop = intervals.map(interval => lengthOfZeroInterval(interval) > 1);
+            let index = wasStop.indexOf(true);
             let stopTexts = [
-                'батискаф остановился ровно на ' + chislitlx((lengthOfZeroInterval(interval) - 1) * 15, 'секунда', 'value'),
-                'батискаф ровно ' + chislitlx((lengthOfZeroInterval(interval) - 1) * 15, 'секунда', 'value') + ' оставался на одной глубине',
-                'в течение ' + chislitlx((lengthOfZeroInterval(interval) - 1) * 15, 'секунда', 'value') + ' подряд батискаф оставался на одной глубине'
+                'батискаф остановился ровно на ' + chislitlx((lengthOfZeroInterval(intervals[index]) - 1) * 15, 'секунда', 'value'),
+                'батискаф ровно ' + chislitlx((lengthOfZeroInterval(intervals[index]) - 1) * 15, 'секунда', 'value') + ' оставался на одной глубине',
+                'в течение ' + chislitlx((lengthOfZeroInterval(intervals[index]) - 1) * 15, 'секунда', 'value') + ' подряд батискаф оставался на одной глубине'
             ];
-            addUniqueAnsw(wasStop, answ, stopTexts[variable]);
+            if (noHasDublValue(wasStop, true)) {
+                answ[index].solution.push(stopTexts[variable]);
+            }
         }
 
         function answAboutMax(intervals, answ) {
@@ -71,7 +74,7 @@
                 if (length[i] == 2 && sl1()) sec = 'полминуты';
                 return sec;
             });
-            
+
             wasCondition.forEach((condition, i) => {
                 if (condition) {
                     let text = 'скорость погружения уменьшалась, а затем произошла остановка на ' + secTexts[i];
@@ -85,7 +88,7 @@
         function answAboutConstNSec(intervals, answ) {
             let wasConst = intervals.map(interval => lengthConst(interval) > 1);
             let constTexts = intervals.map(interval => 'батискаф ' + chislitlx(lengthConst(interval) * 15, 'секунда') + ' погружался с постоянной ненулевой скоростью');
-            
+
             wasConst.forEach((condition, i) => {
                 if (condition) {
                     if (noHasDublValue(wasConst, true) || wasConst.filter(c => c).length === 1) {
@@ -133,38 +136,36 @@
         let lessV = sl(1, 2);
         let moreV = sl(2, 3);
 
-        function addAllAnswers(intervals, listOfIntervals) {
-            // добавляем ответ про остановку
-            answAboutStop(intervals, listOfIntervals, variableForStop);
-            if (aAboutIncrOrDecr) {
-                // добавляем ответ про повышение скорости
-                answAboutIncreasing(intervals, listOfIntervals);
-            } else {
-                // добавляем ответ про понижение скорости
-                answAboutDecreasing(intervals, listOfIntervals);
-            }
+        // добавляем ответ про остановку
+        answAboutStop(intervals, listOfIntervals, variableForStop);
+        if (aAboutIncrOrDecr) {
+            // добавляем ответ про повышение скорости
+            answAboutIncreasing(intervals, listOfIntervals);
+        } else {
+            // добавляем ответ про понижение скорости
+            answAboutDecreasing(intervals, listOfIntervals);
+        }
+
+        if (aAboutNonDecr) {
+            // добавляем ответ про не понижение скорости
+            answAboutNonDecreasing(intervals, listOfIntervals, variable);
+        } else {
+            // добавляем ответ про не понижение скорости и не остановку на интервале
             // добавляем ответ про не повышение скорости
             answAboutNonIncreasing(intervals, listOfIntervals, variable);
-            if (aAboutNonDecr) {
-                // добавляем ответ про не понижение скорости
-                answAboutNonDecreasing(intervals, listOfIntervals, variable);
-            } else {
-                // добавляем ответ про не понижение скорости и не остановку на интервале
-                answAboutNonDecreasingAndWasConst(intervals, listOfIntervals);
-            }
-            // добавляем ответ про скорость была не более
-            answAboutNonMore(intervals, listOfIntervals, moreV);
-            // добавляем ответ про скорость была не менее
-            answAboutNonLess(intervals, listOfIntervals, lessV);
-            // добавляем ответ про постоянную скорость ровно n секунд
-            answAboutConstNSec(intervals, listOfIntervals);
-            // добавляем ответ про понижение скорости и остановку на n
-            answAboutDecreasingAfterZero(intervals, listOfIntervals);
+            answAboutNonDecreasingAndWasConst(intervals, listOfIntervals);
         }
+        // добавляем ответ про скорость была не более
+        answAboutNonMore(intervals, listOfIntervals, moreV);
+        // добавляем ответ про скорость была не менее
+        answAboutNonLess(intervals, listOfIntervals, lessV);
+        // добавляем ответ про постоянную скорость ровно n секунд
+        answAboutConstNSec(intervals, listOfIntervals);
+        // добавляем ответ про понижение скорости и остановку на n
+        answAboutDecreasingAfterZero(intervals, listOfIntervals);
 
         // добавляем ответ про максимальную скорость
         answAboutMax(intervals, listOfIntervals);
-        addAllAnswers(intervals, listOfIntervals);
 
         listOfIntervals.forEach(item => item.solution = item.solution.iz());
 
@@ -186,7 +187,7 @@
                 maxY: 0.5,
                 stepByCeilX: 4,
                 arrowLengthX: 20.5,
-                arrowLengthY: 5.3,
+                arrowLengthY: 5.8,
             });
 
             ctx.translate(30, 30 * 6);
