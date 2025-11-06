@@ -268,6 +268,6 @@
 			height: 600,
 			paint: paint1,
 		});
-	}, 100);
+	}, 1000);
 })();
 //https://mathb-ege.sdamgia.ru/problem?id=507094
