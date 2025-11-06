@@ -14,17 +14,19 @@
             let wasMax = intervals.map((_, i) => i === maxIndex);
             let wasMin = intervals.map((_, i) => i === minIndex);
             
-            addUniqueAnsw(wasMax, answ, 'ежемесячный объём продаж достигает максимума за весь период');
-            addUniqueAnsw(wasMin, answ, 'ежемесячный объём продаж достигает минимума за весь период');
+            if(sl1())
+                addUniqueAnsw(wasMax, answ, 'ежемесячный объём продаж достигает максимума за весь период');
+            if(sl1())
+                addUniqueAnsw(wasMin, answ, 'ежемесячный объём продаж достигает минимума за весь период');
         }
 
-        function answAboutIncreasingNonMore(intervals, answ, more) {
-            let wasCondition = intervals.map(interval => isIncreasing(interval) && isNonMore(interval, more));
+        function answAboutIncreasingLess(intervals, answ, more) {
+            let wasCondition = intervals.map(interval => isIncreasing(interval) && isLess(interval, more));
             addUniqueAnsw(wasCondition, answ, 'ежемесячный объём продаж рос, но был меньше ' + convert(more) + ' штук');
         }
 
         function answAboutIncreasingMore(intervals, answ, more) {
-            let wasCondition = intervals.map(interval => isDecreasing(interval) && isMore(interval, more));
+            let wasCondition = intervals.map(interval => isIncreasing(interval) && isMore(interval, more));
             addUniqueAnsw(wasCondition, answ, 'ежемесячный объём продаж рос и был больше ' + convert(more) + ' штук');
         }
 
@@ -116,22 +118,24 @@
         let less = sl(2, 4);
         let more = sl(4, 6);
         let nonMore = slKrome(less, 2, 4);
-
-        function addAllAnswers(intervals, listOfIntervals) {
-            answAboutConst(intervals, listOfIntervals);
+        
+        answAboutConst(intervals, listOfIntervals);
+        if (sl1()) {
             answAboutIncreasing(intervals, listOfIntervals);
+        } else {
             answAboutDecreasing(intervals, listOfIntervals);
-            answAboutLess(intervals, listOfIntervals, less);
-            answAboutMore(intervals, listOfIntervals, more);
-            answAboutIncreasingMore(intervals, listOfIntervals, more);
-            answAboutIncreasingNonMore(intervals, listOfIntervals, nonMore);
         }
-
+        
+        answAboutIncreasingMore(intervals, listOfIntervals, more);
+        answAboutIncreasingLess(intervals, listOfIntervals, nonMore);
+        
+        answAboutLess(intervals, listOfIntervals, less);
+        answAboutMore(intervals, listOfIntervals, more);
+        
         // добавляем ответ про максимальный показатель
         answAboutMaxMin(intervals, listOfIntervals);
         answAboutMaxDeltaI(intervals, listOfIntervals);
         answAboutMaxDeltaD(intervals, listOfIntervals);
-        addAllAnswers(intervals, listOfIntervals);
 
         listOfIntervals.forEach(item => item.solution = item.solution.iz());
 
