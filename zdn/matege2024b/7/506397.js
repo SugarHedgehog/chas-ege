@@ -2,10 +2,16 @@
     'use strict';
     retryWhileError(function () {
         /* На графике изображена зависимость скорости движения легкового автомобиля от времени. На вертикальной оси отмечена скорость легкового автомобиля в км/ч, на горизонтальной – время в секундах, прошедшее с начала движения автомобиля. */
-
+       
         function answAboutStop(intervals, answ) {
             let wasStop = intervals.map(interval => lengthOfZeroInterval(interval) > 1);
-            addUniqueAnsw(wasStop, answ, 'автомобиль сделал остановку на ' + chislitlx((lengthOfZeroInterval(interval) - 1) * 15, 'секунда', 'value'));
+            
+            let index = wasStop.indexOf(true);
+            let text = 'автомобиль сделал остановку на ' + chislitlx((lengthOfZeroInterval(intervals[index]) - 1)*15, 'секунда');
+
+            if (noHasDublValue(wasStop, true)) {
+                answ[index].solution.push(text);
+            }            
         }
 
         function answAboutMax(intervals, answ) {
@@ -66,12 +72,24 @@
 
         function answAboutConstNSec(intervals, answ) {
             let wasConst = intervals.map(interval => lengthConst(interval) > 1);
-            addUniqueAnsw(wasConst, answ, 'автомобиль ровно ' + chislitlx(lengthConst(interval) * 15, 'секунда') + ' ехал с постоянной скоростью');
+            
+            let index = wasConst.indexOf(true);
+            let text = 'автомобиль ровно ' + chislitlx(lengthOfZeroInterval(intervals[index]) * 15, 'минута'+ ' ехал с постоянной скоростью');
+
+            if (noHasDublValue(wasConst, true)) {
+                answ[index].solution.push(text);
+            }            
         }
 
         function answAboutConstMoreNSec(intervals, answ) {
             let wasConst = intervals.map(interval => lengthConst(interval) > 2);
-            addUniqueAnsw(wasConst, answ, 'автомобиль более ' + chislitlx((lengthConst(interval) - 1) * 15, 'секунда', 'r') + ' ехал с постоянной скоростью');
+            
+            let index = wasConst.indexOf(true);
+            let text = 'автомобиль более ' + chislitlx((lengthConst(intervals[index]) - 1) * 15, 'секунда', 'r') + ' ехал с постоянной скоростью';
+
+            if (noHasDublValue(wasConst, true)) {
+                answ[index].solution.push(text);
+            } 
         }
 
         let time = [0].zapMonot(11, 0, 1, 1); // шкала времени
