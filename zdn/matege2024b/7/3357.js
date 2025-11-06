@@ -1,12 +1,18 @@
 (function () {
     'use strict';
-    retryWhileError(function () { 
+    retryWhileError(function () {
         /* На графике изображена зависимость скорости движения рейсового автобуса от времени. На вертикальной оси отмечена скорость автобуса в км/ч, на горизонтальной – время в минутах, прошедшее с начала движения автобуса. */
 
         function answAboutStop(intervals, answ) {
             let wasStop = intervals.map(interval => lengthOfZeroInterval(interval) > 1);
-            addUniqueAnsw(wasStop, answ, 'автобус сделал остановку длительностью ' + chislitlx(lengthOfZeroInterval(interval) - 1, 'минута'));
-        }
+            
+            let index = wasStop.indexOf(true);
+            let text = 'автобус сделал остановку длительностью ' + chislitlx(lengthOfZeroInterval(intervals[index]) - 1, 'минута');
+
+            if (noHasDublValue(wasStop, true)) {
+                answ[index].solution.push(text);
+            }            
+      }
 
         function answAboutMax(intervals, answ) {
             let maxIndex = findMaxInIntervals(intervals, value);
@@ -36,7 +42,13 @@
 
         function answAboutConst(intervals, answ) {
             let wasConst = intervals.map(interval => lengthConst(interval) > 2);
-            addUniqueAnsw(wasConst, answ, chislitlx(lengthConst(interval), 'минута') + ' автобус двигался с постоянной ненулевой скоростью');
+
+            let index = wasConst.indexOf(true);
+            let text = chislitlx(lengthConst(intervals[index]), 'минута') + ' автобус двигался с постоянной ненулевой скоростью';
+
+            if (noHasDublValue(wasConst, true)) {
+                answ[index].solution.push(text);
+            }
         }
 
         let time = [0].zapMonot(25, 0, 1, 1); // шкала времени
@@ -72,7 +84,7 @@
                 solution: [],
             };
         });
-        
+
         let lessV = sl(1, 2);
         let moreV = sl(3, 4);
 
