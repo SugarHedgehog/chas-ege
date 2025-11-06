@@ -47,7 +47,7 @@
         function answAboutMaxDeltaD(intervals, answ) {
             let decr = intervals.map(int => {
                 if (isDecreasing(int)) {
-                    return int.maxE() - int.minE();
+                    return [int[0] - int[1], int[1] - int[2]].maxE();
                 } else {
                     return 0;
                 }
@@ -101,26 +101,31 @@
         let less2 = slKrome([less1, more1], 2, 4);
         let more2 = slKrome([less1, more1, less2], 3, 6);
 
-        function addAllAnswers(intervals, listOfIntervals) {
-            if (aAboutIncrOrDecr) {
-                // добавляем ответ про повышение прироста
-                answAboutIncreasing(intervals, listOfIntervals);
-                answAboutMore(intervals, listOfIntervals, more1);
-            } else {
-                // добавляем ответ про понижение прироста
-                answAboutLess(intervals, listOfIntervals, less1);
-                answAboutDecreasing(intervals, listOfIntervals);
-            }
-            answAboutDecreasingAndWasConst(intervals, listOfIntervals);
-            answAboutMoreButLess(intervals, listOfIntervals, more2, less2);
+        // добавляем ответ про повышение прироста
+        if (sl1()) {
+            answAboutIncreasing(intervals, listOfIntervals);
+        } else {
+            answAboutMore(intervals, listOfIntervals, more1);
         }
 
-        // добавляем ответ про минимальный показатель
-        answAboutMin(intervals, listOfIntervals);
-        answAboutMax(intervals, listOfIntervals);
-        if (aAboutIncrOrDecr)
+        if (sl1()) {
+            answAboutDecreasing(intervals, listOfIntervals);
+        } else {
+            answAboutLess(intervals, listOfIntervals, less1);
+        }
+
+        answAboutDecreasingAndWasConst(intervals, listOfIntervals);
+        answAboutMoreButLess(intervals, listOfIntervals, more2, less2);
+
+        if (sl1()) {
+            // добавляем ответ про минимальный показатель
+            answAboutMin(intervals, listOfIntervals);
+        } else {
+            answAboutMax(intervals, listOfIntervals);
+        }
+
+        if (sl1())
             answAboutMaxDeltaD(intervals, listOfIntervals);
-        addAllAnswers(intervals, listOfIntervals);
 
         listOfIntervals.forEach(item => item.solution = item.solution.iz());
 
@@ -173,6 +178,6 @@
             height: 600,
             paint: paint1,
         });
-    }, 500);
+    }, 5000);
 })();
 // https://mathb-ege.sdamgia.ru/problem?id=509659
