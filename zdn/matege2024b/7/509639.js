@@ -26,10 +26,13 @@
                 let indexes = indexConst(interval);
                 return indexes.length === 2 && !indexes.includes(0);
             });
-            
+
+            if (sl1()) {
+                addUniqueAnsw(wasConstTwoFirst, answ, 'продажи за первый и второй месяцы периода совпадают');
+            } else {
+                addUniqueAnsw(wasConstTwoLast, answ, 'продажи за второй и третий месяцы периода совпадают');
+            }
             addUniqueAnsw(wasConst, answ, 'все три месяца периода объём продаж был одинаковым');
-            addUniqueAnsw(wasConstTwoFirst, answ, 'продажи за первый и второй месяцы периода совпадают');
-            addUniqueAnsw(wasConstTwoLast, answ, 'продажи за второй и третий месяцы периода совпадают');
         }
 
         function answAboutMoreInMounth(intervals, answ, mounth, MoreP) {
@@ -70,7 +73,7 @@
 
             let maxEI = incr.maxE();
             let wasMaxDeltaI = intervals.map((_, i) => incr[i] === maxEI);
-            addUniqueAnsw(wasMaxDeltaI, answ, 'за этот период ежемесячный объём продаж увеличился на ' + convert(maxEI) + ' холодильников');
+            addUniqueAnsw(wasMaxDeltaI, answ, 'за этот период ежемесячный объём продаж увеличился на ' + convert(maxEI - 1) + ' холодильников');
         }
 
         function answAboutMaxDeltaD(intervals, answ) {
@@ -84,7 +87,7 @@
 
             let maxED = decr.maxE();
             let wasMaxDeltaD = intervals.map((_, i) => decr[i] === maxED);
-            addUniqueAnsw(wasMaxDeltaD, answ, 'за этот период ежемесячный объём продаж уменьшился на ' + convert(maxED) + ' холодильников');
+            addUniqueAnsw(wasMaxDeltaD, answ, 'за этот период ежемесячный объём продаж уменьшился на ' + convert(maxED - 1) + ' холодильников');
         }
 
         let mounth = om.months;
@@ -122,18 +125,15 @@
         let lessM = sl(2);
         let moreM = slKrome(lessM, 0, 2);
 
-        function addAllAnswers(intervals, listOfIntervals) {
-            answAboutConst(intervals, listOfIntervals);
-            answAboutLessInMounth(intervals, listOfIntervals, lessM, lessP);
-            answAboutMoreInMounth(intervals, listOfIntervals, moreM, moreP);
-        }
+        answAboutConst(intervals, listOfIntervals);
+        answAboutLessInMounth(intervals, listOfIntervals, lessM, lessP);
+        answAboutMoreInMounth(intervals, listOfIntervals, moreM, moreP);
 
         // добавляем ответ про максимальный показатель
         answAboutMax(intervals, listOfIntervals);
         answAboutMaxDeltaI(intervals, listOfIntervals);
         answAboutMaxDeltaD(intervals, listOfIntervals);
         answAboutSlowRise(intervals, listOfIntervals);
-        addAllAnswers(intervals, listOfIntervals);
 
         listOfIntervals.forEach(item => item.solution = item.solution.iz());
 
