@@ -1,4 +1,4 @@
-retryWhileUndefined(function() {
+retryWhileUndefined(function () {
 	NAinfo.requireApiVersion(0, 2);
 
 	function parabl(a, b, c, x) {
@@ -46,18 +46,20 @@ retryWhileUndefined(function() {
 		return;
 
 	let points1 = intPoints(f1, {
-		minX: -5,
-		maxX: 5,
-		minY: -7,
-		maxY: 6,
+		minX: -8,
+		maxX: 8,
+		minY: -9,
+		maxY: 7,
+		step: 1,
 	});
 	if (points1.length < 3)
 		return;
 	let points2 = intPoints(f2, {
-		minX: -5,
-		maxX: 5,
-		minY: -7,
-		maxY: 5,
+		minX: -8,
+		maxX: 8,
+		minY: -9,
+		maxY: 7,
+		step: 1,
 	});
 	if (points2.length > 2)
 		return;
@@ -69,11 +71,11 @@ retryWhileUndefined(function() {
 		find = 'абсциссу';
 		answ = x2;
 	}
-	let paint1 = function(ct) {
-		h = 300;
-		w = 300;
+	let paint1 = function (ct) {
+		h = 400;
+		w = 400;
 		//Оси координат (сразу со стрелками)
-		ct.drawCoordinatePlane (w, h, {
+		ct.drawCoordinatePlane(w, h, {
 			hor: 1,
 			ver: 1
 		}, {
@@ -85,17 +87,17 @@ retryWhileUndefined(function() {
 		ct.scale(20, -20);
 		ct.lineWidth = 0.1;
 		graph9AdrawFunction(ct, f1, {
-			minX: -5.5,
-			maxX: 6.5,
-			minY: -7.2,
-			maxY: 6.5,
+			minX: -8.5,
+			maxX: 8.5,
+			minY: -9.5,
+			maxY: 7.7,
 			step: 0.05,
 		});
 		graph9AdrawFunction(ct, f2, {
-			minX: -5.5,
-			maxX: 6.5,
-			minY: -7.2,
-			maxY: 6.5,
+			minX: -8.5,
+			maxX: 8.5,
+			minY: -9.5,
+			maxY: 7.7,
 			step: 0.05,
 		});
 		//точки
@@ -120,9 +122,9 @@ retryWhileUndefined(function() {
 			'$A(' + x1 + ';' + f1(x1) + ')$<br>' +
 			'$B(' + x2 + ';' + f2(x2) + ')$',
 	});
-	chas2.task.modifiers.addCanvasIllustration({
-		width: 300,
-		height: 300,
+	NAtask.modifiers.addCanvasIllustration({
+		width: 400,
+		height: 400,
 		paint: paint1,
 	});
 	return true;
