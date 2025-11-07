@@ -1,4 +1,4 @@
-retryWhileUndefined(function() {
+retryWhileUndefined(function () {
 	NAinfo.requireApiVersion(0, 2);
 
 	function f(x) {
@@ -33,47 +33,47 @@ retryWhileUndefined(function() {
 
 	let question, answ;
 	switch (sl(1, 2)) {
-	case 1:
-		let x = sl(6, 10).pm();
-		question = '$f(' + x + ')$';
-		answ = f(x);
-		break;
-	case 2:
-		question = '';
-		let mng = [];
-		let st = [];
-		if (formula.includes('a')) {
-			st.push('a');
-			mng.push(a);
-		}
-		if (formula.includes('b')) {
-			st.push('b');
-			mng.push(b);
-		}
-		if (formula.includes('c')) {
-			st.push('c');
-			mng.push(c);
-		}
-		if (formula.includes('d')) {
-			st.push('d');
-			mng.push(d);
-		}
-		if (sl1()) {
-			question = 'сумму $' + st.slag() + '$';
-			answ = mng.sum();
-		} else {
-			for (let i = 0; i < st.length; i++) {
-				question += st[i];
-				if (i != st.length - 1)
-					question += '\\cdot ';
+		case 1:
+			let x = sl(6, 10).pm();
+			question = '$f(' + x + ')$';
+			answ = f(x);
+			break;
+		case 2:
+			question = '';
+			let mng = [];
+			let st = [];
+			if (formula.includes('a')) {
+				st.push('a');
+				mng.push(a);
 			}
-			question = 'произведение $' + question + '$';
-			answ = mng.production();
-		}
+			if (formula.includes('b')) {
+				st.push('b');
+				mng.push(b);
+			}
+			if (formula.includes('c')) {
+				st.push('c');
+				mng.push(c);
+			}
+			if (formula.includes('d')) {
+				st.push('d');
+				mng.push(d);
+			}
+			if (sl1()) {
+				question = 'сумму $' + st.slag() + '$';
+				answ = mng.sum();
+			} else {
+				for (let i = 0; i < st.length; i++) {
+					question += st[i];
+					if (i != st.length - 1)
+						question += '\\cdot ';
+				}
+				question = 'произведение $' + question + '$';
+				answ = mng.production();
+			}
 	}
-	let paint1 = function(ct) {
-		let h = 300;
-		let w = 300;
+	let paint1 = function (ct) {
+		let h = 400;
+		let w = 400;
 		//Оси координат
 		ct.drawCoordPlane(w, h, {
 			hor: 1,
@@ -87,10 +87,10 @@ retryWhileUndefined(function() {
 		ct.scale(20, -20);
 		ct.lineWidth = 0.1;
 		graph9AdrawFunction(ct, f, {
-			minX: -6,
-			maxX: 7,
-			minY: -7,
-			maxY: 6,
+			minX: -8.5,
+			maxX: 8.5,
+			minY: -9.5,
+			maxY: 7.7,
 			step: 0.05,
 		});
 		//точки
@@ -103,9 +103,9 @@ retryWhileUndefined(function() {
 		answers: answ,
 		analys: '$f(x)=' + (a.ts() + 'x^3+' + b.ts() + 'x^2+' + c.ts() + 'x+' + d.ts()).plusminus() + '$',
 	});
-	chas2.task.modifiers.addCanvasIllustration({
-		width: 300,
-		height: 300,
+	NAtask.modifiers.addCanvasIllustration({
+		width: 400,
+		height: 400,
 		paint: paint1,
 	});
 	return true;
