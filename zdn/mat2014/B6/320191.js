@@ -5,6 +5,10 @@
 
 (function() {
 	retryWhileError(function() {
+		
+		let key = '320191';
+		let preference = ['inAuditorium', 'notInAuditorium'];
+		let inOrNotIn = getSelectedPreferenceFromList(key, preference);
 
 		let place = ['олимпиаде', 'экзамене', 'вступительном испытании', 'всероссийской проверочной работе',
 			'всероссийском диктанте'
@@ -24,7 +28,6 @@
 		let particInOne = sl(10, numbersOfPartic / numbersOfPlace - 1);
 
 		let answers;
-		inOrNotIn = sl1();
 		if (inOrNotIn)
 			answers = (particInOne * (numbersOfPlace - 1)) / numbersOfPartic;
 		else
@@ -41,6 +44,7 @@
 				'Найдите вероятность того, что случайно выбранный участник писал ' + '<b>не</b>'.esli(inOrNotIn) +
 				' в запасной аудитории.',
 			answers,
+			preference: preference
 		});
 	});
 })();
