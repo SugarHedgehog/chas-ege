@@ -7,7 +7,17 @@
 #../fast_set.sh ../../matege2023p/4
 find . -mindepth 1 ! -name "$(basename "$0")" -exec rm -rf {} +
 
-array=()
+array=(
+    "508895 functionOfX functionOfX"
+    "509197 findAbscissa findAbscissa"
+    "508911 dontShow dontShow"
+    "509149 findAbscissa_simpleLinearFunc findAbscissa simpleLinearFunc"
+    "508971 functionOfX_withoutA functionOfX withoutA"
+    "509192 findAbscissa_findAbscissa findAbscissa findAbscissa"
+    "509271 findAbscissa_withoutB_withoutC findAbscissa withoutB withoutC"
+    "509095 functionOfX_withoutB functionOfX withoutB"
+    "509009 functionOfX_withoutB functionOfX withoutB"
+)
 
 if [[ ${#array[@]} -eq 0 ]]; then
      echo "change array in file"
