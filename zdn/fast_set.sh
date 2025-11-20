@@ -13,7 +13,7 @@ array=(
     "508911 dontShow dontShow"
     "509149 findAbscissa_simpleLinearFunc findAbscissa simpleLinearFunc"
     "508971 functionOfX_withoutA functionOfX withoutA"
-    "509192 findAbscissa_findAbscissa findAbscissa findAbscissa"
+    "509192 findAbscissa_withoutB2 findAbscissa withoutB2"
     "509271 findAbscissa_withoutB_withoutC findAbscissa withoutB withoutC"
     "509095 functionOfX_withoutB functionOfX withoutB"
     "509009 functionOfX_withoutB functionOfX withoutB"
