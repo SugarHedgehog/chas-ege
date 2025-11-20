@@ -27,13 +27,13 @@
 
 		let b1 = y1 - k1 * x1;
 
-		if (randB) {
-			genAssert(b1 == 0);
-		}
-
 		let b2 = (y1 * x1 - y2 * x2) / (x1 - x2);
-		genAssert(b2);
-		genAssertAlmostInteger(b2);
+		if (randB) {
+			genAssert(b2 == 0);
+		} else {
+			genAssert(b2);
+			genAssertAlmostInteger(b2);
+		}
 
 		let k2 = (y1 - b2) * x1;
 		genAssert(k2);
@@ -117,9 +117,9 @@
 			ct.fillText('A', 20 * x1 - 10, -20 * y1 - 10);
 		};
 		NAtask.setTask({
-			text: `На рисунке изображены графики функций $f(x)=k_1 x+b_1$ и $g(x)=\\frac{k_2}{x}${`+b_2`.esli(randB)}$, которые пересекаются в точках $A$ и $B$.  Найдите ${find} точки $B$. `,
+			text: `На рисунке изображены графики функций $f(x)=k_1 x+b_1$ и $g(x)=\\frac{k_2}{x}${`+b_2`.esli(!randB)}$, которые пересекаются в точках $A$ и $B$.  Найдите ${find} точки $B$. `,
 			analys: '$f(x)=' + (k1 + 'x+' + b1).plusminus() + '$<br>' +
-				'$g(x)=' + ('\\frac{' + k2 + '}{x}+' + b2 + '$').plusminus() + '<br>' +
+				'$g(x)=' + ('\\frac{' + k2 + '}{x}+' + b2 + '$').replace('+0', '').plusminus() + '<br>' +
 				'$A(' + x1 + ';' + y1 + ')$<br>' +
 				'$B(' + x2 + ';' + y2 + ')$',
 			answers: answ,
