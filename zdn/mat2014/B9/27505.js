@@ -21,7 +21,7 @@ retryWhileUndefined(function() {
 	let y0 = f(x0);
 	if (D.isPolnKvadr() || Math.abs(y0) > 3)
 		return;
-	let xk = sl(20*(x0 - sl(0,40)/10), 20*(x0 + sl(0,40)/10))/20;
+	let xk = sl(x0 - sl(0,4,0.1), x0 +sl(0,4,0.1) , 0.05);
 	if (xk.abs() > 5)
 		return;
 		
