@@ -31,7 +31,7 @@
 				lineWidth: 0.07,
 				font: "16px liberation_sans",
 				markedPoints:{
-					type: [preference2[rand2]],
+					type: preference2[rand2],
 					step: 2,
 					fontMarkedPoints: "16px liberation_sans",
 					numberOfPoints: {min:4, max:10}
