@@ -10,9 +10,13 @@
         function constant() {
             return Y;
         }
+        
+        let key = '323078';
+		let preference = ['YMoreZero', 'YLessZero'];
+		let rand = getSelectedPreferenceFromList(key, preference);
 
         let X = sl(2, 8).pm();
-        let Y = sl(2, 7).pm();
+        let Y = sl(2, 7)*[1, -1][rand];
         let k = sl(1, 10, 0.1) * ((X * Y > 0) ? -1 : 1);
         let b = Y - k * X;
 
@@ -98,7 +102,9 @@
                 stepY: (Y > 0) ? 15 : -10,
             });
 
-            ctx.setLineDash([0.4, 0.2]);
+            ctx.setLineDash([0.4, 0.2]); 
+            ctx.lineWidth = 0.12;
+            ctx.strokeStyle = om.primaryBrandColors.iz();
             ctx.drawLine(X, 0, X, Y);
             if (X > 0) {
                 ctx.drawLine(leftEnd, 0, leftEnd, Y);
@@ -112,6 +118,7 @@
                 ')$, где $F(x)$ — одна из первообразных функции $f(x)$.',
             answers: answ,
             authors: 'Суматохина Александра',
+            preference: preference,
         });
         NAtask.modifiers.addCanvasIllustration({
             width: 400,
