@@ -2,6 +2,9 @@
 	retryWhileError(function() {
 		NAinfo.requireApiVersion(0, 2);
 		'use strict';
+		let key = '1942';
+		let preference = ['negative', 'positive'];
+		let rand = getSelectedPreferenceFromList(key, preference);
 
 		let minX = sl(-11, -5),
 			maxX = sl(5, 10),
@@ -42,7 +45,7 @@
 		genAssert(points.length>3);
 
 		let answer, condition;
-		if (sl1()) {
+		if (!rand) {
 			condition = 'отрицательна';
 			answer = findDecreasingIntervals(func, minX, maxX);
 		} else {
@@ -81,10 +84,11 @@
 			}
 		});
 		NAtask.setTask({
-			text: 'На рисунке изображён некоторой функции $F(x)$ одной из первообразных некоторой функции $f(x)$ и отмечены  '+ chislitlx(points.length, 'точка')+' на оси абсцисс ' +
+			text: 'На рисунке изображён график некоторой функции $F(x)$ одной из первообразных некоторой функции $f(x)$ и отмечены  '+ chislitlx(points.length, 'точка')+' на оси абсцисс ' +
 				': $'+xs+'$. В скольких из этих точек функция $f(x)$ ' + condition + '.',
 			answers: answer.length,
 			authors: 'Суматохина Александра',
+			preference: preference,
 		});
 		NAtask.modifiers.addCanvasIllustration({
 			width: 500,
