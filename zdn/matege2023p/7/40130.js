@@ -1,6 +1,9 @@
 (function() {
 	retryWhileError(function() {
 		'use strict';
+		let key = '40130';
+		let preference = ['tangent_to_graph_equation', 'tangent_to_graph_const'];
+		let rand = getSelectedPreferenceFromList(key, preference);
 
 		NAtask.setTaskWithGraphOfFunctionDerivative({
 			authors: 'Суматохина Александра',
@@ -15,8 +18,8 @@
 			},
 			questionsF: {
 				main: 'integer_points',
-				conditions: ['tangent_to_graph_equation', 'tangent_to_graph_const'],
-				variants: ['number',],
+				conditions: [preference[rand]],
+				variants: ['number'],
 			},
 			canvasSettings: {
 				height: 400,
@@ -27,6 +30,7 @@
 			minimumDifferenceBetweenExtremes: 1,
 			numberOfRoots: {min:0, max:10}, 
 			numberOfExtremes: {min: 4, max:10}, 
+			preference: preference,
 		});
 	}, 10000);
 })();
