@@ -8,6 +8,11 @@ retryWhileUndefined(function() {
 	function fp(x) {
 		return k * x + d;
 	}
+	
+	let key = '27505';
+	let preference = ['kMoreZero', 'kLessZero'];
+	let rand = getSelectedPreferenceFromList(key, preference);
+	
 	let a = sl(0.1, 2, 0.1).pm();
 	let b = sluchch(0, 10).pm();
 	let c = sluchch(0, 10).pm();
@@ -16,13 +21,8 @@ retryWhileUndefined(function() {
 	let y0 = f(x0);
 	if (D.isPolnKvadr() || Math.abs(y0) > 3)
 		return;
-	let points = intPoints(f, {
-		minX: -5,
-		maxX: 6,
-		minY: -5.5,
-		maxY: 5.5
-	});
 	let xk = sl(x0 - sl(0,4,0.1), x0 +sl(0,4,0.1) , 0.05);
+	console.log(xk);
 	if (xk.abs() > 5)
 		return;
 		
@@ -34,6 +34,15 @@ retryWhileUndefined(function() {
 	let k = (2 * a * xk + b);
 	if (!k || !(k * 100).isZ())
 		return;
+	
+	if (rand == 0 && k < 0) {
+		return;
+	}
+	
+	if (rand == 1 && k > 0) {
+		return;
+	}
+		
 	let d = -xk * (2 * a * xk + b) + yk;
 	let pointsP = intPoints(fp, {
 		minX: -5,
@@ -106,6 +115,7 @@ retryWhileUndefined(function() {
 		answers: k,
 		analys: 'Значение производной в точке касания равно угловому коэффициенту касательной:<br>'+
 		'$y_k='+(k+'x+'+d.ts()).plusminus()+'$',
+		preference: preference,
 	});
 	chas2.task.modifiers.addCanvasIllustration({
 		width: 300,
