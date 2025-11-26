@@ -1,6 +1,9 @@
 (function() {
 	retryWhileError(function() {
 		'use strict';
+		let key = '28';
+		let preference = ['solution_equation_on_the_segment', 'derivative_is_zero_on_the_segment'];
+		let rand = getSelectedPreferenceFromList(key, preference);
 
 		NAtask.setTaskWithGraphOfFunctionDerivative({
 			authors: 'Суматохина Александра',
@@ -15,7 +18,7 @@
 			},
 			questionsF: {
 				main: 'point',
-				conditions: [ 'solution_equation_on_the_segment', 'derivative_is_zero_on_the_segment'],
+				conditions: [preference[rand]],
 				variants: ['empty'],
 			},
 			canvasSettings: {
@@ -31,6 +34,7 @@
 				int: 'yes',
 				tolerance: 0.1
 			},
+			preference: preference,
 		});
 	}, 10000);
 })();
