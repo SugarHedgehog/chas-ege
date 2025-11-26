@@ -742,7 +742,7 @@ chas2.task = {
 						answer = transformExtremumsToIntervals(func, minX, maxX, false);
 						answer = [answer.intIntervalsMinimums.iz(), answer.intIntervalsMaximums.iz()].iz();
 						genAssert(answer.leftEnd != answer.rightEnd, 'Начало и конец отрезка совпали');
-						find = derivativeOfFx + 'равна нулю на отрезке $[' + answer.leftEnd + ';' + answer.rightEnd + ']$';
+						find = derivativeOfFx + 'равна нулю на отрезке $[' + answer.leftEnd.floor()+ ';' + answer.rightEnd.ceil() + ']$';
 						//task.analys = 'Точки экстремума:'
 						answer = [answer.ext.round()];
 						break;
@@ -755,7 +755,7 @@ chas2.task = {
 						answer = transformExtremumsToIntervals(func, minX, maxX, true);
 						answer = [answer.intIntervalsMinimums.iz(), answer.intIntervalsMaximums.iz()].iz();
 						genAssert(answer.leftEnd != answer.rightEnd, 'Начало и конец отрезка совпали');
-						find = 'решение уравнения $f\'(x)=0$ на отрезке $[' + answer.leftEnd + ';' + answer.rightEnd + ']$';
+						find = 'решение уравнения $f\'(x)=0$ на отрезке $[' + answer.leftEnd.floor()+ ';' + answer.rightEnd.ceil() + ']$';
 						answer = [answer.ext.round()];
 						//task.analys = 'Точки экстремума:'
 						break;
