@@ -1,11 +1,9 @@
 (function() {
 	retryWhileError(function() {
 		'use strict';
-		let key = '27489';
-		let preference1 = ['derivative_is_smallest', 'derivative_is_largest'];
-		let preference2 = ['symbol', 'number'];
-		let rand1 = getSelectedPreferenceFromList(key, preference1);
-		let rand2 = getSelectedPreferenceFromList(key, preference2);
+		let key = '317544';
+		let preference = ['derivative_is_smallest', 'derivative_is_largest'];
+		let rand = getSelectedPreferenceFromList(key, preference);
 
 		NAtask.setTaskWithGraphOfFunctionDerivative({
 			authors: 'Суматохина Александра',
@@ -21,7 +19,7 @@
 			},
 			questionsF: {
 				main: 'marked_points',
-				conditions: [preference1[rand1]],
+				conditions: [preference[rand]],
 				variants: ['empty'],
 			},
 			canvasSettings: {
@@ -31,7 +29,7 @@
 				lineWidth: 0.07,
 				font: "16px liberation_sans",
 				markedPoints:{
-					type: preference2[rand2],
+					type: 'number',
 					step: 2,
 					fontMarkedPoints: "14px liberation_sans",
 					numberOfPoints: {min:4, max:4}
