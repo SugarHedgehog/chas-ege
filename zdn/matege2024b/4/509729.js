@@ -9,7 +9,7 @@
 		let degreeName = ['Цельсия', 'Фаренгейта'][rand];
 		let reverseDegreeName = ['Цельсия', 'Фаренгейта'][1 - rand];
 		let degreeNumberCelsius = sl(10, 99);
-		let degreeNumberFahrenheit = 1.8 * degreeNumberCelsius + 32;
+		let degreeNumberFahrenheit = [1.8 * degreeNumberCelsius + 32, 1.8 * (degreeNumberCelsius + 32)][rand];
 
 		NAtask.setTask({
 
