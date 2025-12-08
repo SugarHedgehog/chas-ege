@@ -2,7 +2,7 @@
 	retryWhileError(function() {
 		'use strict';
 		let m = ['первые', 'последние'];
-		let key = "77438";
+		let key = "6";
 		let v1 = sl1();
 		let v2 = getListedPreference(key, [{
 			preference: 'first_day',

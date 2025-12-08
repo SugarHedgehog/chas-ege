@@ -2,7 +2,7 @@
 	retryWhileError(function () {
 		'use strict';
 		NAinfo.requireApiVersion(0, 0);
-		let key = "283467";
+		let key = "1";
 
 		let preference1 = ['two_tosses', 'three_tosses', 'four_tosses'];
 		let preference2 = ['equal', 'more', 'less', 'moreOrEqual', 'lesseOrEqual'];
