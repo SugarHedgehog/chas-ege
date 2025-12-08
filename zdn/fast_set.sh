@@ -8,15 +8,24 @@
 find . -mindepth 1 ! -name "$(basename "$0")" -exec rm -rf {} +
 
 array=(
-    "508895 functionOfX functionOfX"
-    "509197 findAbscissa findAbscissa"
-    "508911 dontShow dontShow"
-    "509149 findAbscissa_simpleLinearFunc findAbscissa simpleLinearFunc"
-    "508971 functionOfX_withoutA functionOfX withoutA"
-    "509192 findAbscissa_findAbscissa findAbscissa findAbscissa"
-    "509271 findAbscissa_withoutB_withoutC findAbscissa withoutB withoutC"
-    "509095 functionOfX_withoutB functionOfX withoutB"
-    "509009 functionOfX_withoutB functionOfX withoutB"
+    124
+    "509729 CelToFar CelToFar"
+    "509729 FarToCel FarToCel"
+    "459972 findF findF"
+    "459972 findV findV"
+    "459974 findMass findMass"
+    "459974 findHeight findHeight"
+    "459974 findEnergy findEnergy"
+    "513771 useU_lessWords useU lessWords"
+    "509769 lessWords_findV lessWords findV"
+    "509769 lessWords_findM lessWords findM"
+    "509769 lessWords_findE lessWords findE"
+    "510314 ampereP_lessWords ampereP lessWords"
+    "510314 ampereR_lessWords ampereR lessWords"
+    "510306 boost boost"
+    "510306 boostCentripetal boostCentripetal"
+    "338238 findS findS"
+    "338238 findD1 findD1"
 )
 
 if [[ ${#array[@]} -eq 0 ]]; then
