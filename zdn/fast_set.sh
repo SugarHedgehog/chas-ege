@@ -8,20 +8,65 @@
 find . -mindepth 1 ! -name "$(basename "$0")" -exec rm -rf {} +
 
 array=(
-    "508895 functionOfX functionOfX"
-    "509197 findAbscissa findAbscissa"
-    "508911 dontShow dontShow"
-    "509149 findAbscissa_simpleLinearFunc findAbscissa simpleLinearFunc"
-    "508971 functionOfX_withoutA functionOfX withoutA"
-    "509192 findAbscissa_findAbscissa findAbscissa findAbscissa"
-    "509271 findAbscissa_withoutB_withoutC findAbscissa withoutB withoutC"
-    "509095 functionOfX_withoutB functionOfX withoutB"
-    "509009 functionOfX_withoutB functionOfX withoutB"
+    "77427 с_линейной_максимум linear maximum"
+    "77427 с_линейной_минимум linear minimum"
+    "77438 кубическая_и_квадратичная_максимум cubic_and_quadratic maximum"
+    "77438 кубическая_и_квадратичная_минимум cubic_and_quadratic minimum"
+    "77438 кубическая_максимум cubic maximum"
+    "77438 кубическая_минимум cubic minimum"
+    "315835 с_линейной_максимум linear maximum"
+    "77455 степень_минимум pow minimum"
+    "77455 степень_максимум pow maximum"
+    "77460 корень_максимум sqrt maximum"
+    "77460 корень_минимум sqrt minimum"
+    "77490 максимум maximum"
+    "77490 минимум minimum"
+    "26695 синус_максимум sin maximum"
+    "26695 синус_минимум sin minimum"
+    "26695 косинус_минимум cos minimum"
+    "26700 синус_максимум sin maximum"
+    "26700 косинус_минимум cos minimum"
+    "26702 максимум maximum"
+    "26702 минимум minimum"
+    "26704 максимум maximum"
+    "26704 минимум minimum"
+    27
+    "26717 максимум_неединичная_степень not_trivial maximum"
+    "26717 минимум_неединичная_степень not_trivial minimum"
+    "26717 максимум_единичная_степень trivial maximum"
+    "26717 минимум_единичная_степень trivial minimum"
+    "77486 положительная_степень_максимум positive_pow maximum"
+    "77486 положительная_степень_минимум positive_pow minimum"
+    "26719 максимум maximum"
+    "26719 минимум minimum"
+    "315127 минимум minimum"
+    "282859 максимум maximum"
+    "282859 минимум minimum"
+    "26713 положительная_степень_максимум positive_pow maximum"
+    "26713 отрицательная_степень_минимум negative_pow minimum"
+    "26726 отрицательная_степень_максимум negative_pow maximum"
+    "26724 минимум minimum"
+    "282862 максимум maximum"
+    "282862 минимум minimum"
+    "26691 exp_отрицательная_степень_максимум exp negative_pow maximum"
+    "77480 минимум minimum"
+    "77480 максимум maximum"
+    "26691 exp_положительная_степень_минимум exp positive_pow minimum"
+    "77492 максимум maximum"
+    "77492 минимум minimum"
+    "77467 x/(x^2+c)_максимум xfrac maximum"
+    "77467 x/(x^2+c)_минимум xfrac minimum"
+    "77467 (x^2+c)/x_максимум fracx maximum"
+    "77470 x/(x^2+c)_минимум xfrac minimum"
+    "77470 x/(x^2+c)_максимум xfrac maximum"
+    "77470 (x^2+c)/x_минимум fracx minimum"
+    "77470 (x^2+c)/x_максимум fracx maximum"
+
 )
 
 if [[ ${#array[@]} -eq 0 ]]; then
-     echo "change array in file"
-     exit
+    echo "change array in file"
+    exit
 fi
 
 result=${PWD##*/}
@@ -53,7 +98,7 @@ for element in "${array[@]}"; do
     ((i++));
     
     touch main.js
-    printf "window.nomer=[\n" >> main.js;
+    printf "window.nomer=[\n" > main.js;
     printf "\t%s,\n" "$type" >> main.js
     printf "].iz()\n" >> main.js
     printf "window.comment='%s%s';\n" "$type$comment" >> main.js;
