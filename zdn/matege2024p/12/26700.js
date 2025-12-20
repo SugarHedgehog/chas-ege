@@ -8,9 +8,10 @@
 		let rand2 = getSelectedPreferenceFromList(key, preference2);
 		let arr2 = ['sin', 'cos'][rand1];
 		let [forbidMinY, forbidMaxY] = [1 - rand2, rand2];
-		
-		let a = sl(2, 20, 2);
-		let b = sl(a+1, 100);
+
+		let a = sl(1, 100, 2);
+		let b = sl(4, 100);
+		genAssert((b / (Math.PI * a)).abs() > 1);
 		let c = sl(1, 50);
 		let arr1 = ['+', '-'];
 
@@ -28,4 +29,3 @@
 	}, 10000);
 })();
 //26700
-
