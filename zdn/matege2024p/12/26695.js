@@ -10,8 +10,8 @@
 		let [forbidMinY, forbidMaxY] = [1 - rand2, rand2];
 
 		
-		let a = sl(1, 100);
-		let b = sl(1, 100);
+		let a = sl(1, 99);
+		let b = sl(a+1, 100);
 		let c = sl(1, 100);
 		let arr1 = ['+', '-'];
 		let maxmin1 = sl1();
