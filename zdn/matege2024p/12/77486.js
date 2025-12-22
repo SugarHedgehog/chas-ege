@@ -4,10 +4,12 @@
 		let key = "77486";
 		let preference1 = ['positive_pow', 'negative_pow'];
 		let preference2 = ['maximum', 'minimum'];
+		let preference3 = ['even_power', 'odd_power'];
 		let rand1 = getSelectedPreferenceFromList(key, preference1);
 		let rand2 = getSelectedPreferenceFromList(key, preference2);
+		let rand3 = getSelectedPreferenceFromList(key, preference3);
 
-		let pow = sl(2,30)*[1, -1][rand1];
+		let pow = sl(2, 30, 2) * [1, -1][rand1] + [0, 1][rand3];
 		let [forbidMinY, forbidMaxY] = [1 - rand2, rand2];
 
 		NAtask.setLocalExtremumTask({
@@ -19,7 +21,7 @@
 			authors: ['Николай Авдеев'],
 			forbidMinY,
 			forbidMaxY,
-			preference: [preference1, preference2],
+			preference: [preference1, preference2, preference3],
 		});
 	}, 200);
 })();
