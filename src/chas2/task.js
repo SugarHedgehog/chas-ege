@@ -2268,10 +2268,10 @@ chas2.task = {
 		genAssertNonempty(whatToFind, 'Искать-то нечего!');
 
 		switch(true){
-			case o.forbidMinY:
+			case Boolean(o.forbidMinY):
 				whatToFind = 'max';
 				break;
-			case o.forbidMaxY:
+			case Boolean(o.forbidMaxY):
 				whatToFind = 'min';
 				break;
 			default:
