@@ -13,7 +13,7 @@
 		genAssertZ1000(answ, 'Кривой ответ');
 
 		let paint1 = function(ctx) {
-			ctx.lineWidth = 2;
+			ctx.lineWidth = om.primaryLineWidth;
 			ctx.strokeStyle = om.secondaryBrandColors;
 
 			ctx.drawLine(10, 370, 390, 370);
@@ -24,7 +24,7 @@
 			ctx.drawLine(79, 220, 390, 370);
 
 			//прямой угол
-			ctx.lineWidth = 1.2;
+			ctx.lineWidth = om.secondaryLineWidth;
 			ctx.drawLine(79 + 21, 220 + 10, 90 + 20, 200 + 11);
 			ctx.drawLine(79 + 10, 220 - 19, 90 + 20, 200 + 11);
 
