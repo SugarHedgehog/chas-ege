@@ -1,4 +1,4 @@
-retryWhileUndefined(function() {
+retryWhileUndefined(function () {
 	NAinfo.requireApiVersion(0, 2);
 
 	function f(x) {
@@ -59,7 +59,7 @@ retryWhileUndefined(function() {
 		graph9AmarkCircles(ct, points, 2, 0.15);
 	};
 	NAtask.setTask({
-		text: `На рисунке изображён график функции $f(x)=${` - `.esli(zn<0)}\\log{_a}{(x+b)}+${c}$. Найдите ${find}. `.replace(
+		text: `На рисунке изображён график функции $f(x)=${` - `.esli(zn < 0)}\\log{_a}{(x+b)}+${c}$. Найдите ${find}. `.replace(
 			`-0`, ``).replace(`+0`, ``).plusminus(),
 		answers: answ,
 		analys: ('$f(x)=' + `-`.esli(zn < 0) + '\\log_{' + a + '}(' + 'x+' + b + ')+' + c + '$').plusminus(),
