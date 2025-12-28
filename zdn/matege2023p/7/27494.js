@@ -1,6 +1,11 @@
 (function() {
 	retryWhileError(function() {
 		'use strict';
+		let key = '27494';
+		let preference1 = ['maximum_points_on_the_segment', 'minimum_points_on_the_segment', 'extreme_points_on_the_segment'];
+		let preference2 = ['number','largest', 'smallest'];
+		let rand1 = getSelectedPreferenceFromList(key, preference1);
+		let rand2 = getSelectedPreferenceFromList(key, preference2);
 
 		NAtask.setTaskWithGraphOfFunctionDerivative({
 			authors: 'Суматохина Александра',
@@ -15,8 +20,8 @@
 			},
 			questionsF: {
 				main: 'integer_points',
-				conditions: ['maximum_points_on_the_segment', 'minimum_points_on_the_segment', 'extreme_points_on_the_segment'],
-				variants: ['number','largest', 'smallest'],
+				conditions: [preference1[rand1]],
+				variants: [preference2[rand2]],
 			},
 			canvasSettings: {
 				height: 400,
@@ -31,6 +36,7 @@
 				int: 'yes',
 				tolerance: 0.1
 			},
+			preference: [preference1, preference2],
 		});
 	}, 20000);
 })();
