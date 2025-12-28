@@ -9,7 +9,7 @@
 		genAssertZ1000(a * 180 / b, 'Кривой ответ');
 
 		let paint1 = function(ctx) {
-			ctx.lineWidth = 2;
+			ctx.lineWidth = om.primaryLineWidth;
 			ctx.strokeStyle = om.secondaryBrandColors.iz();
 
 			ctx.beginPath();
@@ -19,7 +19,7 @@
 			//вписанный
 			let deltaX = (a / b < 0.25 ? 120 : 180);
 			let deltaY = (a / b < 0.25 ? 135 : 10);
-			ctx.strokeStyle = ["#D777F2","#F2A2D6"].iz();
+			ctx.strokeStyle = om.primaryBrandColors.iz();
 
 			ctx.drawLine(200 + deltaX, 200 + deltaY, 200, 200 - 180);
 			ctx.drawLine(200 - deltaX, 200 + deltaY, 200, 200 - 180);
