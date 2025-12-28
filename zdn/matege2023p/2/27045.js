@@ -18,7 +18,7 @@
 			ctx.translate(20, 30);
 			ctx.lineWidth = 2;
 			let height = 300;
-			ctx.fillStyle = om.primaryBrandColors.iz().iz();
+			ctx.fillStyle = om.primaryBrandColors.iz();
 			ctx.strokeStyle = om.secondaryBrandColors.iz();
 
 			let k = sl(1.3, 4, 0.1);
