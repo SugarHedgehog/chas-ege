@@ -1,4 +1,4 @@
-retryWhileUndefined(function() {
+retryWhileUndefined(function () {
 	NAinfo.requireApiVersion(0, 2);
 
 	function parabl(a, b, c, x) {
@@ -71,11 +71,11 @@ retryWhileUndefined(function() {
 		find = 'абсциссу';
 		answ = x2;
 	}
-	let paint1 = function(ct) {
+	let paint1 = function (ct) {
 		h = 400;
 		w = 400;
 		//Оси координат (сразу со стрелками)
-		ct.drawCoordinatePlane (w, h, {
+		ct.drawCoordinatePlane(w, h, {
 			hor: 1,
 			ver: 1
 		}, {
@@ -88,17 +88,17 @@ retryWhileUndefined(function() {
 		ct.lineWidth = 0.1;
 		graph9AdrawFunction(ct, f1, {
 			minX: -8.5,
-            maxX: 8.5,
-            minY: -9.5,
-            maxY: 7.7,
-            step: 0.05,
+			maxX: 8.5,
+			minY: -9.5,
+			maxY: 7.7,
+			step: 0.05,
 		});
 		graph9AdrawFunction(ct, f2, {
 			minX: -8.5,
-            maxX: 8.5,
-            minY: -9.5,
-            maxY: 7.7,
-            step: 0.05,
+			maxX: 8.5,
+			minY: -9.5,
+			maxY: 7.7,
+			step: 0.05,
 		});
 		//точки
 		graph9AmarkCircles(ct, points1, 3, 0.15);
