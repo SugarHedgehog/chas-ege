@@ -13,7 +13,7 @@ sluchch.forceIntegers = true;
 		let preference3 = ['integerA', 'decimalA'];
 
 		let randFind = getSelectedPreferenceFromList(key, preference1);
-		let randB = 1;//getSelectedPreferenceFromList(key, preference2);
+		let randB = getSelectedPreferenceFromList(key, preference2);
 		let randA = getSelectedPreferenceFromList(key, preference3);
 
 
@@ -76,7 +76,7 @@ sluchch.forceIntegers = true;
 		NAtask.setTask({
 			text: `На рисунке изображён график функции $f(x)=${`b+`.esli(!randB)}\\log{_a}{x}$. Найдите ${find}. `,
 			answers: answ,
-			analys: `$f(x)=${b}+\\log{_{${a}}} {x}$`,
+			analys: `$f(x)=${(b+'+').esli(b)}\\log{_{${a}}} {x}$`,
 			preference: [preference1, preference2, preference3],
 		});
 		NAtask.modifiers.allDecimalsToStandard(true);
