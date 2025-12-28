@@ -1,6 +1,9 @@
 (function() {
 	retryWhileError(function() {
 		'use strict';
+		let key = '317541';
+		let preference = ['function_is_decreasing', 'function_is_increasing'];
+		let rand = getSelectedPreferenceFromList(key, preference);
 
 		NAtask.setTaskWithGraphOfFunctionDerivative({
 			authors: 'Суматохина Александра',
@@ -16,7 +19,7 @@
 			},
 			questionsF: {
 				main: 'marked_points',
-				conditions: ['function_is_decreasing', 'function_is_increasing'],
+				conditions: [preference[rand]],
 				variants: ['number'],
 			},
 			canvasSettings: {
@@ -39,6 +42,7 @@
 				int: 'yes',
 				tolerance: 0.2
 			},
+			preference: preference,
 		});
 	}, 10000);
 })();
