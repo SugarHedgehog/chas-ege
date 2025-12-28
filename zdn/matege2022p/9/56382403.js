@@ -1,4 +1,4 @@
-retryWhileUndefined(function() {
+retryWhileUndefined(function () {
 	NAinfo.requireApiVersion(0, 2);
 
 	function f(x) {
@@ -47,19 +47,19 @@ retryWhileUndefined(function() {
 
 	let question, answ;
 	switch (sl(1, 2)) {
-	case 1:
-		let x = sl(6, 10).pm();
-		question = '$f(' + x + ')$';
-		answ = f(x);
-		break;
-	case 2:
-		let st = [
-			['произведение $k \\cdot b \\cdot c$', k * b * c],
-			['сумму $k+b+c$', k + b + c]
-		].iz();
-		answ = st[1];
-		question = st[0];
-		break;
+		case 1:
+			let x = sl(6, 10).pm();
+			question = '$f(' + x + ')$';
+			answ = f(x);
+			break;
+		case 2:
+			let st = [
+				['произведение $k \\cdot b \\cdot c$', k * b * c],
+				['сумму $k+b+c$', k + b + c]
+			].iz();
+			answ = st[1];
+			question = st[0];
+			break;
 	}
 	let sign = [
 		['>', ' \\geq '].iz(), ['>', '\\geq'].iz()
@@ -68,7 +68,7 @@ retryWhileUndefined(function() {
 		sign[0] = ['<', ' \\leq '].iz();
 	if (b < 0)
 		sign[1] = ['<', ' \\leq '].iz();
-	let paint1 = function(ct) {
+	let paint1 = function (ct) {
 		let h = 400;
 		let w = 400;
 		//Оси координат
