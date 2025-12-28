@@ -1,4 +1,4 @@
-retryWhileUndefined(function() {
+retryWhileUndefined(function () {
 	NAinfo.requireApiVersion(0, 2);
 
 	function variant(a, b, x) {
@@ -36,11 +36,11 @@ retryWhileUndefined(function() {
 			}
 	if (points.length < 2)
 		return;
-	let paint1 = function(ct) {
+	let paint1 = function (ct) {
 		let h = 400;
 		let w = 400;
 		//Оси координат
-		ct.drawCoordinatePlane (w, h, {
+		ct.drawCoordinatePlane(w, h, {
 			hor: Math.PI / 4,
 			ver: 1
 		}, {
