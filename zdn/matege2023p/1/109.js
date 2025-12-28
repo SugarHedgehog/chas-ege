@@ -19,7 +19,7 @@
 		let angle = sl1() ? vertices.slice(0, 3).permuteCyclic(1) : vertices.slice(0, 3).permuteCyclic(2);
 
 		let paint1 = function(ctx) {
-			ctx.lineWidth = 2;
+			ctx.lineWidth = om.primaryLineWidth;
 			ctx.strokeStyle = om.secondaryBrandColors.iz();
 
 			ctx.drawLine(10, 370, 390, 370);
@@ -30,8 +30,8 @@
 			ctx.drawLine(280, 200, 10, 370);
 
 			//прямой угол
-			ctx.lineWidth = 1.2;
-			ctx.strokeStyle = ["#D777F2","#F2A2D6"].iz();
+			ctx.lineWidth = om.secondaryLineWidth;
+			ctx.strokeStyle = om.primaryBrandColors.iz();
 			
 			ctx.drawLine(280 - 33, 200 - 5, 280 - 20, 200 + 14);
 			ctx.drawLine(280 - 33, 200 - 5, 280 - 13, 200 - 18);
