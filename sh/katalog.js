@@ -25,8 +25,15 @@ function generateHtmlForTask(category, taskNumber, actionsArray) {
 
         // Handle variations if preferences exist
         let variants = [null]; // Default case - single variant
+        
+        let hasExplicitPreferences = window.nabor.preferences && window.nabor.preferences[taskNumber];
+        
         if (vopr.preference && Array.isArray(vopr.preference) && vopr.preference.length > 0) {
-            variants = generateVariations(vopr.preference);
+            if (hasExplicitPreferences) {
+                variants = [window.nabor.preferences[taskNumber]];
+            } else {
+                variants = generateVariations(vopr.preference);
+            }
         }
 
         // Generate HTML for each variant
@@ -50,10 +57,10 @@ function generateHtmlForTask(category, taskNumber, actionsArray) {
             htmlContent += `<div class="task-wrapper" data-category="${category}" data-tasknumber="${taskNumber}">`;
             htmlContent += currentTaskPath.vTag('h2');
 
-                if (variants.length > 1) {
+                if (variants.length > 1 || hasExplicitPreferences) {
                     const currentVariation = Array.isArray(variants[i])
                         ? variants[i].join(', ')
-                        : Object.values(variants[i])[0];
+                        : variants[i];
                     htmlContent += `<div class="variant-info">Вариация: ${currentVariation}</div>`;
                 }
 
