@@ -1,4 +1,4 @@
-retryWhileUndefined(function() {
+retryWhileUndefined(function () {
 	NAinfo.requireApiVersion(0, 2);
 
 	function fp(x) {
@@ -26,7 +26,7 @@ retryWhileUndefined(function() {
 		return;
 	if (fs(x2) != y2)
 		return;
-	if((fs(0)-fp(0)).abs()<0.25)
+	if ((fs(0) - fp(0)).abs() < 0.25)
 		return;
 	let pointss = intPoints(fs, {
 		minX: -8,
@@ -54,11 +54,11 @@ retryWhileUndefined(function() {
 		answ = y2;
 		find = 'ординату';
 	}
-	let paint1 = function(ct) {
+	let paint1 = function (ct) {
 		let h = 400;
 		let w = 400;
 		//Оси координат
-		ct.drawCoordinatePlane (w, h, {
+		ct.drawCoordinatePlane(w, h, {
 			hor: 1,
 			ver: 1
 		}, {
@@ -96,14 +96,14 @@ retryWhileUndefined(function() {
 		ct.fillText('A', 20 * x1 - 10, -20 * y1 - 10);
 	};
 	NAtask.setTask({
-		text: 'На рисунке изображены графики функций $f(x)=\\sqrt{x'+['+','-'].iz()+'c}'+['+','-'].iz()+'d$ и $g(x)=kx'+['+','-'].iz()+'b$,' +
+		text: 'На рисунке изображены графики функций $f(x)=\\sqrt{x' + ['+', '-'].iz() + 'c}' + ['+', '-'].iz() + 'd$ и $g(x)=kx' + ['+', '-'].iz() + 'b$,' +
 			' которые пересекаются в точках $A$ и $B$.',
 		analys: '$f(x)=' + ('\\sqrt{x+' + c + '}+' + d + '$').plusminus() + '<br>' +
 			'$g(x)=' + (k + 'x+' + b.ts()).plusminus() + '$<br>' +
 			'$A(' + x1 + ';' + y1 + ')$<br>' +
 			'$B(' + x2 + ';' + y2 + ')$',
 	});
-	NAtask.modifiers.askAboutPoint('$B$',[x2,y2]);
+	NAtask.modifiers.askAboutPoint('$B$', [x2, y2]);
 	NAtask.modifiers.addCanvasIllustration({
 		width: 400,
 		height: 400,
