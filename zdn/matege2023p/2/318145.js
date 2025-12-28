@@ -36,7 +36,7 @@
 				add = 9;
 			}
 
-			ctx.fillStyle = om.primaryBrandColors.iz().iz();
+			ctx.fillStyle = om.primaryBrandColors.iz();
 			ctx.beginPath();
 			ctx.moveTo(150 - (140 * (1 - frac) + add), 300 * frac);
 			ctx.lineTo(150 + 140 * (1 - frac) + add, 300 * frac);
