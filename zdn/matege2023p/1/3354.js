@@ -39,7 +39,7 @@
 		}
 
 		let paint1 = function(ctx) {
-			ctx.lineWidth = 2;
+			ctx.lineWidth = om.primaryLineWidth;
 			ctx.strokeStyle = om.secondaryBrandColors.iz();
 
 			ctx.drawLine(100, 80, 350, 80);
@@ -47,7 +47,7 @@
 			ctx.drawLine(100, 80, 10, 320);
 			ctx.drawLine(270, 320, 350, 80);
 
-			ctx.strokeStyle = ["#D777F2","#F2A2D6"].iz();
+			ctx.strokeStyle = om.primaryBrandColors.iz();
 
 			ctx.drawLine(100, 80, 270, 320);
 
