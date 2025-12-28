@@ -20,7 +20,7 @@
 		genAssertZ1000(0.5 * b / a, 'Кривой ответ');
 
 		let paint1 = function(ctx) {
-			ctx.lineWidth = 2;
+			ctx.lineWidth = om.primaryLineWidth;
 			ctx.strokeStyle = om.secondaryBrandColors.iz();
 
 			ctx.drawLine(10, 370, 390, 370);
@@ -28,8 +28,8 @@
 			ctx.drawLine(180, 50, 390, 370);
 
 			//штрихи
-			ctx.strokeStyle = ["#D777F2","#F2A2D6"].iz();
-			ctx.lineWidth = 1.2;
+			ctx.strokeStyle = om.primaryBrandColors.iz();
+			ctx.lineWidth = om.secondaryLineWidth;
 			ctx.drawLine(275, 210, 300, 200);
 			ctx.drawLine(80, 200, 105, 210);
 
