@@ -2075,8 +2075,6 @@ chas2.task = {
 		}
 
 
-		console.log('minX: ' + minX + " ; minY: " + minY + " ;   maxX: " + maxX + " ; maxY: " + maxY);
-
 		if (!(minY*1000).isAlmostInteger() || o.forbidMinY) {
 			minY = null;
 		}
@@ -2205,6 +2203,7 @@ chas2.task = {
 	 * @param {Boolean}  o.simplifyConstant упростить константы силами mathjs - численно
 	 * @param {Boolean}  o.keepFractionsIrreduced не сокращать дроби
 	 * @param {Boolean}  o.keepSumOrder не изменять порядок слагаемых
+	 * @param {Function}  o.ODZ функция области допустимых значений: принимает x и возвращает Boolean
 	 */
 	setLocalExtremumTask: function (o) {
 		let expr = math.parse(o.expr);
@@ -2223,11 +2222,9 @@ chas2.task = {
 			eq = math.simplify(eq, [{l:'n1*n2 + n1*n3', r:'n1*(n2+n3)'}]);
 			eq = math.simplify(eq, [{l:'eq(n1*e^n2)', r:'eq(n1)'}]);
 			eq = eq.args[0];
-			console.log(eq.toString());
 			// Solve the equation eq using nerdamer
 
 			let roots = nerdamer.solve(eq.toString()+'=0', 'x').toString().replace(/^\[/,'').replace(/\]$/,'').split(',');
-			console.log(roots);
 
 			o.extremums = [];
 			for (let root of roots) {
@@ -2240,11 +2237,20 @@ chas2.task = {
 		}
 
 
+		let ODZ = (typeof o.ODZ === 'function') ? o.ODZ : function(){ return true; };
+		o.extremums = o.extremums.filter(function(e){
+			try {
+				var x = eval(''+e);
+				return !!ODZ(x);
+			} catch (err) {
+				return false;
+			}
+		});
+
 		let sortedExtremums = {min:[], max:[], not:[]};
 
 		//sort extremums
 		for (let e of o.extremums) {
-			console.log(e);
 			sortedExtremums[
 				mathjs_helpers.testLocalExtremum(expr.toString(), ''+e, '1/100')
 			].push(e);
@@ -2272,9 +2278,12 @@ chas2.task = {
 				whatToFind = whatToFind.shuffle()[0];
 		}
 			
-		let theExtremum = sortedExtremums[whatToFind];
+		let theExtremum = sortedExtremums[whatToFind][0];
 
 		theExtremum = eval(theExtremum);
+		if (typeof ODZ === 'function') {
+			genAssert(ODZ(theExtremum), 'Точка экстремума не принадлежит области допустимых значений');
+		}
 		genAssertZ1000(theExtremum, 'Бесконечные десятичные дроби запрещены');
 
 		let extremumName = {min: 'минимум', max: 'максимум'}[whatToFind];
