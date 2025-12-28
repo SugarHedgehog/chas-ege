@@ -1,4 +1,4 @@
-retryWhileUndefined(function() {
+retryWhileUndefined(function () {
 	NAinfo.requireApiVersion(0, 2);
 
 	function fg(x) {
@@ -48,40 +48,40 @@ retryWhileUndefined(function() {
 	let minX = [x1, x2].minE();
 	let minY = [y1, y2].minE();
 	switch (3) {
-	case 1:
-		let str = [
-			['большую', [maxX, maxY]],
-			['меньшую', [minX, minY]]
-		].iz();
-		find = [
-			['ординат', str[1].pop()],
-			['абсцисс', str[1].shift()]
-		].iz();
-		answ = find.pop();
-		find = str[0] + ' из ' + find;
-		break;
-	case 2:
-		find = 'сумму всех координат';
-		answ = x1 + x2 + y1 + y2;
-		break;
-	case 3:
-		let str1 = [
-			['большей', maxX],
-			['меньшей', minX]
-		].iz();
-		let str2 = [
-			['большей', maxY],
-			['меньшей', minY]
-		].iz();
-		find = 'сумму ' + str1[0] + ' абсциссы и ' + str2[0] + ' ординаты';
-		answ = str1[1] + str2[1];
-		break;
+		case 1:
+			let str = [
+				['большую', [maxX, maxY]],
+				['меньшую', [minX, minY]]
+			].iz();
+			find = [
+				['ординат', str[1].pop()],
+				['абсцисс', str[1].shift()]
+			].iz();
+			answ = find.pop();
+			find = str[0] + ' из ' + find;
+			break;
+		case 2:
+			find = 'сумму всех координат';
+			answ = x1 + x2 + y1 + y2;
+			break;
+		case 3:
+			let str1 = [
+				['большей', maxX],
+				['меньшей', minX]
+			].iz();
+			let str2 = [
+				['большей', maxY],
+				['меньшей', minY]
+			].iz();
+			find = 'сумму ' + str1[0] + ' абсциссы и ' + str2[0] + ' ординаты';
+			answ = str1[1] + str2[1];
+			break;
 	}
-	let paint1 = function(ct) {
+	let paint1 = function (ct) {
 		let h = 400;
 		let w = 400;
 		//Оси координат
-		ct.drawCoordinatePlane (w, h, {
+		ct.drawCoordinatePlane(w, h, {
 			hor: 1,
 			ver: 1
 		}, {
