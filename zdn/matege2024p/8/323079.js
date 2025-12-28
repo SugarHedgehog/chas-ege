@@ -6,6 +6,11 @@
 		function f(x) {
 			return a * x * x + b * x + c;
 		}
+		
+		let key = '323079';
+		let preference = ['graphIntersectsAxisAbove', 'graphIntersectsAxisBellow', 'graphNotIntersectsAxisAbove', 'graphNotIntersectsAxisBellow'];
+		let rand = getSelectedPreferenceFromList(key, preference);
+		
 		let a = sluchch(0.1, 1, 0.1).pm();
 		let b = sluchch(1, 10).pm();
 		let c = sluchch(0, 10).pm();
@@ -19,13 +24,21 @@
 		let x1 = 0.5 * (-b + D.sqrt()) / a;
 		let x2 = 0.5 * (-b - D.sqrt()) / a;
 
-		if (D > 0) {
-			genAssert(D.isPolnKvadr(), 'Плохой дискриминант');
-			genAssert(x1.isZ() && x2.isZ(), 'Корни не целые');
+		if(rand<2){
+			genAssert(D.isPolnKvadr(), 'Плохой дискриминант');} 
+		else{
+			genAssert(D<0, 'Дискриминант больше нуля');
 		}
+		
+		if(rand<2)
+			genAssert(x1.isZ() && x2.isZ(), 'Корни не целые');
+
 		let x0 = -b / (2 * a);
 		genAssert(x0.abs() < maxX / 2, 'x0 вне зоны видимости');
+		
 		let y0 = f(x0);
+		
+		genAssert([y0>0, y0<0][rand%2], ['y<0', 'y0<0'][rand%2]);
 		genAssert(y0.abs() > 2 && y0.abs() < maxY / 2, 'y0 вне зоны видимости');
 
 		let points = intPoints(f, {
@@ -97,6 +110,7 @@
 				'$ – одна из первообразных функции $f(x)$. Найдите площадь закрашенной фигуры.',
 			answers: answ.abs(),
 			authors: 'Суматохина Александра',
+			preference: preference,
 		});
 		NAtask.modifiers.addCanvasIllustration({
 			width: 400,
