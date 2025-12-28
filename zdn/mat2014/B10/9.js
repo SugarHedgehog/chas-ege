@@ -29,7 +29,7 @@
 				depth: cubeEdge / (2.5 * 1.5),
 				angle: 40,
 				strokeStyle: om.secondaryBrandColors.iz(),
-				diagonalStrokeStyle: om.primaryBrandColors.iz().iz(),
+				diagonalStrokeStyle: om.primaryBrandColors.iz(),
 			}, [0, 2, 3, 4, 6], false, [0.5, 0.2]);
 			ct.translate(-64 / 20, -104 / 20);
 
