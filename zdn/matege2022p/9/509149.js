@@ -49,7 +49,7 @@
 			minY: -9,
 			maxY: 7,
 		});
-		genAssert(pointsP.length >= 3, 'Точек недостаточно');
+		genAssert(pointsP.length >= 3, 'Точек не достаточно');
 
 		let pointsK = intPoints(kf, {
 			minX: -8,
@@ -57,7 +57,7 @@
 			minY: -9,
 			maxY: 7,
 		});
-		genAssert(pointsK.length >= 2, 'Точек недостаточно');
+		genAssert(pointsK.length >= 2, 'Точек не достаточно');
 
 		let answ, find;
 		if (randFind) {
@@ -127,7 +127,10 @@
 			text: 'На рисунке изображены графики функций $f(x)=' + pryamay + '$ и $g(x)=ax^2+bx+c$,' +
 				' которые пересекаются в точках $A$ и $B$. Найдите ' + find + ' точки $B$.',
 			answers: answ,
-			analys: `$f(x)=${(k + 'x+' + d).replace('+0', '').plusminus()};$<br>$g(x)=${(a + 'x^2+' + b + 'x+' + c).replace('+0', '').plusminus()}.$<br>$A(${x1};${y1})$<br>$B(${x2};${y2})$`,
+			analys: '$f(x)=' + (k + 'x+' + d).replace('+0', '').plusminus() + `;$<br>` +
+				'$g(x)=' + (a + 'x^2+' + b + 'x+' + c).replace('+0', '').plusminus() + '.$<br>' +
+				'$A(' + x1 + ';' + y1 + ')$<br>' +
+				'$B(' + x2 + ';' + y2 + ')$',
 			preference: [preference1, preference2],
 		});
 		NAtask.modifiers.allDecimalsToStandard(true);
