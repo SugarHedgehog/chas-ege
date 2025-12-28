@@ -1,6 +1,11 @@
 (function() {
 	retryWhileError(function() {
 		'use strict';
+		let key = '27487';
+		let preference1 = ['derivative_is_negative', 'derivative_is_positive'];
+		let preference2 = ['sum', 'production', 'number', 'largest', 'smallest'];
+		let rand1 = getSelectedPreferenceFromList(key, preference1);
+		let rand2 = getSelectedPreferenceFromList(key, preference2);
 
 		NAtask.setTaskWithGraphOfFunctionDerivative({
 			authors: 'Суматохина Александра',
@@ -15,8 +20,8 @@
 			},
 			questionsF: {
 				main: 'integer_points',
-				conditions: ['derivative_is_positive', 'derivative_is_negative'],
-				variants: ['sum', 'production', 'number', 'largest', 'smallest'],
+				conditions: [preference1[rand1]],
+				variants: [preference2[rand2]],
 			},
 			canvasSettings: {
 				height: 400,
@@ -31,6 +36,7 @@
 				int: 'no',
 				tolerance: 0.2
 			},
+			preference: [preference1, preference2],
 			/*rootsIsInteger: {
 				int: 'yes',
 				tolerance: 0.2
