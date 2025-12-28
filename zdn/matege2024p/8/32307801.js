@@ -10,10 +10,14 @@
         function constant() {
             return Y;
         }
+        
+        let key = '32307801';
+		let preference = ['YMoreZero', 'YLessZero'];
+		let rand = getSelectedPreferenceFromList(key, preference);
 
-        let X = sl(2, 8).pm();
-        let Y = sl(2, 7);
-        let k = sl(1, 10, 0.1) * ((X * Y > 0) ? -1 : 1);
+        let X = sl(0, 6).pm();
+        let Y = sl(2, 7)*[1, -1][rand];
+        let k = sl(1, 10, 0.1) * ((X * Y < 0) ? -1 : 1);
         let b = Y - k * X;
 
         genAssert((b / k).isZ());
@@ -24,19 +28,18 @@
             minY = -9.5,
             maxY = 7.5;
 
-        genAssert((b / k).abs() < maxX.round());
-        genAssert(b.abs() < maxX.round());
+        genAssert((-b / k).abs() < X.abs());
 
-        let ends = (X > 0) ? [-b / k, slKrome(0, minX.ceil(), X - 2)] : [-b / k, slKrome(0, X + 2, maxX.floor())];
+        let ends = (X < 0) ? [-b / k, slKrome(0, minX.ceil(), X - 2)] : [-b / k, slKrome(0, X + 2, maxX.floor())];
         let leftEnd = ends.minE();
         let rightEnd = ends.maxE();
 
-        let subMinX = (X > 0) ? X : minX;
-        let subMaxX = (X < 0) ? X : maxX;
-        let subMinXC = (X < 0) ? X : minX;
-        let subMaxXC = (X > 0) ? X : maxX;
+        let subMinX = (X < 0) ? X : minX;
+        let subMaxX = (X > 0) ? X : maxX;
+        let subMinXC = (X > 0) ? X : minX;
+        let subMaxXC = (X < 0) ? X : maxX;
 
-        let answ = 0.5 * Y * ((rightEnd - leftEnd).abs() + (X - (X > 0 ? leftEnd : rightEnd)).abs());
+        let answ = 0.5 * Y * ((rightEnd - leftEnd).abs() + (X - (X < 0 ? leftEnd : rightEnd)).abs());
 
         let paint1 = function (ctx) {
             let h = 400;
@@ -102,11 +105,13 @@
             ctx.lineWidth = 0.12;
             ctx.strokeStyle = om.primaryBrandColors.iz();
             ctx.drawLine(X, 0, X, Y);
-            if (X > 0) {
+            if (X < 0) {
                 ctx.drawLine(leftEnd, 0, leftEnd, Y);
             } else {
                 ctx.drawLine(rightEnd, 0, rightEnd, Y);
             }
+
+            ctx.drawLine(0, Y, X, Y);
         };
         NAtask.setTask({
             text: 'На рисунке изображён график некоторой функции $y=f(x)$ (два луча с общей начальной точкой). ' +
@@ -114,6 +119,7 @@
                 ')$, где $F(x)$ — одна из первообразных функции $f(x)$.',
             answers: answ,
             authors: 'Суматохина Александра',
+            preference: preference,
         });
         NAtask.modifiers.addCanvasIllustration({
             width: 400,
@@ -124,4 +130,4 @@
     }, 20000);
 })();
 
-//323078: 323183 323185 323275 323187 323189 323191 323193 323195 323197 323199 323201 323203 323205 323207 323209 323211 323213 323215 323217 323219 323221 323223 323225 323227 323229 323231 323233 323235 323237 323239 323241 323243 323245 323247 323249 323251 323253 323255 323257 323259 323261 323263 323265 323267 323269 323271 323273 323277 323279 323281
+//32307801
