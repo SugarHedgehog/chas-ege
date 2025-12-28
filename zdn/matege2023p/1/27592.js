@@ -47,7 +47,7 @@
 		}
 
 		let paint1 = function(ctx) {
-			ctx.lineWidth = 2;
+			ctx.lineWidth = om.primaryLineWidth;
 			ctx.strokeStyle = om.secondaryBrandColors.iz();
 
 			ctx.drawLine(10, 350, 390, 350);
@@ -58,7 +58,7 @@
 			ctx.drawLine(65, 200, 255, 200);
 
 			//штрихи
-			ctx.lineWidth = 1;
+			ctx.lineWidth = om.secondaryLineWidth;
 
 			ctx.strokeStyle = om.primaryBrandColors.iz();
 			ctx.strokeInMiddleOfSegment(10, 350, 65, 200, 10);
