@@ -32,7 +32,7 @@
 					depth: cubeEdge / (2.5 * 1.5),
 					angle: 40,
 					strokeStyle: om.secondaryBrandColors.iz(),
-				diagonalStrokeStyle: om.primaryBrandColors.iz().iz(),
+				diagonalStrokeStyle: om.primaryBrandColors.iz(),
 				}, [0, 2, 3, 4, 6], true, [0.5, 0.2]);
 				ct.translate(-44 / 15, -71 / 15);
 				ct.strokeStyle = "black";
@@ -44,7 +44,7 @@
 				depth: cubeEdge / (2.5),
 				angle: 40,
 				strokeStyle: om.secondaryBrandColors.iz(),
-				diagonalStrokeStyle: om.primaryBrandColors.iz().iz(),
+				diagonalStrokeStyle: om.primaryBrandColors.iz(),
 			}, [0, 3, 4], true, [0.5, 0.2]);
 
 		};
