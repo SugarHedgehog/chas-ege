@@ -1,4 +1,4 @@
-retryWhileUndefined(function() {
+retryWhileUndefined(function () {
 	NAinfo.requireApiVersion(0, 2);
 
 	function axb(a, x, b) {
@@ -27,7 +27,7 @@ retryWhileUndefined(function() {
 		answ = f(chisl);
 	} else {
 		answ = chisl;
-		find = `значение $x$, при котором $f(x)=${f(chisl).ts() }$`;
+		find = `значение $x$, при котором $f(x)=${f(chisl).ts()}$`;
 	}
 	let X = [],
 		Y = [];
@@ -39,7 +39,7 @@ retryWhileUndefined(function() {
 			}
 	if (X.length < 2)
 		return;
-	let paint1 = function(ct) {
+	let paint1 = function (ct) {
 		let h = 400;
 		let w = 400;
 		//Оси координат
@@ -65,7 +65,7 @@ retryWhileUndefined(function() {
 		graph9AmarkCircles(ct, [X, Y].T(), 2, 0.15);
 	};
 	NAtask.setTask({
-		text: `На рисунке изображён график функции $f(x)=${` - `.esli(a<0)}a^x+b$. Найдите ${find}. `,
+		text: `На рисунке изображён график функции $f(x)=${` - `.esli(a < 0)}a^x+b$. Найдите ${find}. `,
 		answers: answ,
 		analys: `$f(x)=` + (a + `^{x}+` + (b)).replace('+0', '').plusminus() + `$`,
 	});
