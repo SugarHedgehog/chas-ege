@@ -8,13 +8,13 @@
 	var vpis = sl(1, 89);
 
 	let paint1 = function(ctx) {
-		ctx.lineWidth = 2;
+		ctx.lineWidth = om.primaryLineWidth;
 		ctx.strokeStyle = om.secondaryBrandColors.iz();
 		ctx.beginPath();
 		ctx.arc(200, 200, 180, 0, 2 * Math.PI);
 		ctx.stroke();
 
-		ctx.strokeStyle = ["#D777F2","#F2A2D6"].iz();
+		ctx.strokeStyle = om.primaryBrandColors.iz();
 		//центральный
 		ctx.drawLine(200, 200, 320, 335);
 		ctx.drawLine(200, 200, 80, 335);
