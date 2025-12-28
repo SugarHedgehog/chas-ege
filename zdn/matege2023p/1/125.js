@@ -17,7 +17,7 @@
 		subangle1 = subangle1.permuteCyclic(2);
 
 	let paint1 = function(ctx) {
-		ctx.lineWidth = 2;
+		ctx.lineWidth = om.primaryLineWidth;
 
 		ctx.strokeStyle = om.secondaryBrandColors.iz();
 		ctx.drawArc(200, 200, 180, 0, 2 * Math.PI);
