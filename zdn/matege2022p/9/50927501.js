@@ -1,4 +1,4 @@
-retryWhileUndefined(function() {
+retryWhileUndefined(function () {
 	NAinfo.requireApiVersion(0, 2);
 
 	function pryam(k, b, x) {
@@ -18,10 +18,10 @@ retryWhileUndefined(function() {
 	}
 
 	let x1 = Math.pow(sluchch(0, 10, 0.5), 2);
-	let c = sluchch(-10,10);
+	let c = sluchch(-10, 10);
 	let a = sluchch(1, 20).pm();
 	let y1 = a * x1.sqrt() + c;
-	let k = sluchch(0.25, 20,0.25).pm();
+	let k = sluchch(0.25, 20, 0.25).pm();
 	let b = y1 - k * x1;
 	if (a * a - 4 * k * (b - c) != 0)
 		return;
@@ -53,11 +53,11 @@ retryWhileUndefined(function() {
 		answ = y1;
 		find = 'ординату';
 	}
-	let paint1 = function(ct) {
+	let paint1 = function (ct) {
 		let h = 400;
 		let w = 400;
 		//Оси координат
-		ct.drawCoordinatePlane (w, h, {
+		ct.drawCoordinatePlane(w, h, {
 			hor: 1,
 			ver: 1
 		}, {
@@ -101,4 +101,4 @@ retryWhileUndefined(function() {
 	});
 	return true;
 }, 100000);
-//509275
+//50927501
