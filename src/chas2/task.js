@@ -2462,7 +2462,6 @@ chas2.task = {
 				}
 			}
 			possibleMultipliers.shuffle();
-			//console.log(possibleMultipliers);
 			for (var i of possibleMultipliers){
 				if(sl1() && (ans/i.sqrt()*1000).isAlmostInteger()){
 					o.text += ' Ответ разделите на $' + i.texsqrt(opts.useMultiples) + '$.';
