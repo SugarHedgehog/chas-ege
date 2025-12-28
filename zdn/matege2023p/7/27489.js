@@ -1,6 +1,11 @@
 (function() {
 	retryWhileError(function() {
 		'use strict';
+		let key = '27489';
+		let preference1 = ['tangent_to_graph_const', 'tangent_to_graph_abscissa', 'derivative_is_zero', 'solutions_equation'];
+		let preference2 = ['sum', 'production', 'number'];
+		let rand1 = getSelectedPreferenceFromList(key, preference1);
+		let rand2 = getSelectedPreferenceFromList(key, preference2);
 
 		NAtask.setTaskWithGraphOfFunctionDerivative({
 			authors: 'Суматохина Александра',
@@ -15,8 +20,8 @@
 			},
 			questionsF: {
 				main: 'integer_points',
-				conditions: [ 'tangent_to_graph_const', 'tangent_to_graph_abscissa', 'derivative_is_zero', 'solutions_equation',],
-				variants: ['sum', 'production', 'number'],
+				conditions: [preference1[rand1]],
+				variants: [preference2[rand2]],
 			},
 			canvasSettings: {
 				height: 400,
@@ -31,6 +36,7 @@
 				int: 'yes',
 				tolerance: 0.15
 			},
+			preference: [preference1, preference2],
 		});
 	}, 10000);
 })();
