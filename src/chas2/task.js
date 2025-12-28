@@ -1259,7 +1259,7 @@ chas2.task = {
 				task.text.push('функции $y=f(x)$');
 				break;
 			case 'derivative':
-				task.text.push('$y=f\'(x)$ — производной ' + functionsFx);
+				task.text.push(`$y=f\'(x)$ — производной ${functionsFx}`);
 				break;
 			default:
 				throw new Error('Не выбран тип задания. Укажите type.');
@@ -1294,39 +1294,39 @@ chas2.task = {
 			case 'function':
 				switch (conditions) {
 					case 'derivative_is_positive':
-						find = derivativeOfFx + 'положительна';
+						find = `${derivativeOfFx} положительна`;
 						answer = findIncreasingIntervals(func, minX, maxX);
 						//task.analys = 'Интервалы, где производная функции положительна:'
 						break;
 					case 'derivative_is_negative':
-						find = derivativeOfFx + 'отрицательна';
+						find = `${derivativeOfFx} отрицательна`;
 						//task.analys = 'Интервалы, где производная функции отрицательна:'
 						answer = findDecreasingIntervals(func, minX, maxX);
 						break;
 					case 'derivative_is_largest':
-						find = derivativeOfFx + 'принимает наибольшее значение';
+						find = `${derivativeOfFx} принимает наибольшее значение`;
 						deriv = points.map((x) => 1000 * (func(x + 0.001) - func(x - 0.001)));
 						genAssert(isDistinctByTolerance(deriv, 1), 'Значения производных в точках отличаются менее чем на ' + 0.5);
 						answer = points[deriv.max()];
 						break;
 					case 'derivative_is_smallest':
-						find = derivativeOfFx + 'принимает наименьшее значение';
+						find = `${derivativeOfFx} принимает наименьшее значение`;
 						deriv = points.map((x) => 1000 * (func(x + 0.001) - func(x - 0.001)));
 						genAssert(isDistinctByTolerance(deriv, 1), 'Значения производных в точках отличаются менее чем на ' + 0.5);
 						answer = points[deriv.min()];
 						break;
 					case 'tangent_to_graph_abscissa':
-						find = 'касательная к графику ' + functionsFx + ' параллельна оси абсцисс';
+						find = `касательная к графику ${functionsFx} параллельна оси абсцисс`;
 						//task.analys = 'Точки экстремума:'
 						answer = extremumsX(func, minX, maxX);
 						break;
 					case 'tangent_to_graph_const':
-						find = 'касательная к графику ' + functionsFx + ' параллельна графику функции $y=' + sl(-20, 20, 0.1) + '$ или совпадает с ней';
+						find = `касательная к графику ${functionsFx} параллельна графику функции $y=${sl(-20, 20, 0.1)}$ или совпадает с ней`;
 						//task.analys = 'Точки экстремума:'
 						answer = extremumsX(func, minX, maxX);
 						break;
 					case 'derivative_is_zero':
-						find = derivativeOfFx + 'равна нулю';
+						find = `${derivativeOfFx} равна нулю`;
 						//task.analys = 'Точки экстремума:'
 						answer = extremumsX(func, minX, maxX);
 						break;
@@ -1366,52 +1366,52 @@ chas2.task = {
 						answer = findNegativeIntervals(func, minX, maxX);
 						break;
 					case 'function_is_increasing':
-						find = functionFx + ' возрастает';
+						find = `${functionFx} возрастает`;
 						//task.analys = 'Интервалы, где функция возрастает:'
 						answer = findIncreasingIntervals(func, minX, maxX);
 						break;
 					case 'function_is_decreasing':
-						find = functionFx + ' убывает';
+						find = `${functionFx} убывает`;
 						//task.analys = 'Интервалы, где функция убывает:'
 						answer = findDecreasingIntervals(func, minX, maxX);
 						break;
 					case 'extreme_points_on_the_segment':
-						find = 'экстремума ' + functionsFx + ' на отрезке $[' + subSegment[0] + ';' + subSegment[1] + ']$';
+						find = `экстремума ${functionsFx} на отрезке $[${subSegment[0]};${subSegment[1]}$`;
 						//task.analys = 'Точки экстремума на отрезке $[' + subSegment[0] + ';' + subSegment[1] + ']$:'
 						answer = extremumsX(func, subSegment[0] - stepForX * 0.1, subSegment[1] + stepForX * 0.1);
 						break;
 					case 'minimum_points_on_the_segment':
-						find = 'минимума ' + functionsFx + ' на отрезке $[' + subSegment[0] + ';' + subSegment[1] + ']$';
+						find = `минимума ${functionsFx} на отрезке $[${subSegment[0]};${subSegment[1]}]$`;
 						//task.analys = 'Точки минимума на отрезке $[' + subSegment[0] + ';' + subSegment[1] + ']$:'
 						answer = minimumsX(func, subSegment[0] - stepForX * 0.1, subSegment[1] + stepForX * 0.1);
 						break;
 					case 'maximum_points_on_the_segment':
-						find = 'максимума ' + functionsFx + ' на отрезке $[' + subSegment[0] + ';' + subSegment[1] + ']$';
+						find = `максимума ${functionsFx} на отрезке $[${subSegment[0]};${subSegment[1]}]$`;
 						//task.analys = 'Точки максимума на отрезке $[' + subSegment[0] + ';' + subSegment[1] + ']$:'
 						answer = maximumsX(func, subSegment[0] - stepForX * 0.1, subSegment[1] + stepForX * 0.1);
 						break;
 					case 'minimum_point_on_the_segment':
 						answer = answer.intIntervalsMinimums.iz();
 						genAssert(answer.leftEnd != answer.rightEnd, 'Начало и конец отрезка совпали');
-						find = 'минимума ' + functionsFx + ' на отрезке $[' + answer.leftEnd + ';' + answer.rightEnd + ']$';
+						find = `минимума ${functionsFx} на отрезке $[${answer.leftEnd};${answer.rightEnd}]$`;
 						answer = answer.ext.round();
 						break;
 					case 'maximum_point_on_the_segment':
 						answer = answer.intIntervalsMaximums.iz();
 						genAssert(answer.leftEnd != answer.rightEnd, 'Начало и конец отрезка совпали');
-						find = 'максимума ' + functionsFx + ' на отрезке $[' + answer.leftEnd + ';' + answer.rightEnd + ']$';
+						find = `максимума ${functionsFx} на отрезке $[${answer.leftEnd};${answer.rightEnd}]$`;
 						answer = answer.ext.round();
 						break;
 					case 'derivative_is_zero_on_the_segment':
 						answer = transformExtremumsToIntervals(func, minX, maxX, false);
 						answer = [answer.intIntervalsMinimums.iz(), answer.intIntervalsMaximums.iz()].iz();
 						genAssert(answer.leftEnd != answer.rightEnd, 'Начало и конец отрезка совпали');
-						find = derivativeOfFx + 'равна нулю на отрезке $[' + answer.leftEnd.floor()+ ';' + answer.rightEnd.ceil() + ']$';
+						find = `${derivativeOfFx} равна нулю на отрезке $[${answer.leftEnd.floor()};${answer.rightEnd.ceil()}]$`;
 						//task.analys = 'Точки экстремума:'
 						answer = [answer.ext.round()];
 						break;
 					case 'solutions_equation_on_the_segment':
-						find = 'решений уравнения $f\'(x)=0$ на отрезке $[' + subSegment[0] + ';' + subSegment[1] + ']$';
+						find = `решений уравнения $f\'(x)=0$ на отрезке $[${subSegment[0]};${subSegment[1]}]$`;
 						//task.analys = 'Точки экстремума:'
 						answer = extremumsX(func, subSegment[0] - stepForX * 0.1, subSegment[1] + stepForX * 0.1);
 						break;
@@ -1419,7 +1419,7 @@ chas2.task = {
 						answer = transformExtremumsToIntervals(func, minX, maxX, true);
 						answer = [answer.intIntervalsMinimums.iz(), answer.intIntervalsMaximums.iz()].iz();
 						genAssert(answer.leftEnd != answer.rightEnd, 'Начало и конец отрезка совпали');
-						find = 'решение уравнения $f\'(x)=0$ на отрезке $[' + answer.leftEnd.floor()+ ';' + answer.rightEnd.ceil() + ']$';
+						find = `решение уравнения $f\'(x)=0$ на отрезке $[${answer.leftEnd.floor()};${answer.rightEnd.ceil()}]$`;
 						answer = [answer.ext.round()];
 						//task.analys = 'Точки экстремума:'
 						break;
@@ -1436,47 +1436,47 @@ chas2.task = {
 						answer = findIntervalsOfIncreaseAndDecrease(func, minX, maxX);
 						break;
 					case 'extreme_points':
-						find = 'экстремума ' + functionsFx;
+						find = `экстремума ${functionsFx}`;
 						//task.analys = 'Точки экстремума:'
 						answer = extremumsX(func, minX, maxX);
 						break;
 					case 'minimum_points':
-						find = 'минимума ' + functionsFx;
+						find = `минимума ${functionsFx}`;
 						//task.analys = 'Точки минимума:'
 						answer = minimumsX(func, minX, maxX);
 						break;
 					case 'maximum_points':
-						find = 'максимума ' + functionsFx;
+						find = `максимума ${functionsFx}`;
 						//task.analys = 'Точки максимума:'
 						answer = maximumsX(func, minX, maxX);
 						break;
 					case 'extreme_point':
-						find = 'экстремума ' + functionsFx;
+						find = `экстремума ${functionsFx}`;
 						//task.analys = 'Точки экстремума:'
 						answer = extremumsX(func, minX, maxX);
 						break;
 					case 'minimum_point':
-						find = 'минимума ' + functionsFx;
+						find = `минимума ${functionsFx}`;
 						//task.analys = 'Точки минимума:'
 						answer = minimumsX(func, minX, maxX);
 						break;
 					case 'maximum_point':
-						find = 'максимума ' + functionsFx;
+						find = `максимума ${functionsFx}`;
 						//task.analys = 'Точки максимума:'
 						answer = maximumsX(func, minX, maxX);
 						break;
 					case 'extreme_points_on_the_segment':
-						find = 'экстремума ' + functionsFx + ' на отрезке $[' + subSegment[0] + ';' + subSegment[1] + ']$';
+						find = `экстремума ${functionsFx} на отрезке $[${subSegment[0]};${subSegment[1]}]$`;
 						//task.analys = 'Точки экстремума на отрезке $[' + subSegment[0] + ';' + subSegment[1] + ']$:'
 						answer = extremumsX(func, subSegment[0] - stepForX * 0.1, subSegment[1] + stepForX * 0.1);
 						break;
 					case 'minimum_points_on_the_segment':
-						find = 'минимума ' + functionsFx + ' на отрезке $[' + subSegment[0] + ';' + subSegment[1] + ']$';
+						find = `минимума ${functionsFx} на отрезке $[${subSegment[0]};${subSegment[1]}]$`;
 						//task.analys = 'Точки минимума на отрезке $[' + subSegment[0] + ';' + subSegment[1] + ']$:'
 						answer = minimumsX(func, subSegment[0] - stepForX * 0.1, subSegment[1] + stepForX * 0.1);
 						break;
 					case 'maximum_points_on_the_segment':
-						find = 'максимума ' + functionsFx + ' на отрезке $[' + subSegment[0] + ';' + subSegment[1] + ']$';
+						find = `максимума ${functionsFx} на отрезке $[${subSegment[0]};${subSegment[1]}]$`;
 						//task.analys = 'Точки максимума на отрезке $[' + subSegment[0] + ';' + subSegment[1] + ']$:'
 						answer = maximumsX(func, subSegment[0] - stepForX * 0.1, subSegment[1] + stepForX * 0.1);
 						break;
@@ -1484,43 +1484,41 @@ chas2.task = {
 						answer = transformExtremumsToIntervals(func, minX, maxX, true)
 						answer = [answer.intIntervalsMinimums.iz(), answer.intIntervalsMaximums.iz()].iz();
 						genAssert(answer.leftEnd != answer.rightEnd, 'Начало и конец отрезка совпали');
-						find = 'экстремума ' + functionsFx + ' на отрезке $[' + answer.leftEnd + ';' + answer.rightEnd + ']$';
+						find = `экстремума ${functionsFx} на отрезке $[${answer.leftEnd};${answer.rightEnd}]$`;
 						answer = [answer.ext.round()];
 						break;
 					case 'minimum_point_on_the_segment':
 						answer = transformExtremumsToIntervals(func, minX, maxX, true)
 						answer = answer.intIntervalsMinimums.iz();
 						genAssert(answer.leftEnd != answer.rightEnd, 'Начало и конец отрезка совпали');
-						find = 'минимума ' + functionsFx + ' на отрезке $[' + answer.leftEnd + ';' + answer.rightEnd + ']$';
+						find = `минимума ${functionsFx} на отрезке $[${answer.leftEnd};${answer.rightEnd}]$`;
 						answer = [answer.ext.round()];
 						break;
 					case 'maximum_point_on_the_segment':
 						answer = transformExtremumsToIntervals(func, minX, maxX, true)
 						answer = answer.intIntervalsMaximums.iz();
 						genAssert(answer.leftEnd != answer.rightEnd, 'Начало и конец отрезка совпали');
-						find = 'максимума ' + functionsFx + ' на отрезке $[' + answer.leftEnd + ';' + answer.rightEnd + ']$';
+						find = `максимума ${functionsFx} на отрезке $[${answer.leftEnd};${answer.rightEnd}]$`;
 						answer = [answer.ext.round()];
 						break;
 					case 'function_is_increasing':
-						find = functionFx + ' возрастает';
+						find = `${functionFx} возрастает`;
 						//task.analys = 'Интервалы, где функция возрастает:'
 						answer = findIncreasingIntervals(func, minX, maxX);
 						break;
 					case 'function_is_decreasing':
-						find = functionFx + ' убывает';
+						find = `${functionFx} убывает`;
 						//task.analys = 'Интервалы, где функция убывает:'
 						answer = findDecreasingIntervals(func, minX, maxX);
 						break;
 					case 'tangent_to_graph_const':
-						find = 'касательная к графику ' + functionsFx + ' параллельна графику функции $y=' + sl(-20, 20, 0.1) + '$ или совпадает с ней';
+						find = `касательная к графику ${functionsFx} параллельна графику функции $y=${sl(-20, 20, 0.1)}$ или совпадает с ней`;
 						//task.analys = 'Точки экстремума:'
 						answer = extremumsX(func, minX, maxX);
 						break;
 					case 'tangent_to_graph_abscissa':
 						answer = extremumsX(func, minX, maxX);
-						find = 'касательная к графику ' + functionsFx + ' параллельна ';
-						find += 'оси абсцисс';
-						find += ' или совпадает с ней';
+						find = `касательная к графику ${functionsFx} параллельна оси абсцисс или совпадает с ней`;
 						break;
 					case 'tangent_to_graph_equation':
 						answer = intPointsWithTolerance
@@ -1536,9 +1534,9 @@ chas2.task = {
 						genAssert(answer[1].round() != 0, '0x не подходит');
 						let extY = extremumsY(painFunc, minX, maxX);
 						extY.forEach(elem => genAssert(Math.abs(elem - answer[1].round()) > 1), 'Точки пересечения невозможно понять');
-						find = 'касательная к графику ' + functionsFx + ' параллельна ';
-						find += 'графику функции $y=' + [+ sl(-20, 20, 0.1), answer[1].round() + 'x'].shuffleJoin('+').plusminus() + '$';
-						find += ' или совпадает с ней';
+						find = `касательная к графику ${functionsFx} параллельна `;
+						find += `графику функции $y=${[+sl(-20, 20, 0.1), answer[1].round() + 'x'].shuffleJoin('+').plusminus()}$`;
+						find += ` или совпадает с ней`;
 						break;
 					default:
 						throw new Error('conditions: ' + conditions + ' не найдено');
@@ -1626,7 +1624,7 @@ chas2.task = {
 			case 'point':
 				switch (variants) {
 					case 'smallest_value':
-						find = functionFx + ' принимает наименьшее значение';
+						find = `${functionFx} принимает наименьшее значение`;
 						if (conditions == 'value_on_the_segment') {
 							answer = answer.intIntervalsMinimums.iz();
 							genAssert(answer.leftEnd != answer.rightEnd, 'Начало и конец отрезка совпали');
@@ -1648,7 +1646,7 @@ chas2.task = {
 						}
 						break;
 					case 'largest_value':
-						find = functionFx + ' принимает наибольшее значение';
+						find = `${functionFx} принимает наибольшее значение`;
 						if (conditions == 'value_on_the_segment') {
 							answer = answer.intIntervalsMaximums.iz();
 							genAssert(answer.leftEnd != answer.rightEnd, 'Начало и конец отрезка совпали')
