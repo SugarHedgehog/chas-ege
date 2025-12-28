@@ -1,4 +1,4 @@
-(function() {
+(function () {
 	NAinfo.requireApiVersion(0, 2);
 
 	function f(x) {
@@ -13,7 +13,7 @@
 	do {
 		a = sluchch(2, 10);
 		if ((100 / a).isZ() && sl1())
-			a = sl(1,5) / a;
+			a = sl(1, 5) / a;
 		b = sluchch(0, 6).pm();
 		chisl = Math.pow(a, sluchch(2, 4));
 		X = [];
@@ -23,7 +23,7 @@
 				X.push(i);
 				Y.push(f(i));
 			}
-	} while (X.length < 2 || (Math.abs(f(chisl)) <= 6 && Math.abs(chisl) <= 6 ));
+	} while (X.length < 2 || (Math.abs(f(chisl)) <= 6 && Math.abs(chisl) <= 6));
 	let find, answ;
 	if (sl1()) {
 		find = `$f(${chisl.ts()})$`;
@@ -55,7 +55,7 @@
 			i += 0.1;
 		} while (i < 8);
 		//точки
-	graph9AmarkCircles(ct, [X, Y].T(), 2, 0.15);
+		graph9AmarkCircles(ct, [X, Y].T(), 2, 0.15);
 	};
 	NAtask.setTask({
 		text: `На рисунке изображён график функции $f(x)=b+\\log{_a}{x}$. Найдите ${find}. `,
