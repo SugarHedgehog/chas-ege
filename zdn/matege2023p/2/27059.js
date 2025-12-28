@@ -52,7 +52,7 @@
 			ctx.stroke();
 			ctx.closePath();
 
-			ctx.strokeStyle = om.primaryBrandColors.iz().iz();
+			ctx.strokeStyle = om.primaryBrandColors.iz();
 
 			ctx.drawLine(200, 200, 200, 50);
 
