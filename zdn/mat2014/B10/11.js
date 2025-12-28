@@ -31,7 +31,7 @@
 				depth: depth,
 				angle: 40,
 				strokeStyle: om.secondaryBrandColors.iz(),
-				diagonalStrokeStyle: om.primaryBrandColors.iz().iz(),
+				diagonalStrokeStyle: om.primaryBrandColors.iz(),
 				lengthOfEdge: true,
 				scale: scale,
 			}, [0, 3, 4], question.includes('диагональ'), [0.5, 0.2]);
