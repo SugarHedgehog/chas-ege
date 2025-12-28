@@ -1,4 +1,4 @@
-retryWhileUndefined(function() {
+retryWhileUndefined(function () {
 	NAinfo.requireApiVersion(0, 2);
 
 	function f(x) {
@@ -34,22 +34,22 @@ retryWhileUndefined(function() {
 			else
 				variant = 'наибольшее';
 		else
-		if (chisl < 0 && chisl + 2 * d > 0)
-			variant = ['отрицательное', 'наименьшее'].iz();
-		else
-			variant = 'наименьшее';
+			if (chisl < 0 && chisl + 2 * d > 0)
+				variant = ['отрицательное', 'наименьшее'].iz();
+			else
+				variant = 'наименьшее';
 		find = variant + ' значение $x$, при котором $f(x)=' + f(chisl).ts() + '$';
 		if (!(f(chisl) * 1000).isZ())
 			return;
 	}
-	let paint1 = function(ct) {
+	let paint1 = function (ct) {
 		let h = 400;
 		let w = 400;
 		//Оси координат
-		ct.drawCoordPlane(w, h, {hor: 1,ver: 1}, {x1: '1',y1: '1',sh1: 13,}, 20);
-		
+		ct.drawCoordPlane(w, h, { hor: 1, ver: 1 }, { x1: '1', y1: '1', sh1: 13, }, 20);
+
 		ct.lineWidth = 0.1;
-		
+
 		ct.scale(20, -20);
 		//График
 		graph9AdrawFunction(ct, f, {
