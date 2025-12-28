@@ -1,4 +1,4 @@
-(function() {
+(function () {
 	NAinfo.requireApiVersion(0, 2);
 
 	function gr(raz, ir, x) {
@@ -17,8 +17,8 @@
 	}
 	let k, chisl, X, Y;
 	do {
-		k = make(sl(1, 10) / [1, 2, ].iz().pm(), [2, 3, 5, 6, 7, ].iz());
-		chisl = make(sl(5, 10) / [1, 2, ].iz(), k.ir);
+		k = make(sl(1, 10) / [1, 2].iz().pm(), [2, 3, 5, 6, 7,].iz());
+		chisl = make(sl(5, 10) / [1, 2,].iz(), k.ir);
 		X = [];
 		Y = [];
 		for (let i = 0; i < 14; i++)
@@ -30,13 +30,13 @@
 	} while (X.length < 2);
 	let find, answ;
 	if (sl1()) {
-		find = `$f(${(Math.pow(chisl.raz,2)*chisl.ir).ts(1)})$`;
+		find = `$f(${(Math.pow(chisl.raz, 2) * chisl.ir).ts(1)})$`;
 		answ = k.raz * chisl.raz * k.ir;
 	} else {
 		answ = Math.pow(chisl.raz, 2);
-		find = `значение $x$, при котором $f(x)=${(k.raz*chisl.raz).ts(1)}\\sqrt{${chisl.ir}}$`.plusminus();
+		find = `значение $x$, при котором $f(x)=${(k.raz * chisl.raz).ts(1)}\\sqrt{${chisl.ir}}$`.plusminus();
 	}
-	let paint1 = function(ct) {
+	let paint1 = function (ct) {
 		let h = 400;
 		let w = 600;
 		//Оси координат
