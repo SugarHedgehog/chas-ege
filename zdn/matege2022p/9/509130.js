@@ -41,7 +41,7 @@ retryWhileUndefined(function () {
 		let h = 400;
 		let w = 400;
 		//Оси координат
-		ct.drawCoordinatePlane (w, h, {
+		ct.drawCoordinatePlane(w, h, {
 			hor: 2,
 			ver: 1
 		}, {
