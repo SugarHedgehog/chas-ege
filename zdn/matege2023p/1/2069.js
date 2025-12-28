@@ -4,12 +4,12 @@
 
 		let angle = sl(2, 44);
 		let condition = [
-			['больший', 45 + angle],
+			['больший острый', 45 + angle],
 			['меньший', 45 - angle]
 		].iz();
 
 		let paint1 = function(ctx) {
-			ctx.lineWidth = 2;
+			ctx.lineWidth = om.primaryLineWidth;
 			
 			let angle = Math.PI/2.9;
 			
