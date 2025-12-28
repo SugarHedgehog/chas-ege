@@ -1,4 +1,4 @@
-retryWhileUndefined(function() {
+retryWhileUndefined(function () {
 	NAinfo.requireApiVersion(0, 2);
 
 	function giperbl(k2, b2, x) {
@@ -51,7 +51,7 @@ retryWhileUndefined(function() {
 	if (pointsp.length < 2)
 		return;
 
-	let paint1 = function(ct) {
+	let paint1 = function (ct) {
 		let h = 400;
 		let w = 400;
 		//Оси координат
