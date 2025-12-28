@@ -13,7 +13,7 @@
 		genAssertZ1000(answ, 'Кривой ответ');
 
 		let paint1 = function(ctx) {
-			ctx.lineWidth = 2;
+			ctx.lineWidth = om.primaryLineWidth;
 
 			ctx.strokeStyle = om.secondaryBrandColors.iz();
 
