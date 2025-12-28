@@ -34,7 +34,7 @@
 			ctx.ellipse(200, 300, 20, 150, Math.PI / 2, Math.PI / 2, 1.5 * Math.PI);
 			ctx.stroke();
 
-			ctx.strokeStyle = om.primaryBrandColors.iz().iz();
+			ctx.strokeStyle = om.primaryBrandColors.iz();
 			//радиус
 			ctx.drawLine(200, 300, 350, 300);
 			//высота
