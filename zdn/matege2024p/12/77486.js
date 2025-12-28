@@ -1,13 +1,25 @@
 (function() {
 	retryWhileError(function() {
 		'use strict';
+		let key = "77486";
+		let preference1 = ['positive_pow', 'negative_pow'];
+		let preference2 = ['maximum', 'minimum'];
+		let rand1 = getSelectedPreferenceFromList(key, preference1);
+		let rand2 = getSelectedPreferenceFromList(key, preference2);
+
+		let pow = sl(2,30)*[1, -1][rand1];
+		let [forbidMinY, forbidMaxY] = [1 - rand2, rand2];
+
 		NAtask.setLocalExtremumTask({
 			expr: [
 				'' + sl(1,30).pm() + 'x',
-				'ln((x +' + sl(1,30).pm() +')^' + sl(2,30).pm() + ')',
+				'ln((x +' + sl(1,30).pm() +')^' + pow + ')',
 				'' +  sl(1,30).pm(),
 			].joinPlusMinus(),
 			authors: ['Николай Авдеев'],
+			forbidMinY,
+			forbidMaxY,
+			preference: [preference1, preference2],
 		});
 	}, 200);
 })();
