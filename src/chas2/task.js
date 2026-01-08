@@ -2017,6 +2017,7 @@ chas2.task = {
 	 * @param {Boolean}  o.keepFractionsIrreduced не сокращать дроби
 	 * @param {Boolean}  o.keepSumOrder не изменять порядок слагаемых
 	 * @param {Boolean}  o.avoidTrivialSimplification избегать тривиальных упрощений - например, не превращать 1x в x
+	 * @param {Function}  o.ODZ функция области допустимых значений: принимает x и возвращает Boolean
 	 */
 	setMinimaxFunctionTask: function (o) {
 		let expr = math.parse(o.expr);
@@ -2025,10 +2026,20 @@ chas2.task = {
 		let lEnd = math.parse(o.leftEnd).evaluate();
 		let rEnd = math.parse(o.rightEnd).evaluate();
 
-		let minY = expr.evaluate({x:rEnd});
-		let maxY = minY;
-		let minX = rEnd;
-		let maxX = rEnd;
+		let ODZ = (typeof o.ODZ === 'function') ? o.ODZ : function(){ return true; };
+		let isInODZ = function(x){
+			try {
+				return !!ODZ(x);
+			} catch (err) {
+				return false;
+			}
+		};
+
+		let minY;
+		let maxY;
+		let minX;
+		let maxX;
+		let hasValueInODZ = false;
 
 		o.epsilon = (o.epsilon || 1/1024/1024);
 		o.primaryStep = (o.primaryStep || 0.01);
@@ -2041,21 +2052,30 @@ chas2.task = {
 		let compiledExpr = math.compile(expr.toString());
 
 		for (let x = lEnd; x <= rEnd + o.epsilon; x += o.primaryStep) {
+			if (!isInODZ(x)) {
+				continue;
+			}
 			let y = compiledExpr.evaluate({x});
-			if (y > maxY) {
+			if (!hasValueInODZ || y > maxY) {
 				maxX = x;
 				maxY = y;
-			} else if (y < minY) {
+			}
+			if (!hasValueInODZ || y < minY) {
 				minX = x;
 				minY = y;
 			}
+			hasValueInODZ = true;
 		}
+		genAssert(hasValueInODZ, 'Область допустимых значений пуста на заданном промежутке');
 
 		//Sharpen the values a bit...
 		minY += 0.5;
 		let xFrom = Math.max(minX - 3 * o.primaryStep, lEnd);
 		let xTo   = Math.min(minX + 3 * o.primaryStep, rEnd);
 		for (let x = xFrom; x <= xTo + o.epsilon; x += o.secondaryStep) {
+			if (!isInODZ(x)) {
+				continue;
+			}
 			let y = compiledExpr.evaluate({x});
 			if (y < minY) {
 				minX = x;
@@ -2067,6 +2087,9 @@ chas2.task = {
 		xFrom = Math.max(maxX - 3 * o.primaryStep, lEnd);
 		xTo   = Math.min(maxX + 3 * o.primaryStep, rEnd);
 		for (let x = xFrom; x <= xTo + o.epsilon; x += o.secondaryStep) {
+			if (!isInODZ(x)) {
+				continue;
+			}
 			let y = compiledExpr.evaluate({x});
 			if (y > maxY) {
 				maxX = x;
