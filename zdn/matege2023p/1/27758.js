@@ -1,13 +1,25 @@
 (function() {
 	retryWhileError(function() {
 		NAinfo.requireApiVersion(0, 2);
+		let key = '27758';
+		let preference = ['findAngleC', 'findAngleCBD', 'findAngleA'];
+		let rand = getSelectedPreferenceFromList(key, preference);
 
-		let a = sl(2, 44);
+		let a = sl(20, 44);
 		let b = sl(91, 179) / 2;
-
+		
 		genAssert(180 - a - 2 * b > 0, 'Слишком большие углы')
 
-		let vertices = om.latbukv.iz(4);
+		let vertices = om.latbukv.slice(0,4);
+		let condition = [
+			[vertices[2], a],
+			[vertices.slice(1, 4).permuteCyclic(1).randomReverse().join(''), b],
+			[vertices[0], 180 - a - 2 * b]
+		];
+		
+		let find = condition.splice(rand, 1)[0];
+		condition = condition.shuffle();
+		condition.push(find);
 
 		let paint1 = function(ctx) {
 			ctx.lineWidth = om.primaryLineWidth;
@@ -34,13 +46,12 @@
 		};
 
 		NAtask.setTask({
-			text: 'В треугольнике $' + vertices.slice(0, 3).shuffleJoin() + '$ $' + [vertices[1], vertices[3]].shuffleJoin() +
-				'$ – биссектриса, ' + 'угол $' + vertices[2] + '$ равен $' + a + 
-				'^\\circ$, угол $' + vertices.slice(1, 4).permuteCyclic(1).randomReverse().join('') +
-				'$ равен $' + b + '^\\circ$. Найдите угол $' + vertices[0] + '$. Ответ дайте в градусах.',
-			answers: 180 - a - 2 * b,
+			text: `В треугольнике $${vertices.slice(0, 3).shuffleJoin()}$ $${[vertices[1], vertices[3]].shuffleJoin()}$ – биссектриса, угол $${condition[0][0]}$ равен $${condition[0][1]}^\\circ$, угол $${condition[1][0]}$ равен $${condition[1][1]}^\\circ$. Найдите угол $${condition[2][0]}$. Ответ дайте в градусах.`,
+			answers: condition[2][1],
 			analys: '',
+			preference,
 		});
+		NAtask.modifiers.variativeABC(vertices);
 		NAtask.modifiers.addCanvasIllustration({
 			width: 400,
 			height: 400,
