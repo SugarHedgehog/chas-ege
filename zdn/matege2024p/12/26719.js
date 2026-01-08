@@ -27,6 +27,7 @@
 			authors: ['Алендарь Сергей'],
 			forbidMinY,
 			forbidMaxY,
+			ODZ: x => x > 0,
 			preference: preference,
 		});
 	}, 1000);
