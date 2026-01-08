@@ -3,6 +3,9 @@
 		NAinfo.requireApiVersion(0, 2);
 		'use strict'
 
+		let key = '135';
+		let preference = ['magnitudeOfSmallerArc', 'degreeMeasureOfArc'];
+		let rand = getSelectedPreferenceFromList(key, preference);
 		let a = sl(2, 89);
 
 		let vertices = [];
@@ -16,7 +19,7 @@
 		let question = [
 			['Найдите величину меньшей дуги ', ' окружности. Ответ дайте в градусах'],
 			['Найдите градусную меру дуги ', 'окружности, заключённой внутри этого угла']
-		].iz();
+		][rand];
 		question.splice(1, 0, '$' + vertices.slice(0, 2).shuffle().join('') + '$');
 
 		let paint1 = function(ctx) {
@@ -49,8 +52,9 @@
 				'Его сторона $' + [vertices[0], vertices[2]].shuffle().join('') + '$ касается окружности. ' +
 				'Сторона $' + vertices.slice(2, 4).shuffle().join('') + '$ пересекает окружность в точке $' + vertices[1] +
 				'$ ' +
-				'(см. рис.).' + question.join(' ') + '.',
-			answers: 90 - a, //
+				'(см. рис.). ' + question.join(' ') + '.',
+			answers: 90 - a,
+			preference,
 		});
 		NAtask.modifiers.addCanvasIllustration({
 			width: 400,
