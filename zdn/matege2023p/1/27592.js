@@ -91,7 +91,7 @@
 			preference: preference,
 			analys: '',
 		});
-		//NAtask.modifiers.variativeABC();
+		NAtask.modifiers.variativeABC(vertices);
 		NAtask.modifiers.addCanvasIllustration({
 			width: 400,
 			height: 400,
