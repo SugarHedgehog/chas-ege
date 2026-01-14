@@ -9,38 +9,26 @@ script_dir="$(cd "$(dirname "$0")" && pwd)"
 
 # Заполните список задач перед запуском.
 array=(
-    "77427 с_линейной_максимум linear maximum"
-    "77427 с_линейной_минимум linear minimum"
-    "77455 степень_максимум pow maximum"
-    "77455 степень_минимум pow minimum"
-    "77455 корень_максимум sqrt maximum"
-    "77455 корень_минимум sqrt minimum"
-    "77460 корень_максимум sqrt maximum"
-    "77460 корень_минимум sqrt minimum"
-    "77490 максимум maximum"
-    "77490 минимум minimum"
-    "26695 синус_максимум sin maximum"
-    "26695 синус_минимум sin minimum"
-    "26695 косинус_максимум cos maximum"
-    "26695 косинус_минимум cos minimum"
-    "26700 синус_максимум sin maximum"
-    "26700 косинус_минимум cos minimum"
-    27
-    "26717 максимум_неединичная_степень not_trivial maximum"
-    "26717 минимум_неединичная_степень not_trivial minimum"
-    "26717 максимум_единичная_степень trivial maximum"
-    "26717 минимум_единичная_степень trivial minimum"
-    "77486 положительная_чётная_степень_максимум positive_pow maximum even_power"
-    "77486 положительная_чётная_степень_минимум positive_pow minimum even_power"
-    "77486 положительная_нечётная_степень_максимум positive_pow maximum odd_power"
-    "77486 положительная_нечётная_степень_минимум positive_pow minimum odd_power"
-    "26719 максимум maximum"
-    "26719 минимум minimum"
-    "26713 положительная_степень_максимум positive_pow maximum"
-    "26713 отрицательная_степень_минимум negative_pow minimum"
-    "26726 отрицательная_степень_максимум negative_pow maximum"
-    "77467 x/(x^2+c)_максимум xfrac maximum"
-    "77467 x/(x^2+c)_минимум xfrac minimum"
+    320181
+    320194
+    "5 первые_участницы first"
+    7
+    "5 последня_участница last"
+    "320169 девочка girl"
+    "320169 мальчик boy"
+    9
+    '320191 inAuditorium inAuditorium'
+    '320191 notInAuditorium notInAuditorium'
+    '1 two_tosses two_tosses'
+    '1 three_tosses three_tosses'
+    "320183 три_матча_ровно three_games equal"
+    "320183 три_матча_больше three_games more"
+    "320183 три_матча_меньше three_games less"
+    "2 два_броска two_times"
+    "4 notHaveDefectInQuest_haveDefect notHaveDefectInQuest haveDefect"
+    "4 haveDefectInQuest_haveDefect haveDefectInQuest haveDefect"
+    "4 notHaveDefectInQuest_notHaveDefect notHaveDefectInQuest notHaveDefect"
+    "4 haveDefectInQuest_notHaveDefect haveDefectInQuest notHaveDefect"
 )
 
 if [[ $# -lt 1 ]]; then
@@ -92,10 +80,10 @@ done
 
 # Сохраняем метаданные в main.js (для контроля запуска).
 {
-    printf "\n// fast.sh metadata\n"
+    printf "\n// fast_set_year.sh metadata\n"
     printf "// array entries:\n"
     for element in "${array[@]}"; do
-        printf "// - %s\n" "$element"
+        printf "// %s\n" "$element"
     done
     printf "// forbidOpenEnds answer: %s\n" "$add_forbidOpenEnds"
     printf "// forbidDecimalFractions answer: %s\n" "$add_forbidDecimalFractions"
