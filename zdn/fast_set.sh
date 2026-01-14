@@ -10,7 +10,39 @@ find . -mindepth 1 ! -name "$(basename "$0")" -exec rm -rf {} +
 
 rm -rf *
 
-array=(10 3 8 4 2066 5541 6080 2069 1945  73  99  109  105  27589  27793  27758  27764  27762  27623  27592  319157  4850  3353  3354  5941  11  127  131  119  125  169  177  181  173  135  145  149  153  157  161  165  185
+array=(
+    "77427 с_линейной_максимум linear maximum"
+    "77427 с_линейной_минимум linear minimum"
+    "77455 степень_максимум pow maximum"
+    "77455 степень_минимум pow minimum"
+    "77455 корень_максимум sqrt maximum"
+    "77455 корень_минимум sqrt minimum"
+    "77460 корень_максимум sqrt maximum"
+    "77460 корень_минимум sqrt minimum"
+    "77490 максимум maximum"
+    "77490 минимум minimum"
+    "26695 синус_максимум sin maximum"
+    "26695 синус_минимум sin minimum"
+    "26695 косинус_максимум cos maximum"
+    "26695 косинус_минимум cos minimum"
+    "26700 синус_максимум sin maximum"
+    "26700 косинус_минимум cos minimum"
+    27
+    "26717 максимум_неединичная_степень not_trivial maximum"
+    "26717 минимум_неединичная_степень not_trivial minimum"
+    "26717 максимум_единичная_степень trivial maximum"
+    "26717 минимум_единичная_степень trivial minimum"
+    "77486 положительная_чётная_степень_максимум positive_pow maximum even_power"
+    "77486 положительная_чётная_степень_минимум positive_pow minimum even_power"
+    "77486 положительная_нечётная_степень_максимум positive_pow maximum odd_power"
+    "77486 положительная_нечётная_степень_минимум positive_pow minimum odd_power"
+    "26719 максимум maximum"
+    "26719 минимум minimum"
+    "26713 положительная_степень_максимум positive_pow maximum"
+    "26713 отрицательная_степень_минимум negative_pow minimum"
+    "26726 отрицательная_степень_максимум negative_pow maximum"
+    "77467 x/(x^2+c)_максимум xfrac maximum"
+    "77467 x/(x^2+c)_минимум xfrac minimum"
 )
 
 if [[ ${#array[@]} -eq 0 ]]; then
