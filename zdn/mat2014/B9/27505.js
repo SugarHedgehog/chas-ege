@@ -22,7 +22,6 @@ retryWhileUndefined(function() {
 	if (D.isPolnKvadr() || Math.abs(y0) > 3)
 		return;
 	let xk = sl(x0 - sl(0,4,0.1), x0 +sl(0,4,0.1) , 0.05);
-	console.log(xk);
 	if (xk.abs() > 5)
 		return;
 		
