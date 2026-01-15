@@ -10,6 +10,11 @@
 	var t3 = ['больше', 'меньше'];
 	var t4 = ['вписанного', 'центрального'];
 	var vpis = sl(1, 89);
+	let angleNames = ['ABC', 'ADC'];
+	if (rand == 1) {
+		angleNames.reverse();
+	}
+
 
 	let paint1 = function (ctx) {
 		ctx.lineWidth = om.primaryLineWidth;
@@ -37,8 +42,8 @@
 	};
 
 	NAtask.setTask({
-		text: 'Найдите ' + t2[rand] + ' угол $ABC$, если он на $' + vpis +
-			'^\\circ$ ' + t3[rand] + ' ' + t4[rand] + ' угла $ADC$, опирающегося на ту же дугу. Ответ дайте в градусах.',
+		text: 'Найдите ' + t2[rand] + ' угол $' + angleNames[0] + '$, если он на $' + vpis +
+			'^\\circ$ ' + t3[rand] + ' ' + t4[rand] + ' угла $' + angleNames[1] + '$, опирающегося на ту же дугу. Ответ дайте в градусах.',
 		answers: rand ? vpis : vpis * 2,
 		preference,
 	});
