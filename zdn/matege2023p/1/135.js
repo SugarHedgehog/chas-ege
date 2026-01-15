@@ -4,23 +4,21 @@
 		'use strict'
 
 		let key = '135';
-		let preference = ['magnitudeOfSmallerArc', 'degreeMeasureOfArc'];
+		let preference = ['degreeMeasureOfArc', 'angleACO'];
 		let rand = getSelectedPreferenceFromList(key, preference);
 		let a = sl(2, 89);
 
-		let vertices = [];
-		do {
-			let a = slLetter(vertices).toUpperCase();
-			if (!vertices.includes(a))
-				vertices.push(a);
-		}
-		while (vertices.length < 4);
+		let vertices = om.latbukv.slice(0, 4);
 
 		let question = [
 			['Найдите величину меньшей дуги ', ' окружности. Ответ дайте в градусах'],
 			['Найдите градусную меру дуги ', 'окружности, заключённой внутри этого угла']
-		][rand];
+		].iz();
 		question.splice(1, 0, '$' + vertices.slice(0, 2).shuffle().join('') + '$');
+		
+		let arc = 90 - a;
+		let CD = vertices.slice(2, 4).shuffle().join('');
+		let AC = [vertices[0], vertices[2]].shuffle().join('');
 
 		let paint1 = function(ctx) {
 			ctx.lineWidth = om.primaryLineWidth;
@@ -47,13 +45,18 @@
 		};
 
 		NAtask.setTask({
-			text: 'Угол $' + vertices[0] + vertices[2] + vertices[3] + '$ равен $'+a+'^\\circ$, где $' + vertices[3] +
-				'$ – центр окружности. ' +
-				'Его сторона $' + [vertices[0], vertices[2]].shuffle().join('') + '$ касается окружности. ' +
-				'Сторона $' + vertices.slice(2, 4).shuffle().join('') + '$ пересекает окружность в точке $' + vertices[1] +
-				'$ ' +
+			text: '',
+			questions:[[{
+				text: 'Угол $ACD$ равен $'+a+'^\\circ$, где $D$ – центр окружности. ' +
+				'Его сторона $' + AC + '$ касается окружности. ' +
+				'Сторона $' + CD + '$ пересекает окружность в точке $B$ ' +
 				'(см. рис.). ' + question.join(' ') + '.',
-			answers: 90 - a,
+				answers: arc,
+			},{text: 'Найдите угол $ACD$, если его сторона $'+AC+'$ касается окружности, '+ 
+			'$D$ — центр окружности, сторона $' + CD + '$ пересекает окружность в точке $B$, '+   
+			'дуга $AB$ окружности, заключённая внутри этого угла, равна $'+arc+'^\\circ$. Ответ дайте в градусах.',
+				answers: a,
+			}][rand]],
 			preference,
 		});
 		NAtask.modifiers.addCanvasIllustration({
@@ -63,4 +66,5 @@
 		});
 	}, 1000);
 })();
-//135 137
+// https://ege.sdamgia.ru/problem?id=27881
+// https://ege.sdamgia.ru/problem?id=27884
