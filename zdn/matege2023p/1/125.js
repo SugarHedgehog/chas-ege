@@ -2,7 +2,7 @@
 	'use strict';
 	let key = '125';
 	let preference = ['centralAngle', 'inscribedAngle'];
-	let rand = 1;getSelectedPreferenceFromList(key, preference);
+	let rand = getSelectedPreferenceFromList(key, preference);
 
 	let angle = sl(10, 85);
 	let letters = om.latbukv.slice(0, 5);
@@ -70,7 +70,7 @@
 		answers: condition[0][1],
 		preference, 
 	});
-	//NAtask.modifiers.variativeABC(letters);
+	NAtask.modifiers.variativeABC(letters);
 	NAtask.modifiers.addCanvasIllustration({
 		width: 400,
 		height: 400,
