@@ -2,7 +2,7 @@
 	retryWhileError(function () {
 		NAinfo.requireApiVersion(0, 2);
 		let key = '2069';
-		let preference = ['angleInTriangle', 'angleBetweenMedianAndBbisector'];
+		let preference = ['angleInTriangle', 'angleBetweenMedianAndBisector'];
 		let rand = getSelectedPreferenceFromList(key, preference);
 
 		let angle = sl(2, 44);
