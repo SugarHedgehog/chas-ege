@@ -2,23 +2,26 @@
 	retryWhileError(function() {
 		NAinfo.requireApiVersion(0, 2);
 		let key = '27758';
-		let preference = ['findAngleC', 'findAngleCBD', 'findAngleA'];
+		let preference = ['findAngleA', 'findAngleBDC', 'findAngleC', 'findAngleCBDOrABD'];
 		let rand = getSelectedPreferenceFromList(key, preference);
 
-		let a = sl(20, 44);
-		let b = sl(91, 179) / 2;
+		let angleC = sl(20, 44);
+		let angleCBD = sl(91, 160) / 2;
+		let angleBDC = 180 - angleC - angleCBD;
+		let angleA = 180 - angleC - 2*angleCBD;
 		
-		genAssert(180 - a - 2 * b > 0, 'Слишком большие углы')
+		genAssert(angleA > 0, 'Слишком большие углы');
 
 		let vertices = om.latbukv.slice(0,4);
 		let condition = [
-			[vertices[2], a],
-			[vertices.slice(1, 4).permuteCyclic(1).randomReverse().join(''), b],
-			[vertices[0], 180 - a - 2 * b]
+			[vertices[0], angleA],
+			['BDC', angleBDC],
+			[vertices[2], angleC],
+			[['A', 'C'].iz()+'BD', angleCBD]
 		];
-		
+
 		let find = condition.splice(rand, 1)[0];
-		condition = condition.shuffle();
+		condition = condition.iz(2);
 		condition.push(find);
 
 		let paint1 = function(ctx) {
