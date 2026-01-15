@@ -1,11 +1,14 @@
-(function() {
-	retryWhileError(function() {
+(function () {
+	retryWhileError(function () {
 		NAinfo.requireApiVersion(0, 2);
+		let key = '5541';
+		let preference = ['angleInTriangle', 'angleBetweenHightAndBisector'];
+		let rand = getSelectedPreferenceFromList(key, preference);
 
 		let angle = sl(2, 35);
-		let condition= [['больший острый', 45 + angle],['меньший', 45 - angle]].iz();
+		let condition = [['больший острый', 45 + angle], ['меньший', 45 - angle]].iz();
 
-		let paint1 = function(ctx) {
+		let paint1 = function (ctx) {
 			ctx.lineWidth = om.primaryLineWidth;
 
 			let angle = Math.PI / 2.9;
@@ -31,10 +34,18 @@
 		};
 
 		NAtask.setTask({
-			text: 'В прямоугольном треугольнике угол между высотой и биссектрисой, ' +
-				'проведёнными из вершины прямого угла, равен $' + angle + '^{\\circ}$. ' +
-				'Найдите '+condition[0]+' угол прямоугольного треугольника. Ответ дайте в градусах.',
-			answers: condition[1],
+			questions: [[{
+				text: 'В прямоугольном треугольнике угол между высотой и биссектрисой, ' +
+					'проведёнными из вершины прямого угла, равен $' + angle + '^{\\circ}$. ' +
+					'Найдите ' + condition[0] + ' угол прямоугольного треугольника.',
+				answers: condition[1],
+			}, {
+				text: condition[0].toZagl() + ' угол прямоугольного треугольника равен $' + condition[1] + '^{\\circ}$. ' +
+					'Найдите величину угла между высотой и биссектрисой, проведёнными из вершины прямого угла.',
+				answers: angle,
+			}][rand]],
+			postquestion: ' Ответ дайте в градусах.',
+			preference,
 			analys: '',
 		});
 		NAtask.modifiers.addCanvasIllustration({
