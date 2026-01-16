@@ -81,10 +81,11 @@ done
 # Сохраняем метаданные в main.js (для контроля запуска).
 {
     printf "\n// fast_set_year.sh metadata\n"
-    printf "// array entries:\n"
+    printf "/* array entries:\n"
     for element in "${array[@]}"; do
-        printf "// %s\n" "$element"
+        printf "%s\n" "\"$element\""
     done
+    printf " */\n"
     printf "// forbidOpenEnds answer: %s\n" "$add_forbidOpenEnds"
     printf "// forbidDecimalFractions answer: %s\n" "$add_forbidDecimalFractions"
 } >> main.js
