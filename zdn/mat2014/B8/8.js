@@ -35,7 +35,7 @@
 		}
 
 		if (rand1 == 1 || rand1 == 2) {
-			sides.splice(2, 0);
+			sides.splice(1, 1);
 		}
 
 		if (rand2 == 0) {
