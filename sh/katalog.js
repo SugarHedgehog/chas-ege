@@ -14,7 +14,7 @@
  * @param {Array} actionsArray - Массив действий.
  * @returns {string} - HTML-код задания.
  */
-function generateHtmlForTask(category, taskNumber, actionsArray) {
+function generateHtmlForTask(category, taskNumber, actionsArray, onError) {
     let htmlContent = '';
     vopr.podg();
     const currentTaskPath = `${nabor.adres}${category}/${taskNumber}.js`;
@@ -115,6 +115,18 @@ function generateHtmlForTask(category, taskNumber, actionsArray) {
         }
     } catch (e) {
         console.error(e);
+        console.error('Ошибка генерации шаблона:', {
+            category: category,
+            taskNumber: taskNumber,
+            template: vopr && vopr.template,
+            taskText: vopr && vopr.txt,
+            answer: vopr && vopr.ver,
+            actions: vopr && vopr.dey,
+            taskData: vopr,
+        });
+        if (typeof onError === 'function') {
+            onError(e);
+        }
         htmlContent += `<div class="task-wrapper error" data-category="${category}" data-tasknumber="${taskNumber}">
             Error generating task: ${e.message}
         </div>`;
@@ -123,16 +135,46 @@ function generateHtmlForTask(category, taskNumber, actionsArray) {
     return htmlContent;
 }
 
+var katalogGeneration = {
+    stop: false,
+    inProgress: false,
+};
+
+var TASK_TIMEOUT_MS = 60 * 1000;
+var MAX_GENERATION_ERRORS = 30;
+
+function stopKatalogGeneration() {
+    katalogGeneration.stop = true;
+}
+
 /**
  * Генерирует каталог заданий.
  */
 function generateKatalog() {
-    let htmlContent = '';
-    let tableOfContents = '';
+    if (katalogGeneration.inProgress) {
+        return;
+    }
+
+    katalogGeneration.stop = false;
+    katalogGeneration.inProgress = true;
+
     const actionsArray = [];
     const lineBreak = '<br/>';
+    const $result = $('#divrez');
+    $result.html('<div id="katalog-toc"></div><br/><div id="katalog-content"></div>');
+    const $toc = $('#katalog-toc');
+    const $content = $('#katalog-content');
 
-    for (const category in nabor.upak) {
+    const categories = Object.keys(nabor.upak);
+    let categoryIndex = 0;
+    let taskIndex = 0;
+    let currentCategory = null;
+    let tasksToList = [];
+    let currentCategoryBody = null;
+    let errorCount = 0;
+    let stopReason = '';
+
+    function prepareCategory(category) {
         window.comment = '';
         window.availableTaskNumbers = null;
 
@@ -142,41 +184,93 @@ function generateKatalog() {
             console.error(e);
         }
 
-        htmlContent += `
-            <button class="spoiler-show">Показать категорию ${category}</button>
-            <button class="spoiler-hide">Скрыть категорию ${category}</button>
-            <div class="spoiler-body">
-                <h1 id="${category}">Категория ${category}</h1>
-                ${window.comment}
-        `;
-        tableOfContents += `<a href="#${category}">${category}. ${window.comment}</a>${lineBreak}`;
-
-        const tasksToList = window.availableTaskNumbers || Object.keys(nabor.upak[category]);
-
-        for (const taskNumber of tasksToList) {
-            if (taskNumber !== 'main' && taskNumber !== 'fipi') {
-                htmlContent += generateHtmlForTask(category, taskNumber, actionsArray);
-            }
-        }
-
-        htmlContent += '</div>';
+        var $showButton = $('<button class="spoiler-show">Показать категорию ' + category + '</button>');
+        var $hideButton = $('<button class="spoiler-hide">Скрыть категорию ' + category + '</button>');
+        var $body = $('<div class="spoiler-body"></div>');
+        $body.append('<h1 id="' + category + '">Категория ' + category + '</h1>' + window.comment);
+        $content.append($showButton, $hideButton, $body);
+        currentCategoryBody = $body;
+        $toc.append(`<a href="#${category}">${category}. ${window.comment}</a>${lineBreak}`);
+        tasksToList = window.availableTaskNumbers || Object.keys(nabor.upak[category]);
+        taskIndex = 0;
     }
 
-    $('#divrez').html(tableOfContents + lineBreak + htmlContent);
-
-    actionsArray.forEach(action => {
-        try {
-            if (typeof action === 'function') {
-                action();
-            }
-        } catch (e) {
-            console.error(e);
+    function finalizeGeneration(stopped) {
+        if (stopped) {
+            var message = stopReason || 'Генерация остановлена пользователем.';
+            $content.append('<div class="katalog-stopped">' + message + '</div>');
         }
-    });
 
-    MathJax.Hub.Typeset();
-    afterTasksGenerated();
-    $('.spoiler-show').click();
+        actionsArray.forEach(action => {
+            try {
+                if (typeof action === 'function') {
+                    action();
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        });
+
+        MathJax.Hub.Typeset();
+        afterTasksGenerated();
+        $('.spoiler-show').click();
+        katalogGeneration.inProgress = false;
+    }
+
+    const scheduleNext = window.requestIdleCallback
+        ? (cb) => window.requestIdleCallback(cb)
+        : (cb) => setTimeout(cb, 0);
+
+    function processChunk() {
+        if (katalogGeneration.stop) {
+            finalizeGeneration(true);
+            return;
+        }
+
+        if (categoryIndex >= categories.length) {
+            finalizeGeneration(false);
+            return;
+        }
+
+        if (!currentCategory) {
+            currentCategory = categories[categoryIndex];
+            prepareCategory(currentCategory);
+        }
+
+        if (taskIndex >= tasksToList.length) {
+            currentCategory = null;
+            currentCategoryBody = null;
+            categoryIndex += 1;
+            scheduleNext(processChunk);
+            return;
+        }
+
+        const taskNumber = tasksToList[taskIndex];
+        taskIndex += 1;
+
+        if (taskNumber !== 'main' && taskNumber !== 'fipi') {
+            var taskStart = Date.now();
+            var taskHtml = generateHtmlForTask(currentCategory, taskNumber, actionsArray, function() {
+                errorCount += 1;
+                if (errorCount >= MAX_GENERATION_ERRORS) {
+                    stopReason = 'Генерация остановлена: слишком много ошибок (' + errorCount + ').';
+                    katalogGeneration.stop = true;
+                }
+            });
+            var duration = Date.now() - taskStart;
+            if (duration > TASK_TIMEOUT_MS) {
+                currentCategoryBody.append('<div class="task-wrapper error" data-category="' +
+                    currentCategory + '" data-tasknumber="' + taskNumber +
+                    '">Пропущено: генерация заняла больше минуты.</div>');
+            } else {
+                currentCategoryBody.append(taskHtml);
+            }
+        }
+
+        scheduleNext(processChunk);
+    }
+
+    processChunk();
 }
 
 /**
