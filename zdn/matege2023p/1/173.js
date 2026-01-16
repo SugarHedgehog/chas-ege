@@ -73,6 +73,7 @@
 				condition[1].name + '$ равен $' + condition[1].value + '^\\circ$. ' +
 				'Найдите угол $' + condition[2].name + '$. Ответ дайте в градусах.',
 			answers: condition[2].value,
+			preference,
 		});
 		NAtask.modifiers.variativeABC(letters);
 		NAtask.modifiers.addCanvasIllustration({
