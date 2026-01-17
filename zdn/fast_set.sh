@@ -10,7 +10,38 @@ find . -mindepth 1 ! -name "$(basename "$0")" -exec rm -rf {} +
 
 rm -rf *
 
-array=(10 3 8 4 2066 5541 6080 2069 1945  73  99  109  105  27589  27793  27758  27764  27762  27623  27592  319157  4850  3353  3354  5941  11  127  131  119  125  169  177  181  173  135  145  149  153  157  161  165  185
+array=(
+'8 sinA_findTrigValue sinA findTrigValue'
+'8 cosA_findTrigValue cosA findTrigValue'
+6080
+'2069 angleInTriangle angleInTriangle'
+'2069 angleBetweenMedianAndBbiseector angleBetweenMedianAndBbiseector'
+'5541 angleInTriangle angleInTriangle'
+'5541 angleBetweenHightAndBisector angleBetweenHightAndBisector'
+'311680 findAngleC findAngleC'
+'311680 findExternalAngleB findExternalAngleB'
+'27758 findAngleC findAngleC'
+'27758 findAngleCBD findAngleCBD'
+'27758 findAngleBDC findAngleBDC'
+27623
+'27592 ABCareaOfTriangleADF  ABCareaOfTriangleADF'
+'27592 ABCareaOfTrapezoidBCDF  ABCareaOfTrapezoidBCDF'
+4850
+'319157 areaOfTriangle areaOfTriangle'
+'319157 areaOfTrapezoid areaOfTrapezoid'
+'11 centralAngle centralAngle'
+'11 inscribedAngle inscribedAngle'
+'125 centralAngle centralAngle'
+'125 inscribedAngle inscribedAngle'
+177
+181
+'173 findABC findABC'
+'173 findABD findABD'
+'173 findCAD findCAD'
+'135 degreeMeasureOfArc degreeMeasureOfArc'
+'135 angleACO angleACO'
+157
+185   
 )
 
 if [[ ${#array[@]} -eq 0 ]]; then
