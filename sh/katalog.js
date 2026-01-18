@@ -312,11 +312,13 @@ function generateKatalog(options) {
 
         var $showButton = $('<button class="spoiler-show">Показать категорию ' + category + '</button>');
         var $hideButton = $('<button class="spoiler-hide">Скрыть категорию ' + category + '</button>');
+        var commentText = (window.comment || '').trim();
+        var titleText = 'Категория ' + category + (commentText ? ': ' + commentText : '');
         var $body = $('<div class="spoiler-body"></div>');
-        $body.append('<h1 id="' + category + '">Категория ' + category + '</h1>' + window.comment);
+        $body.append('<h1 id="' + category + '">' + titleText + '</h1>');
         $content.append($showButton, $hideButton, $body);
         currentCategoryBody = $body;
-        $toc.append(`<a href="#${category}">${category}. ${window.comment}</a>${lineBreak}`);
+        $toc.append(`<a href="#${category}">${titleText}</a>${lineBreak}`);
         setLoadingStatus('Генерируем категорию ' + getCategoryLabel(category));
         tasksToList = window.availableTaskNumbers || Object.keys(nabor.upak[category]);
         taskIndex = 0;
