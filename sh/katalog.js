@@ -275,7 +275,6 @@ function generateKatalog(options) {
     setLoadingStatus('Подготовка каталога...');
 
     const actionsArray = [];
-    const lineBreak = '<br/>';
     const $result = $('#divrez');
     $result.html('<div id="katalog-toc"></div><br/><div id="katalog-content"></div>');
     const $toc = $('#katalog-toc');
@@ -310,15 +309,33 @@ function generateKatalog(options) {
             console.error(e);
         }
 
-        var $showButton = $('<button class="spoiler-show">Показать категорию ' + category + '</button>');
-        var $hideButton = $('<button class="spoiler-hide">Скрыть категорию ' + category + '</button>');
         var commentText = (window.comment || '').trim();
         var titleText = 'Категория ' + category + (commentText ? ': ' + commentText : '');
-        var $body = $('<div class="spoiler-body"></div>');
+        var bodyId = 'katalog-category-' + category.toString().replace(/[^A-Za-z0-9_-]/g, '_');
+        var $body = $('<div class="katalog-category-body"></div>').attr('id', bodyId);
         $body.append('<h1 id="' + category + '">' + titleText + '</h1>');
-        $content.append($showButton, $hideButton, $body);
+        $content.append($body);
         currentCategoryBody = $body;
-        $toc.append(`<a href="#${category}">${titleText}</a>${lineBreak}`);
+        var $tocItem = $('<div class="katalog-toc__item"></div>');
+        var $tocLink = $('<a></a>').attr('href', '#' + category).text(titleText);
+        var $tocToggle = $('<button type="button" class="katalog-toc__toggle">Скрыть категорию</button>');
+        $tocToggle.data('targetEl', $body[0]);
+        $tocToggle.on('click', function() {
+            var targetEl = $(this).data('targetEl');
+            var $target = targetEl ? $(targetEl) : $();
+            if (!$target.length) {
+                return;
+            }
+            if ($target.is(':visible')) {
+                $target.slideUp(160);
+                $(this).text('Показать категорию');
+            } else {
+                $target.slideDown(160);
+                $(this).text('Скрыть категорию');
+            }
+        });
+        $tocItem.append($tocLink, $tocToggle);
+        $toc.append($tocItem);
         setLoadingStatus('Генерируем категорию ' + getCategoryLabel(category));
         tasksToList = window.availableTaskNumbers || Object.keys(nabor.upak[category]);
         taskIndex = 0;
