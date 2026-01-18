@@ -33,6 +33,9 @@
 			<div id="katalog-loading-status" class="katalog-loading__status"></div>
 		</div>
 	</div>
+	<div id="katalog-toast" class="katalog-toast hidden" role="status" aria-live="polite">
+		Путь скопирован
+	</div>
 	<div id="divrez">
 	</div>
 	</div>
@@ -58,6 +61,16 @@
 		h1,h2{
 			clear:both;
 			padding-top:2em;
+		}
+		.task-path{
+			font-family: "Courier New", Courier, monospace;
+			cursor:pointer;
+			color:#1b6ac9;
+			transition:color 0.2s ease;
+		}
+		.task-path:hover{
+			color:#144f96;
+			text-decoration:underline;
 		}
 		.spoiler-show,.spoiler-hide,.spoiler-body{
 			margin-top:auto;
@@ -104,6 +117,26 @@
 		.katalog-loading__status{
 			font-size:14px;
 			color:#394048;
+		}
+		.katalog-toast{
+			position:fixed;
+			right:24px;
+			bottom:24px;
+			background:rgba(27, 106, 201, 0.95);
+			color:#fff;
+			padding:10px 14px;
+			border-radius:12px;
+			box-shadow:0 12px 30px rgba(15, 42, 74, 0.18);
+			font-size:14px;
+			opacity:1;
+			transform:translateY(0);
+			transition:opacity 0.2s ease, transform 0.2s ease;
+			z-index:10000;
+		}
+		.katalog-toast.hidden{
+			opacity:0;
+			transform:translateY(6px);
+			pointer-events:none;
 		}
 		.katalog-controls{
 			margin-top:14px;

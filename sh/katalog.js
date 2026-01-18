@@ -55,7 +55,7 @@ function generateHtmlForTask(category, taskNumber, actionsArray, onError) {
                 nabor.upak[category][taskNumber]();
 
             htmlContent += `<div class="task-wrapper" data-category="${category}" data-tasknumber="${taskNumber}">`;
-            htmlContent += currentTaskPath.vTag('h2');
+            htmlContent += `<h2 class="task-path" data-taskpath="${currentTaskPath}">${currentTaskPath}</h2>`;
 
                 if (variants.length > 1 || hasExplicitPreferences) {
                     const currentVariation = Array.isArray(variants[i])
@@ -152,10 +152,21 @@ var loadingUi = {
     $status: null,
 };
 
+var toastUi = {
+    $root: null,
+    timeoutId: null,
+};
+
 function ensureLoadingUi() {
     if (!loadingUi.$root) {
         loadingUi.$root = $('#katalog-loading');
         loadingUi.$status = $('#katalog-loading-status');
+    }
+}
+
+function ensureToastUi() {
+    if (!toastUi.$root) {
+        toastUi.$root = $('#katalog-toast');
     }
 }
 
@@ -174,6 +185,21 @@ function setLoadingStatus(text) {
         return;
     }
     loadingUi.$status.text(text || '');
+}
+
+function showToast(message) {
+    ensureToastUi();
+    if (!toastUi.$root || !toastUi.$root.length) {
+        return;
+    }
+    toastUi.$root.text(message || 'Готово');
+    toastUi.$root.removeClass('hidden');
+    if (toastUi.timeoutId) {
+        clearTimeout(toastUi.timeoutId);
+    }
+    toastUi.timeoutId = setTimeout(function() {
+        toastUi.$root.addClass('hidden');
+    }, 1400);
 }
 
 function getCategoryLabel(category) {
@@ -387,6 +413,16 @@ function afterTasksGenerated() {
     $('button.copybutton[data-already-inited!=true]').click(copyTask).attr('data-already-inited', true);
     $('button.renewbutton[data-already-inited!=true]').click(renewTask).attr('data-already-inited', true);
     $('button.addbutton[data-already-inited!=true]').click(addTask).attr('data-already-inited', true);
+    $('.task-path[data-already-inited!=true]').click(copyTaskPath).attr('data-already-inited', true);
+}
+
+function copyTaskPath() {
+    var path = this.getAttribute('data-taskpath');
+    if (!path) {
+        return;
+    }
+    copyToClipboard(path);
+    showToast('Путь скопирован');
 }
 
 /**
