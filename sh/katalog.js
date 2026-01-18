@@ -147,6 +147,43 @@ function stopKatalogGeneration() {
     katalogGeneration.stop = true;
 }
 
+var loadingUi = {
+    $root: null,
+    $status: null,
+};
+
+function ensureLoadingUi() {
+    if (!loadingUi.$root) {
+        loadingUi.$root = $('#katalog-loading');
+        loadingUi.$status = $('#katalog-loading-status');
+    }
+}
+
+function setLoadingVisible(isVisible) {
+    ensureLoadingUi();
+    if (!loadingUi.$root || !loadingUi.$root.length) {
+        return;
+    }
+    loadingUi.$root.toggleClass('hidden', !isVisible);
+    loadingUi.$root.attr('aria-busy', isVisible ? 'true' : 'false');
+}
+
+function setLoadingStatus(text) {
+    ensureLoadingUi();
+    if (!loadingUi.$status || !loadingUi.$status.length) {
+        return;
+    }
+    loadingUi.$status.text(text || '');
+}
+
+function getCategoryLabel(category) {
+    var comment = (window.comment || '').trim();
+    if (comment) {
+        return category + ': ' + comment;
+    }
+    return category;
+}
+
 /**
  * Генерирует каталог заданий.
  */
@@ -157,6 +194,8 @@ function generateKatalog() {
 
     katalogGeneration.stop = false;
     katalogGeneration.inProgress = true;
+    setLoadingVisible(true);
+    setLoadingStatus('Подготовка каталога...');
 
     const actionsArray = [];
     const lineBreak = '<br/>';
@@ -191,11 +230,14 @@ function generateKatalog() {
         $content.append($showButton, $hideButton, $body);
         currentCategoryBody = $body;
         $toc.append(`<a href="#${category}">${category}. ${window.comment}</a>${lineBreak}`);
+        setLoadingStatus('Генерируем категорию ' + getCategoryLabel(category));
         tasksToList = window.availableTaskNumbers || Object.keys(nabor.upak[category]);
         taskIndex = 0;
     }
 
     function finalizeGeneration(stopped) {
+        setLoadingVisible(false);
+        setLoadingStatus('');
         if (stopped) {
             var message = stopReason || 'Генерация остановлена пользователем.';
             $content.append('<div class="katalog-stopped">' + message + '</div>');
@@ -249,6 +291,7 @@ function generateKatalog() {
         taskIndex += 1;
 
         if (taskNumber !== 'main' && taskNumber !== 'fipi') {
+            setLoadingStatus('Генерируем категорию ' + getCategoryLabel(currentCategory) + ' — задание ' + taskNumber);
             var taskStart = Date.now();
             var taskHtml = generateHtmlForTask(currentCategory, taskNumber, actionsArray, function() {
                 errorCount += 1;
