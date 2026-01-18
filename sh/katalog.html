@@ -15,7 +15,8 @@
 {% endblock %}
 
 {% block textcontent %}
-	<div>
+	<div class="katalog-page">
+	<div class="katalog-intro">
 		Ниже для каждого шаблона приводится пример сгенерированного им задания.
 		Обратите внимание: как правило, один шаблон может генерировать очень много заданий,
 		которые в той или иной мере похожи между собой!
@@ -34,7 +35,26 @@
 	</div>
 	<div id="divrez">
 	</div>
+	</div>
 	<style>
+		.katalog-page{
+			max-width:1100px;
+			margin:24px auto 48px;
+			padding:24px;
+			border-radius:18px;
+			background:
+				radial-gradient(circle at 0% 0%, rgba(255,255,255,0.9), rgba(255,255,255,0.6)),
+				linear-gradient(160deg, rgba(240,246,252,0.95), rgba(255,255,255,0.98));
+			box-shadow:0 20px 50px rgba(15, 42, 74, 0.12);
+		}
+		.katalog-intro{
+			padding:16px 18px;
+			border-radius:12px;
+			background:rgba(255,255,255,0.8);
+			border:1px solid rgba(15, 42, 74, 0.08);
+			margin-bottom:16px;
+			line-height:1.5;
+		}
 		h1,h2{
 			clear:both;
 			padding-top:2em;
@@ -50,21 +70,21 @@
 			align-items:center;
 			justify-content:center;
 			background:
-				radial-gradient(circle at 20% 20%, rgba(255,255,255,0.9), rgba(255,255,255,0.6) 50%, rgba(255,255,255,0.3)),
-				linear-gradient(135deg, rgba(236,240,241,0.95), rgba(250,250,250,0.95));
+				radial-gradient(circle at 20% 20%, rgba(255,255,255,0.92), rgba(245,248,252,0.7) 50%, rgba(255,255,255,0.4)),
+				linear-gradient(135deg, rgba(226,235,248,0.96), rgba(255,255,255,0.98));
 			backdrop-filter: blur(2px);
 		}
 		.katalog-loading.hidden{
 			display:none;
 		}
 		.katalog-loading__panel{
-			background:rgba(255,255,255,0.9);
-			border:1px solid rgba(0,0,0,0.08);
-			border-radius:16px;
+			background:rgba(255,255,255,0.95);
+			border:1px solid rgba(15, 42, 74, 0.1);
+			border-radius:20px;
 			padding:24px 28px;
 			min-width:260px;
 			max-width:80vw;
-			box-shadow:0 12px 30px rgba(0,0,0,0.12);
+			box-shadow:0 18px 40px rgba(15, 42, 74, 0.15);
 			text-align:center;
 		}
 		.katalog-loading__spinner{
@@ -86,25 +106,30 @@
 			color:#394048;
 		}
 		.katalog-controls{
-			margin-top:12px;
+			margin-top:14px;
 			display:flex;
 			flex-direction:column;
 			gap:10px;
-			max-width:720px;
+			max-width:860px;
 		}
 		.katalog-controls__list{
 			display:flex;
 			flex-wrap:wrap;
-			gap:6px 12px;
+			gap:8px 12px;
 		}
 		.katalog-controls__item{
 			display:flex;
 			align-items:center;
 			gap:6px;
-			padding:4px 6px;
-			border:1px solid rgba(0,0,0,0.08);
-			border-radius:6px;
-			background:rgba(255,255,255,0.8);
+			padding:6px 10px;
+			border:1px solid rgba(15, 42, 74, 0.12);
+			border-radius:12px;
+			background:rgba(255,255,255,0.9);
+			transition:box-shadow 0.2s ease, transform 0.2s ease;
+		}
+		.katalog-controls__item:hover{
+			box-shadow:0 6px 16px rgba(15, 42, 74, 0.12);
+			transform:translateY(-1px);
 		}
 		.katalog-controls__actions{
 			display:flex;
@@ -112,7 +137,24 @@
 			flex-wrap:wrap;
 		}
 		.katalog-controls button{
-			padding:6px 10px;
+			padding:8px 14px;
+			border-radius:10px;
+			border:1px solid rgba(15, 42, 74, 0.12);
+			background:linear-gradient(135deg, #1b6ac9, #2a86e6);
+			color:#fff;
+			cursor:pointer;
+			transition:transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+		}
+		.katalog-controls button:hover{
+			box-shadow:0 8px 18px rgba(27, 106, 201, 0.28);
+			transform:translateY(-1px);
+		}
+		.katalog-controls button:active{
+			transform:translateY(0);
+			opacity:0.9;
+		}
+		.katalog-controls__actions button:last-child{
+			background:linear-gradient(135deg, #7b8da6, #6d7c90);
 		}
 		@keyframes katalog-spin{
 			to{transform:rotate(360deg);}
