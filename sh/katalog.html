@@ -189,6 +189,34 @@
 		.katalog-controls__actions button:last-child{
 			background:linear-gradient(135deg, #7b8da6, #6d7c90);
 		}
+		#katalog-toc{
+			margin:18px 0 12px;
+			padding:14px 16px;
+			border-radius:14px;
+			background:rgba(255,255,255,0.9);
+			border:1px solid rgba(15, 42, 74, 0.1);
+			display:flex;
+			flex-direction:column;
+			gap:8px;
+		}
+		#katalog-toc a{
+			display:flex;
+			align-items:center;
+			padding:8px 12px;
+			border-radius:10px;
+			background:rgba(27, 106, 201, 0.08);
+			color:#1b6ac9;
+			text-decoration:none;
+			transition:background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+		}
+		#katalog-toc a:hover{
+			background:rgba(27, 106, 201, 0.16);
+			box-shadow:0 6px 14px rgba(27, 106, 201, 0.18);
+			transform:translateY(-1px);
+		}
+		#katalog-toc a:active{
+			transform:translateY(0);
+		}
 		@keyframes katalog-spin{
 			to{transform:rotate(360deg);}
 		}
