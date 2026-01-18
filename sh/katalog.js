@@ -184,10 +184,61 @@ function getCategoryLabel(category) {
     return category;
 }
 
+function renderCategoryControls() {
+    var $controls = $('#katalog-controls');
+    if (!$controls.length || !window.nabor || !window.nabor.upak) {
+        return;
+    }
+    $controls.empty();
+    var categories = Object.keys(nabor.upak);
+    var $list = $('<div class="katalog-controls__list"></div>');
+    categories.forEach(function(category, index) {
+        var prevComment = window.comment;
+        var prevAvailable = window.availableTaskNumbers;
+        window.comment = '';
+        window.availableTaskNumbers = null;
+        try {
+            nabor.upak[category][nabor.scheduler]();
+        } catch (e) {
+            console.error(e);
+        }
+        var categoryLabel = getCategoryLabel(category);
+        window.comment = prevComment;
+        window.availableTaskNumbers = prevAvailable;
+
+        var checkboxId = 'katalog-category-' + index;
+        var $item = $('<label class="katalog-controls__item"></label>');
+        var $checkbox = $('<input type="checkbox" checked />').attr('id', checkboxId).data('category', category);
+        var $text = $('<span></span>').text(categoryLabel);
+        $item.append($checkbox, $text);
+        $list.append($item);
+    });
+    var $actions = $('<div class="katalog-controls__actions"></div>');
+    var $generate = $('<button type="button">Генерировать выбранное</button>');
+    var $reset = $('<button type="button">Сбросить выбор</button>');
+    $generate.on('click', function() {
+        var selected = [];
+        $list.find('input[type=checkbox]').each(function() {
+            if (this.checked) {
+                selected.push($(this).data('category'));
+            }
+        });
+        if (!selected.length) {
+            return;
+        }
+        generateKatalog({ categories: selected });
+    });
+    $reset.on('click', function() {
+        $list.find('input[type=checkbox]').prop('checked', true);
+    });
+    $actions.append($generate, $reset);
+    $controls.append($list, $actions);
+}
+
 /**
  * Генерирует каталог заданий.
  */
-function generateKatalog() {
+function generateKatalog(options) {
     if (katalogGeneration.inProgress) {
         return;
     }
@@ -204,7 +255,17 @@ function generateKatalog() {
     const $toc = $('#katalog-toc');
     const $content = $('#katalog-content');
 
-    const categories = Object.keys(nabor.upak);
+    const categoryFilter = options && options.categoryFilter ? options.categoryFilter : null;
+    const categoriesOverride = options && Array.isArray(options.categories) ? options.categories : null;
+    const categories = categoriesOverride
+        ? categoriesOverride
+        : (categoryFilter ? [categoryFilter] : Object.keys(nabor.upak));
+    if (!categories.length) {
+        katalogGeneration.inProgress = false;
+        setLoadingVisible(false);
+        setLoadingStatus('');
+        return;
+    }
     let categoryIndex = 0;
     let taskIndex = 0;
     let currentCategory = null;
@@ -315,6 +376,8 @@ function generateKatalog() {
 
     processChunk();
 }
+
+$(renderCategoryControls);
 
 /**
  * Выполняет действия после генерации заданий.

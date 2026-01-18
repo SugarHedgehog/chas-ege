@@ -20,7 +20,7 @@
 		Обратите внимание: как правило, один шаблон может генерировать очень много заданий,
 		которые в той или иной мере похожи между собой!
 	</div>
-	<button onclick="generateKatalog()">Генерировать</button>
+	<div id="katalog-controls" class="katalog-controls"></div>
 	<br/>
 	<br/>
 	<script src="katalog.js"></script>
@@ -84,6 +84,35 @@
 		.katalog-loading__status{
 			font-size:14px;
 			color:#394048;
+		}
+		.katalog-controls{
+			margin-top:12px;
+			display:flex;
+			flex-direction:column;
+			gap:10px;
+			max-width:720px;
+		}
+		.katalog-controls__list{
+			display:flex;
+			flex-wrap:wrap;
+			gap:6px 12px;
+		}
+		.katalog-controls__item{
+			display:flex;
+			align-items:center;
+			gap:6px;
+			padding:4px 6px;
+			border:1px solid rgba(0,0,0,0.08);
+			border-radius:6px;
+			background:rgba(255,255,255,0.8);
+		}
+		.katalog-controls__actions{
+			display:flex;
+			gap:8px;
+			flex-wrap:wrap;
+		}
+		.katalog-controls button{
+			padding:6px 10px;
 		}
 		@keyframes katalog-spin{
 			to{transform:rotate(360deg);}
