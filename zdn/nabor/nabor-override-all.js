@@ -25,7 +25,7 @@ $('#start-number').val(1)
 // Не указывать данные вариантов
 $('#vanishVariants').prop("checked", false);
 // Генерировать преимущественно натуральные числа
-$('#forceIntegers').prop("checked", true);
+$('#forceIntegers').prop("checked", false);
 // Генерировать ТОЛЬКО целые числа
 $('#onlyIntegers').prop("checked", false);
 // Требовать уникальных ответов, решений или сигнатур (осторожно, ответов может не хватить!) 
