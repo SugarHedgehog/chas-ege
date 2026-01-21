@@ -1,15 +1,12 @@
 console.log('Overriding...');
 
-// По одному заданию каждой категории:
-vse1();
-
 // Выставляем экспорт в LaTeX
 $('#prepareLaTeX').prop("checked", true);
 
 // Редактируемый текст 
 $('#redakt').prop("checked", true);
 //Увеличить шрифт 
-$('#largeFont').prop("checked", true);
+$('#largeFont').prop("checked", false);
 //Не разрывать страницу между вариантами 
 $('#nopagebreak').prop("checked", false);
 //Компактные таблицы ответов 
@@ -25,8 +22,6 @@ $('#nobackground').prop("checked", false);
 // Начать нумерацию вариантов с
 $('#customNumber').prop("checked", true);
 $('#start-number').val(1)
-// Префикс варианта
-$('#variantPrefix').val('');
 // Не указывать данные вариантов
 $('#vanishVariants').prop("checked", false);
 // Генерировать преимущественно натуральные числа

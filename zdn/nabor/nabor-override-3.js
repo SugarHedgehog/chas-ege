@@ -52,6 +52,6 @@ window.nabor.upak[11].main = function(){
 }
 
 window.nabor.upak[12].main = function(){
-	window.nomer = 77490;
+	window.nomer = 77486;
 }
 
