@@ -50,7 +50,7 @@
 			ctx.ellipse(150, height, 20, 150, Math.PI / 2, Math.PI / 2, 1.5 * Math.PI);
 			ctx.stroke();
 			//радиус
-			ctx.strokeStyle = om.primaryBrandColors.iz().iz();
+			ctx.strokeStyle = om.primaryBrandColors.iz();
 
 			if (variable.T()[0].includes('радиус основания'))
 				ctx.drawLine(150, height, 300, height);

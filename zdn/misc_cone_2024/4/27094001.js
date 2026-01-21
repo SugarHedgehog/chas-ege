@@ -33,7 +33,7 @@
 		ctx.ellipse(150, 300, 20, 150, Math.PI / 2, Math.PI / 2, 1.5 * Math.PI);
 		ctx.stroke();
 
-		ctx.strokeStyle = om.primaryBrandColors.iz().iz();
+		ctx.strokeStyle = om.primaryBrandColors.iz();
 		for (let i = 0; i < copy.length; i++) {
 			//радиус
 			if (copy[i].name.ie == 'радиус основания')

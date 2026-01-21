@@ -23,7 +23,7 @@
 			ctx.translate(-10, -40);
 			ctx.lineWidth = 2;
 			ctx.strokeStyle = om.secondaryBrandColors.iz();
-			ctx.fillStyle = om.primaryBrandColors.iz().iz();
+			ctx.fillStyle = om.primaryBrandColors.iz();
 
 			ctx.beginPath();
 			if (radiusNew[1] == 'площадь большого круга') {
