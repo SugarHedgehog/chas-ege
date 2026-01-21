@@ -36,7 +36,8 @@ window.nabor.upak[7].main = function(){
 }
 
 window.nabor.upak[8].main = function(){
-	window.nomer = 2749402;
+	window.nomer = 27494;
+	window.nabor.preferences['27494'] = ['maximum_points_on_the_segment'];
 }
 
 window.nabor.upak[9].main = function(){
