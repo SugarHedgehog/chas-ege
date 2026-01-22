@@ -1,6 +1,11 @@
 (function() {
 	retryWhileError(function() {
 			NAinfo.requireApiVersion(0, 2);
+			
+			let key = '27049';
+			let preference = ['volume', 'sideSurfaceArea'];
+			let rand = getSelectedPreferenceFromList(key, preference);
+			
 			let prism = new RectangularPrismWithRightAngledTriangleAtBase({
 				height: sl(1, 50),
 				sideA: sl(1, 50),
@@ -11,8 +16,6 @@
 				radius: 0.5 * prism.sideC,
 				height: prism.height
 			});
-
-			let rand = sl1();
 
 			let paint1 = function(ctx) {
 				let h = 400;
