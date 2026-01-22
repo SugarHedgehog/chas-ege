@@ -35,7 +35,7 @@
 		});
 
 		let points = [];
-		const epsilon = sl(stepForX * 0.1, stepForX * 0.5, 0.1);
+		const epsilon = sl(stepForX, stepForX * 5)/10;
 		for (let x = minX + epsilon; x <= maxX - epsilon; x += 2) {
 			if (Math.abs(painFunc(x)) > 1 && Math.abs(x) > 1 && !isCloseToInteger(x, 0.2)) {
 				points.push(x);
