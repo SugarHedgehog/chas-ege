@@ -36,7 +36,8 @@ window.nabor.upak[7].main = function(){
 }
 
 window.nabor.upak[8].main = function(){
-	window.nomer = 2749201;
+	window.nomer = 27492;
+	window.nabor.preferences['27492'] = ['smallest_value'];
 }
 
 window.nabor.upak[9].main = function(){
