@@ -13,7 +13,7 @@ retryWhileUndefined(function() {
 	let preference = ['kMoreZero', 'kLessZero'];
 	let rand = getSelectedPreferenceFromList(key, preference);
 	
-	let a = sl(0.1, 2, 0.1).pm();
+	let a = sl(1, 20).pm()/10;
 	let b = sluchch(0, 10).pm();
 	let c = sluchch(0, 10).pm();
 	let D = b * b - 4 * a * c;
@@ -21,7 +21,7 @@ retryWhileUndefined(function() {
 	let y0 = f(x0);
 	if (D.isPolnKvadr() || Math.abs(y0) > 3)
 		return;
-	let xk = sl(x0 - sl(0,4,0.1), x0 +sl(0,4,0.1) , 0.05);
+	let xk = sl(20*(x0 - sl(0,40)/10), 20*(x0 + sl(0,40)/10))/20;
 	if (xk.abs() > 5)
 		return;
 		
