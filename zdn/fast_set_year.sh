@@ -9,17 +9,41 @@ script_dir="$(cd "$(dirname "$0")" && pwd)"
 
 # Заполните список задач перед запуском.
 array=(
-77384
-282849
-'6 power_2_no_frac power_2 no_frac'
-'6 power_3_no_frac power_3 no_frac'
-26671
-'5 no_frac no_frac'
-'5 frac frac'
-26650
-3
-2
-26658
+26740
+'77394 same_base same_base'
+'77394 diff_base diff_base'
+'77394 pow_base pow_base'
+'5 same_base same_base'
+'5 diff_base diff_base'
+6
+8
+'2674101 positive_degree positive_degree'
+'2674101 negative_degree negative_degree'
+4
+14
+26745
+316351
+26857
+26856
+2684901
+'26848 integer integer' 
+'26848 not_integer not_integer'
+26859
+26759
+'26777 sin_cos sin cos'
+'26777 cos_sin cos sin'
+'26777 tg_sin tg sin'
+'26777 tg_cos tg cos'
+316350
+508966
+245169
+282525
+245170
+'245171 sin sin'
+'245171 cos cos'
+'11 integer_double_angle integer double_angle'
+97869
+26755
 )
 
 if [[ $# -lt 1 ]]; then
