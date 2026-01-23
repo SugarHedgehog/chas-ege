@@ -6,9 +6,15 @@
 
 	retryWhileError(function() {
 		NAinfo.requireApiVersion(0, 2);
-		let rand = sl1();
+		let key = '245351';
+		let preference1 = ['sphere', 'cone'];
+		let preference2 = ['baseRadius', 'sideSurfaceArea', 'volume', 'generatrix', 'baseArea'];
+		let preference3 = ['surfaceArea', 'volume'];
+		let randFind = getSelectedPreferenceFromList(key, preference1);
+		let randGivenForCone = getSelectedPreferenceFromList(key, preference2);
+		let randGivenForSphere = getSelectedPreferenceFromList(key, preference3);
 
-		let sphere = new Sphere(sl(1, 100) * [1, (2).sqrt(), ][rand]);
+		let sphere = new Sphere(sl(1, 100) * [1, (2).sqrt()][randFind]);
 		let cone = new Cone({
 			radius: sphere.radius,
 			height: sphere.radius
@@ -20,11 +26,11 @@
 			['объём', cone.volume],
 			['образующая', cone.generatrix],
 			['площадь основания', cone.baseArea]
-		].iz();
+		][randGivenForCone];
 		let nameSphere = [
 			['площадь поверхности', sphere.surfaceArea],
 			['объём', sphere.volume],
-		].iz();
+		][randGivenForSphere];
 
 		let paint1 = function(ctx) {
 
@@ -61,8 +67,8 @@
 				nameSphere[0].toZagl() + ' шара ' + ['равен', 'равна'][sklonlxkand(nameSphere[0]).rod] + ' $' +
 				nameSphere[1].texpi() + '$. Найдите ' + sklonlxkand(nameCone[0]).ve.replace('образующаю', 'образующую') +
 				' конуса'
-			][rand] + '.',
-			answers: [nameSphere[1], nameCone[1]][rand],
+			][randFind] + '.',
+			answers: [nameSphere[1], nameCone[1]][randFind],
 		});
 		
 		NAtask.modifiers.multiplyAnswerByPI();
