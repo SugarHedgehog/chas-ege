@@ -1,5 +1,9 @@
 (function() {
 	retryWhileError(function() {
+		let key = '318145';
+		let preference = ['missingLiquid', 'liquidInFullCone'];
+		let randQuestion = getSelectedPreferenceFromList(key, preference);
+			
 		let denominator = sl(3, 10);
 		let numerator = sl(1, denominator - 1);
 
@@ -10,7 +14,7 @@
 		let question = [
 			['нужно долить, чтобы наполнить сосуд доверху', volumeUp - volumeDown],
 			['поместится в весь сосуд', volumeUp]
-		].iz();
+		][randQuestion];
 
 		let paint1 = function(ctx) {
 			ctx.translate(0, 20);
