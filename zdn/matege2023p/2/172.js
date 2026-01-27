@@ -160,6 +160,7 @@
 				verb: 'равны',
 			},
 			authors: ['Суматохина Александра'],
+			preference,
 		});
 		NAtask.modifiers.addCanvasIllustration({
 			width: 400,
