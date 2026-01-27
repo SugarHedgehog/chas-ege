@@ -1,24 +1,27 @@
 (function() {
 	retryWhileError(function() {
 			NAinfo.requireApiVersion(0, 2);
-
-			let rand1 = sl1();
-			let rand2 = sl1();
+			
+			let key = '27051';
+			let preference1 = ['volume', 'sideSurfaceArea'];
+			let preference2 = ['findValueInCone', 'findValueInCylinder'];
+			let randCondition = getSelectedPreferenceFromList(key, preference1);
+			let randCFind = getSelectedPreferenceFromList(key, preference2);
 
 			let radius = sl(1, 20);
 			let cyl = new Cylinder({
 				radius: radius,
-				height: [sl(1, 20), radius][rand2],
+				height: [sl(1, 20), radius][randCondition],
 			});
 			let cone = new Cone({
 				radius: cyl.radius,
-				height: [cyl.height, cyl.radius][rand2]
+				height: [cyl.height, cyl.radius][randCondition]
 			});
 
 			let nameFigura = [ //цилиндр,конус
 				['объём', cyl.volume / Math.PI, cone.volume / Math.PI],
 				['площадь боковой поверхности', cyl.sideSurfaceArea / Math.PI, cone.sideSurfaceArea / Math.PI]
-			][rand2];
+			][randCondition];
 
 			let paint1 = function(ctx) {
 				ctx.scale = (60, 60);
@@ -51,10 +54,11 @@
 			};
 
 			NAtask.setTask({
-				text: 'Цилиндр и конус имеют общие основание и высоту. ' + 'Высота цилиндра равна радиусу основания. '.esli(rand2) +
-					nameFigura[0].toZagl() + ' ' + ['цилиндра', 'конуса'][rand1] + ' ' + ['равен', 'равна'][rand2] +
-					' $' + nameFigura[1 + rand1].pow(2).texsqrt(1) + '$. Найдите ' + nameFigura[0] + ' ' + ['конуса', 'цилиндра'][rand1] + '.',
-				answers: nameFigura[2 - rand1],
+				text: 'Цилиндр и конус имеют общие основание и высоту. ' + 'Высота цилиндра равна радиусу основания. '.esli(randCondition) +
+					nameFigura[0].toZagl() + ' ' + ['цилиндра', 'конуса'][randCFind] + ' ' + ['равен', 'равна'][randCondition] +
+					' $' + nameFigura[1 + randCFind].pow(2).texsqrt(1) + '$. Найдите ' + nameFigura[0] + ' ' + ['конуса', 'цилиндра'][randCFind] + '.',
+				answers: nameFigura[2 - randCFind],
+				preferenc: [preference1, preference2],
 			});
 			NAtask.modifiers.multiplyAnswerBySqrt(13);
 			NAtask.modifiers.allDecimalsToStandard(true);
