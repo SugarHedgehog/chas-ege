@@ -89,7 +89,8 @@
             ['A_1', 'B_1', 'C_1', 'D_1', 'B', 'C']].iz()][randQuestion].shuffleJoin('$, $') + '$.',
             analys: 'Полный объём многогранника: $' + par.volume + '$' + '<br>' +
                 'Диагональ основания:$' + (par.DWDiagonal.pow(2)).texsqrt(1) + '$',
-            author: ['Суматохина Александра']
+            author: ['Суматохина Александра'],
+            preference,
         });
         NAtask.modifiers.allDecimalsToStandard(true);
         NAtask.modifiers.multiplyAnswerBySqrt(12);
