@@ -75,6 +75,7 @@
 			answers: question[1],
 			authors: ['Суматохина Александра'],
 			analys: '',
+			preference,
 		});
 		NAtask.modifiers.addCanvasIllustration({
 			width: 400,
