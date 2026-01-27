@@ -6,8 +6,14 @@
 
 	retryWhileError(function() {
 		NAinfo.requireApiVersion(0, 2);
-
-		let rand = sl1();
+		
+		let key = '5077';
+		let preference1 = ['questionCylinder', 'questionSphere'];
+		let preference2 = ['radiusCylinder', 'sideSurfaceAreaCylinder', 'volumeCylinder', 'diameterOrHeightCylinder', 'surfaceAreaCylinder'];
+		let preference3 = ['radiusSphere', 'surfaceAreaSphere', 'volumeSphere', 'diameterSphere'];
+		let randQuestion = getSelectedPreferenceFromList(key, preference1);
+		let randCylinder = getSelectedPreferenceFromList(key, preference2);
+		let randSphere = getSelectedPreferenceFromList(key, preference3);
 
 		let sphere = new Sphere(sl(1, 100));
 		let cyl = new Cylinder({
@@ -23,13 +29,13 @@
 				['диаметр основания', 'высота'].iz(), cyl.height
 			],
 			['полная площадь поверхности', cyl.surfaceArea, ]
-		].iz();
+		][randCylinder];
 		let nameSphere = [
 			['радиус', sphere.radius],
 			['площадь поверхности', sphere.surfaceArea, ],
 			['объём', sphere.volume],
 			['диаметр', sphere.diameter]
-		].iz();
+		][randSphere];
 
 		let paint1 = function(ctx) {
 
@@ -69,8 +75,9 @@
 				'$. Найдите ' + sklonlxkand(nameCylinder[0]).ve + ' цилиндра.',
 				' Цилиндр, ' + nameCylinder[0] + ' которого ' + ['равен', 'равна'][sklonlxkand(nameCylinder[0]).rod] +
 				' $' + nameCylinder[1].texpi() + '$, описан около шара. Найдите ' + sklonlxkand(nameSphere[0]).ve + ' шара.'
-			][rand],
-			answers: [nameCylinder[1], nameSphere[1]][rand],
+			][randQuestion],
+			answers: [nameCylinder[1], nameSphere[1]][randQuestion],
+			preference:[preference1, preference2, preference3],
 		});
 		NAtask.modifiers.multiplyAnswerByPI();
 		NAtask.modifiers.allDecimalsToStandard(true);
