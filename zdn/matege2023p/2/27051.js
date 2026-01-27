@@ -58,7 +58,7 @@
 					nameFigura[0].toZagl() + ' ' + ['цилиндра', 'конуса'][randCFind] + ' ' + ['равен', 'равна'][randCondition] +
 					' $' + nameFigura[1 + randCFind].pow(2).texsqrt(1) + '$. Найдите ' + nameFigura[0] + ' ' + ['конуса', 'цилиндра'][randCFind] + '.',
 				answers: nameFigura[2 - randCFind],
-				preferenc: [preference1, preference2],
+				preference: [preference1, preference2],
 			});
 			NAtask.modifiers.multiplyAnswerBySqrt(13);
 			NAtask.modifiers.allDecimalsToStandard(true);
