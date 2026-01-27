@@ -4,6 +4,10 @@
 	lx_declareClarifiedPhrase('площадь', 'основания');
 	lx_declareClarifiedPhrase('длина', 'окружности основания');
 	retryWhileError(function() {
+		
+		let key = '172';
+		let preference = ['radiusOfBaseOrLengthOfCircumferenceOfBaseVolumeAndHeight', 'lengthOfCircumferenceOfBaseAndAreaOfBase', 'areasOfBasesAndRadiiOfBasesHeightAndSlantHeight', 'radiusLengthAndAreaOfBaseAndLateralSurfaceAreaAndSlantHeight', 'radiiLengthsAndAreasOfBasesAndLateralSurfaceAreaAndSlantHeight'];
+		let randMeasurement = getSelectedPreferenceFromList(key, preference);
 		let measurements = [
 			[
 				[{
@@ -86,7 +90,7 @@
 					power: 1,
 				}
 			]
-		].iz();
+		][randMeasurement];
 
 		let copy = measurements.map((num) => num);
 		let paint1 = function(ctx) {
