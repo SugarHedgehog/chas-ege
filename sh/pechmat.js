@@ -480,7 +480,7 @@ function removeGridFields() {
 
 function getAnswersSubtableLaTeX(cellsInFirstRow, answersParsedToTeX) {
 	const maxRows = options.splitAnswersNumber || 60;
-	const hline = "\n\\\n\\hline\n";
+	const hline = "\n\n\\hline\n";
 	const colFormat = (new Array(cellsInFirstRow)).fill('|l').join('') + '|';
 
 	let res = '';
