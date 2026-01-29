@@ -22,6 +22,11 @@
 				['объём', cyl.volume / Math.PI, cone.volume / Math.PI],
 				['площадь боковой поверхности', cyl.sideSurfaceArea / Math.PI, cone.sideSurfaceArea / Math.PI]
 			][randCondition];
+			
+			let valueFigura = nameFigura[1 + randCFind];
+			if(!valueFigura.isZ()){
+				valueFigura = valueFigura.pow(2).texsqrt(1);
+			}
 
 			let paint1 = function(ctx) {
 				ctx.scale = (60, 60);
@@ -56,7 +61,7 @@
 			NAtask.setTask({
 				text: 'Цилиндр и конус имеют общие основание и высоту. ' + 'Высота цилиндра равна радиусу основания. '.esli(randCondition) +
 					nameFigura[0].toZagl() + ' ' + ['цилиндра', 'конуса'][randCFind] + ' ' + ['равен', 'равна'][randCondition] +
-					' $' + nameFigura[1 + randCFind].pow(2).texsqrt(1) + '$. Найдите ' + nameFigura[0] + ' ' + ['конуса', 'цилиндра'][randCFind] + '.',
+					' $' + valueFigura + '$. Найдите ' + nameFigura[0] + ' ' + ['конуса', 'цилиндра'][randCFind] + '.',
 				answers: nameFigura[2 - randCFind],
 				preference: [preference1, preference2],
 			});
