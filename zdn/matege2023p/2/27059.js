@@ -2,28 +2,39 @@
 	lx_declareClarifiedPhrase('площадь', 'поверхности');
 	lx_declareClarifiedPhrase('площадь', 'большого круга');
 	lx_declareClarifiedPhrase('длина', 'большого круга');
+	lx_declareClarifiedPhrase('площадь', 'сечения шара плоскостью, проходящей через центр');
 
 	retryWhileError(function() {
+		
+		let key = '27059';
+		let preference1 = ['givenRadius', 'givenDiameter', 'givenCircumference', 'givenGreatCircleArea', 'givenCrossSectionalArea', 'givenSurfaceArea', 'givenVolume'];
+		let preference2 = ['findRadius', 'findDiameter', 'findCircumference', 'findGreatCircleArea', 'findCrossSectionalArea', 'findSurfaceArea', 'findVolume'];
+		let randGiven = getSelectedPreferenceFromList(key, preference1);
+		let randFind = getSelectedPreferenceFromList(key, preference2);
+		
+		genAssert(randGiven!=randFind, 'Дано и вопрос совпадают');
 
 		let radius = sl(1, 50);
 
 		let variable = [
-			[
-				['радиус', radius],
-				['диаметр', radius * 2],
-				['длина большого круга', 2 * radius + '\\pi'],
-				['площадь большого круга', radius.pow(2) + '\\pi'],
-			].iz(), ['площадь поверхности', 4 * radius.pow(2) + '\\pi'],
+			['радиус', radius],
+			['диаметр', radius * 2],
+			['длина большого круга', 2 * radius + '\\pi'],
+			['площадь большого круга', radius.pow(2) + '\\pi'],
+			['площадь сечения шара плоскостью, проходящей через центр', radius.pow(2) + '\\pi'],
+			['площадь поверхности', 4 * radius.pow(2) + '\\pi'],
 		];
 
-		if (!(radius % 3))
-			variable.push(['объём', 4 * radius.pow(3) / 3 + '\\pi']);
+		if (!(radius % 3)){
+			variable.push(['объём', 4 * radius.pow(3) / 3 + '\\pi']);} 
+		else {
+			genAssert(!(randGiven== 6 || randFind== 6), 'Объем не определен');
+		}
 
-		variable = variable.iz(3);
-
-		let name = sklonlxkand(variable.T()[0]);
-		let number = variable.T()[1];
-		let answer = number[1];
+		let condition = [variable[randGiven], variable[randFind]];
+		let name = sklonlxkand(condition.T()[0]);
+		let value = condition.T()[1];
+		let answer = value[1];
 
 		let ps = '';
 		if (answer.includes('pi')) {
@@ -60,11 +71,12 @@
 
 		NAinfo.requireApiVersion(0, 2);
 		NAtask.setTask({
-			text: name[0].ie.toZagl() + ' шара ' + ['равен', 'равна'][name[0].rod] + ' $' + number[0] + '$. ' +
+			text: name[0].ie.toZagl() + ' шара'+','.esli(randGiven == 4)+' ' + ['равен', 'равна'][name[0].rod] + ' $' + value[0] + '$. ' +
 				'Найдите ' + name[1].ve + ' шара. ' + ps,
 			answers: answer,
 			authors: ['Суматохина Александра'],
-			analys: name[1].ie.toZagl() + ': $' + number[1] + '$',
+			analys: name[1].ie.toZagl() + ': $' + value[1] + '$',
+			preference: [preference1, preference2],
 		});
 		NAtask.modifiers.addCanvasIllustration({
 			width: 400,
