@@ -7,10 +7,38 @@
 #../fast_set.sh ../../matege2023p/4
 find . -mindepth 1 ! -name "$(basename "$0")" -exec rm -rf {} +
 
-
-rm -rf *
-
-array=(10 3 8 4 2066 5541 6080 2069 1945  73  99  109  105  27589  27793  27758  27764  27762  27623  27592  319157  4850  3353  3354  5941  11  127  131  119  125  169  177  181  173  135  145  149  153  157  161  165  185
+array=(
+"27068 sideSurfaceArea_truncatedPrism sideSurfaceArea truncatedPrism"
+"27068 sideSurfaceArea_originalPrism sideSurfaceArea originalPrism"
+"27068 volume_truncatedPrism volume truncatedPrism"
+"27068 volume_originalPrism volume originalPrism"
+"27094 heightRadiusOfBaseAndVolume heightRadiusOfBaseAndVolume"
+'318145 missingLiquid missingLiquid'
+'318145 liquidInFullCone liquidInFullCone'
+"27118 cylinderIsWider cylinderIsWider"
+"27118 cylinderIsHigher cylinderIsHigher"
+"245335 horizontalCrossSectionVolume horizontalCrossSectionVolume"
+"245335 verticalCrossSectionVolume verticalCrossSectionVolume"
+"27183 volumeOfCube volumeOfCube"
+"27183 volumeOfPrism volumeOfPrism"
+245338
+27074
+"245340 volumeOfPyramid volumeOfPyramid"
+"245341 volumeOfPyramid volumeOfPyramid"
+"27051 volume_findValueInCone volume findValueInCone"
+"27051 volume_findValueInCylinder volume findValueInCylinder"
+"27051 sideSurfaceArea_findValueInCone sideSurfaceArea findValueInCone"
+"27051 sideSurfaceArea_findValueInCylinder sideSurfaceArea findValueInCylinder"
+"5077 questionCylinder_surfaceAreaCylinder_surfaceAreaSphere questionCylinder surfaceAreaCylinder surfaceAreaSphere"
+"5077 questionSphere_surfaceAreaCylinder_surfaceAreaSphere questionSphere surfaceAreaCylinder surfaceAreaSphere"
+"5077 questionCylinder_volumeCylinder_volumeSphere questionCylinder volumeCylinder volumeSphere"
+"5077 questionSphere_volumeCylinder_volumeSphere questionSphere volumeCylinder volumeSphere"
+"245351 questionSphere_generatrixCone_radiusSphere questionSphere generatrixCone radiusSphere"
+"245351 questionCone_generatrixCone_radiusSphere questionCone generatrixCone radiusSphere"
+"245351 questionSphere_volumeCone_volumeSphere questionSphere volumeCone volumeSphere"
+"245351 questionCone_volumeCone_volumeSphere questionCone volumeCone volumeSphere"
+27041001
+"27059 givenCrossSectionalArea_findSurfaceArea givenCrossSectionalArea findSurfaceArea"
 )
 
 if [[ ${#array[@]} -eq 0 ]]; then
@@ -20,7 +48,7 @@ fi
 
 result=${PWD##*/}
 result=${result:-/}
-touch $result.js
+cat $result.js
 printf "if (!window.nabor)\n\twindow.nabor = {};\nwindow.nabor.importFrom({\n\tnZad: "${#array[@]}",\n \tadres: '../zdn/"$result"/',\n" >> $result.js
 printf "\tname: '"$result"',\n});\n" >> $result.js
 
