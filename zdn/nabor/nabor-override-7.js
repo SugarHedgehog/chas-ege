@@ -8,7 +8,7 @@ $('#variantPrefix').val('7.');
 // Количество вариантов
 $('#cV').val('5');
 window.nabor.upak[1].main = function(){
-	window.nomer = 119;
+	window.nomer = 125;
 }
 
 window.nabor.upak[2].main = function(){
@@ -49,6 +49,7 @@ window.nabor.upak[10].main = function(){
 
 window.nabor.upak[11].main = function(){
 	window.nomer = 508951;
+	window.nabor.preferences['508951'] = ['functionOfX', 'withoutB'];
 }
 
 window.nabor.upak[12].main = function(){
