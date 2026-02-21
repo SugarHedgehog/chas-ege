@@ -16,12 +16,12 @@ array=(
 2
 26658
 #7
-245170
-'245171 sin sin'
-'245171 cos cos'
-'11 integer_double_angle integer double_angle'
-97869
-26755
+26857
+26856
+2684901
+'26848 integer integer' 
+'26848 not_integer not_integer'
+26859
 #9
 '27996 findV findV'
 '27996 findP findP'
