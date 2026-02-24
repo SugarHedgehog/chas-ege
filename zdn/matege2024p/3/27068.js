@@ -4,7 +4,7 @@
 		NAinfo.requireApiVersion(0, 2);
 		let key = '27068';
 		let preference1 = ['sideSurfaceArea', 'volume'];
-		let preference2 = ['truncatedPrism ', 'originalPrism'];
+		let preference2 = ['truncatedPrism', 'originalPrism'];
 		let randQuestion = getSelectedPreferenceFromList(key, preference1);
 		let randPrism = getSelectedPreferenceFromList(key, preference2);
 
