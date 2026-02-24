@@ -70,7 +70,7 @@
 		NAinfo.requireApiVersion(0, 2);
 		NAtask.setTask({
 			text: 'В сосуде, имеющем форму конуса, уровень жидкости достигает ' +
-				'$' + numerator.texfrac(denominator) + '$ высоты. Объём жидкости равен ' + volumeDown + 'мл. ' +
+				'$' + numerator.texfrac(denominator) + '$ высоты. Объём жидкости равен ' + volumeDown + ' мл. ' +
 				'Сколько миллилитров жидкости ' + question[0] + '?',
 			answers: question[1],
 			authors: ['Суматохина Александра'],
