@@ -5,7 +5,7 @@
 		let preference = ['two', 'three', 'four', 'five'];
 		let numberOfTarget = getSelectedPreferenceFromList(key, preference) + 2;
 		let numString = ['двух', 'трёх', 'четырёх', 'пяти'];
-		let probability = sl(0.1, 0.9, 0.01);
+		let probability = sl(10, 90)/100;
 		let antiProbability = 1 - probability;
 		let numberOfWin = sl(1, numberOfTarget - 1);
 		let answ = probability.pow(numberOfWin) * antiProbability.pow(numberOfTarget - numberOfWin);
