@@ -12,11 +12,12 @@
 			]
 		].iz();
 		let bottomWeight = bun.pop();
-		bottomWeight = sl(bottomWeight, bottomWeight * sl(1.5, 3, 0.1));
+		bottomWeight = sl(bottomWeight, bottomWeight * sl(15, 30)/10);
 		let topWeight = bottomWeight + sl(10, 100);
 		bun = sklonlxkand(bun[0]);
-		let firstProbability = sl(0.4, 0.99, 0.01);
-		let secondProbability = sl(1 - firstProbability + 0.01, 0.99, 0.01);
+		let firstProbability = sl(4, 98)/100;
+		let secondProbability = sl(100 - firstProbability + 1, 99)/100;
+		firstProbability /= 100;
 
 		genAssert(firstProbability + secondProbability > 1, 'Слишком маленькие вероятности');
 		NAtask.setTask({
