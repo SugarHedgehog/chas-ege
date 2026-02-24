@@ -5,7 +5,9 @@
             depth = sl(10, 50),
             width = sl(10, 50);
 
-        let v = sl1();
+        let key = '245335';
+        let preference = ['horizontalCrossSectionVolume', 'verticalCrossSectionVolume'];
+        let randQuestion = getSelectedPreferenceFromList(key, preference);
 
         let par = new Parallelepiped({
             depth: depth,
@@ -25,12 +27,12 @@
 
         let matrixPar = [
             [strok],
-            [[strok, 0][v], 1],
+            [[strok, 0][randQuestion], 1],
             [strok, 0, 1],
-            [0, 0, [1, 0][1 - v], 1],
-            [strok, [strok, 0][1 - v], 0, 0, 1],
+            [0, 0, [1, 0][1 - randQuestion], 1],
+            [strok, [strok, 0][1 - randQuestion], 0, 0, 1],
             [0, 1, 0, 0, 0, 1],
-            [0, 0, 1, 0, 1, [1, 0][v], 1],
+            [0, 0, 1, 0, 1, [1, 0][randQuestion], 1],
         ];
 
         let camera = {
@@ -84,7 +86,7 @@
                 ['A', 'C', 'D', 'A_1', 'C_1', 'D_1']
             ].iz(),
             [['A', 'B', 'C', 'D', 'A_1', 'D_1'],
-            ['A_1', 'B_1', 'C_1', 'D_1', 'B', 'C']].iz()][v].shuffleJoin('$, $') + '$.',
+            ['A_1', 'B_1', 'C_1', 'D_1', 'B', 'C']].iz()][randQuestion].shuffleJoin('$, $') + '$.',
             analys: 'Полный объём многогранника: $' + par.volume + '$' + '<br>' +
                 'Диагональ основания:$' + (par.DWDiagonal.pow(2)).texsqrt(1) + '$',
             author: ['Суматохина Александра']
