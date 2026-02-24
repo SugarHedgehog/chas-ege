@@ -1,7 +1,12 @@
-(function() {
+(function () {
 	lx_declareClarifiedPhrase('площадь', 'боковой поверхности');
 	lx_declareClarifiedPhrase('радиус', 'основания');
 	lx_declareClarifiedPhrase('длина', 'окружности основания');
+
+	let key = '27094';
+	let preference = ['radiusOfBaseOrLengthOfCircumferenceOfBaseVolumeAndHeight', 'radiusOfBaseOrLengthOfCircumferenceOfBaseAndAreaOfBase', 'areaOfBaseHeightAndVolume', 'heightRadiusOfBaseAndVolume', 'slantHeightHeightAndVolume', 'allMeasurementsIncludingLateralSurfaceAreaAndSlantHeight', 'allMeasurementsWithClarifiedRadiusLengthAndAreaOfBaseAndLateralSurfaceAreaAndSlantHeight'];
+	let randMeasurement = getSelectedPreferenceFromList(key, preference);
+
 	let measurements = [
 		[
 			[{
@@ -10,58 +15,52 @@
 			}, {
 				name: 'длина окружности основания',
 				power: 1,
-			}, ].iz(), {
+			},].iz(), {
 				name: 'объём',
 				power: 2,
 			}, {
 				name: 'высота',
 				wordToClarify: true,
 			},
-		],
-		[
+		], [
 			[{
 				name: 'радиус основания',
 				power: 1,
 			}, {
 				name: 'длина окружности основания',
 				power: 1,
-			}, ].iz(), {
+			},].iz(), {
 				name: 'площадь основания',
 				power: 2,
 			}
-		],
-		[
-			[{
-				name: 'площадь основания',
-				power: 1,
-			}, {
-				name: 'высота',
-				wordToClarify: true,
-			}, {
-				name: 'объём',
-				power: 1,
-			}],
-			[{
-				name: 'высота',
-				power: 1,
-			}, {
-				name: 'радиус основания',
-				wordToClarify: true,
-			}, {
-				name: 'объём',
-				power: 1,
-			}],
-			[{
-				name: 'образующая',
-				power: 1,
-			}, {
-				name: 'высота',
-				wordToClarify: true,
-			}, {
-				name: 'объём',
-				power: 1,
-			}]
-		].iz(), [
+		], [{
+			name: 'площадь основания',
+			power: 1,
+		}, {
+			name: 'высота',
+			wordToClarify: true,
+		}, {
+			name: 'объём',
+			power: 1,
+		}], [{
+			name: 'высота',
+			power: 1,
+		}, {
+			name: 'радиус основания',
+			wordToClarify: true,
+		}, {
+			name: 'объём',
+			power: 1,
+		}], [{
+			name: 'образующая',
+			power: 1,
+		}, {
+			name: 'высота',
+			wordToClarify: true,
+		}, {
+			name: 'объём',
+			power: 1,
+		}], [
 			[{
 				name: 'радиус основания',
 				power: 1,
@@ -71,15 +70,14 @@
 			}, {
 				name: 'площадь основания',
 				power: 2
-			}, ].iz(), {
+			},].iz(), {
 				name: 'площадь боковой поверхности',
 				power: 1,
 			}, {
 				name: 'образующая',
 				wordToClarify: true,
 			}
-		],
-		[
+		], [
 			[{
 				name: 'радиус основания',
 				wordToClarify: true,
@@ -89,7 +87,7 @@
 			}, {
 				name: 'площадь основания',
 				wordToClarify: true,
-			}, ].iz(), {
+			},].iz(), {
 				name: 'площадь боковой поверхности',
 				power: 1,
 			}, {
@@ -97,9 +95,9 @@
 				power: 1,
 			}
 		]
-	].iz();
+	][randMeasurement];
 	let copy = measurements.map((num) => num);
-	let paint1 = function(ctx) {
+	let paint1 = function (ctx) {
 		ctx.lineWidth = 2;
 		ctx.translate(30, 0);
 		ctx.strokeStyle = om.secondaryBrandColors.iz();
@@ -139,6 +137,7 @@
 			verb: ['не изменился', 'не изменилась'],
 		},
 		authors: ['Суматохина Ася'],
+		preference
 	});
 	NAtask.modifiers.addCanvasIllustration({
 		width: 400,
