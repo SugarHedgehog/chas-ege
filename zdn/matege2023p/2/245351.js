@@ -3,7 +3,7 @@
 	lx_declareClarifiedPhrase('диаметр', 'основания');
 	lx_declareClarifiedPhrase('радиус', 'основания');
 	lx_declareClarifiedPhrase('площадь', ' боковой поверхности');
-
+	
 	retryWhileError(function() {
 		NAinfo.requireApiVersion(0, 2);
 		let key = '245351';
@@ -23,18 +23,18 @@
 		let nameCone = [
 			['радиус основания', cone.radius],
 			['площадь боковой поверхности', cone.sideSurfaceArea],
-			['объём', cone.volume.tex],
+			['объём', cone.volume],
 			['образующая', cone.generatrix],
 			['площадь основания', cone.baseArea]
 		][randGivenForCone];
 		
 		if(randFind == 0 && randGivenForCone == 3){
 			nameCone[1] = nameCone[1].pow(2).texsqrt(1);
-		}
-		
-		if(randFind == 1) {
+		} else if(randFind == 0) {
 			nameCone[1] = nameCone[1].texpi();
 		}
+		
+		
 		
 		let nameSphere = [
 			['площадь поверхности', sphere.surfaceArea],
@@ -44,11 +44,11 @@
 		
 		if(randFind == 1 &&  randGivenForCone == 3) {
 			nameSphere[1] = nameSphere[1].pow(2).texsqrt(1);
-		}
-		
-		if(randFind == 0) {
+		} else if(randFind == 1) {
 			nameSphere[1] = nameSphere[1].texpi();
 		}
+		
+		
 
 		let paint1 = function(ctx) {
 
