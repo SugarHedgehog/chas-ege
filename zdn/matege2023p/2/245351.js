@@ -70,6 +70,7 @@
 				' конуса'
 			][randFind] + '.',
 			answers: [nameSphere[1], nameCone[1]][randFind],
+			preference: [preference1, preference2, preference3],
 		});
 		
 		NAtask.modifiers.multiplyAnswerByPI();
