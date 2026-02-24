@@ -480,7 +480,7 @@ function removeGridFields() {
 
 function getAnswersSubtableLaTeX(cellsInFirstRow, answersParsedToTeX) {
 	const maxRows = options.splitAnswersNumber || 60;
-	const hline = "\n\\\\\n\\hline\n";
+	const hline = "\n\\hline\n";
 	const colFormat = (new Array(cellsInFirstRow)).fill('|l').join('') + '|';
 
 	let res = '';
@@ -545,6 +545,8 @@ function createLaTeXbunchTasks(variantN) {
 	var bunchText = "";
 	for (var taskId in tasksInLaTeX) {
 		if (generatedTasks[taskId].variantNumber == variantN) {
+			if(generatedTasks[preference]!==undefined)
+				console.log(generatedTasks[preference]);
 			bunchText +=
 				'\n' +
 				'\\begin{taskBN}{' + generatedTasks[taskId].taskCategory + '}' + '\n' +
