@@ -2,6 +2,11 @@
 	retryWhileError(function() {
 		lx_declareClarifiedPhrase('площадь', 'боковой поверхности');
 		NAinfo.requireApiVersion(0, 2);
+		let key = '27068';
+		let preference1 = ['sideSurfaceArea', 'volume'];
+		let preference2 = ['truncatedPrism ', 'originalPrism'];
+		let randQuestion = getSelectedPreferenceFromList(key, preference1);
+		let randPrism = getSelectedPreferenceFromList(key, preference2);
 
 		let prism = new IrregularTriangularPrism({
 			height: sl(10, 20),
@@ -10,15 +15,13 @@
 			sideC: sl(10, 20),
 		});
 
-		let rand1 = sl1();
-		let rand2 = sl1();
 		let question = [
 			['площадь боковой поверхности', 0.5],
 			['объём', 0.25]
-		][rand1];
+		][randQuestion];
 		let ratio = question.pop();
 		question = sklonlxkand(question[0]);
-		let number = [prism.sideSurfaceArea, prism.volume][rand1];
+		let number = [prism.sideSurfaceArea, prism.volume][randQuestion];
 
 		prism.verticesOfFigure.push(coordinatesMiddleOfSegment3D(prism.verticesOfFigure[0], prism.verticesOfFigure[2]),
 			coordinatesMiddleOfSegment3D(prism.verticesOfFigure[1], prism.verticesOfFigure[2]),
@@ -73,10 +76,11 @@
 		NAtask.setTask({
 			text: 'Через среднюю линию основания треугольной призмы проведена плоскость, параллельная боковому ребру. ' +
 				question.ie.toZagl() +
-				' отсечённой'.esli(rand2) + ' призмы рав' + ['ен', 'на'][question.rod] + ' $' + number +
-				'$. Найдите  ' + question.ve + ' ' + ['отсечённой', 'исходной'][rand2] + ' треугольной призмы.',
-			answers: [number * ratio, number / ratio][rand2],
+				' отсечённой'.esli(randPrism) + ' призмы рав' + ['ен', 'на'][question.rod] + ' $' + number +
+				'$. Найдите  ' + question.ve + ' ' + ['отсечённой', 'исходной'][randPrism] + ' треугольной призмы.',
+			answers: [number * ratio, number / ratio][randPrism],
 			analys: '',
+			preference: [preference1, preference2],
 		});
 		NAtask.modifiers.multiplyAnswerBySqrt(13);
 		NAtask.modifiers.allDecimalsToStandard(true);
