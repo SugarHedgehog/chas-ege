@@ -7,9 +7,9 @@
 	retryWhileError(function() {
 		NAinfo.requireApiVersion(0, 2);
 		let key = '245351';
-		let preference1 = ['sphere', 'cone'];
-		let preference2 = ['baseRadius', 'sideSurfaceArea', 'volume', 'generatrix', 'baseArea'];
-		let preference3 = ['surfaceArea', 'volume'];
+		let preference1 = ['questionSphere', 'questionCone'];
+		let preference2 = ['baseRadiusCone', 'sideSurfaceAreaCone', 'volumeCone', 'generatrixCone', 'baseAreaCone'];
+		let preference3 = ['surfaceAreaSphere', 'volumeSphere', 'radiusSphere'];
 		let randFind = getSelectedPreferenceFromList(key, preference1);
 		let randGivenForCone = getSelectedPreferenceFromList(key, preference2);
 		let randGivenForSphere = getSelectedPreferenceFromList(key, preference3);
@@ -30,6 +30,7 @@
 		let nameSphere = [
 			['площадь поверхности', sphere.surfaceArea],
 			['объём', sphere.volume],
+			['радиус', sphere.radius],
 		][randGivenForSphere];
 
 		let paint1 = function(ctx) {
