@@ -1,6 +1,8 @@
 (function() {
 	retryWhileError(function() {
-		let v = sl1();
+		let key = '27183';
+		let preference = ['volumeOfCube', 'volumeOfPrism'];
+		let randCondition = getSelectedPreferenceFromList(key, preference);
 
 		let cube = new Cube(sl(2, 50));
 
@@ -67,19 +69,20 @@
 				'плоскостью, проходящей через середины двух рёбер, ' +
 				'выходящих из одной вершины, и параллельной третьему ребру, ' +
 				'выходящему из этой же вершины, равен $' + prism.volume + '$', 'Объём куба равен $' + cube.volume + '$'
-			][v] + '. Найдите ',
+			][randCondition] + '. Найдите ',
 			questions: [{
 				text: 'объём',
-				answers: [cube.volume, prism.volume][v]
+				answers: [cube.volume, prism.volume][randCondition]
 			}],
 			postquestion: [' куба', ' треугольной призмы, отсекаемой от него плоскостью, проходящей ' +
 				'через середины двух рёбер, выходящих из одной вершины, ' +
 				'и параллельной третьему ребру, выходящему из этой же вершины'
-			][v] + '.',
+			][randCondition] + '.',
 			analys: 'Сторона куба: $' + cube.baseSide + '$' + '<br>' +
 				'Объём куба: $' + cube.volume + '$' + '<br>' +
 				'Объём призмы: $' + prism.volume + '$' + '<br>',
-			author: ['Суматохина Александра']
+			author: ['Суматохина Александра'],
+			preference,
 		});
 		NAtask.modifiers.allDecimalsToStandard(true);
 
