@@ -1,8 +1,10 @@
 (function() {
 	retryWhileError(function() {
-
-		let v1 = sl1();
-		let v2 = sl1();
+		
+		let key = '245340';
+		let preference = ['volumeOfPyramid', 'volumeOfPrism'];
+		let randQuestion = getSelectedPreferenceFromList(key, preference);
+		let randReverse = sl1();
 
 		let prism = new RegularPrism({
 			height: sl(10, 30),
@@ -22,19 +24,19 @@
 			[1],
 			[strok, strok],
 			[
-				[strok, 0][v1],
-				[strok, 0][v1], strok
+				[strok, 0][randReverse],
+				[strok, 0][randReverse], strok
 			],
-			[1, 0, [strok, 0][1 - v1], 1],
-			[0, 1, [strok, 0][1 - v1], 1, 1]
+			[1, 0, [strok, 0][1 - randReverse], 1],
+			[0, 1, [strok, 0][1 - randReverse], 1, 1]
 		];
 
 		let vert = [
 			['A', 'B', 'C'],
 			['A_1', 'B_1', 'C_1']
 		];
-		vert = (v1) ? vert.reverse() : vert;
-		vert = vert[0].concat(['C_1', 'C'][v1]);
+		vert = (randReverse) ? vert.reverse() : vert;
+		vert = vert[0].concat(['C_1', 'C'][randReverse]);
 
 		let camera = {
 			x: 0,
@@ -58,7 +60,7 @@
 		});
 
 		point2DPar = prism.verticesOfFigure.map((coord3D) => project3DTo2D(coord3D, camera));
-		if (v1)
+		if (randReverse)
 			genAssert((point2DPar[3].y - point2DPar[2].y).abs() > 20, 'Сечение не видно');
 
 		let paint1 = function(ctx) {
@@ -78,18 +80,19 @@
 		NAtask.setTask({
 			text: ['Найдите ', 'Дана пирамида $' + vert.shuffleJoin('') + '$, площадь основания которой равна $' +
 				pyr.baseArea + '$, а высота, проведённая к этому основанию, равна $' + pyr.height + '$. Найдите '
-			][v2],
+			][randQuestion],
 			questions: [{
 				text: 'объём',
-				answers: [pyr.volume, pyr.volume * 3][v2],
+				answers: [pyr.volume, pyr.volume * 3][randQuestion],
 			}, ],
 			postquestion: [' многогранника, ' +
 				'вершинами которого являются вершины $' + vert.shuffleJoin(', ') +
 				'$ правильной треугольной призмы ' +
 				'$ABCA_1B_1C_1$, площадь основания которой равна $' + pyr.baseArea + '$, а боковое ребро равно $' + prism.height +
 				'$', ' прямой призмы с вершинами $' + ['A', 'B', 'C', 'A_1', 'B_1', 'C_1'].shuffleJoin(', ') + '$'
-			][v2] + '.',
+			][randQuestion] + '.',
 			analys: '',
+			preference,
 			author: ['Суматохина Александра']
 		});
 		NAtask.modifiers.allDecimalsToStandard(true);
