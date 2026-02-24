@@ -2,7 +2,8 @@
 	lx_declareClarifiedPhrase('площадь', 'боковой поверхности');
 	lx_declareClarifiedPhrase('диаметр', 'основания');
 	lx_declareClarifiedPhrase('радиус', 'основания');
-	lx_declareClarifiedPhrase('полная', ' площадь поверхности');
+	lx_declareClarifiedPhrase('полная', 'площадь поверхности');
+	lx_declareClarifiedPhrase('площадь', 'поверхности');
 
 	retryWhileError(function() {
 		NAinfo.requireApiVersion(0, 2);
@@ -72,7 +73,7 @@
 			text: [
 				'Шар вписан в цилиндр. ' + nameSphere[0].toZagl() + ' шара ' + ['равен', 'равна'][sklonlxkand(
 					nameSphere[0]).rod] + ' $' + nameSphere[1].texpi() +
-				'$. Найдите ' + sklonlxkand(nameCylinder[0]).ve + ' цилиндра.',
+				'$. Найдите ' + sklonlxkand(nameCylinder[0]).ve.replace('полнаю', 'полную') + ' цилиндра.',
 				' Цилиндр, ' + nameCylinder[0] + ' которого ' + ['равен', 'равна'][sklonlxkand(nameCylinder[0]).rod] +
 				' $' + nameCylinder[1].texpi() + '$, описан около шара. Найдите ' + sklonlxkand(nameSphere[0]).ve + ' шара.'
 			][randQuestion],
