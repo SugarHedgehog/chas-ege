@@ -1,12 +1,14 @@
 (function() {
 	retryWhileError(function() {
 
-		let v1 = sl1();
-		let v2 = sl1();
+		let key = '245341';
+		let preference = ['volumeOfPyramid', 'volumeOfPrism'];
+		let randQuestion = getSelectedPreferenceFromList(key, preference);
+		let randReverse = sl1();
 
 		let prism = new RegularPrism({
 			height: sl(10, 100),
-			baseSide: sl(10, 100)*(3).sqrt(),
+			baseSide: sl(10, 100)*[(3).sqrt(), 1][randQuestion],
 			numberSide: 3
 		});
 
@@ -30,7 +32,7 @@
 			['A', 'B', 'C',],
 			['A_1', 'B_1', 'C_1']
 		];
-		vert = (v1) ? vert.reverse() : vert;
+		vert = (randReverse) ? vert.reverse() : vert;
 		vert = vert[0].concat(vert[1].iz(2));
 
 		let camera = {
@@ -73,18 +75,19 @@
 		NAtask.setTask({
 			text: ['Найдите ', 'Дана пирамида $' + vert.shuffleJoin('') + '$, площадь основания которой равна $' +
 				pyr.baseArea + '$, а высота, проведённая к этому основанию, равна $' + (pyr.height.pow(2)).texsqrt(1) + '$. Найдите '
-			][v2],
+			][randQuestion],
 			questions: [{
 				text: 'объём',
-				answers: [pyr.volume, prism.volume][v2],
+				answers: [pyr.volume, prism.volume][randQuestion],
 			}, ],
 			postquestion: [' многогранника, ' +
 				'вершинами которого являются вершины $' + vert.shuffleJoin(', ') +
 				'$ правильной треугольной призмы ' +
 				'$ABCA_1B_1C_1$, площадь основания которой равна $' + (prism.baseArea.pow(2)).texsqrt(1) + '$, а боковое ребро равно $' + prism.height +
 				'$', ' прямой призмы с вершинами $' + ['A', 'B', 'C', 'A_1', 'B_1', 'C_1'].shuffleJoin(', ') + '$'
-			][v2] + '.',
-			author: ['Суматохина Александра']
+			][randQuestion] + '.',
+			author: ['Суматохина Александра'],
+			preference,
 		});
 		NAtask.modifiers.multiplyAnswerBySqrt(12);
 		NAtask.modifiers.allDecimalsToStandard(true);
