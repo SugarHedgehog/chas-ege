@@ -4,7 +4,7 @@
 	lx_declareClarifiedPhrase('радиус', 'основания');
 	lx_declareClarifiedPhrase('площадь', ' боковой поверхности');
 	
-	retryWhileError(function() {
+		retryWhileError(function() {
 		NAinfo.requireApiVersion(0, 2);
 		let key = '245351';
 		let preference1 = ['questionSphere', 'questionCone'];
@@ -13,8 +13,8 @@
 		let randFind = getSelectedPreferenceFromList(key, preference1);
 		let randGivenForCone = getSelectedPreferenceFromList(key, preference2);
 		let randGivenForSphere = getSelectedPreferenceFromList(key, preference3);
-
-		let sphere = new Sphere(sl(1, 100) * [1, (2).sqrt()][randFind]);
+		
+		let sphere = new Sphere(sl(1, 100) * [1, (2).sqrt()][Number(randFind && !(randGivenForCone == 2 && randGivenForSphere == 1))]);
 		let cone = new Cone({
 			radius: sphere.radius,
 			height: sphere.radius
