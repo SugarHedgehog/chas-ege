@@ -3,17 +3,21 @@
 		NAinfo.requireApiVersion(0, 2);
 		let product = sklonlxkand(['пончик', 'напиток', 'сладость', 'батончик', 'линза', 'шоколадка', 'батончик'].iz());
 		let machine = sklonlxkand(['автомат', 'киоск'].iz());
-		let firstProbability = sl(0.05, 0.49, 0.01);
+		let firstProbability = sl(5, 49);
 		let secondProbability;
 		let probability;
 		if (sl1()) {
 			probability = 'такая же';
 			secondProbability = firstProbability;
 		} else {
-			secondProbability = slKrome(firstProbability, 0.05, 0.5, 0.01);
+			secondProbability = slKrome(firstProbability, 5, 50);
 			probability = '$' + secondProbability.ts() + '$';
 		}
-		let thirdProbability = sl(0.05, [firstProbability, secondProbability].minE() - 0.01, 0.01);
+		let thirdProbability = sl(5, [firstProbability, secondProbability].minE() - 1);
+		firstProbability /= 100;
+		secondProbability /= 100;
+		thirdProbability /= 100;
+		
 		NAtask.setTask({
 			text: 'В торговом центре два одинаковых ' + machine.re + ' с ' + product.tm + '. ' +
 				'Вероятность того, что к концу дня в первом ' + machine.pe + ' закончатся ' + product.im + ', ' +
