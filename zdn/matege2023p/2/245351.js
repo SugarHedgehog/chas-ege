@@ -23,15 +23,32 @@
 		let nameCone = [
 			['радиус основания', cone.radius],
 			['площадь боковой поверхности', cone.sideSurfaceArea],
-			['объём', cone.volume],
+			['объём', cone.volume.tex],
 			['образующая', cone.generatrix],
 			['площадь основания', cone.baseArea]
 		][randGivenForCone];
+		
+		if(randFind == 0 && randGivenForCone == 3){
+			nameCone[1] = nameCone[1].pow(2).texsqrt(1);
+		}
+		
+		if(randFind == 1) {
+			nameCone[1] = nameCone[1].texpi();
+		}
+		
 		let nameSphere = [
 			['площадь поверхности', sphere.surfaceArea],
 			['объём', sphere.volume],
 			['радиус', sphere.radius],
 		][randGivenForSphere];
+		
+		if(randFind == 1 &&  randGivenForCone == 3) {
+			nameSphere[1] = nameSphere[1].pow(2).texsqrt(1);
+		}
+		
+		if(randFind == 0) {
+			nameSphere[1] = nameSphere[1].texpi();
+		}
 
 		let paint1 = function(ctx) {
 
@@ -64,9 +81,9 @@
 				' Радиус основания конуса равен радиусу шара'
 			].iz() + '. ' + [
 				nameCone[0].toZagl() + ' конуса ' + ['равен', 'равна'][sklonlxkand(nameCone[0]).rod] + ' $' +
-				nameCone[1].texpi() + '$. Найдите ' + sklonlxkand(nameSphere[0]).ve + ' шара',
+				nameCone[1] + '$. Найдите ' + sklonlxkand(nameSphere[0]).ve + ' шара',
 				nameSphere[0].toZagl() + ' шара ' + ['равен', 'равна'][sklonlxkand(nameSphere[0]).rod] + ' $' +
-				nameSphere[1].texpi() + '$. Найдите ' + sklonlxkand(nameCone[0]).ve.replace('образующаю', 'образующую') +
+				nameSphere[1] + '$. Найдите ' + sklonlxkand(nameCone[0]).ve.replace('образующаю', 'образующую') +
 				' конуса'
 			][randFind] + '.',
 			answers: [nameSphere[1], nameCone[1]][randFind],
