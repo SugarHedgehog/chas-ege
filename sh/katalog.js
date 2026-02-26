@@ -58,10 +58,14 @@ function generateHtmlForTask(category, taskNumber, actionsArray) {
             htmlContent += currentTaskPath.vTag('h2');
 
                 if (variants.length > 1 || hasExplicitPreferences) {
-                    const currentVariation = Array.isArray(variants[i])
-                        ? variants[i].join(', ')
-                        : variants[i];
-                    htmlContent += `<div class="variant-info">Вариация: ${currentVariation}</div>`;
+                    const currentVariation = [taskNumber];
+                    if(Array.isArray(variants[i])){
+                        currentVariation.push(variants[i].join('_'));
+                        currentVariation.push(variants[i].join(' '));
+                    } else {
+                        currentVariation.push(variants[i], variants[i]);
+                    }
+                    htmlContent += `<div class="variant-info">Вариация: '${currentVariation.join(' ')}'</div>`;
                 }
 
             vopr.template = currentTaskPath.replace(/^(\.\.\/)+/, '');
