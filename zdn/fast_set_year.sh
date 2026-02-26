@@ -9,31 +9,34 @@ script_dir="$(cd "$(dirname "$0")" && pwd)"
 
 # Заполните список задач перед запуском.
 array=(
-"27068 sideSurfaceArea_truncatedPrism sideSurfaceArea truncatedPrism"
-"27068 sideSurfaceArea_originalPrism sideSurfaceArea originalPrism"
-"27068 volume_truncatedPrism volume truncatedPrism"
-"27068 volume_originalPrism volume originalPrism"
-"27094 heightRadiusOfBaseAndVolume heightRadiusOfBaseAndVolume"
-'318145 missingLiquid missingLiquid'
-'318145 liquidInFullCone liquidInFullCone'
-"27118 cylinderIsWider cylinderIsWider"
-"27118 cylinderIsHigher cylinderIsHigher"
-"245335 horizontalCrossSectionVolume horizontalCrossSectionVolume"
-"245335 verticalCrossSectionVolume verticalCrossSectionVolume"
-"27183 volumeOfCube volumeOfCube"
-"27183 volumeOfPrism volumeOfPrism"
-245338
-27074
-"245340 volumeOfPyramid volumeOfPyramid"
-"245341 volumeOfPyramid volumeOfPyramid"
+'5077 questionCylinder_sideSurfaceAreaCylinder_surfaceAreaSphere questionCylinder sideSurfaceAreaCylinder surfaceAreaSphere'    
+"5077 questionCylinder_volumeCylinder_volumeSphere questionCylinder volumeCylinder volumeSphere"
+"5077 questionCylinder_surfaceAreaCylinder_surfaceAreaSphere questionCylinder surfaceAreaCylinder surfaceAreaSphere"
+'5077 questionSphere_sideSurfaceAreaCylinder_surfaceAreaSphere questionSphere sideSurfaceAreaCylinder surfaceAreaSphere'   
+"5077 questionSphere_volumeCylinder_volumeSphere questionSphere volumeCylinder volumeSphere"
+"5077 questionSphere_surfaceAreaCylinder_surfaceAreaSphere questionSphere surfaceAreaCylinder surfaceAreaSphere"
 "27051 volume_findValueInCone volume findValueInCone"
 "27051 volume_findValueInCylinder volume findValueInCylinder"
 "27051 sideSurfaceArea_findValueInCone sideSurfaceArea findValueInCone"
 "27051 sideSurfaceArea_findValueInCylinder sideSurfaceArea findValueInCylinder"
-"5077 questionCylinder_surfaceAreaCylinder_surfaceAreaSphere questionCylinder surfaceAreaCylinder surfaceAreaSphere"
-"5077 questionSphere_surfaceAreaCylinder_surfaceAreaSphere questionSphere surfaceAreaCylinder surfaceAreaSphere"
-"5077 questionCylinder_volumeCylinder_volumeSphere questionCylinder volumeCylinder volumeSphere"
-"5077 questionSphere_volumeCylinder_volumeSphere questionSphere volumeCylinder volumeSphere"
+"27068 sideSurfaceArea_truncatedPrism sideSurfaceArea truncatedPrism"
+"27068 sideSurfaceArea_originalPrism sideSurfaceArea originalPrism"
+"27068 volume_truncatedPrism volume truncatedPrism"
+"27068 volume_originalPrism volume originalPrism"
+27074
+"27094 heightRadiusOfBaseAndVolume heightRadiusOfBaseAndVolume"
+"27094 radiusOfBaseOrLengthOfCircumferenceOfBaseVolumeAndHeight radiusOfBaseOrLengthOfCircumferenceOfBaseVolumeAndHeight"
+"27118 cylinderIsWider cylinderIsWider"
+"27118 cylinderIsHigher cylinderIsHigher"
+"27183 volumeOfCube volumeOfCube"
+"27183 volumeOfPrism volumeOfPrism"
+"245335 horizontalCrossSectionVolume horizontalCrossSectionVolume"
+"245335 verticalCrossSectionVolume verticalCrossSectionVolume"
+245338
+"245340 volumeOfPyramid volumeOfPyramid"
+"245341 volumeOfPyramid volumeOfPyramid"
+'318145 missingLiquid missingLiquid'
+'318145 liquidInFullCone liquidInFullCone'
 "245351 questionSphere_generatrixCone_radiusSphere questionSphere generatrixCone radiusSphere"
 "245351 questionCone_generatrixCone_radiusSphere questionCone generatrixCone radiusSphere"
 "245351 questionSphere_volumeCone_volumeSphere questionSphere volumeCone volumeSphere"
