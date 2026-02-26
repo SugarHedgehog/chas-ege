@@ -9,41 +9,37 @@ script_dir="$(cd "$(dirname "$0")" && pwd)"
 
 # Заполните список задач перед запуском.
 array=(
-26740
-'77394 same_base same_base'
-'77394 diff_base diff_base'
-'77394 pow_base pow_base'
-'5 same_base same_base'
-'5 diff_base diff_base'
-6
-8
-'2674101 positive_degree positive_degree'
-'2674101 negative_degree negative_degree'
-4
-14
-26745
-316351
-26857
-26856
-2684901
-'26848 integer integer' 
-'26848 not_integer not_integer'
-26859
-26759
-'26777 sin_cos sin cos'
-'26777 cos_sin cos sin'
-'26777 tg_sin tg sin'
-'26777 tg_cos tg cos'
-316350
-508966
-245169
-282525
-245170
-'245171 sin sin'
-'245171 cos cos'
-'11 integer_double_angle integer double_angle'
-97869
-26755
+"27068 sideSurfaceArea_truncatedPrism sideSurfaceArea truncatedPrism"
+"27068 sideSurfaceArea_originalPrism sideSurfaceArea originalPrism"
+"27068 volume_truncatedPrism volume truncatedPrism"
+"27068 volume_originalPrism volume originalPrism"
+"27094 heightRadiusOfBaseAndVolume heightRadiusOfBaseAndVolume"
+'318145 missingLiquid missingLiquid'
+'318145 liquidInFullCone liquidInFullCone'
+"27118 cylinderIsWider cylinderIsWider"
+"27118 cylinderIsHigher cylinderIsHigher"
+"245335 horizontalCrossSectionVolume horizontalCrossSectionVolume"
+"245335 verticalCrossSectionVolume verticalCrossSectionVolume"
+"27183 volumeOfCube volumeOfCube"
+"27183 volumeOfPrism volumeOfPrism"
+245338
+27074
+"245340 volumeOfPyramid volumeOfPyramid"
+"245341 volumeOfPyramid volumeOfPyramid"
+"27051 volume_findValueInCone volume findValueInCone"
+"27051 volume_findValueInCylinder volume findValueInCylinder"
+"27051 sideSurfaceArea_findValueInCone sideSurfaceArea findValueInCone"
+"27051 sideSurfaceArea_findValueInCylinder sideSurfaceArea findValueInCylinder"
+"5077 questionCylinder_surfaceAreaCylinder_surfaceAreaSphere questionCylinder surfaceAreaCylinder surfaceAreaSphere"
+"5077 questionSphere_surfaceAreaCylinder_surfaceAreaSphere questionSphere surfaceAreaCylinder surfaceAreaSphere"
+"5077 questionCylinder_volumeCylinder_volumeSphere questionCylinder volumeCylinder volumeSphere"
+"5077 questionSphere_volumeCylinder_volumeSphere questionSphere volumeCylinder volumeSphere"
+"245351 questionSphere_generatrixCone_radiusSphere questionSphere generatrixCone radiusSphere"
+"245351 questionCone_generatrixCone_radiusSphere questionCone generatrixCone radiusSphere"
+"245351 questionSphere_volumeCone_volumeSphere questionSphere volumeCone volumeSphere"
+"245351 questionCone_volumeCone_volumeSphere questionCone volumeCone volumeSphere"
+27041001
+"27059 givenCrossSectionalArea_findSurfaceArea givenCrossSectionalArea findSurfaceArea"
 )
 
 if [[ $# -lt 1 ]]; then
