@@ -545,8 +545,6 @@ function createLaTeXbunchTasks(variantN) {
 	var bunchText = "";
 	for (var taskId in tasksInLaTeX) {
 		if (generatedTasks[taskId].variantNumber == variantN) {
-			if(generatedTasks[preference]!==undefined)
-				console.log(generatedTasks[preference]);
 			bunchText +=
 				'\n' +
 				'\\begin{taskBN}{' + generatedTasks[taskId].taskCategory + '}' + '\n' +
