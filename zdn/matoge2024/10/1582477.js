@@ -101,10 +101,10 @@
                     answers: probabilityA.sum(),
                 }, {
                     text: '$\\overline{A} \\cup B$',
-                    answers: probabilityB.sum() + probabilityAAndB.sum(),
+                    answers: probabilityB.sum() + probabilityAAndB.sum() + probabilityNotAB.sum(),
                 }, {
                     text: '$A \\cup \\overline{B}$',
-                    answers: probabilityA.sum() + probabilityAAndB.sum(),
+                    answers: probabilityA.sum() + probabilityAAndB.sum() + probabilityNotAB.sum(),
                 }, {
                     text: '$\\overline{A \\cap B}$',
                     answers: probabilityA.sum() + probabilityB.sum() + probabilityNotAB.sum(),
