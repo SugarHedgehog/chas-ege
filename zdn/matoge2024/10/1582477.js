@@ -95,10 +95,10 @@
                     answers: probabilityA.sum() + probabilityB.sum() + probabilityAAndB.sum(),
                 }, {
                     text: '$\\overline{A} \\cap B$',
-                    answers: probabilityB.sum() + probabilityAAndB.sum() + probabilityNotAB.sum(),
+                    answers: probabilityB.sum(),
                 }, {
                     text: '$A \\cap \\overline{B}$',
-                    answers: probabilityA.sum() + probabilityAAndB.sum() + probabilityNotAB.sum(),
+                    answers: probabilityA.sum(),
                 }, {
                     text: '$\\overline{A} \\cup B$',
                     answers: probabilityB.sum() + probabilityAAndB.sum(),
