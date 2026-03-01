@@ -83,10 +83,10 @@
             questions: [
                 {
                     text: '$A$',
-                    answers: probabilityA.sum(),
+                    answers: probabilityA.sum() + probabilityAAndB.sum(),
                 }, {
                     text: '$B$',
-                    answers: probabilityB.sum(),
+                    answers: probabilityB.sum() + probabilityAAndB.sum(),
                 }, {
                     text: '$A \\cap B$',
                     answers: probabilityAAndB.sum(),
@@ -95,10 +95,10 @@
                     answers: probabilityA.sum() + probabilityB.sum() + probabilityAAndB.sum(),
                 }, {
                     text: '$\\overline{A} \\cap B$',
-                    answers: probabilityB.sum(),
+                    answers: probabilityB.sum() + probabilityAAndB.sum() + probabilityNotAB.sum(),
                 }, {
                     text: '$A \\cap \\overline{B}$',
-                    answers: probabilityA.sum(),
+                    answers: probabilityA.sum() + probabilityAAndB.sum() + probabilityNotAB.sum(),
                 }, {
                     text: '$\\overline{A} \\cup B$',
                     answers: probabilityB.sum() + probabilityAAndB.sum(),
