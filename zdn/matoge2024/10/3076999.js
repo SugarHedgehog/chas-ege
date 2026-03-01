@@ -68,10 +68,10 @@
             questions: [
                 {
                     text: '$A$',
-                    answers: probabilityA,
+                    answers: probabilityA + probabilityAAndB,
                 }, {
                     text: '$B$',
-                    answers: probabilityB,
+                    answers: probabilityB + probabilityAAndB,
                 }, {
                     text: '$A \\cap B$',
                     answers: probabilityAAndB,
@@ -86,10 +86,10 @@
                     answers: probabilityA,
                 }, {
                     text: '$\\overline{A} \\cup B$',
-                    answers: probabilityB + probabilityAAndB,
+                    answers: probabilityB + probabilityAAndB + probabilityNotAB,
                 }, {
                     text: '$A \\cup \\overline{B}$',
-                    answers: probabilityA + probabilityAAndB,
+                    answers: probabilityA + probabilityAAndB + probabilityNotAB,
                 }, {
                     text: '$\\overline{A \\cap B}$',
                     answers: probabilityA + probabilityB + probabilityNotAB,
