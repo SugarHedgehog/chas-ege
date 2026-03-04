@@ -14,22 +14,22 @@
 		let randFind = getSelectedPreferenceFromList(key, preference1);
 		let randB = getSelectedPreferenceFromList(key, preference2);
 
-		let a = slKrome([1], 0.25, 20, 0.25).pm();
+		let a = [[0.25, 0.1, 0.2, 0.125].iz(), sl(2, 5)].iz().pm();
 		let b = [sluchch(1, 10).pm(), 0][randB];
-		let chisl = sluchch(0, 5).pm();
+		let chisl = sluchch(0, 10).pm();
 		genAssert(f(chisl).abs() >= 8);
-		genAssertAlmostInteger((chisl));
+		genAssertAlmostInteger(chisl);
 		genAssertZ1000(f(chisl));
-		genAssert(f(chisl).abs() < 10000);
+		genAssert(f(chisl).abs() < 1000);
 
 		//слишком большое
 		let find, answ;
 		if (!randFind) {
-			find = `$f(${chisl.ts()})$`;
+			find = `$f(${chisl})$`;
 			answ = f(chisl);
 		} else {
 			answ = chisl;
-			find = `значение $x$, при котором $f(x)=${f(chisl).ts()}$`;
+			find = `значение $x$, при котором $f(x)=${f(chisl)}$`;
 		}
 
 		let points = intPoints(f, {
@@ -59,7 +59,7 @@
 			graph9AdrawFunction(ct, f, {
 				minX: -8.5,
 				maxX: 8.5,
-				minY: -8.8,
+				minY: -9.5,
 				maxY: 8.5,
 				step: 0.05
 			});
@@ -69,7 +69,7 @@
 		NAtask.setTask({
 			text: `На рисунке изображён график функции $f(x)=${` - `.esli(a < 0)}a^x${`+b`.esli(!randB)}$. Найдите ${find}. `,
 			answers: answ,
-			analys: `$f(x)=` + (a + `^{x}+` + (b)).replace('+0', '').plusminus() + `$`,
+			analys: (`$f(x)=${a}^{x}+${b}$`).replace('+0', '').plusminus(),
 			preference: [preference1, preference2],
 		});
 		NAtask.modifiers.allDecimalsToStandard(true);
