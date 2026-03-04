@@ -1,34 +1,11 @@
-(function() {
-	retryWhileError(function() {
+(function () {
+	retryWhileError(function () {
 		NAinfo.requireApiVersion(0, 2);
-		let letters = latbukv.slice(0, 3);
+		let letters = om.latbukv.slice(0, 3);
 
 		let key = "356109";
-		let variant = getListedPreference(key, [{
-			preference: 'side_from_sinA',
-			preferenceValue: 0,
-		}, {
-			preference: 'side_from_cosA',
-			preferenceValue: 1,
-		}, {
-			preference: 'side_from_tgA',
-			preferenceValue: 2,
-		}, {
-			preference: 'side_from_ctgA',
-			preferenceValue: 3,
-		}, {
-			preference: 'side_from_sinC',
-			preferenceValue: 4,
-		}, {
-			preference: 'side_from_cosC',
-			preferenceValue: 5,
-		}, {
-			preference: 'side_from_tgC',
-			preferenceValue: 6,
-		}, {
-			preference: 'side_from_ctgC',
-			preferenceValue: 7,
-		}], sl(0, 7));
+		let preference = ['side_from_sinA', 'side_from_cosA', 'side_from_tgA', 'side_from_ctgA', 'side_from_sinC', 'side_from_cosC', 'side_from_tgC', 'side_from_ctgC'];
+		let variant = getSelectedPreferenceFromList(key, preference);
 
 		let triangle = new Triangle({
 			lengths: {
@@ -39,36 +16,32 @@
 				angle: Math.PI / 2,
 			},
 		});
-		genAssert(![triangle.lengthAB, triangle.lengthBC, triangle.lengthCA].hasDubl(),
-			'Все стороны треугольника должны быть разными');
+		genAssert(!triangle.isEquilateral(), 'Все стороны треугольника должны быть разными');
 
 		let funcDano = ['sin', 'cos', 'tg', 'ctg'][variant % 4] + ' ' + ['A', 'C'][variant < 4 ? 0 : 1];
 		let sides;
 
-		switch (true) {
-		case [0, 5].includes(variant):
-			sides = ['CA', 'BC'];
-			break;
-		case [1, 4].includes(variant):
-			sides = ['CA', 'AB'];
-			break;
-		case [2, 6].includes(variant):
-			sides = ['AB', 'BC'];
-			break;
-		case [3, 7].includes(variant):
-			sides = ['BC', 'AB'];
-			break;
+		switch (variant) {
+			case 0:
+			case 5:
+				sides = ['CA', 'BC'];
+				break;
+			case 1:
+			case 4:
+				sides = ['CA', 'AB'];
+				break;
+			case 2:
+			case 6:
+				sides = ['AB', 'BC'];
+				break;
+			case 3:
+			case 7:
+				sides = ['BC', 'AB'];
+				break;
 		}
 
 		sides = sides.map(side => {
-			switch (side) {
-			case 'AB':
-				return [triangle.lengthAB, side];
-			case 'BC':
-				return [triangle.lengthBC, side];
-			case 'CA':
-				return [triangle.lengthCA, side];
-			}
+			return [ triangle['length'+side], side];
 		});
 
 		let funcValue = [triangle.sinA, triangle.cosA, triangle.tgA, triangle.ctgA, triangle.sinC, triangle.cosC, triangle.tgC, triangle.ctgC][variant];
@@ -76,7 +49,7 @@
 
 		let points = autoScale(triangle.vertices);
 
-		let paint1 = function(ctx) {
+		let paint1 = function (ctx) {
 			let h = 400;
 			let w = 400;
 
@@ -100,9 +73,11 @@
 			text: `В треугольнике $ABC$ угол $B$ равен $90^{\\circ}$, $${sides[0][1]}=${sides[0][0]}$, $\\${funcDano}=${funcValue.texrndfrac(1)}$. Найдите $${sides[1][1]}$.`,
 			answers: sides[1][0],
 			authors: ['Александра Суматохина'],
+			preference: preference,
 		});
 		NAtask.modifiers.variativeABC(letters);
 
+		NAtask.modifiers.allDecimalsToStandard(/*true*/);
 		NAtask.modifiers.addCanvasIllustration({
 			width: 400,
 			height: 400,
