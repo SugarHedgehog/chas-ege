@@ -2,6 +2,10 @@
 
 	retryWhileError(function() {
 		NAinfo.requireApiVersion(0, 2);
+		
+		let key = '27118';
+		let preference = ['cylinderIsWider', 'cylinderIsHigher'];
+		let randCondition = getSelectedPreferenceFromList(key, preference);
 
 		let ratioHeight = sl(2, 10, 0.5);
 		let ratioRadius = slKrome(ratioHeight, 2, 10, 0.5);
@@ -13,8 +17,7 @@
 		let firstSecond = ['второй', 'первой'];
 		let answ = [ratioHeight / ratioRadius.pow(2), ratioRadius.pow(2) / ratioHeight];
 
-		let variant = sl1();
-		if (variant) {
+		if (randCondition) {
 			widerHigher = widerHigher.reverse();
 			answ = answ.reverse();
 		}
@@ -28,18 +31,20 @@
 		genAssertZ1000(answ, 'Ответ слишком нецелый');
 
 		let paint1 = function(ctx) {
-			ctx.translate(10,40);
+			ctx.translate(10, 40);
 			ctx.lineWidth = 2;
 			let heightConst = 180;
-			variant = 1 - variant;
+			ctx.translate(0, 50);
+			randCondition = 1 - randCondition;
+			ctx.strokeStyle = om.secondaryBrandColors.iz();
+
+			let height = [heightConst, heightConst / 2][randCondition];
 			
-			let height = [heightConst, heightConst / 2][variant];
-			
-			let a = [60, 80][variant];
+			let a = [60, 80][randCondition];
 			let b = 20;
 
 			//кружка первая
-			ctx.translate(0, [0,heightConst/2][variant]);
+			ctx.translate(0, [0, heightConst / 2][randCondition]);
 			//высота
 			ctx.drawLine(100 - a, height, 100 - a, 10);
 			ctx.drawLine(100 + a, height, 100 + a, 10);
@@ -70,11 +75,11 @@
 			ctx.stroke();
 			ctx.closePath();
 
-			ctx.translate(250, [heightConst/2,-heightConst/2][variant]);
+			ctx.translate(250, [heightConst / 2, -heightConst / 2][randCondition]);
 			ctx.setLineDash([0, 0]);
 
-			a = [70, 100][1 - variant];
-			height = [heightConst, heightConst / 2][1 - variant];
+			a = [70, 100][1 - randCondition];
+			height = [heightConst, heightConst / 2][1 - randCondition];
 
 			//кружка вторая
 			//высота
@@ -93,7 +98,7 @@
 			ctx.ellipse(100, height, b, a, Math.PI / 2, 1.5 * Math.PI, Math.PI / 2);
 			ctx.stroke();
 			ctx.closePath();
-			
+
 			ctx.beginPath();
 			ctx.setLineDash([5, 5]);
 			ctx.ellipse(100, height, b, a, Math.PI / 2, Math.PI / 2, 1.5 * Math.PI);
@@ -116,11 +121,12 @@
 				' ' + widerHigher[1][1] + ' первой. Найдите отношение объёма ' +
 				'' + firstSecond[0] + ' кружки к объёму ' + firstSecond[1] + '.',
 			answers: answ,
+			preference,
 			authors: ['Суматохина Александра'],
 		});
 		NAtask.modifiers.addCanvasIllustration({
 			width: 500,
-			height: 250,
+			height: 400,
 			paint: paint1,
 		});
 	}, 1000);

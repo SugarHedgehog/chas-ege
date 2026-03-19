@@ -1,4 +1,4 @@
-retryWhileUndefined(function() {
+retryWhileUndefined(function () {
 	NAinfo.requireApiVersion(0, 2);
 
 	function f(x) {
@@ -8,10 +8,10 @@ retryWhileUndefined(function() {
 	let a = sluchch(1, 8, 0.5).pm();
 	let k = sl(1, 10).pm();
 	let points = intPoints(f, {
-		minX: -5,
-		maxX: 6,
-		minY: -5.5,
-		maxY: 5.5
+		minX: -8,
+		maxX: 8,
+		minY: -9,
+		maxY: 7,
 	});
 	if (points.length < 2)
 		return;
@@ -34,29 +34,29 @@ retryWhileUndefined(function() {
 			else
 				variant = 'наибольшее';
 		else
-		if (chisl < 0 && chisl + 2 * d > 0)
-			variant = ['отрицательное', 'наименьшее'].iz();
-		else
-			variant = 'наименьшее';
+			if (chisl < 0 && chisl + 2 * d > 0)
+				variant = ['отрицательное', 'наименьшее'].iz();
+			else
+				variant = 'наименьшее';
 		find = variant + ' значение $x$, при котором $f(x)=' + f(chisl).ts() + '$';
 		if (!(f(chisl) * 1000).isZ())
 			return;
 	}
-	let paint1 = function(ct) {
-		let h = 300;
-		let w = 300;
+	let paint1 = function (ct) {
+		let h = 400;
+		let w = 400;
 		//Оси координат
-		graph9AdrawAxes_20_300(ct);
-		ct.translate(-10, -10);
+		ct.drawCoordPlane(w, h, { hor: 1, ver: 1 }, { x1: '1', y1: '1', sh1: 13, }, 20);
+
 		ct.lineWidth = 0.1;
-		ct.translate(h / 2, h / 2);
+
 		ct.scale(20, -20);
 		//График
 		graph9AdrawFunction(ct, f, {
-			minX: -6,
-			maxX: 6,
-			minY: -7,
-			maxY: 5.7,
+			minX: -8.5,
+			maxX: 8.5,
+			minY: -9.5,
+			maxY: 7.7,
 			step: 0.05,
 		});
 
@@ -69,9 +69,9 @@ retryWhileUndefined(function() {
 		answers: answ,
 		analys: ('$f(x)=\\frac{' + k + '}{(x+' + a + ')^2}').plusminus() + '$'
 	});
-	chas2.task.modifiers.addCanvasIllustration({
-		width: 300,
-		height: 300,
+	NAtask.modifiers.addCanvasIllustration({
+		width: 400,
+		height: 400,
 		paint: paint1,
 	});
 	return true;

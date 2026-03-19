@@ -1,44 +1,67 @@
-(function(){
-	'use strict';
+(function() {
+	retryWhileError(function() {
+		NAinfo.requireApiVersion(0, 2);
+		'use strict';
+		let key = '26755';
+		let preference1 = ['integer', 'not_integer'];
+		let preference2 = ['double_angle', 'reduction_formula'];
+		let preference3 = ['with_tg_ctg', 'without_tg_ctg'];
+		let rand1 = getSelectedPreferenceFromList(key, preference1);
+		let rand2 = getSelectedPreferenceFromList(key, preference2);
+		let rand3 = getSelectedPreferenceFromList(key, preference3);
 
-var a=slKrome([90,180,270],1,359);
-var at='{'+a.ts()+'^\\circ}';
-var b=sluchch(0.1,400,0.1).pm();
-var c=2 .pow(sl(-2,4))*5 .pow(sl(-2,4)) .pm();
-var f=[['\\sin','\\cos'],['\\tg','\\cos^2'],['\\sin^2','\\ctg']].iz().shuffle();
+		var a = slKrome([90, 180, 270], 1, 359);
+		var at = '{' + a.ts() + '^\\circ}';
+		var b = [sl(2, 400), sl(2, 400) + sl(1, 9) / 10][rand1].pm();
+		var c = (2).pow(sl(-2, 4)) * (5).pow(sl(-2, 4)).pm();
 
-var vyr1=[f[0]+at,f[1]+at].shuffle().join('\\cdot');
-var vyr2=[
-	'\\sin'+(2*a).ts()+'^\\circ',
-	'\\sin'+(360+2*a).ts()+'^\\circ',
-	'\\cos'+(90-2*a).negativeBrackets()+'^\\circ',
-	'\\cos'+(450-2*a).negativeBrackets()+'^\\circ',
-].iz()
-.replace(')^\\circ','^\\circ)'); // A sever co-style! TODO!
+		if (rand1 == 0) {
+			genAssertAlmostInteger(c);
+		}
 
-		y,
-		answer;
-	if(sl1()){
-		y = '\\frac{' + b.ts() + '~' + vyr1 +
-			'}{' + c.ts() + '~' + vyr2 + '}';
-		answer = b / (2 * c);
-	}else{
-		y = '\\frac{' + b.ts() + '~' + vyr2 + '}{' +
-			c.ts() + '~' + vyr1 + '}';
-		answer = b * 2 / c;
-	}
+		var f = [
+			['\\sin', '\\cos'],
+			['\\tg', '\\cos^2'],
+			['\\sin^2', '\\ctg']
+		];
+		
+		f = (rand3? f[0] : f = f[sl1()+1]).shuffle();
 
-	chas2.task.setTask({
-		text: ('Найдите значение выражения $$'+y+'$$').plusminus().ts(),
-		answers: answer,
-		tags: {
-			'log': 0,
-			'prz': 0,
-			'drs': 0,
-			'tri': 1,
-		},
-	});
+		var vyr1 = [f[0] + at, f[1] + at].shuffle().join('\\cdot');
+		var vyr2 = [
+				'\\sin' + (2 * a).ts() + '^\\circ',
+				'\\sin' + (360 + 2 * a).ts() + '^\\circ',
+				'\\cos' + (90 - 2 * a).negativeBrackets() + '^\\circ',
+				'\\cos' + (450 - 2 * a).negativeBrackets() + '^\\circ',
+			][
+				[0, sl(1, 3)][rand2]
+			]
+			.replace(')^\\circ', '^\\circ)'); // A sever co-style! TODO!
 
+		var y, answer;
+		if (sl1()) {
+			y = '\\frac{' + b.ts() + '~' + vyr1 + '}{' + c.ts().esli(c != 1) + '~' + vyr2 + '}';
+			answer = b / (2 * c);
+		} else {
+			y = '\\frac{' + b.ts() + '~' + vyr2 + '}{' +
+				c.ts().esli(c != 1) + '~' + vyr1 + '}';
+			answer = b * 2 / c;
+		}
+
+		genAssertZ1000(answer);
+
+		chas2.task.setTask({
+			text: ('Найдите значение выражения $$' + y + '$$').plusminus().ts(),
+			answers: answer,
+			tags: {
+				'log': 0,
+				'prz': 0,
+				'drs': 0,
+				'tri': 1,
+			},
+			preference: [preference1, preference2, preference3],
+		});
+	}, 1000);
 })();
 //Обзад 26755
 //Николай Авдеев

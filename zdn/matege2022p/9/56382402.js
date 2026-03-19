@@ -1,4 +1,4 @@
-retryWhileUndefined(function() {
+retryWhileUndefined(function () {
 	NAinfo.requireApiVersion(0, 2);
 
 	function f(x) {
@@ -10,10 +10,10 @@ retryWhileUndefined(function() {
 	if (!(a * 1000).isZ())
 		return;
 	let p = intPoints(f, {
-		minX: -6,
-		maxX: 0,
-		minY: -6,
-		maxY: 5.5,
+		minX: -8,
+		maxX: 8,
+		minY: -9,
+		maxY: 7,
 	});
 	if (p.length < 2)
 		return;
@@ -31,29 +31,29 @@ retryWhileUndefined(function() {
 
 	let question, answ;
 	switch (sl(1, 3)) {
-	case 1:
-		let num1 = sl(-10, 10);
-		question = 'значение дискриминанта уравнения $f(x)=' + num1 + '$';
-		answ = b.pow(2) - 4 * (c - num1) * a;
-		if ((answ * 1000).isZ())
+		case 1:
+			let num1 = sl(-10, 10);
+			question = 'значение дискриминанта уравнения $f(x)=' + num1 + '$';
+			answ = b.pow(2) - 4 * (c - num1) * a;
+			if ((answ * 1000).isZ())
+				break;
+		case 2:
+			let x = sl(6, 10).pm();
+			question = '$f(' + x + ')$';
+			answ = f(x);
 			break;
-	case 2:
-		let x = sl(6, 10).pm();
-		question = '$f(' + x + ')$';
-		answ = f(x);
-		break;
-	case 3:
-		let st = [
-			['произведение', a * b * c],
-			['сумму', a + b + c]
-		].iz();
-		answ = st[1];
-		question = st[0] + ' всех коэффициентов многочлена';
-		break;
+		case 3:
+			let st = [
+				['произведение', a * b * c],
+				['сумму', a + b + c]
+			].iz();
+			answ = st[1];
+			question = st[0] + ' всех коэффициентов многочлена';
+			break;
 	}
-	let paint1 = function(ct) {
-		let h = 300;
-		let w = 300;
+	let paint1 = function (ct) {
+		let h = 400;
+		let w = 400;
 		//Оси координат
 		ct.drawCoordPlane(w, h, {
 			hor: 1,
@@ -67,10 +67,10 @@ retryWhileUndefined(function() {
 		ct.scale(20, -20);
 		ct.lineWidth = 0.1;
 		graph9AdrawFunction(ct, f, {
-			minX: -6.3,
-			maxX: 7,
-			minY: -7,
-			maxY: 6,
+			minX: -8.5,
+			maxX: 8.5,
+			minY: -9.5,
+			maxY: 7.7,
 			step: 0.05,
 		});
 		//точки
@@ -83,9 +83,9 @@ retryWhileUndefined(function() {
 		answers: answ,
 		analys: '$f(x)=' + (a.ts() + 'x^2+' + b.ts() + '|x|+' + c.ts()).plusminus() + '$',
 	});
-	chas2.task.modifiers.addCanvasIllustration({
-		width: 300,
-		height: 300,
+	NAtask.modifiers.addCanvasIllustration({
+		width: 400,
+		height: 400,
 		paint: paint1,
 	});
 	return true;
