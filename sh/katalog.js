@@ -205,7 +205,21 @@ function executeDeferredActions(actionsArray) {
     });
 }
 
-
+/**
+ * Копирует задание в буфер обмена.
+ */
+function copyTask() {
+    console.log(this);
+    let taskData = decodeURIComponent(this.getAttribute('data-task'));
+    console.log(taskData);
+    try {
+        taskData = JSON.parse(taskData);
+    } catch (e) {
+        console.error('Failed to parse task data:', e);
+        return;
+    }
+    console.log(taskData);
+}
 /**
  * Выполняет действия после генерации заданий.
  */
