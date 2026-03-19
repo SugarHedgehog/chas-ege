@@ -36,7 +36,7 @@ window.nabor.upak[7].main = function(){
 }
 
 window.nabor.upak[8].main = function(){
-	window.nomer = 2750502;
+	window.nomer = 27505;
 }
 
 window.nabor.upak[9].main = function(){
@@ -49,6 +49,7 @@ window.nabor.upak[10].main = function(){
 
 window.nabor.upak[11].main = function(){
 	window.nomer = 509192;
+	window.nabor.preferences['509192'] = ['findAbscissa','withoutB2'];
 }
 
 window.nabor.upak[12].main = function(){
