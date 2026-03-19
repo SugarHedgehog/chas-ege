@@ -7,7 +7,7 @@
 		let vertices = om.latbukv.iz(6);
 
 		let paint1 = function(ctx) {
-			ctx.lineWidth = 2;
+			ctx.lineWidth = om.primaryLineWidth;
 			ctx.strokeStyle = om.secondaryBrandColors.iz();
 			let arc = Math.PI / 2.9;
 
@@ -27,8 +27,8 @@
 			ctx.arcBetweenSegments([10, 355, ver2.x, ver2.y, 390 - 8, 355, ver1.x, ver1.y], 30);
 
 			//прямые углы
-			ctx.arcBetweenSegments([10, 355, ver2.x, ver2.y, ver3.x, ver3.y], 20);
-			ctx.arcBetweenSegments([390 - 8, 355, ver1.x, ver1.y, ver3.x, ver3.y], 20);
+			ctx.arcBetweenSegments([10, 355, ver2.x, ver2.y, ver3.x, ver3.y], 20, true);
+			ctx.arcBetweenSegments([390 - 8, 355, ver1.x, ver1.y, ver3.x, ver3.y], 20, true);
 
 			ctx.font = "23px liberation_sans";
 			ctx.fillText(vertices[0], 150, 70 - 10);
