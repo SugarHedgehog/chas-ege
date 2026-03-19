@@ -136,7 +136,8 @@ function konecSozd() {
 		for (var id in generatedTasks) {
 			tasksInLaTeX[id] = roughHTML2LaTeX(replaceCanvasWithImgInTask(
 				getTaskTextContainerByTaskId(id),
-				generatedTasks[id].txt
+				generatedTasks[id].txt,
+				generatedTasks[id].taskCategory
 			));
 		}
 	}
@@ -182,9 +183,9 @@ function appendVariantTasksEnding() {
 
 function appendVariantAnswersCaption() {
 	strOtv +=
-		'<table '+
-			'class="normtabl tablpech pech-answers-table" ' +
-			'id="pech-answers-table-variant-' + variantNumber +
+		'<table ' +
+		'class="normtabl tablpech pech-answers-table" ' +
+		'id="pech-answers-table-variant-' + variantNumber +
 		'">';
 
 	if (!options.vanishVariants) {
@@ -402,7 +403,7 @@ function grabCurrentTask(){
 	generatedTasks[vopr.taskId] = vopr.clone();
 	generatedTasks[vopr.taskId].address =
 		window.nabor.adres + dvig.getzadname(nZ) + '/' + window.nomer;
-
+		generatedTasks[vopr.taskId].taskCategory = vopr.taskCategory;
 }
 
 function renewTask() {
@@ -420,14 +421,14 @@ function renewTask() {
 	dvig.zadan(function () {
 		console.log(wrapper);
 		var taskHtml = createHtmlForTask(nazvzad);
-		wrapper  .replaceWith(taskHtml.txt);
+		wrapper.replaceWith(taskHtml.txt);
 		answerRow.replaceWith(taskHtml.ver);
-		solution .replaceWith(taskHtml.rsh);
+		solution.replaceWith(taskHtml.rsh);
 		window.vopr.dey();
 		convertCanvasToImagesIfNeeded();
 		grabCurrentTask();
 		if (options.prepareLaTeX) {
-			tasksInLaTeX[taskId] = replaceCanvasWithImgInTask(getTaskTextContainerByTaskId(taskId), vopr.txt);
+			tasksInLaTeX[taskId] = replaceCanvasWithImgInTask(getTaskTextContainerByTaskId(taskId), vopr.txt, window.vopr.taskCategory);
 			refreshLaTeXarchive();
 		}
 		MathJax.Hub.Typeset(taskHtml[0]);
@@ -441,16 +442,16 @@ function insertGridFields() {
 	$('#grid-svg-template')[0].style.minHeight = fieldHeight + 'cm';
 
 	var cellSize = $('#grid-cell-size').val();
-	$('#grid-pattern')[0].setAttribute('width' ,cellSize);
-	$('#grid-pattern')[0].setAttribute('height',cellSize);
+	$('#grid-pattern')[0].setAttribute('width', cellSize);
+	$('#grid-pattern')[0].setAttribute('height', cellSize);
 
-	$('#grid-pattern-line-1')[0].setAttribute('x1',cellSize/2);
-	$('#grid-pattern-line-1')[0].setAttribute('x2',cellSize/2);
-	$('#grid-pattern-line-1')[0].setAttribute('y2',cellSize  );
+	$('#grid-pattern-line-1')[0].setAttribute('x1', cellSize / 2);
+	$('#grid-pattern-line-1')[0].setAttribute('x2', cellSize / 2);
+	$('#grid-pattern-line-1')[0].setAttribute('y2', cellSize);
 
-	$('#grid-pattern-line-2')[0].setAttribute('y1',cellSize/2);
-	$('#grid-pattern-line-2')[0].setAttribute('y2',cellSize/2);
-	$('#grid-pattern-line-2')[0].setAttribute('x2',cellSize  );
+	$('#grid-pattern-line-2')[0].setAttribute('y1', cellSize / 2);
+	$('#grid-pattern-line-2')[0].setAttribute('y2', cellSize / 2);
+	$('#grid-pattern-line-2')[0].setAttribute('x2', cellSize);
 
 
 	var svg = $('#grid-svg-container').html();
@@ -458,12 +459,12 @@ function insertGridFields() {
 
 
 	$('#grid-style-placeholder').html(
-		'<style>'+
-			'.grid-for-writing { ' +
-				'display: block;' +
-				'min-height: ' + fieldHeight + 'cm;' +
-				'background-image: ' + 'url(data:image/svg+xml;base64,' + svgCode + ');' +
-			'}'+
+		'<style>' +
+		'.grid-for-writing { ' +
+		'display: block;' +
+		'min-height: ' + fieldHeight + 'cm;' +
+		'background-image: ' + 'url(data:image/svg+xml;base64,' + svgCode + ');' +
+		'}' +
 		'</style>'
 	);
 
@@ -479,7 +480,7 @@ function removeGridFields() {
 
 function getAnswersSubtableLaTeX(cellsInFirstRow, answersParsedToTeX) {
 	const maxRows = options.splitAnswersNumber || 60;
-	const hline = "\n\\\\\n\\hline\n";
+	const hline = "\n\n\\hline\n";
 	const colFormat = (new Array(cellsInFirstRow)).fill('|l').join('') + '|';
 
 	let res = '';
@@ -503,17 +504,21 @@ function createLaTeXbunchAnswers(variantN) {
 	var answersParsedToTeX = [];
 	// The first row may be the caption, so...
 	var cellsInFirstRow = (answerRows[2] || answerRows[1] || answerRows[0]).getElementsByTagName('td').length;
+	let count = 0;
 	for (var row of Array.from(answerRows)) {
+		count++;
 		var tdCells = row.getElementsByTagName('td');
 		if (tdCells.length) {
 			//TODO: reverse-decode LaTeX from MathJax
-			answersParsedToTeX.push(Array.from(tdCells).map(x => x.innerHTML).join(' & '));
+			answersParsedToTeX.push(Array.from(tdCells).map(x => x.innerHTML).join(' & ') + '\\\\');
+			if (count % 50 == 0 && count < kZ)
+				answersParsedToTeX.push('\\end{tabular}&\\begin{tabular}[t]{' + (new Array(cellsInFirstRow)).fill('|l').join('') + '|' + '}')
 		}
 	}
 	return getAnswersSubtableLaTeX(cellsInFirstRow, answersParsedToTeX);
 }
 
-function replaceCanvasWithImgInTask(element, text) {
+function replaceCanvasWithImgInTask(element, text, taskCategory) {
 	if (!(/<canvas/i.test(text))) {
 		// Nothing to do
 		return text;
@@ -523,7 +528,7 @@ function replaceCanvasWithImgInTask(element, text) {
 	for (var i = 0; i < canvases.length; i++) {
 		var imageName = canvases[i].getAttribute('data-nonce').substr(3) + "n" + i;
 		preparedImages[imageName] = canvases[i].toDataURL().replace('data:image/png;base64,','');
-		text = text.replace(/<canvas.*?<\/canvas>/, '\\addpictoright[0.4\\linewidth]{'+imageName+'}');
+		text = text.replace(/<canvas.*?<\/canvas>/, '\\addpictoright[\\size{'+taskCategory+'}][\\scale{'+taskCategory+'}]{'+imageName+'}');
 	}
 	if (canvases.length) {
 		text =
@@ -551,7 +556,6 @@ function createLaTeXbunchTasks(variantN) {
 	}
 	return bunchText;
 }
-
 
 function refreshLaTeXarchive() {
 	if (!options.prepareLaTeX) {
