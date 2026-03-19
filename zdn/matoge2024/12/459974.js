@@ -3,7 +3,7 @@
     retryWhileError(function () {
         NAinfo.requireApiVersion(0, 2);
 
-        let key = '506276';
+        let key = '459974';
         let preference = ['findMass', 'findHeight', 'findEnergy'];
         let rand = getSelectedPreferenceFromList(key, preference);
 

@@ -1,0 +1,55 @@
+window.nomer=[
+	9,
+	26584,
+	26585,
+	26589,
+	26592,
+	26597,
+	27482,
+	77344,
+	99577,
+	99578,
+	99591,
+	99602,
+	99606,
+	99607,
+	99614,
+	99615,
+	99617,
+	512333,
+	523375,
+	9961201,
+].iz()
+window.comment='Текстовые задачи';
+
+// fast_set_year.sh metadata
+/* array entries:
+"99606"
+"99607"
+"26584 first_speed first_speed"
+"9961201"
+"99591"
+"27482"
+"9 speed_of_second speed_of_second"
+"26585 river_speed_have_half_distance river_speed have_half_distance"
+"26585 boat_speed_have_half_distance boat_speed have_half_distance"
+"26589 river_speed river_speed"
+"26589 boat_speed boat_speed"
+"26589 sum_distance_between_points sum_distance_between_points"
+"523375"
+"99602"
+"26592 first_worker first_worker"
+"26592 second_worker second_worker"
+"26597 first_hose"
+"26597 second_hose"
+"99614"
+"99617"
+"99615"
+"77344 findAll findAll"
+"512333 second_largest_find_third_mass second_largest find_third_mass"
+"512333 first_largest_find_third_mass first_largest find_third_mass"
+"99578 procent_of_mixin_in_first procent_of_mixin_in_first"
+"99577 first_mass first_mass"
+ */
+// forbidOpenEnds answer: 
+// forbidDecimalFractions answer: 
