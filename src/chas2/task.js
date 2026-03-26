@@ -1141,7 +1141,7 @@ chas2.task = {
 		NAtask.modifiers.allDecimalsToStandard();
 	},
 	
-	setCorrespondenceTask: function ({ left, right, text, leftHeader, rightHeader, postText, autoLaTeXLeft, autoLaTeXRight, preference }) {
+	setCorrespondenceTask: function({ left, right, text, leftHeader, rightHeader, postText, autoLaTeXLeft, autoLaTeXRight, preference,analys }) {
 
 		left.shuffle();
 		let shuffledSolutions = [...right].shuffle();
