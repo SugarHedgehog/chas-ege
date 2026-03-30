@@ -16,7 +16,7 @@
 			authors: ['Николай Авдеев'],
 			forbidMinY,
 			forbidMaxY,
-			ODZ: x => x > 0,
+			domain: x => x > 0,
 			preference: preference,
 		});
 	}, 200);
