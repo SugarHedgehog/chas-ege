@@ -11,17 +11,19 @@
 
 		let pow = sl(2, 30, 2) * [1, -1][rand1] + [0, 1][rand3];
 		let [forbidMinY, forbidMaxY] = [1 - rand2, rand2];
+		let b = sl(1,30).pm();
 
 		NAtask.setLocalExtremumTask({
 			expr: [
 				'' + sl(1,30).pm() + 'x',
-				'ln((x +' + sl(1,30).pm() +')^' + pow + ')',
+				'ln((x +' + b +')^' + pow + ')',
 				'' +  sl(1,30).pm(),
 			].joinPlusMinus(),
 			authors: ['Николай Авдеев'],
 			forbidMinY,
 			forbidMaxY,
 			preference: [preference1, preference2, preference3],
+			domain: x => x > - b
 		});
 	}, 200);
 })();
