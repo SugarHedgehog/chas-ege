@@ -3,7 +3,7 @@ console.log('Overriding...');
 
 
 // Это у нас так номер варианта пишется!
-$('#variantPrefix').val('10.');
+$('#variantPrefix').val('11.');
  
 // Количество вариантов
 $('#cV').val('5');
