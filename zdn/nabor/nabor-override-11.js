@@ -44,7 +44,7 @@ window.nabor.upak[8].main = function(){
 }
 
 window.nabor.upak[9].main = function(){
-	window.nomer = 26857;
+	window.nomer = 27962;
 }
 
 window.nabor.upak[10].main = function(){
