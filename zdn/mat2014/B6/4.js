@@ -16,6 +16,8 @@
 		d + ' ' + (v2 ? 'не ' : '') + chislit(d, 'имеет', 'имеют', 'имеют') + ' дефект' + (!v2 ? 'ы' : 'ов') +
 		'. Найдите вероятность того, что один случайным образом выбранный экземпляр товара ' + t1 + '.';
 	window.vopr.ver = ['' + c.ts()];
+	window.vopr.preference = [preference1, preference2];
+	
 
 	window.vopr.kat['log'] = 0;
 	window.vopr.kat['prz'] = 0;
