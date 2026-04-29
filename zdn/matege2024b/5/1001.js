@@ -4,23 +4,8 @@
         'use strict';
 
         let key = "1001";
-
-        let variant = getListedPreference(key, [{
-            preference: 'learned_learned',
-            preferenceValue: 0,
-        }, {
-            preference: 'learned_not_learned',
-            preferenceValue: 1,
-
-        }, {
-            preference: 'not_learned_learned',
-            preferenceValue: 2,
-
-        }, {
-            preference: 'not_learned_not_learned',
-            preferenceValue: 3,
-
-        }], sl(0, 3));
+        let preference = ['learned_learned', 'learned_not_learned', 'not_learned_learned', 'not_learned_not_learned'];
+		let variant = getSelectedPreferenceFromList(key, preference);
 
         let numberOfQuestions = sl(10, 100);
         let numberlearnedOrNotlearnedQuestions = sl(5, numberOfQuestions - 1);
@@ -36,6 +21,7 @@
 			Найдите вероятность того, что ему попадётся ${`не`.esli(variant % 2)} выученный ${nameQuestion.ve}.`,
             answers: answers,
             authors: ['Суматохина Александра'],
+            preference,
         });
     }, 100);
 })();
