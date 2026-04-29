@@ -2,7 +2,7 @@
     'use strict';
     retryWhileError(function () {
         NAinfo.requireApiVersion(0, 2);
-        let key = '3918958';
+        let key = '3252902';
 		let preference = ['diffColors', 'sameColors'];
 		let targetColor = getSelectedPreferenceFromList(key, preference);
 		
