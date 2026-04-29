@@ -9,3 +9,6 @@ window.nomer=[
   	14271994,
 ].iz();
 window.comment = 'Статистика, вероятности';
+/* 	 
+	4 /home/asssi/Репозитории/chas-ege/zdn/matege2023p/4/4.js
+*/
