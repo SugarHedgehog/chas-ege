@@ -7,7 +7,23 @@
 #../fast_set.sh ../../matege2023p/4
 find . -mindepth 1 ! -name "$(basename "$0")" -exec rm -rf {} +
 
-array=()
+array=(
+"27505 kMoreZero kMoreZero"
+"27505 kLessZero kLessZero"
+"500248 derivative_is_positive_symbol derivative_is_positive symbol"
+"500248 derivative_is_negative_symbol derivative_is_negative symbol"
+562751
+"2542 number number"
+"317544 derivative_is_smallest_number derivative_is_smallest number"
+"317544 derivative_is_largest_number derivative_is_largest number"
+"27494 maximum_points_on_the_segment_number maximum_points_on_the_segment number"
+"27494 minimum_points_on_the_segment_number minimum_points_on_the_segment number"
+"27492 largest_value largest_value"
+"27492 smallest_value smallest_value"
+"317541 function_is_increasing function_is_increasing"
+"317541 function_is_decreasing function_is_decreasing"
+"27502 extreme_point_on_the_segment extreme_point_on_the_segment"
+)
 
 if [[ ${#array[@]} -eq 0 ]]; then
      echo "change array in file"
