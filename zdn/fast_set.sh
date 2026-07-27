@@ -7,74 +7,40 @@
 #../fast_set.sh ../../matege2023p/4
 
 array=(
-#1
 26740
-#2 same_base
 '77394 same_base same_base'
-#2 diff_base
 '77394 diff_base diff_base'
-#2 pow_base
 '77394 pow_base pow_base'
-#3 same_base
 '5 same_base same_base'
-#3 diff_base
 '5 diff_base diff_base'
-#4
 6
-#6
 8
-#7
 '2674101 positive_degree positive_degree'
 '2674101 negative_degree negative_degree'
-#9
 4
-#11
 14
-#12
 26745
-#17
 316351
-#23
 26857
-#24
 26856
-#33
 2684901
-#31 a
 '26848 integer integer' 
-#31 b
 '26848 not_integer not_integer'
-#39
 26859
-#42
 26759
-#45 a
 '26777 sin_cos sin cos'
-#45 b
 '26777 cos_sin cos sin'
-#45 c
 '26777 tg_sin tg sin'
-#45 d
 '26777 tg_cos tg cos'
-#47
 316350
-#48
 508966
-#49
 245169
-#50
 282525
-#51
 245170
-#52 a
 '245171 sin sin'
-#52 ba
 '245171 cos cos'
-#54 integer double_angle
 '11 integer_double_angle integer double_angle'
-#54 
 97869
-#55
 26755
 )
 
