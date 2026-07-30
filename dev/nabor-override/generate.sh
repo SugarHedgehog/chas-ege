@@ -28,6 +28,18 @@ if ! [[ "$NOMER" =~ ^[0-9]+$ ]]; then
     exit 1
 fi
 
+# 2. Количество подвариантов
+CV="$2"
+if [ -z "$CV" ]; then
+    read -p "Введите количество подвариантов (по умолчанию 5): " CV_INPUT
+    CV="${CV_INPUT:-5}"
+fi
+
+if ! [[ "$CV" =~ ^[0-9]+$ ]] || [ "$CV" -eq 0 ]; then
+    echo "Ошибка: количество подвариантов должно быть положительным числом" >&2
+    exit 1
+fi
+
 OUTPUT_FILE="${OUTPUT_DIR}/nabor-override-${NOMER}.js"
 
 # Временный файл для новых записей кэша (запишем в конце)
@@ -39,7 +51,7 @@ console.log('Overriding...');
 // Это у нас так номер варианта пишется!
 \$('#variantPrefix').val('${NOMER}.');
 // Количество вариантов
-\$('#cV').val('5');
+\$('#cV').val('${CV}');
 EOF
 
 # Извлечь номер задачи из строки
@@ -58,9 +70,9 @@ get_last_number_for_index() {
     local index="$1"
     if [ ! -f "$LAST_FILE" ]; then
         echo ""
-        return
+        return 0
     fi
-    grep "^${index}:" "$LAST_FILE" | head -n 1 | sed "s/^${index}://"
+    grep "^${index}:" "$LAST_FILE" 2>/dev/null | head -n 1 | sed "s/^${index}://" || true
 }
 
 # Выбрать случайную строку с учётом предыдущего варианта
@@ -91,10 +103,10 @@ pick_with_cache() {
         done <<< "$block"
     fi
     
-    # Выбираем случайную строку
-    local chosen
-    chosen=$(printf '%s\n' "${available[@]}" | shuf -n 1)
-    
+    local chosen=""
+    if [ ${#available[@]} -gt 0 ]; then
+        chosen=$(printf '%s\n' "${available[@]}" | shuf -n 1)
+    fi
     echo "$chosen"
 }
 
@@ -102,36 +114,38 @@ process_line() {
     local line="$1"
     local index="$2"
     
+    [ -z "$line" ] && return 0
+    
     line=$(echo "$line" | sed 's/^"//; s/"$//')
     line=$(echo "$line" | sed "s/^'//; s/'$//")
     line=$(echo "$line" | tr -d "'\"")
     line=$(echo "$line" | sed 's/^[[:space:]]*//')
     
     read -ra tokens <<< "$line"
-    num_tokens=${#tokens[@]}
+    local num_tokens=${#tokens[@]}
     
-    if [ $num_tokens -eq 0 ]; then
-        return
+    if [ "$num_tokens" -eq 0 ]; then
+        return 0
     fi
     
-    nomer=${tokens[0]}
+    local nomer="${tokens[0]}"
     
     echo "window.nabor.upak[$index].main = function(){" >> "$OUTPUT_FILE"
     echo "window.nomer = $nomer;" >> "$OUTPUT_FILE"
     
-    start_index=1
-    if [ $num_tokens -ge 2 ]; then
-        comment_raw="${tokens[1]}"
+    local start_index=1
+    if [ "$num_tokens" -ge 2 ]; then
+        local comment_raw="${tokens[1]}"
         if [[ "$comment_raw" == *_* ]]; then
-            comment_text="${comment_raw//_/ }"
+            local comment_text="${comment_raw//_/ }"
             echo "window.comment='$nomer $comment_text';" >> "$OUTPUT_FILE"
             start_index=2
         fi
     fi
     
-    if [ $num_tokens -gt $start_index ]; then
-        params=("${tokens[@]:$start_index}")
-        params_str=""
+    if [ "$num_tokens" -gt "$start_index" ]; then
+        local params=("${tokens[@]:$start_index}")
+        local params_str=""
         for param in "${params[@]}"; do
             if [ -n "$params_str" ]; then
                 params_str+=", "
@@ -139,6 +153,19 @@ process_line() {
             params_str+="'$param'"
         done
         echo "window.nabor.preferences['$nomer'] = [$params_str];" >> "$OUTPUT_FILE"
+    fi
+    
+    # Специальные строки для конкретных задач
+    if [ "$index" -eq 9 ]; then
+        echo "sluchch.onlyIntegers = true;" >> "$OUTPUT_FILE"
+    fi
+    
+    if [ "$index" -eq 11 ]; then
+        echo "sluchch.onlyIntegers = false;" >> "$OUTPUT_FILE"
+    fi
+    
+    if [ "$index" -eq 12 ]; then
+        echo "chas2.task.setMinimaxFunctionTask.forbidOpenEnds = true;" >> "$OUTPUT_FILE"
     fi
     
     echo "}" >> "$OUTPUT_FILE"
@@ -149,9 +176,9 @@ process_line() {
 
 # Режим работы: объединённый файл или отдельные
 if [ -f "$ALL_FILE" ]; then
-    [ -z "$1" ] && echo "Режим: объединённый файл ($ALL_FILE)"
-    NUM_SETS=$(grep -c '^===SET:' "$ALL_FILE")
-    [ -z "$1" ] && echo "Найдено наборов: $NUM_SETS"
+    [ -z "$1" ] && [ -z "$2" ] && echo "Режим: объединённый файл ($ALL_FILE)"
+    NUM_SETS=$(grep -c '^===SET:' "$ALL_FILE" || echo 0)
+    [ -z "$1" ] && [ -z "$2" ] && echo "Найдено наборов: $NUM_SETS"
     
     for i in $(seq 1 "$NUM_SETS"); do
         block=$(awk -v set="$i" '
@@ -171,7 +198,7 @@ if [ -f "$ALL_FILE" ]; then
         process_line "$line" "$i"
     done
 else
-    [ -z "$1" ] && echo "Режим: отдельные файлы (папка $SETS_DIR)"
+    [ -z "$1" ] && [ -z "$2" ] && echo "Режим: отдельные файлы (папка $SETS_DIR)"
     
     for i in {1..12}; do
         file="${SETS_DIR}/${i}.txt"
@@ -181,7 +208,7 @@ else
             continue
         fi
         
-        block=$(grep -v '^[[:space:]]*$' "$file")
+        block=$(grep -v '^[[:space:]]*$' "$file" || true)
         
         if [ -z "$block" ]; then
             echo "Предупреждение: файл $file пуст" >&2
@@ -196,6 +223,6 @@ fi
 # Сохраняем новый кэш (заменяем старый)
 mv "$NEW_LAST_FILE" "$LAST_FILE"
 
-[ -z "$1" ] && echo "Сгенерирован файл: $OUTPUT_FILE"
+[ -z "$1" ] && [ -z "$2" ] && echo "Сгенерирован файл: $OUTPUT_FILE (подвариантов: $CV)"
 
 exit 0
