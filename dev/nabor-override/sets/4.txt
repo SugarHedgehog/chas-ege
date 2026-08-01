@@ -13,7 +13,7 @@
 "320183 три_матча_ровно three_games equal"
 "320183 три_матча_больше three_games more"
 "320183 три_матча_меньше three_games less"
-"2 два_броска two_times"
+"282853 два_броска two_times"
 "4 notHaveDefectInQuest_haveDefect notHaveDefectInQuest haveDefect"
 "4 haveDefectInQuest_haveDefect haveDefectInQuest haveDefect"
 "4 notHaveDefectInQuest_notHaveDefect notHaveDefectInQuest notHaveDefect"
