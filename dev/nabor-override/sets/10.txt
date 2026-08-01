@@ -5,11 +5,11 @@
 99591
 27482
 '9 speed_of_second speed_of_second'
-'7 river_speed_have_half_distance river_speed have_half_distance'
-'7 boat_speed_have_half_distance boat_speed have_half_distance'
-'8 river_speed river_speed'
-'8 boat_speed boat_speed'
-'8 sum_distance_between_points sum_distance_between_points'
+'26585 river_speed_have_half_distance river_speed have_half_distance'
+'26585 boat_speed_have_half_distance boat_speed have_half_distance'
+'26589 river_speed river_speed'
+'26589 boat_speed boat_speed'
+'26589 sum_distance_between_points sum_distance_between_points'
 523375
 99602
 '26592 first_worker first_worker'
