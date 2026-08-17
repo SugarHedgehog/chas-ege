@@ -3,7 +3,7 @@
 	let preference1 = ['river_speed', 'boat_speed', 'time_difference', 'total_distance', 'half_distance'];
 	let preference2 = ['have_total_distance', 'have_half_distance'];
 	let variant1 = getSelectedPreferenceFromList(key, preference1);
-	let variant2 = getSelectedPreferenceFromList(key, preference2);
+	let variant2 = variant1 > 2? variant1%3: getSelectedPreferenceFromList(key, preference2);
 
 	var b = 0.5, x, a, s;
 	for (; !(b.isZ() && b > 0);) {
@@ -33,11 +33,11 @@
 		nah: (variant1 == 1),
 		nmn: 'км/ч'
 	}, {
-		utv: 'лодка затратила на обратный путь на ' + chislitlx(b, 'час') + ' меньше',
+		utv: 'лодка затратила на обратный путь на ' + chislitlx(b, 'час', 're') + ' меньше',
 		vpr: 'насколько меньше времени затратила лодка на обратный путь',
 		zna: b,
 		nah: (variant1 == 2)
-	}, {
+	}, [{
 		vel: 'суммарное пройденное лодкой расстояние',
 		zna: s * 2,
 		rod: 2,
@@ -49,7 +49,7 @@
 		rod: 2,
 		nah: (variant1 == 4),
 		nmn: 'км'
-	}][variant2], {
+	}][variant2]], {
 		preambula: 'Моторная лодка прошла против течения реки и вернулась в пункт отправления. ',
 		preference: [preference1, preference2],
 	});
