@@ -14,6 +14,7 @@
             },
         });
 
+        let angleA = trp.angleAInDegrees.ceil();
         let points = autoScale(trp.vertices);
 
         let paint1 = function (ctx) {
@@ -30,8 +31,8 @@
         };
 
         NAtask.setTask({
-            text: `Один из углов равнобедренной трапеции равен $${trp.angleAInDegrees.ceil()}^\circ$. Найдите ${[`больший`, `меньший`][Number(trp.angleAInDegrees > trp.angleDInDegrees)]} угол этой трапеции. Ответ дайте в градусах.`,
-            answers: 180 - trp.angleAInDegrees.ceil(),
+            text: `Один из углов равнобедренной трапеции равен $${angleA}^\circ$. Найдите ${[`больший`, `меньший`][Number(trp.angleAInDegrees > trp.angleDInDegrees)]} угол этой трапеции. Ответ дайте в градусах.`,
+            answers: 180 - angleA,
             authors: ['Александра Суматохина'],
         });
 
