@@ -1,52 +1,84 @@
 (function () {
-	NAinfo.requireApiVersion(0, 2);
-	let k = sluchch(1, 5).pm() / [1, 2].iz();
-	let chisl = Math.pow(sluchch(6, 20), 2);
-	chisl *= (100).pow(sl(-2, 2));
+	retryWhileError(function () {
+		NAinfo.requireApiVersion(0, 2);
 
-	let find, answ;
-	if (sl1()) {
-		find = `$f(${chisl.ts(1)})$`;
-		answ = (k * Math.sqrt(chisl)).ts();
-	} else {
-		answ = chisl.ts();
-		find = `значение $x$, при котором $f(x)=${(k * Math.sqrt(chisl)).ts(1)}$`;
-	}
-	let X = [],
-		Y = [];
-	for (let i = 1; i < 7; i++)
-		if ((k * Math.sqrt(i)).isZ() && (k * Math.sqrt(i)).abs() < 9) {
-			X.push(i * 20);
-			Y.push(k * Math.sqrt(20 * i * 20));
-			//break;
+		let key = '509113';
+		let preference = ['functionOfX', 'valueX'];
+		let rand = getSelectedPreferenceFromList(key, preference);
+
+		function f(x) {
+			return k * Math.sqrt(x);
 		}
-	let paint1 = function (ct) {
-		let h = 400;
-		let w = 600;
-		//Оси координат
-		ct.translate(-200, 0);
-		ct.drawCoordPlane(w, h, { hor: 1, ver: 1 }, { x1: '1', y1: '1', sh1: 13, }, 20);
 
-		//график
+		let k = sluchch(1, 5).pm() / [1, 2].iz();
+		let chisl = Math.pow(sluchch(6, 20), 2);
+		chisl *= (10).pow(sl(-2, 2));
 
-		ct.scale(1, -1);
-		for (let i = 0; i < 180; i++)
-			if (k * Math.sqrt(20 * i) < 170)
-				if (k * Math.sqrt(20 * i) > -170)
-					ct.drawLine(i - 1, k * Math.sqrt(20 * (i - 1)), i, k * Math.sqrt(20 * i));
-		//точки
-		graph9AmarkCircles(ct, [X, Y].T(), 1);
-	};
-	NAtask.setTask({
-		text: `На рисунке изображён график функции $f(x)=k\\sqrt{x}$. Найдите ${find}. `,
-		answers: answ,
-		analys: `$f(x)=${k}\\sqrt{x}$`.plusminus(),
-	});
-	NAtask.modifiers.addCanvasIllustration({
-		width: 400,
-		height: 400,
-		paint: paint1,
+		let fOfChisl = f(chisl);
+
+		genAssertZ1000(chisl);
+		genAssertZ1000(fOfChisl);
+
+		let points = intPoints(f, {
+			minX: 0.1,
+			maxX: 7,
+			minY: -7,
+			maxY: 7
+		});
+
+		genAssert(points.length > 0, 'Точек недостаточно');
+
+		let paint1 = function (ctx) {
+			let h = 400;
+			let w = 400;
+			//Оси координат
+			ctx.drawCoordinatePlane(w, h, {
+				hor: 1,
+				ver: 1
+			}, {
+				x1: '1',
+				y1: '1',
+				sh1: 13,
+			}, 20);
+
+			ctx.scale(20, -20);
+			ctx.lineWidth = 0.1;
+
+			graph9AdrawFunction(ctx, f, {
+				minX: -0.5,
+				maxX: 8.5,
+				minY: -8.5,
+				maxY: 8.5,
+				step: 0.05,
+				scale: 20,
+			});
+
+			graph9AmarkCircles(ctx, points, 1, 0.2);
+		};
+
+
+		NAtask.setTask({
+			text: `На рисунке изображён график функции $f(x)=k\\sqrt{x}$. Найдите `,
+			questions: [
+				[{
+					text: `$f(${chisl})$`,
+					answer: fOfChisl,
+				}, {
+					text: `значение $x$, при котором $f(x)=${fOfChisl}$`,
+					answer: chisl,
+					analys: (`, $x=\\left(\\frac{${fOfChisl}}{${k}}\\right)^2$`).plusminus(),
+				},][rand]
+			],
+			postquestion: `.`,
+			preference: preference,
+			analys: `$f(x)=` + k + `\\sqrt{x}$`,
+		});
+		NAtask.modifiers.allDecimalsToStandard(true);
+		NAtask.modifiers.addCanvasIllustration({
+			width: 400,
+			height: 400,
+			paint: paint1,
+		});
 	});
 })();
 //509113 509118
-//TODO: иррациональные k, более длинные оси
