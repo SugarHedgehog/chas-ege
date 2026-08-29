@@ -1,5 +1,9 @@
 retryWhileError(function () {
     NAinfo.requireApiVersion(0, 2);
+    
+    let key = '1';
+	let preference = ['loanAmount', 'interestRate', 'totalPayment', 'overpayment', 'loanTerm', 'minLoanTerm'];
+    let variant = getSelectedPreferenceFromList(key, preference);
 
     var r = sl(1, sl(10, 50));
     genAssert(!(r == 25 && sl(10)));
@@ -27,10 +31,7 @@ retryWhileError(function () {
         ['x', x - S, 'Сколько рублей составит переплата?'],
         ['n', n, 'За сколько лет будет погашен кредит?'],
         ['n_min', n, 'На какое минимальное количество лет можно взять кредит, чтобы каждая выплата составила не более ' + chislitlx((v + precision).okrugldo(precision), 'рубль') + '?'],
-    ];
-
-    unknown = unknown.iz();
-
+    ][variant];
 
     var text =
         'В ' + sklonlxkand(om.months[monthIndex]).pe + ' ' + sl(2000, 2023) + ' года планируется взять кредит в банке ' +
