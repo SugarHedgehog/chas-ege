@@ -12,7 +12,7 @@ fi
 > "$OUTPUT"
 
 count=0
-for i in {1..12}; do
+for i in {1..13}; do
     file="${SETS_DIR}/${i}.txt"
     if [ ! -f "$file" ]; then
         echo "Предупреждение: $file не найден, пропускаем" >&2
