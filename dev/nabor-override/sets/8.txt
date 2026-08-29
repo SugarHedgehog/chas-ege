@@ -1,15 +1,35 @@
-"27505 kMoreZero kMoreZero"
-"27505 kLessZero kLessZero"
-"500248 derivative_is_positive_symbol derivative_is_positive symbol"
-"500248 derivative_is_negative_symbol derivative_is_negative symbol"
-562751
-"2542 number number"
-"317544 derivative_is_smallest_number derivative_is_smallest number"
-"317544 derivative_is_largest_number derivative_is_largest number"
-"27494 maximum_points_on_the_segment_number maximum_points_on_the_segment number"
-"27494 minimum_points_on_the_segment_number minimum_points_on_the_segment number"
-"27492 largest_value largest_value"
-"27492 smallest_value smallest_value"
-"317541 function_is_increasing function_is_increasing"
-"317541 function_is_decreasing function_is_decreasing"
-"27502 extreme_point_on_the_segment extreme_point_on_the_segment"
+26740
+'77394 same_base same_base'
+'77394 diff_base diff_base'
+'77394 pow_base pow_base'
+'5 same_base same_base'
+'5 diff_base diff_base'
+6
+8
+'2674101 positive_degree positive_degree'
+'2674101 negative_degree negative_degree'
+4
+14
+26745
+316351
+26857
+26856
+2684901
+'26848 integer integer'
+'26848 not_integer not_integer'
+26859
+26759
+'26777 sin_cos sin cos'
+'26777 cos_sin cos sin'
+'26777 tg_sin tg sin'
+'26777 tg_cos tg cos'
+316350
+508966
+245169
+282525
+245170
+'245171 sin sin'
+'245171 cos cos'
+'11 integer_double_angle integer double_angle'
+97869
+26755
