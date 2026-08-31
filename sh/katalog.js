@@ -240,17 +240,14 @@ function createTaskFooter(actionsArray) {
 }
 
 /**
- * Создает секцию с решением
- * @returns {string} HTML
- */
+Создает секцию с решением
+@returns {string} HTML
+*/
 function createSolutionSection() {
-    if (!vopr.rsh) return '';
-    
-    return `
-        <button class="spoiler-show">Показать решение</button>
-        <button class="spoiler-hide">Скрыть решение</button>
-        <div class="spoiler-body">Решение: <br/>${vopr.rsh}</div>
-    `;
+	if (!vopr.rsh) {
+		return '';
+	}
+	return `<button class="spoiler-show">Показать решение</button> <button class="spoiler-hide">Скрыть решение</button> <div class="spoiler-body">Решение: <br/>${vopr.rsh}</div>`;
 }
 
 /**
@@ -292,15 +289,6 @@ function handleTaskError(category, taskNumber, error) {
     </div>`;
 }
 
-/**
- * Создает секцию с решением
- * @returns {string} HTML
- */
-function createSolutionSection() {
-	if (!vopr.rsh) {
-		return '';
-	}
-}
 // ============================================================================
 // ОСНОВНЫЕ ФУНКЦИИ ГЕНЕРАЦИИ КАТАЛОГА
 // ============================================================================
