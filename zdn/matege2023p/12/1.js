@@ -65,7 +65,8 @@ retryWhileError(function () {
     NAtask.setTask({
         text: text,
         answers: unknown[1],
-        analys: 'Каждая выплата: ' + v + ' руб.'
+        analys: 'Каждая выплата: ' + v + ' руб.',
+        preference,
     });
 
 }, 1000000);
