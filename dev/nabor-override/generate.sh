@@ -133,24 +133,20 @@ process_line() {
     echo "window.nabor.upak[$index].main = function(){" >> "$OUTPUT_FILE"
     echo "window.nomer = $nomer;" >> "$OUTPUT_FILE"
     
-    local start_index=1
+    # Всегда: второй токен - комментарий
     if [ "$num_tokens" -ge 2 ]; then
-        local comment_raw="${tokens[1]}"
-        if [[ "$comment_raw" == *_* ]]; then
-            local comment_text="${comment_raw//_/ }"
-            echo "window.comment='$nomer $comment_text';" >> "$OUTPUT_FILE"
-            start_index=2
-        fi
+        local comment="${tokens[1]}"
+        echo "window.comment='$nomer $comment';" >> "$OUTPUT_FILE"
     fi
     
-    if [ "$num_tokens" -gt "$start_index" ]; then
-        local params=("${tokens[@]:$start_index}")
+    # Третий и далее - преференсы (параметры)
+    if [ "$num_tokens" -ge 3 ]; then
         local params_str=""
-        for param in "${params[@]}"; do
+        for ((i=2; i<num_tokens; i++)); do
             if [ -n "$params_str" ]; then
                 params_str+=", "
             fi
-            params_str+="'$param'"
+            params_str+="'${tokens[$i]}'"
         done
         echo "window.nabor.preferences['$nomer'] = [$params_str];" >> "$OUTPUT_FILE"
     fi
