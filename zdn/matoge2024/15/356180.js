@@ -24,7 +24,7 @@
 
 		const offset = leftOrRightAngle === 0 ? 1 : 2;
 
-		let letters = latbukv.slice(0, 4);
+		let letters = om.latbukv.slice(0, 4);
 		let angleDano = [
 			letters[variant],
 			letters[(variant + offset) % 3],
@@ -37,7 +37,7 @@
 			letters[3]
 		];
 
-		let centralAngle = angleDano.slice().splice(0, 1)[0];
+		let centralAngle = angleDano[0];
 
 		let triangle = new Triangle({
 			lengths: {
@@ -49,13 +49,13 @@
 				calculateHeights: true,
 			}
 		});
-		genAssert(![triangle.lengthAB, triangle.lengthBC, triangle.lengthCA].hasDubl(),
-			'Все стороны треугольника должны быть разными');
+		
+		genAssert(!triangle.isIsosceles(), 'Все стороны треугольника должны быть разными');
 
-		[triangle.angleAInDegrees, triangle.angleBInDegrees, triangle.angleCInDegrees].forEach(angle => genAssert(angle < 80, 'Треугольник не остроугольный'));
+		genAssert(triangle.maxAngleInDegrees() < 80, 'Треугольник не остроугольный');
 
-		let valueAngle = [triangle.angleAInDegrees, triangle.angleBInDegrees, triangle.angleCInDegrees][variant].ceil();
-		triangle.addVertex([triangle.heightEndPointA, triangle.heightEndPointB, triangle.heightEndPointC][variant], ['A', 'B', 'C'][variant]);
+		let valueAngle = triangle['angle' + angleDano[1] + 'InDegrees'].ceil();
+		triangle.addVertexToConnectionMatrix(Object.values(triangle.heightEndPoints)[variant], ['A', 'B', 'C'][variant]);
 
 		let points = autoScale(triangle.vertices);
 
@@ -91,6 +91,7 @@
 		});
 		NAtask.modifiers.variativeABC(letters);
 
+		NAtask.modifiers.allDecimalsToStandard(/*true*/);
 		NAtask.modifiers.addCanvasIllustration({
 			width: 400,
 			height: 400,
