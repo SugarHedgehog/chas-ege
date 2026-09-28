@@ -2,6 +2,10 @@
 	'use strict';
 	retryWhileError(function () {
 		NAinfo.requireApiVersion(0, 2);
+		
+		let key = '314802';
+		let preference = ['findTrue', 'findFalse'];
+		let rand = getSelectedPreferenceFromList(key, preference);
 
 		let x = sl(1, 9).pm();
 		// Абсолютные величины x и y должны не совпадать
@@ -42,13 +46,13 @@
 			[label2 + "^2 \\cdot " + label1 + " < 0", (y ** 2) * x < 0]
 		];
 
-		let rand = sl1();
 		let correctOrNot = ['верно', 'неверно'][rand];
 
 		NAtask.setTask({
 			text: 'На координатной прямой отмечены числа. Какое из ' + ['приведённых утверждений для этих чисел', 'следующих неравенств'].iz()+ ' ' + correctOrNot + '?',
 			markedAnswers: forms,
 			invertMarkedAnswers: rand,
+			preference,
 		});
 		AtoB(3, {autoLaTeX: true});
 
