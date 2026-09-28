@@ -1,6 +1,13 @@
 (function () {
     retryWhileError(function () {
         NAinfo.requireApiVersion(0, 2);
+
+        let key = "523095";
+        let preference = ['cellSizeIsOne', 'cellSizeIsNotOne'];
+        let rand = getSelectedPreferenceFromList(key, preference);
+
+        let cellSize = [1, sl(2, 10)][rand];
+
         let a = -sl(3, 6);
         let b = slKrome(3, 6);
         let c = sl(-6, 6);
@@ -13,7 +20,7 @@
             [c + delta, b],
         ];
 
-        points.forEach(point => genAssert(point[0].abs() < 7 && point[1].abs() < 7), 'Параллелограм вышел за пределы клеток');
+        points.forEach(point => genAssert(point[0].abs() < 7 && point[1].abs() < 7, 'Параллелограм вышел за пределы клеток'));
 
         points = points.map((c) => {
             return {
@@ -26,7 +33,7 @@
             shiftCoordinate: false
         };
 
-        let square = new Parallelogram({
+        let parallelogram = new Parallelogram({
             points,
             supplementary
         });
@@ -43,13 +50,14 @@
             ctx.strokeStyle = om.secondaryBrandColors;
             ctx.rotate(sl1() * Math.PI / 2);
             ctx.lineWidth = 4 / scale;
-            ctx.drawFigure(square.vertices, square.connectionMatrix);
+            ctx.drawFigure(parallelogram.vertices, parallelogram.connectionMatrix);
         };
 
         NAtask.setTask({
-            text: `План местности разбит на клетки. Каждая клетка обозначает квадрат $1 \\text{ м} \\times 1 \\text{ м}$. Найдите площадь участка, выделенного на плане. Ответ дайте в квадратных метрах.`,
-            answers: square.area(),
+            text: `План местности разбит на клетки. Каждая клетка обозначает квадрат $${cellSize} \\text{ м} \\times ${cellSize} \\text{ м}$. Найдите площадь участка, выделенного на плане. Ответ дайте в квадратных метрах.`,
+            answers: parallelogram.area() * cellSize.pow(2),
             authors: ['Александра Суматохина'],
+            preference,
         });
 
         NAtask.modifiers.allDecimalsToStandard( /*true*/);
