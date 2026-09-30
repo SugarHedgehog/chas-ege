@@ -5,22 +5,72 @@ retryWhileError(function () {
 	let preference = ['loanAmount', 'interestRate', 'totalPayment', 'overpayment', 'loanTerm', 'minLoanTerm'];
     let variant = getSelectedPreferenceFromList(key, preference);
 
-    var r = sl(1, sl(10, 50));
-    genAssert(!(r == 25 && sl(10)));
-    var n = sl(sl(sl(2, 3), 4), 10);
-    var p = 1 + r / 100;
+    // Генерируем точные суммы, кратные 1000 рублей.
+    let gcd = function (a, b) {
+        while (b !== 0n) {
+            let remainder = a % b;
+            a = b;
+            b = remainder;
+        }
+        return a;
+    };
 
-    var v = sl(5000, 1000000);
-    var S = v * (p.pow(n) - 1) / (p.pow(n) * (p - 1));
+    let candidates = [];
 
-    //var S = sl(50000, 10000000);
-    //var v = (S*p.pow(n)*(p-1))/(p.pow(n)-1);
+    for (let rate = 1; rate <= 50; rate++) {
+        for (let term = 2; term <= 4; term++) {
+            let growth = BigInt(100 + rate) ** BigInt(term);
+            let base = 100n ** BigInt(term);
 
-    genAssert(S.isZ());
-    var x = n * v;
+            // S/v = 100 * (growth - base) / (rate * growth).
+            let numerator = 100n * (growth - base);
+            let denominator = BigInt(rate) * growth;
+            let divisor = gcd(numerator, denominator);
 
-    var monthIndex = sl(3, 10);
+            let amountStep = 1000n * (numerator / divisor);
+            let paymentStep = 1000n * (denominator / divisor);
 
+            if (amountStep > 10000000n || paymentStep > 1000000n) {
+                continue;
+            }
+
+            let amountUnit = Number(amountStep);
+            let paymentUnit = Number(paymentStep);
+
+            let minMultiplier = Math.max(
+                1,
+                Math.ceil(50000 / amountUnit),
+                Math.ceil(5000 / paymentUnit)
+            );
+            let maxMultiplier = Math.min(
+                Math.floor(10000000 / amountUnit),
+                Math.floor(1000000 / paymentUnit)
+            );
+
+            if (minMultiplier <= maxMultiplier) {
+                candidates.push({
+                    rate,
+                    term,
+                    amountUnit,
+                    paymentUnit,
+                    minMultiplier,
+                    maxMultiplier
+                });
+            }
+        }
+    }
+
+    genAssert(candidates.length > 0, 'Нет допустимых параметров кредита');
+
+    let selected = candidates[sl(0, candidates.length - 1)];
+    let multiplier = sl(selected.minMultiplier, selected.maxMultiplier);
+
+    let r = selected.rate;
+    let n = selected.term;
+    let S = selected.amountUnit * multiplier;
+    let v = selected.paymentUnit * multiplier;
+    let x = n * v;
+    let monthIndex = sl(3, 10);
 
     var precision = [100, 1000].iz() * [1, 2, 4, 5].iz();
 
