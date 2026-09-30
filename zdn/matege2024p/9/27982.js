@@ -1,10 +1,27 @@
 (function() { 'use strict'; retryWhileError(function() {
 
-	let v=sl(20, 300, 0.01);//скорость
-	let l=sl(50, 3000, 0.1);//путь
-	let a=500*v*v/l;//ускорение
+	let key='27982';
+	let preference=['decimalNumbers','integerNumbers'];
+	let variant=getSelectedPreferenceFromList(key,preference);
 
-	genAssertZ1000(a,'ускорение слишком дробное');
+	let v;//скорость
+	let l;//путь
+	let a;//ускорение
+
+	if(variant){
+		let distanceKm=sl(1,3);
+		v=2*sl(10,150);
+		l=1000*distanceKm;
+		a=v*v/(2*distanceKm);
+
+		genAssert(a.isZ(),'ускорение должно быть целым');
+	}else{
+		v=sl(20,300,0.01);
+		l=sl(50,3000,0.1);
+		a=500*v*v/l;
+
+		genAssertZ1000(a,'ускорение слишком дробное');
+	}
 	genAssert(a<25000,'ускорение слишком большое');
 
 	let the_vehicleRacingOnRoad = sklonlxkand(['автомобиль','мотоцикл','велосипед','электросамокат','гироскутер','мотоциклист','велосипедист','гонщик','грузовик','автомобилист'].iz());
@@ -22,13 +39,23 @@
 					'чтобы, проехав '+[chislitlx(l, 'метр'), l +' м',chislitlx(l/1000, 'километр'), (l/1000) +' км'].iz()+', приобрести скорость ' + v + ' км/ч. '+
 					'Ответ выразите в км/ч${}^2$.',
 				answers: a,
+				analys:
+					'Из формулы $v=\\sqrt{2la}$ получаем $v^2=2la$, откуда $a=\\frac{v^2}{2l}$. '+
+					'Путь в километрах равен $l='+l+':1000='+(l/1000)+'$. '+
+					'Подставим значения: $a=\\frac{'+v+'^2}{2\\cdot '+(l/1000)+'}='+a+'$ км/ч${}^2$. '+
+					'Ответ: '+a+'.',
 			},
 			{
 				text: ' $a$ = '+a+' км/ч${}^2$.'+ formula +
 					the_orderToFind.toZagl() +', сколько километров проедет ' + the_vehicleRacingOnRoad.ie +' к моменту, когда он разгонится до скорости '+v+' км/ч.',
 				answers: l/1000,
+				analys:
+					'Из формулы $v=\\sqrt{2la}$ получаем $v^2=2la$, откуда $l=\\frac{v^2}{2a}$. '+
+					'Подставим значения: $l=\\frac{'+v+'^2}{2\\cdot '+a+'}='+(l/1000)+'$ км. '+
+					'Ответ: '+(l/1000)+'.',
 			}
 		],
+		preference,
 		authors: ['Aisse-258'],
 	});
 	NAtask.modifiers.allDecimalsToStandard();
