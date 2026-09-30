@@ -24,7 +24,7 @@
 
 		genAssertZ1000(a,'ускорение слишком дробное');
 	}
-	genAssert(a<25000,'ускорение слишком большое');
+	genAssert(a<10000,'ускорение слишком большое');
 
 	let the_vehicleRacingOnRoad = sklonlxkand(['автомобиль','мотоцикл','велосипед','электросамокат','гироскутер','мотоциклист','велосипедист','гонщик','грузовик','автомобилист'].iz());
 	let the_RacingRoad = ['шоссе','дороги','трассы'].iz();
@@ -53,7 +53,6 @@
 				answers: l/1000,
 			}][randFind]
 		],
-		preference,
 		authors: ['Aisse-258'],
 		preference: [preference1, preference2],
 	});
