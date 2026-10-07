@@ -113,6 +113,67 @@ function udalPanel() {
 	$('#panel, #menucenter, #inf').remove();
 }
 
+// Инструмент для исправления LaTeX-кода таблиц соответствий
+// Удаляет линии (\hline), меняет формат столбцов с {|c|c|} на {ll},
+// и корректно обрабатывает теги <strong> и <b>
+function fixCorrespondenceTableLaTeX(latex) {
+    if (!latex) 
+		return latex;
+    
+    // Удаляем \hline
+    latex = latex.replace(/\\hline\s*/g, '');
+    
+    // Заменяем <strong> и <b> на \textbf
+    latex = latex.replace(/<strong>(.*?)<\/strong>/g, '\\textbf{$1}');
+    latex = latex.replace(/<b>(.*?)<\/b>/g, '\\textbf{$1}');
+    
+    // Ищем таблицу соответствий и перестраиваем её
+    latex = latex.replace(/\\begin\{tabular\}\{ll\}([\s\S]*?)\\end\{tabular\}/g, function(match, content) {
+        // Разбиваем содержимое по \\
+        let lines = content.split('\\\\').map(s => s.trim()).filter(s => s && s !== '&');
+        
+        if (lines.length === 0) return match;
+        
+        // Находим заголовки и элементы
+        let leftHeader = '';
+        let rightHeader = '';
+        let leftItems = [];
+        let rightItems = [];
+        
+        for (let line of lines) {
+            // Убираем лишний & в начале или конце
+            line = line.replace(/^\s*&\s*|\s*&\s*$/g, '').trim();
+            
+            if (line.startsWith('A)') || line.startsWith('B)') || line.startsWith('C)') || line.startsWith('D)')) {
+                leftItems.push(line);
+            } else if (line.match(/^\d+\)/)) {
+                rightItems.push(line);
+            } else if (line.includes('\\textbf{')) {
+                // Это заголовок
+                if (!leftHeader) {
+                    leftHeader = line;
+                } else {
+                    rightHeader = line;
+                }
+            }
+        }
+        
+        if (leftItems.length === 0 || rightItems.length === 0) return match;
+        
+        // Формируем новую таблицу
+        let newContent = leftHeader + ' & ' + rightHeader + '\\\\\n';
+        for (let i = 0; i < Math.max(leftItems.length, rightItems.length); i++) {
+            let leftItem = leftItems[i] || '';
+            let rightItem = rightItems[i] || '';
+            newContent += leftItem + ' & ' + rightItem + '\\\\\n';
+        }
+        
+        return '\\begin{tabular}{ll}\n' + newContent + '\\end{tabular}';
+    });
+    
+    return latex;
+}
+
 function konecSozd() {
 	strOtv = '<h2>Ответы</h2>' + strOtv;
 
@@ -134,11 +195,13 @@ function konecSozd() {
 	convertCanvasToImagesIfNeeded();
 	if (options.prepareLaTeX) {
 		for (var id in generatedTasks) {
-			tasksInLaTeX[id] = roughHTML2LaTeX(replaceCanvasWithImgInTask(
-				getTaskTextContainerByTaskId(id),
-				generatedTasks[id].txt,
-				generatedTasks[id].taskCategory
-			));
+			tasksInLaTeX[id] = fixCorrespondenceTableLaTeX(
+				roughHTML2LaTeX(replaceCanvasWithImgInTask(
+					getTaskTextContainerByTaskId(id),
+					generatedTasks[id].txt,
+					generatedTasks[id].taskCategory
+				))
+			);
 		}
 	}
 
@@ -428,7 +491,9 @@ function renewTask() {
 		convertCanvasToImagesIfNeeded();
 		grabCurrentTask();
 		if (options.prepareLaTeX) {
-			tasksInLaTeX[taskId] = replaceCanvasWithImgInTask(getTaskTextContainerByTaskId(taskId), vopr.txt, window.vopr.taskCategory);
+			tasksInLaTeX[taskId] = fixCorrespondenceTableLaTeX(
+				roughHTML2LaTeX(replaceCanvasWithImgInTask(getTaskTextContainerByTaskId(taskId), vopr.txt, window.vopr.taskCategory))
+			);
 			refreshLaTeXarchive();
 		}
 		MathJax.Hub.Typeset(taskHtml[0]);
