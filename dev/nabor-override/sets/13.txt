@@ -1,2 +1,5 @@
 '1 totalPayment totalPayment'
 '1 interestRate interestRate'
+'1 totalPayment totalPayment'
+'1 overpayment overpayment'
+'1 loanTerm loanTerm'
