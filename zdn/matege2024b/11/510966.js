@@ -9,12 +9,19 @@
 		let firstTaller = getSelectedPreferenceFromList('510966', preferenceHeight) === 0;
 		let secondWider = getSelectedPreferenceFromList('510966', preferenceWidth) === 0;
 		let askGreater = getSelectedPreferenceFromList('510966', preferenceQuestion) === 0;
+		// При противоположном влиянии высоты и ширины возможны оба
+		// направления сравнения объёмов. При одинаковом — только одно.
+		let preferenceVolume = firstTaller === secondWider ?
+			['first_volume_larger', 'second_volume_larger'] :
+			[firstTaller ? 'first_volume_larger' : 'second_volume_larger'];
+		let firstVolumeLarger = preferenceVolume[getSelectedPreferenceFromList('510966', preferenceVolume)] === 'first_volume_larger';
 		let kh = sl(15, 45, 5) / 10;
 		let kr = sl(15, 40, 5) / 10;
 		let hRatio = firstTaller ? 1 / kh : kh;
 		let rRatio = secondWider ? kr : 1 / kr;
 		let ratio = hRatio * rRatio * rRatio;
 		let secondBigger = ratio > 1;
+		genAssert(firstVolumeLarger ? ratio < 1 : ratio > 1, 'Выбранное направление сравнения объёмов');
 		let ans = Math.max(ratio, 1 / ratio);
 		genAssertAlmostInteger(ans, 'Ответ должен быть целым');
 		ans = Math.round(ans);
@@ -38,7 +45,7 @@
 
 		NAtask.setTask({
 			text: text,
-			preference: [preferenceHeight, preferenceWidth, preferenceQuestion],
+			preference: [preferenceHeight, preferenceWidth, preferenceQuestion, preferenceVolume],
 			answers: ans,
 			analys: analys,
 			authors: ['chas-ege-selena'],
