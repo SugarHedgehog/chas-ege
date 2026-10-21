@@ -7,7 +7,7 @@
 		let preference = ['surface_area', 'volume'];
 		let volume = getSelectedPreferenceFromList('7206191', preference) === 1;
 		let a = sl(1, 3), b = sl(1, 3), c = sl(1, 3);
-		let depth = sl(2, 5), width = a + b + c;
+		let depth = sl(1, 6), width = a + b + c;
 		let low = sl(1, 3), middle = sl(1, 3), high = sl(1, 3);
 		let height = low + middle + high;
 		// C-образное сечение; ступень; основание с верхним выступом;

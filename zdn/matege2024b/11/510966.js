@@ -21,9 +21,14 @@
 		genAssert(ans >= 2, 'Объёмы должны различаться');
 		let subject = (askGreater === secondBigger) ? 'второй' : 'первой';
 		let other = subject === 'второй' ? 'первой' : 'второй';
+		let factorText = function (k) {
+			if (k === 1.5) return 'в полтора раза';
+			if (k === 4.5) return 'в четыре с половиной раза';
+			return 'в ' + chislitlx(k, 'раз', '$v');
+		};
 		let text = 'Даны две кружки цилиндрической формы. Первая кружка ' +
-			'в ' + chislitlx(kh, 'раз', '$v') + ' ' + (firstTaller ? 'выше' : 'ниже') +
-			' второй, а вторая в ' + chislitlx(kr, 'раз', '$v') + ' ' + (secondWider ? 'шире' : 'у́же') +
+			factorText(kh) + ' ' + (firstTaller ? 'выше' : 'ниже') +
+			' второй, а вторая ' + factorText(kr) + ' ' + (secondWider ? 'шире' : 'у́же') +
 			' первой. Во сколько раз объём ' + subject + ' кружки ' + (askGreater ? 'больше' : 'меньше') +
 			' объёма ' + other + '?';
 		let analys = 'Объём пропорционален квадрату линейного размера основания и высоте. ' +
