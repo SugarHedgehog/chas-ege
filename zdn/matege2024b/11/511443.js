@@ -3,15 +3,12 @@
 	retryWhileError(function () {
 		NAinfo.requireApiVersion(0, 2);
 
-		let preference = ["larger", "FA5AD0", "6A8E45", "CC863D"];
-		let variant = getSelectedPreferenceFromList('511443', preference);
-		let factors = [2, 1.5, 2, 3];
-		let words = ["в два раза", "в полтора раза", "вдвое", "втрое"];
-		let k = variant ? factors[variant] : sl(2, 5);
-		if (!variant) words[0] = 'в ' + chislitlx(k, 'раз', '$v');
-		let smaller = variant !== 0;
-		let h = smaller ? 4 * sl(2, 20) : sl(2, 20) * k * k;
+		let preference = ['radius_larger', 'radius_smaller'];
+		let smaller = getSelectedPreferenceFromList('511443', preference) === 1;
+		let k = sl(15, 40, 5) / 10;
+		let h = sl(2, 20) * (smaller ? 4 : k * k);
 		let ans = smaller ? h * k * k : h / (k * k);
+		let factorText = 'в ' + chislitlx(k, 'раз', '$v');
 
 
 		let paintCylinder = function (ct) {
@@ -81,7 +78,7 @@
 		};
 
 		NAtask.setTask({
-			text: 'Вода в сосуде цилиндрической формы находится на уровне $h = ' + h + '$ см. На каком уровне окажется вода, если её перелить в другой цилиндрический сосуд, у которого радиус основания ' + words[variant] + ' ' + (smaller ? 'меньше' : 'больше') + ', чем у данного? Ответ дайте в сантиметрах.',
+			text: 'Вода в сосуде цилиндрической формы находится на уровне $h = ' + h + '$ см. На каком уровне окажется вода, если её перелить в другой цилиндрический сосуд, у которого радиус основания ' + factorText + ' ' + (smaller ? 'меньше' : 'больше') + ', чем у данного? Ответ дайте в сантиметрах.',
 			answers: ans,
 			preference: preference,
 		});

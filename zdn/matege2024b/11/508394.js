@@ -7,9 +7,8 @@
 		// Три прототипа ФИПИ (задание 11, «Наглядная стереометрия с телами вращения»):
 		// дан объём жидкости - сколько долить (95394F); дан объём жидкости - объём
 		// сосуда (C4BD11, 3DA6BB); дан объём сосуда - объём жидкости (721742)
-		let preference = ['liquid_ask_pour', 'liquid_ask_total', 'total_ask_liquid', '3DA6BB', '61A985'];
-		let selected = getSelectedPreferenceFromList(key, preference);
-		let rand = selected === 3 ? 1 : (selected === 4 ? 2 : selected);
+		let preference = ['liquid_ask_pour', 'liquid_ask_total', 'total_ask_liquid'];
+		let rand = getSelectedPreferenceFromList(key, preference);
 
 		// Уровень жидкости - несократимая дробь p/q высоты, q от 2 до 7:
 		// у ФИПИ 1/2, 1/3, 1/4, 1/5, 1/6, 2/3, 2/5, 2/7, 3/4, 3/7, 4/5, 4/7, 6/7
@@ -58,7 +57,7 @@
 		let k = p / q;
 		let level = 'уровень жидкости достигает $' + fractionText + '$ высоты.';
 		let vesselText = 'В сосуде, имеющем форму конуса, ' + level;
-		if (selected === 3) {
+		if (rand === 1) {
 			// вторая формулировка ФИПИ (3DA6BB)
 			vesselText = 'В сосуде, имеющем форму конуса с вершиной внизу, уровень жидкости параллелен плоскости ' +
 				'основания конуса и достигает $' + fractionText + '$ высоты.';

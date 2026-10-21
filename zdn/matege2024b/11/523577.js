@@ -2,98 +2,47 @@
 	'use strict';
 	retryWhileError(function () {
 		NAinfo.requireApiVersion(0, 2);
-		let variants = [
-  {
-    "code": "F2FD33",
-    "text": "Даны две коробки, имеющие форму правильной четырёхугольной призмы, стоящей на основании. Первая коробка в полтора раза выше второй, а вторая втрое шире первой. Во сколько раз объём второй коробки больше объёма первой?",
-    "hRatio": 0.6666666666666666,
-    "rRatio": 3
-  },
-  {
-    "code": "F68D58",
-    "text": "Даны две коробки, имеющие форму правильной четырёхугольной призмы, стоящей на основании. Первая коробка в полтора раза выше второй, а вторая втрое шире первой. Во сколько раз объём первой коробки меньше объёма второй коробки?",
-    "hRatio": 0.6666666666666666,
-    "rRatio": 3
-  },
-  {
-    "code": "FEA9F4",
-    "text": "Даны две коробки, имеющие форму правильной четырёхугольной призмы, стоящей на основании. Первая коробка в полтора раза ниже второй, а вторая в два раза шире первой. Во сколько раз объём первой коробки меньше объёма второй?",
-    "hRatio": 1.5,
-    "rRatio": 2
-  },
-  {
-    "code": "AE99C1",
-    "text": "Даны две коробки, имеющие форму правильной четырёхугольной призмы, стоящей на основании. Первая коробка в полтора раза ниже второй, а вторая вдвое шире первой. Во сколько раз объём второй коробки больше объёма первой?",
-    "hRatio": 1.5,
-    "rRatio": 2
-  },
-  {
-    "code": "5251BA",
-    "text": "Даны две коробки, имеющие форму правильной четырёхугольной призмы, стоящей на основании. Первая коробка в четыре раза выше второй, а вторая в полтора раза у́же первой. Во сколько раз объём второй коробки меньше объёма первой?",
-    "hRatio": 0.25,
-    "rRatio": 0.6666666666666666
-  },
-  {
-    "code": "089175",
-    "text": "Даны две коробки, имеющие форму правильной четырёхугольной призмы, стоящей на основании. Первая коробка в четыре раза ниже второй, а вторая в полтора раза шире первой. Во сколько раз объём второй коробки больше объёма первой?",
-    "hRatio": 4,
-    "rRatio": 1.5
-  },
-  {
-    "code": "044EC1",
-    "text": "Даны две коробки, имеющие форму правильной четырёхугольной призмы, стоящей на основании. Первая коробка в четыре с половиной раза выше второй, а вторая в полтора раза шире первой. Во сколько раз объём первой коробки больше объёма второй?",
-    "hRatio": 0.2222222222222222,
-    "rRatio": 1.5
-  },
-  {
-    "code": "F1F199",
-    "text": "Даны две коробки, имеющие форму правильной четырёхугольной призмы, стоящей на основании. Первая коробка в четыре с половиной раза выше второй, а вторая втрое шире первой. Во сколько раз объём первой коробки меньше объёма второй?",
-    "hRatio": 0.2222222222222222,
-    "rRatio": 3
-  },
-  {
-    "code": "38C38E",
-    "text": "Даны две коробки, имеющие форму правильной четырёхугольной призмы, стоящей на основании. Первая коробка в четыре с половиной раза ниже второй, а вторая втрое у́же первой. Во сколько раз объём первой коробки больше объёма второй коробки?",
-    "hRatio": 4.5,
-    "rRatio": 0.3333333333333333
-  }
-];
-		let preference = ['general'].concat(variants.map(v => v.code));
-		let selected = getSelectedPreferenceFromList('523577', preference);
-		let v;
-		if (selected) {
-			v = variants[selected - 1];
-		} else {
-			// Сохраняем исходную генерацию числовых параметров наряду с
-			// фиксированными словесными соотношениями ФИПИ.
-			let w, h, ratio;
-			do {
-				w = sl(2, 6);
-				h = sl(15, 60) / 10;
-				ratio = w * w / h;
-			} while (ratio <= 1 || ratio > 20 || Math.abs(ratio * 10 - Math.round(ratio * 10)) > 1e-8);
-			v = {
-				hRatio: 1 / h, rRatio: w,
-				text: 'Даны две коробки, имеющие форму правильной четырёхугольной призмы, стоящей на основании. ' +
-					'Первая коробка в ' + chislitlx(h, 'раз', '$v') + ' выше второй, а вторая в ' +
-					chislitlx(w, 'раз', '$v') + ' шире первой. Во сколько раз объём второй коробки больше объёма первой?',
-			};
-		}
-		let ratio = v.hRatio * v.rRatio * v.rRatio;
-		let answer = Math.round(Math.max(ratio, 1 / ratio) * 10) / 10;
+		let preferenceHeight = ['first_taller', 'first_shorter'];
+		let preferenceWidth = ['second_wider', 'second_narrower'];
+		let preferenceQuestion = ['volume_greater', 'volume_smaller'];
+		let firstTaller = getSelectedPreferenceFromList('523577', preferenceHeight) === 0;
+		let secondWider = getSelectedPreferenceFromList('523577', preferenceWidth) === 0;
+		let askGreater = getSelectedPreferenceFromList('523577', preferenceQuestion) === 0;
+		let kh = sl(15, 45, 5) / 10;
+		let kr = sl(15, 40, 5) / 10;
+		let hRatio = firstTaller ? 1 / kh : kh;
+		let rRatio = secondWider ? kr : 1 / kr;
+		let ratio = hRatio * rRatio * rRatio;
+		let secondBigger = ratio > 1;
+		let ans = Math.max(ratio, 1 / ratio);
+		genAssertAlmostInteger(ans, 'Ответ должен быть целым');
+		ans = Math.round(ans);
+		genAssert(ans >= 2, 'Объёмы должны различаться');
+		let subject = (askGreater === secondBigger) ? 'второй' : 'первой';
+		let other = subject === 'второй' ? 'первой' : 'второй';
+		let text = 'Даны две коробки, имеющие форму правильной четырёхугольной призмы, стоящей на основании. Первая коробка ' +
+			'в ' + chislitlx(kh, 'раз', '$v') + ' ' + (firstTaller ? 'выше' : 'ниже') +
+			' второй, а вторая в ' + chislitlx(kr, 'раз', '$v') + ' ' + (secondWider ? 'шире' : 'у́же') +
+			' первой. Во сколько раз объём ' + subject + ' коробки ' + (askGreater ? 'больше' : 'меньше') +
+			' объёма ' + other + '?';
+		let analys = 'Объём пропорционален квадрату линейного размера основания и высоте. ' +
+			'$V_2/V_1=(' + (secondWider ? kr.ts() : '1/' + kr.ts()) + ')^2\\cdot(' +
+			(firstTaller ? '1/' + kh.ts() : kh.ts()) + ')$. ' +
+			'Искомое отношение равно $' + ans + '$.';
+
 		NAtask.setTask({
-			text: v.text,
-			answers: answer,
-			preference: preference,
-			analys: 'Объёмы правильных четырёхугольных призм относятся как произведение квадрата отношения сторон оснований на отношение высот: ' +
-				'$V_2/V_1 = (' + v.rRatio + ')^2 \\cdot (' + v.hRatio + ')$. Искомое отношение равно $' + answer + '$.',
+			text: text,
+			answers: ans,
+			preference: [preferenceHeight, preferenceWidth, preferenceQuestion],
+			analys: analys,
 		});
+
 		NAtask.modifiers.addCanvasIllustration({
 			width: 420,
 			height: 300,
 			paint: function (ct) {
-				let a = 1, h = 2.2 * Math.sqrt(v.rRatio / v.hRatio);
-				let a2 = v.rRatio, h2 = h * v.hRatio;
+				let a = 1, h = 2.2 * Math.sqrt(rRatio / hRatio);
+				let a2 = rRatio, h2 = h * hRatio;
 				let dx = Math.cos(Math.PI / 6), dy = Math.sin(Math.PI / 6);
 				let gap = 0.4 * Math.max(a, a2);
 				let totalW = (a + a2) * (1 + dx) + gap;

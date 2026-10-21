@@ -3,14 +3,12 @@
 	retryWhileError(function () {
 		NAinfo.requireApiVersion(0, 2);
 
-		let preference = ["larger", "BF7455", "8895C8"];
-		let variant = getSelectedPreferenceFromList('512461', preference);
-		let factors = [2, 2, 3];
-		let words = ["вдвое", "вдвое", "втрое"];
-		let k = factors[variant];
-		let smaller = variant !== 0;
-		let h = smaller ? 4 * sl(2, 20) : sl(2, 20) * k * k;
+		let preference = ['base_side_larger', 'base_side_smaller'];
+		let smaller = getSelectedPreferenceFromList('512461', preference) === 1;
+		let k = sl(15, 40, 5) / 10;
+		let h = sl(2, 20) * (smaller ? 4 : k * k);
 		let ans = smaller ? h * k * k : h / (k * k);
+		let factorText = 'в ' + chislitlx(k, 'раз', '$v');
 
 
 		let paint1 = function (ct) {
@@ -103,7 +101,7 @@
 		NAtask.setTask({
 			text: 'Вода в сосуде, имеющем форму правильной четырёхугольной призмы, находится на уровне $' + h + '$ см. ' +
 				'На каком уровне окажется вода, если её перелить в другой сосуд, имеющий форму правильной четырёхугольной призмы, ' +
-				'у которого сторона основания ' + words[variant] + ' ' + (smaller ? 'меньше' : 'больше') + ', чем у данного? Ответ дайте в сантиметрах.',
+				'у которого сторона основания ' + factorText + ' ' + (smaller ? 'меньше' : 'больше') + ', чем у данного? Ответ дайте в сантиметрах.',
 			answers: ans,
 			preference: preference,
 		});

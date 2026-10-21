@@ -3,7 +3,7 @@
 	retryWhileError(function () {
 		NAinfo.requireApiVersion(0, 2);
 		let key = "506456";
-		let preference = ['length', 'litres', '0C4CBF'];
+		let preference = ['base_side_and_level_rise', 'litres_and_level_factor'];
 		let rand = getSelectedPreferenceFromList(key, preference);
 		
 		let length = sl(10, 70, 10);
@@ -11,7 +11,7 @@
 		let litres = sl(2, 12, 1);
 		let m = sl(1, 9, 1);
 		let koeff = (10 + m) / 10;
-		let textVariant = rand === 2 ? 0 : rand;
+		let textVariant = rand;
 		let volume = [length * length * height, 100 * litres * m][textVariant];
 		
 		let paint1 = function (ct) {
@@ -86,7 +86,7 @@
 
 		NAtask.setTask({
 			text: 'В бак, имеющий форму правильной четырёхугольной призмы' +
-				[(rand === 2 ? ' со стороной основания $' : ' со стороной основания, равной $') + length + '$ см, налита жидкость. Чтобы измерить объём детали сложной формы, её полностью погружают в эту жидкость.',
+				[' со стороной основания, равной $' + length + '$ см, налита жидкость. Чтобы измерить объём детали сложной формы, её полностью погружают в эту жидкость.',
 				 ', налито $' + litres + '$ л воды. После полного погружения в воду детали уровень воды в баке увеличился в ' + chislitlx(koeff, 'раз', '$v') + '.'][textVariant] +
 				[' Найдите объём детали, если после её погружения уровень жидкости в баке поднялся на $' + height + '$ см. Ответ дайте в кубических сантиметрах.',
 				 ' Найдите объём детали. Ответ дайте в кубических сантиметрах, зная, что в одном литре $1000$ кубических сантиметров.'][textVariant],

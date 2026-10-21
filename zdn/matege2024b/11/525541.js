@@ -4,9 +4,9 @@
 		NAinfo.requireApiVersion(0, 2);
 
 		let key = "525541";
-		let preferenceSolid = ['cube', 'tetrahedron', 'prism'];
-		let preferenceQuestion = ['ribs', 'vertices', 'facets'];
-		let preferenceSize = ['larger', 'smaller'];
+		let preferenceSolid = ['cube', 'tetrahedron', 'triangular_prism'];
+		let preferenceQuestion = ['edges', 'vertices', 'faces'];
+		let preferenceSize = ['larger_part', 'smaller_part'];
 		let preferenceCriterion = ['by_vertices', 'by_faces', 'by_edges'];
 		let criterion = ['vertices', 'facets', 'ribs'][getSelectedPreferenceFromList(key, preferenceCriterion)];
 
@@ -14,9 +14,9 @@
 		let questionIndex = getSelectedPreferenceFromList(key, preferenceQuestion);
 		let sizeIndex = getSelectedPreferenceFromList(key, preferenceSize);
 
-		let solid = preferenceSolid[solidIndex];
-		let question = preferenceQuestion[questionIndex];
-		let size = preferenceSize[sizeIndex];
+		let solid = ['cube', 'tetrahedron', 'prism'][solidIndex];
+		let question = ['ribs', 'vertices', 'facets'][questionIndex];
+		let size = ['larger', 'smaller'][sizeIndex];
 		let letters = ['A', 'B', 'C'];
 
 		let solidNames = {

@@ -4,8 +4,8 @@
 		NAinfo.requireApiVersion(0, 2);
 		// Прямые призмы с ортогональным сечением: геометрия, подписи и ответ
 		// строятся из одного списка вершин. Размеры вырезов строго положительны.
-		let preference = ['6DF52F', '40EDBF', '6E952C', '4FA3F3'];
-		let family = getSelectedPreferenceFromList('fipi-solid', preference);
+		let preference = ['surface_area', 'volume'];
+		let volume = getSelectedPreferenceFromList('fipi-solid', preference) === 1;
 		let a = sl(1, 3), b = sl(1, 3), c = sl(1, 3);
 		let depth = sl(2, 5), width = a + b + c;
 		let low = sl(1, 3), middle = sl(1, 3), high = sl(1, 3);
@@ -19,8 +19,8 @@
 			[[0,0],[a,0],[a,middle],[a+b,middle],[a+b,0],[width,0],[width,height],[0,height]],
 			[[0,0],[a,0],[a,low],[a+b,low],[a+b,low+middle],[a,low+middle],[a,height],[0,height]],
 		];
-		let allowed = [[0,2],[0,1,3],[3,2],[0,4]][family];
-		let shapes = ['c_profile','step_profile','top_profile','notch_profile','side_profile'];
+		let allowed = [0, 1, 2, 3, 4];
+		let shapes = ['c_shaped_section', 'stepped_section', 'top_protrusion', 'rectangular_notch', 'side_protrusion'];
 		let selected = getSelectedPreferenceFromList('fipi-solid', allowed.map(i => shapes[i]));
 		let profile = profiles[allowed[selected]];
 		let twiceArea = 0, perimeter = 0;
@@ -30,7 +30,6 @@
 			perimeter += Math.abs(q[0] - p[0]) + Math.abs(q[1] - p[1]);
 		});
 		let area = Math.abs(twiceArea) / 2;
-		let volume = family === 1;
 		let answer = volume ? area * depth : 2 * area + perimeter * depth;
 		NAtask.setTask({
 			text: 'Деталь имеет форму изображённого на рисунке многогранника (все двугранные углы прямые). ' +

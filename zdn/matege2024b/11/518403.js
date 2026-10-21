@@ -6,9 +6,7 @@
 		let depth = sl(25, 40, 5);
 		let height = sl(10, 20, 5);
 		let width = sl(80, 100, 10);
-		let preference = ['several', 'E4A10A', 'B87AC2'];
-		let variant = getSelectedPreferenceFromList('518403', preference);
-		let steps = variant ? 5 : sl(4, 6);
+		let steps = sl(4, 6);
 
 		let answer = steps * height * width + (steps - 1) * depth * width;
 
@@ -237,11 +235,10 @@
 		};
 
 		NAtask.setTask({
-			text: (variant ? 'Пять' : 'Несколько') + ' ступеней лестницы покрасили в тёмный цвет, как показано на рисунке (штриховкой). ' +
+			text: chislitlx(steps, 'ступень') + ' лестницы покрасили в тёмный цвет, как показано на рисунке (штриховкой). ' +
 				'Найдите площадь окрашенной поверхности, если глубина каждой ступеньки равна $' + depth + '$ см, ' +
-				'высота' + (variant === 2 ? ' $' : ' — $') + height + '$ см, а ширина' + (variant === 2 ? ' $' : ' — $') + width + '$ см. Ответ дайте в квадратных сантиметрах.',
+				'высота' + ' — $' + height + '$ см, а ширина' + ' — $' + width + '$ см. Ответ дайте в квадратных сантиметрах.',
 			answers: answer,
-			preference: preference,
 		});
 
 		NAtask.modifiers.addCanvasIllustration({
