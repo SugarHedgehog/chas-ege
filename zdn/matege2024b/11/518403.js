@@ -3,6 +3,9 @@
 	retryWhileError(function () {
 		NAinfo.requireApiVersion(0, 2);
 
+		let preference = ['several_steps', 'specified_step_count'];
+		let variant = getSelectedPreferenceFromList('518403', preference);
+
 		let depth = sl(25, 40, 5);
 		let height = sl(10, 20, 5);
 		let width = sl(80, 100, 10);
@@ -235,10 +238,11 @@
 		};
 
 		NAtask.setTask({
-			text: chislitlx(steps, 'ступень') + ' лестницы покрасили в тёмный цвет, как показано на рисунке (штриховкой). ' +
+			text: (variant === 0 ? 'Несколько ступеней' : chislitlx(steps, 'ступень')) + ' лестницы покрасили в тёмный цвет, как показано на рисунке (штриховкой). ' +
 				'Найдите площадь окрашенной поверхности, если глубина каждой ступеньки равна $' + depth + '$ см, ' +
-				'высота' + ' — $' + height + '$ см, а ширина' + ' — $' + width + '$ см. Ответ дайте в квадратных сантиметрах.',
+				'высота — $' + height + '$ см, а ширина — $' + width + '$ см. Ответ дайте в квадратных сантиметрах.',
 			answers: answer,
+			preference: preference,
 		});
 
 		NAtask.modifiers.addCanvasIllustration({
@@ -252,4 +256,4 @@
 })();
 //chas-ege-selena
 //https://mathb-ege.sdamgia.ru/test?likes=518403
-//Аналоги: 518431, 518451, 518475, 535198; ОБЗ: 2C5710 (дубликат), E4A10A
+//Аналоги: 518431, 518451, 518475, 535198; ОБЗ: 2C5710 (дубликат), E4A10A, B87AC2
