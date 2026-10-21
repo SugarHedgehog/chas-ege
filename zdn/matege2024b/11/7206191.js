@@ -5,7 +5,7 @@
 		// Прямые призмы с ортогональным сечением: геометрия, подписи и ответ
 		// строятся из одного списка вершин. Размеры вырезов строго положительны.
 		let preference = ['surface_area', 'volume'];
-		let volume = getSelectedPreferenceFromList('fipi-solid', preference) === 1;
+		let volume = getSelectedPreferenceFromList('7206191', preference) === 1;
 		let a = sl(1, 3), b = sl(1, 3), c = sl(1, 3);
 		let depth = sl(2, 5), width = a + b + c;
 		let low = sl(1, 3), middle = sl(1, 3), high = sl(1, 3);
@@ -21,7 +21,7 @@
 		];
 		let allowed = [0, 1, 2, 3, 4];
 		let shapes = ['c_shaped_section', 'stepped_section', 'top_protrusion', 'rectangular_notch', 'side_protrusion'];
-		let selected = getSelectedPreferenceFromList('fipi-solid', allowed.map(i => shapes[i]));
+		let selected = getSelectedPreferenceFromList('7206191', allowed.map(i => shapes[i]));
 		let profile = profiles[allowed[selected]];
 		let twiceArea = 0, perimeter = 0;
 		profile.forEach(function (p, i) {
@@ -84,3 +84,8 @@
 		});
 	}, 1000);
 })();
+// ФИПИ: 6DF52F (0x6DF52F = 7206191).
+// Аналоги (6DF52F): 77C1DF, 3AEB5C.
+// Аналоги (40EDBF): 40EDBF, EE651B, 02985D, C15157, DA70C8, 1B4F93, 86869F, 0F67EF, 2D7A61, 450281.
+// Аналоги (6E952C): 6E952C, 2422CC, FA53EE.
+// Аналоги (4FA3F3): 4FA3F3, 620DBA, D9E5CF, 491685.

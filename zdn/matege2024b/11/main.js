@@ -1,7 +1,7 @@
 window.nomer=[
-	'fipi-solid',
-	'fipi-sphere',
-	'fipi-cone-3d',
+	7206191,
+	631849,
+	16460866,
 	318413,
 	506456,
 	506476,
