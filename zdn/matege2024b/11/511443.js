@@ -3,10 +3,13 @@
 	retryWhileError(function () {
 		NAinfo.requireApiVersion(0, 2);
 
-		let k = sl(2, 5);
-		let H = sl(2, 20);
-		let h = H * k * k;
-		let k_word = (k === 2 || k === 3 || k === 4) ? "раза" : "раз";
+		let preference = ['radius_larger', 'radius_smaller'];
+		let smaller = getSelectedPreferenceFromList('511443', preference) === 1;
+		let k = sl(15, 40, 5) / 10;
+		let h = sl(2, 20) * (smaller ? 4 : k * k);
+		let ans = smaller ? h * k * k : h / (k * k);
+		let factorText = 'в ' + chislitlx(k, 'раз', '$v');
+
 
 		let paintCylinder = function (ct) {
 			let cx = 120;
@@ -75,8 +78,9 @@
 		};
 
 		NAtask.setTask({
-			text: 'Вода в сосуде цилиндрической формы находится на уровне $h = ' + h + '$ см. На каком уровне окажется вода, если её перелить в другой цилиндрический сосуд, у которого радиус основания в $' + k + '$ ' + k_word + ' больше, чем у данного? Ответ дайте в сантиметрах.',
-			answers: H,
+			text: 'Вода в сосуде цилиндрической формы находится на уровне $h = ' + h + '$ см. На каком уровне окажется вода, если её перелить в другой цилиндрический сосуд, у которого радиус основания ' + factorText + ' ' + (smaller ? 'меньше' : 'больше') + ', чем у данного? Ответ дайте в сантиметрах.',
+			answers: ans,
+			preference: preference,
 		});
 
 		NAtask.modifiers.addCanvasIllustration({

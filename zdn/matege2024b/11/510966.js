@@ -3,63 +3,49 @@
 	retryWhileError(function () {
 		NAinfo.requireApiVersion(0, 2);
 
-		// Кратности - словами, как у ФИПИ (11 №37-48): по высоте «в полтора раза»,
-		// «вдвое», «в четыре раза», «вчетверо», «в четыре с половиной раза»;
-		// по ширине «в полтора раза», «вдвое», «втрое», «в три раза», «в четыре раза»
-		let heightMultipliers = [
-			{ k: 1.5, words: ['в полтора раза'] },
-			{ k: 2, words: ['вдвое', 'в два раза'] },
-			{ k: 3, words: ['втрое', 'в три раза'] },
-			{ k: 4, words: ['вчетверо', 'в четыре раза'] },
-			{ k: 4.5, words: ['в четыре с половиной раза'] },
-		];
-		let widthMultipliers = [
-			{ k: 1.5, words: ['в полтора раза'] },
-			{ k: 2, words: ['вдвое', 'в два раза'] },
-			{ k: 3, words: ['втрое', 'в три раза'] },
-			{ k: 4, words: ['вчетверо', 'в четыре раза'] },
-		];
-		let kh = heightMultipliers.iz();
-		let kr = widthMultipliers.iz();
-		// Первая кружка выше или ниже второй; вторая шире или у́же первой
-		let firstTaller = sl1();
-		let secondWider = sl1();
-
-		// Отношения размеров второй кружки к первой
-		let hRatio = firstTaller ? 1 / kh.k : kh.k; // h2 / h1
-		let rRatio = secondWider ? kr.k : 1 / kr.k; // r2 / r1
-		// V2 / V1 = (r2 / r1)^2 * (h2 / h1)
-		let ratio = rRatio * rRatio * hRatio;
+		let preferenceHeight = ['first_taller', 'first_shorter'];
+		let preferenceWidth = ['second_wider', 'second_narrower'];
+		let preferenceQuestion = ['volume_greater', 'volume_smaller'];
+		let firstTaller = getSelectedPreferenceFromList('510966', preferenceHeight) === 0;
+		let secondWider = getSelectedPreferenceFromList('510966', preferenceWidth) === 0;
+		let askGreater = getSelectedPreferenceFromList('510966', preferenceQuestion) === 0;
+		// При противоположном влиянии высоты и ширины возможны оба
+		// направления сравнения объёмов. При одинаковом — только одно.
+		let preferenceVolume = firstTaller === secondWider ?
+			['first_volume_larger', 'second_volume_larger'] :
+			[firstTaller ? 'first_volume_larger' : 'second_volume_larger'];
+		let firstVolumeLarger = preferenceVolume[getSelectedPreferenceFromList('510966', preferenceVolume)] === 'first_volume_larger';
+		let kh = sl(15, 45, 5) / 10;
+		let kr = sl(15, 40, 5) / 10;
+		let hRatio = firstTaller ? 1 / kh : kh;
+		let rRatio = secondWider ? kr : 1 / kr;
+		let ratio = hRatio * rRatio * rRatio;
 		let secondBigger = ratio > 1;
-		let ans = secondBigger ? ratio : 1 / ratio;
+		genAssert(firstVolumeLarger ? ratio < 1 : ratio > 1, 'Выбранное направление сравнения объёмов');
+		let ans = Math.max(ratio, 1 / ratio);
 		genAssertAlmostInteger(ans, 'Ответ должен быть целым');
 		ans = Math.round(ans);
-		genAssert(ans >= 2, 'Объёмы кружек должны различаться');
-
-		// Четыре формы вопроса ФИПИ: «во сколько раз объём второй больше
-		// объёма первой», «первой меньше второй» (если больше вторая) и наоборот
-		let question = secondBigger ?
-			['Во сколько раз объём второй кружки больше объёма первой?', 'Во сколько раз объём первой кружки меньше объёма второй?'].iz() :
-			['Во сколько раз объём первой кружки больше объёма второй?', 'Во сколько раз объём второй кружки меньше объёма первой?'].iz();
-
-		let text = 'Даны две кружки цилиндрической формы. Первая кружка ' + kh.words.iz() + ' ' +
-			(firstTaller ? 'выше' : 'ниже') + ' второй, а вторая' + [' ', ' — '].iz() + kr.words.iz() + ' ' +
-			(secondWider ? 'шире' : 'у́же') + ' первой. ' + question;
-
-		let fmt = function (x) {
-			return String(Math.round(x * 1000) / 1000).replace('.', '{,}');
+		genAssert(ans >= 2, 'Объёмы должны различаться');
+		let subject = (askGreater === secondBigger) ? 'второй' : 'первой';
+		let other = subject === 'второй' ? 'первой' : 'второй';
+		let factorText = function (k) {
+			if (k === 1.5) return 'в полтора раза';
+			if (k === 4.5) return 'в четыре с половиной раза';
+			return 'в ' + chislitlx(k, 'раз', '$v');
 		};
-		let analys = 'Объём цилиндра равен $V = \\pi r^2 h$. Обозначим радиус и высоту первой кружки $r$ и $h$. ' +
-			'Тогда у второй кружки высота равна $' + (firstTaller ? '\\frac{h}{' + fmt(kh.k) + '}' : fmt(kh.k) + 'h') +
-			'$, а радиус равен $' + (secondWider ? fmt(kr.k) + 'r' : '\\frac{r}{' + fmt(kr.k) + '}') + '$. ' +
-			'Значит, $\\frac{V_2}{V_1} = ' + (secondWider ? fmt(kr.k) + '^2' : '\\frac{1}{' + fmt(kr.k) + '^2}') + ' \\cdot ' +
-			(firstTaller ? '\\frac{1}{' + fmt(kh.k) + '}' : fmt(kh.k)) + ' = ' +
-			(secondBigger ? fmt(ans) : '\\frac{1}{' + fmt(ans) + '}') + '$, ' +
-			'то есть объём ' + (secondBigger ? 'второй кружки больше объёма первой' : 'первой кружки больше объёма второй') +
-			' в $' + ans + '$ раз' + (ans % 10 >= 2 && ans % 10 <= 4 && (ans % 100 < 12 || ans % 100 > 14) ? 'а' : '') + '.';
+		let text = 'Даны две кружки цилиндрической формы. Первая кружка ' +
+			factorText(kh) + ' ' + (firstTaller ? 'выше' : 'ниже') +
+			' второй, а вторая ' + factorText(kr) + ' ' + (secondWider ? 'шире' : 'у́же') +
+			' первой. Во сколько раз объём ' + subject + ' кружки ' + (askGreater ? 'больше' : 'меньше') +
+			' объёма ' + other + '?';
+		let analys = 'Объём пропорционален квадрату линейного размера основания и высоте. ' +
+			'$V_2/V_1=(' + (secondWider ? kr.ts() : '1/' + kr.ts()) + ')^2\\cdot(' +
+			(firstTaller ? '1/' + kh.ts() : kh.ts()) + ')$. ' +
+			'Искомое отношение равно $' + ans + '$.';
 
 		NAtask.setTask({
 			text: text,
+			preference: [preferenceHeight, preferenceWidth, preferenceQuestion, preferenceVolume],
 			answers: ans,
 			analys: analys,
 			authors: ['chas-ege-selena'],

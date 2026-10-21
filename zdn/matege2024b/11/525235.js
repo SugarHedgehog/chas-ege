@@ -18,7 +18,7 @@
 		// Используем класс Cylinder из lib/figure.js
 		let radius = Math.sqrt(square / Math.PI);
 		let cylinder = new Cylinder({ radius: radius, height: height });
-		let volume = Math.round(cylinder.volume / 1000);
+		let volume = square * height / 1000;
 
 		let paint = function (ct) {
 			let r = Math.min(220 / cylinder.height, 110 / cylinder.radius) * cylinder.radius;
@@ -59,3 +59,4 @@
 })();
 //chas-ege-selena
 //https://mathb-ege.sdamgia.ru/test?likes=525235
+// ФИПИ: 72E8B5.

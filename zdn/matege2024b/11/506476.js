@@ -4,7 +4,7 @@
 		NAinfo.requireApiVersion(0, 2);
 
 		let key = '506476';
-		let preference = ['grani', 'rebra', 'vershiny'];
+		let preference = ['faces', 'edges', 'vertices'];
 		let preferenceShape = [
 			'cube',
 			'triangular_prism',
@@ -235,3 +235,6 @@
 //506476
 //Zer00Player, chas-ege-selena
 //https://mathb-ege.sdamgia.ru/test?likes=506476
+// ФИПИ: F5C09A; аналоги: FAB38C, 08249D (куб);
+// EA2B38, C81BF6, EB6C47 (пятиугольная призма);
+// 54764A, EEA764, 1BDCBA (треугольная призма).

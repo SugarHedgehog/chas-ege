@@ -3,8 +3,13 @@
 	retryWhileError(function () {
 		NAinfo.requireApiVersion(0, 2);
 
-		let ans = sl(10, 50, 1);
-		let h = ans * 4;
+		let preference = ['base_side_larger', 'base_side_smaller'];
+		let smaller = getSelectedPreferenceFromList('512461', preference) === 1;
+		let k = sl(15, 40, 5) / 10;
+		let h = sl(2, 20) * (smaller ? 4 : k * k);
+		let ans = smaller ? h * k * k : h / (k * k);
+		let factorText = 'в ' + chislitlx(k, 'раз', '$v');
+
 
 		let paint1 = function (ct) {
 			let edgeColor = om.secondaryBrandColors.iz();
@@ -96,8 +101,9 @@
 		NAtask.setTask({
 			text: 'Вода в сосуде, имеющем форму правильной четырёхугольной призмы, находится на уровне $' + h + '$ см. ' +
 				'На каком уровне окажется вода, если её перелить в другой сосуд, имеющий форму правильной четырёхугольной призмы, ' +
-				'у которого сторона основания вдвое больше, чем у данного? Ответ дайте в сантиметрах.',
+				'у которого сторона основания ' + factorText + ' ' + (smaller ? 'меньше' : 'больше') + ', чем у данного? Ответ дайте в сантиметрах.',
 			answers: ans,
+			preference: preference,
 		});
 
 		NAtask.modifiers.addCanvasIllustration({

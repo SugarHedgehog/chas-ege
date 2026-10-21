@@ -4,7 +4,7 @@
 		NAinfo.requireApiVersion(0, 2);
 
 		let key = '514063';
-		let preference = ['centimeters', 'liters'];
+		let preference = ['level_rise_cm', 'litres_and_level_factor'];
 		let rand = getSelectedPreferenceFromList(key, preference);
 
 		let text, answers, analys;
@@ -33,7 +33,8 @@
 			// Ответ: V_l * 1000 * (k - 1) = V_l * 100 * multStep
 			let V_cm3 = V_liters * 1000;
 			let newLevel = V_cm3 * k;
-			let answer = newLevel - V_cm3;
+			let answer = V_liters * 100 * multStep;
+			newLevel = V_cm3 + answer;
 
 			// Параметры S и h1 нужны только для пропорционального чертежа.
 			// Выбираем разумную высоту воды и восстанавливаем площадь основания.
@@ -43,8 +44,8 @@
 			hRest = sl(2, 4) * 5;
 			H = h1 + dh + hRest;
 
-			text = 'В бак, имеющий форму цилиндра, налито $' + V_liters + '$ л воды. После полного погружения в воду детали ' +
-				'уровень воды в баке поднялся в $' + k.toFixed(1) + '$ раза. Найдите объём детали. ' +
+			text = 'В бак, имеющий форму цилиндра, стоящего на основании, налито $' + V_liters + '$ л воды. После полного погружения в воду детали ' +
+				'уровень воды в баке увеличился в $' + k.toFixed(1) + '$ раза. Найдите объём детали. ' +
 				'Ответ дайте в кубических сантиметрах, зная, что в одном литре $1000$ кубических сантиметров.';
 			answers = answer;
 			analys = 'Начальный объём воды: $' + V_liters + '\\cdot 1000 = ' + V_cm3 + '$ см³. ' +
@@ -136,3 +137,5 @@
 		NAtask.modifiers.allDecimalsToStandard();
 	}, 1000);
 })();
+// ФИПИ: 9328F3; аналоги: D3CDD8, B7394B, D21FFF.
+// Объём цилиндрического бака (72E8B5) реализован отдельно в 525235.js.

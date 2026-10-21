@@ -4,17 +4,19 @@
 		NAinfo.requireApiVersion(0, 2);
 
 		let key = "525541";
-		let preferenceSolid = ['cube', 'tetrahedron', 'prism'];
-		let preferenceQuestion = ['ribs', 'vertices', 'facets'];
-		let preferenceSize = ['larger', 'smaller'];
+		let preferenceSolid = ['cube', 'tetrahedron', 'triangular_prism'];
+		let preferenceQuestion = ['edges', 'vertices', 'faces'];
+		let preferenceSize = ['larger_part', 'smaller_part'];
+		let preferenceCriterion = ['by_vertices', 'by_faces', 'by_edges'];
+		let criterion = ['vertices', 'facets', 'ribs'][getSelectedPreferenceFromList(key, preferenceCriterion)];
 
 		let solidIndex = getSelectedPreferenceFromList(key, preferenceSolid);
 		let questionIndex = getSelectedPreferenceFromList(key, preferenceQuestion);
 		let sizeIndex = getSelectedPreferenceFromList(key, preferenceSize);
 
-		let solid = preferenceSolid[solidIndex];
-		let question = preferenceQuestion[questionIndex];
-		let size = preferenceSize[sizeIndex];
+		let solid = ['cube', 'tetrahedron', 'prism'][solidIndex];
+		let question = ['ribs', 'vertices', 'facets'][questionIndex];
+		let size = ['larger', 'smaller'][sizeIndex];
 		let letters = ['A', 'B', 'C'];
 
 		let solidNames = {
@@ -140,6 +142,10 @@
 			};
 		}
 
+		let parts = [data[solid].smaller, data[solid].larger];
+		parts.sort((a, b) => a[criterion] - b[criterion]);
+		genAssert(parts[0][criterion] !== parts[1][criterion], 'Критерий должен однозначно выбирать часть');
+		let selectedPart = parts[size === 'larger' ? 1 : 0];
 		let figureData = getFigureData();
 
 		let paint1 = function (ct) {
@@ -222,12 +228,13 @@
 			text: 'Плоскость, проходящая через точки A, B и C (см. рисунок), ' +
 				'разбивает ' + solidNames[solid] + ' на два многогранника. ' +
 				'Сколько ' + questionWords[question] +
-				' у получившегося многогранника с ' + sizeWords[size] + ' числом вершин?',
-			answers: data[solid][size][question],
+				' у получившегося многогранника с ' + sizeWords[size] + ' числом ' + questionWords[criterion] + '?',
+			answers: selectedPart[question],
 			preference: [
 				preferenceSolid,
 				preferenceQuestion,
-				preferenceSize
+				preferenceSize,
+				preferenceCriterion
 			],
 		});
 

@@ -49,7 +49,8 @@
 			},
 		];
 
-		let v = variants.iz();
+		let preferenceSolid = ['triangular_prism', 'cube', 'pentagonal_prism', 'hexagonal_prism'];
+		let v = variants[getSelectedPreferenceFromList(key, preferenceSolid)];
 		let n = v.baseSides;
 
 		// У n-угольной призмы n+2 грани и 3n рёбер,
@@ -171,7 +172,7 @@
 			answers: answers[rand],
 			analys: analys,
 			authors: ['chas-ege-selena', 'Zer00Player'],
-			preference: [preference],
+			preference: [preference, preferenceSolid],
 		});
 
 		NAtask.modifiers.addCanvasIllustration({
