@@ -3,6 +3,8 @@
 	retryWhileError(function () {
 		NAinfo.requireApiVersion(0, 2);
 
+		let preference = ['original', 'B34014'];
+		let variant = getSelectedPreferenceFromList('509658', preference);
 		let a = sl(10, 40, 1);
 
 		let paint1 = function (ct) {
@@ -22,8 +24,9 @@
 
 		NAtask.setTask({
 			text: 'Ящик, имеющий форму куба с ребром $' + a + '$ см без одной грани, '+
-			'нужно покрасить со всех сторон снаружи. Найдите площадь поверхности, которую необходимо покрасить. Ответ дайте в квадратных сантиметрах.',
+			'нужно покрасить ' + (variant ? 'снаружи со всех сторон' : 'со всех сторон снаружи') + '. Найдите площадь поверхности, которую необходимо покрасить. Ответ дайте в квадратных сантиметрах.',
 			answers: 5 * a * a,
+			preference: preference,
 		});
 
 		NAtask.modifiers.addCanvasIllustration({

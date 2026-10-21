@@ -2,76 +2,116 @@
 	'use strict';
 	retryWhileError(function () {
 		NAinfo.requireApiVersion(0, 2);
-
-		let widthRatio, heightRatio, volumeRatio;
-		do {
-			widthRatio = sl(2, 6);   // во сколько раз вторая коробка шире первой
-			heightRatio = sl(15, 60) / 10;  // во сколько раз первая коробка выше второй (1.5 – 6.0)
-			volumeRatio = (widthRatio * widthRatio) / heightRatio;  // V2 / V1
-		} while (Math.round(volumeRatio * 10) !== volumeRatio * 10 || volumeRatio > 20);
-
-		// Склонение слова «раз» в зависимости от числительного
-		let razForm = function(number) {
-			if (number % 1 !== 0) return 'раза';  // дробные: 1.5 раза, 2.5 раза
-			let intValue = Math.floor(number);
-			let lastDigit = intValue % 10;
-			let lastTwoDigits = intValue % 100;
-			if (lastTwoDigits >= 11 && lastTwoDigits <= 14) return 'раз';
-			if (lastDigit === 1) return 'раз';
-			if (lastDigit >= 2 && lastDigit <= 4) return 'раза';
-			return 'раз';
-		};
-
-		let taskText = 'Даны две коробки, имеющие форму правильной четырёхугольной призмы, стоящей на основании. Первая коробка в {heightRatio} {heightRaz} выше второй, а вторая в {widthRatio} {widthRaz} шире первой. Во сколько раз объём второй коробки больше объёма первой?';
-		taskText = taskText
-			.replace('{heightRatio}', heightRatio)
-			.replace('{heightRaz}', razForm(heightRatio))
-			.replace('{widthRatio}', widthRatio)
-			.replace('{widthRaz}', razForm(widthRatio));
-
-		// Функция рисования двух коробок
-		let paintBoxes = function (ct) {
-			ct.translate(40, 30);
-			ct.scale(20, 20);
-			ct.lineWidth = 2 / 20;
-
-			// Первая коробка — высокая и узкая (слева)
-			ct.drawParallelepiped({
-				width: 3,
-				height: 9,
-				depth: 3,
-				angle: 30,
-				strokeStyle: om.primaryBrandColors,
-			}, [0, 0, 0], false, [0.5, 0.3]);
-
-			// Смещаем контекст для второй коробки: правее и вниз
-			ct.save();
-			ct.translate(7, 3);  // сдвиг вправо на 18 и вниз на 4 единицы
-
-			// Вторая коробка — низкая и широкая (справа)
-			ct.drawParallelepiped({
-				width: 8,
-				height: 3,
-				depth: 8,
-				angle: 30,
-				strokeStyle: om.primaryBrandColors,
-			}, [0, 0, 0], false, [0.5, 0.3]);
-
-			ct.restore();
-		};
-
+		let variants = [
+  {
+    "code": "F2FD33",
+    "text": "Даны две коробки, имеющие форму правильной четырёхугольной призмы, стоящей на основании. Первая коробка в полтора раза выше второй, а вторая втрое шире первой. Во сколько раз объём второй коробки больше объёма первой?",
+    "hRatio": 0.6666666666666666,
+    "rRatio": 3
+  },
+  {
+    "code": "F68D58",
+    "text": "Даны две коробки, имеющие форму правильной четырёхугольной призмы, стоящей на основании. Первая коробка в полтора раза выше второй, а вторая втрое шире первой. Во сколько раз объём первой коробки меньше объёма второй коробки?",
+    "hRatio": 0.6666666666666666,
+    "rRatio": 3
+  },
+  {
+    "code": "FEA9F4",
+    "text": "Даны две коробки, имеющие форму правильной четырёхугольной призмы, стоящей на основании. Первая коробка в полтора раза ниже второй, а вторая в два раза шире первой. Во сколько раз объём первой коробки меньше объёма второй?",
+    "hRatio": 1.5,
+    "rRatio": 2
+  },
+  {
+    "code": "AE99C1",
+    "text": "Даны две коробки, имеющие форму правильной четырёхугольной призмы, стоящей на основании. Первая коробка в полтора раза ниже второй, а вторая вдвое шире первой. Во сколько раз объём второй коробки больше объёма первой?",
+    "hRatio": 1.5,
+    "rRatio": 2
+  },
+  {
+    "code": "5251BA",
+    "text": "Даны две коробки, имеющие форму правильной четырёхугольной призмы, стоящей на основании. Первая коробка в четыре раза выше второй, а вторая в полтора раза у́же первой. Во сколько раз объём второй коробки меньше объёма первой?",
+    "hRatio": 0.25,
+    "rRatio": 0.6666666666666666
+  },
+  {
+    "code": "089175",
+    "text": "Даны две коробки, имеющие форму правильной четырёхугольной призмы, стоящей на основании. Первая коробка в четыре раза ниже второй, а вторая в полтора раза шире первой. Во сколько раз объём второй коробки больше объёма первой?",
+    "hRatio": 4,
+    "rRatio": 1.5
+  },
+  {
+    "code": "044EC1",
+    "text": "Даны две коробки, имеющие форму правильной четырёхугольной призмы, стоящей на основании. Первая коробка в четыре с половиной раза выше второй, а вторая в полтора раза шире первой. Во сколько раз объём первой коробки больше объёма второй?",
+    "hRatio": 0.2222222222222222,
+    "rRatio": 1.5
+  },
+  {
+    "code": "F1F199",
+    "text": "Даны две коробки, имеющие форму правильной четырёхугольной призмы, стоящей на основании. Первая коробка в четыре с половиной раза выше второй, а вторая втрое шире первой. Во сколько раз объём первой коробки меньше объёма второй?",
+    "hRatio": 0.2222222222222222,
+    "rRatio": 3
+  },
+  {
+    "code": "38C38E",
+    "text": "Даны две коробки, имеющие форму правильной четырёхугольной призмы, стоящей на основании. Первая коробка в четыре с половиной раза ниже второй, а вторая втрое у́же первой. Во сколько раз объём первой коробки больше объёма второй коробки?",
+    "hRatio": 4.5,
+    "rRatio": 0.3333333333333333
+  }
+];
+		let preference = ['general'].concat(variants.map(v => v.code));
+		let selected = getSelectedPreferenceFromList('523577', preference);
+		let v;
+		if (selected) {
+			v = variants[selected - 1];
+		} else {
+			// Сохраняем исходную генерацию числовых параметров наряду с
+			// фиксированными словесными соотношениями ФИПИ.
+			let w, h, ratio;
+			do {
+				w = sl(2, 6);
+				h = sl(15, 60) / 10;
+				ratio = w * w / h;
+			} while (ratio <= 1 || ratio > 20 || Math.abs(ratio * 10 - Math.round(ratio * 10)) > 1e-8);
+			v = {
+				hRatio: 1 / h, rRatio: w,
+				text: 'Даны две коробки, имеющие форму правильной четырёхугольной призмы, стоящей на основании. ' +
+					'Первая коробка в ' + chislitlx(h, 'раз', '$v') + ' выше второй, а вторая в ' +
+					chislitlx(w, 'раз', '$v') + ' шире первой. Во сколько раз объём второй коробки больше объёма первой?',
+			};
+		}
+		let ratio = v.hRatio * v.rRatio * v.rRatio;
+		let answer = Math.round(Math.max(ratio, 1 / ratio) * 10) / 10;
 		NAtask.setTask({
-			text: taskText,
-			answers: volumeRatio,
+			text: v.text,
+			answers: answer,
+			preference: preference,
+			analys: 'Объёмы правильных четырёхугольных призм относятся как произведение квадрата отношения сторон оснований на отношение высот: ' +
+				'$V_2/V_1 = (' + v.rRatio + ')^2 \\cdot (' + v.hRatio + ')$. Искомое отношение равно $' + answer + '$.',
 		});
-
 		NAtask.modifiers.addCanvasIllustration({
-			width: 400,
+			width: 420,
 			height: 300,
-			paint: paintBoxes,
+			paint: function (ct) {
+				let a = 1, h = 2.2 * Math.sqrt(v.rRatio / v.hRatio);
+				let a2 = v.rRatio, h2 = h * v.hRatio;
+				let dx = Math.cos(Math.PI / 6), dy = Math.sin(Math.PI / 6);
+				let gap = 0.4 * Math.max(a, a2);
+				let totalW = (a + a2) * (1 + dx) + gap;
+				let totalH = Math.max(h + a * dy, h2 + a2 * dy);
+				let scale = Math.min(380 / totalW, 250 / totalH);
+				ct.translate(20, 275);
+				ct.scale(scale, -scale);
+				ct.lineWidth = 2 / scale;
+				let color = om.secondaryBrandColors.iz();
+				let box = function (side, height) {
+					ct.drawParallelepiped({ width: side, depth: side, height: height,
+						angle: Math.PI / 6, strokeStyle: color }, [6, 8, 10], false, [5 / scale, 3 / scale]);
+				};
+				box(a, h);
+				ct.translate(a * (1 + dx) + gap, 0);
+				box(a2, h2);
+			},
 		});
-
 		NAtask.modifiers.allDecimalsToStandard();
 	}, 1000);
 })();
-// https://mathb-ege.sdamgia.ru/problem?id=523577
