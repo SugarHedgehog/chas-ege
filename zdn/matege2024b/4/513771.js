@@ -28,10 +28,4 @@
 //zer00player
 //https://mathb-ege.sdamgia.ru/problem?id=513771
 //https://mathb-ege.sdamgia.ru/problem?id=513811
-// ФИПИ: сопоставленные позиции категории 4 и все исходные коды.
-// 4.86: BB836B, B18BA1, F47F83
-// 4.87: EE3E4A, B80856, 9E6080, E76124, BA7487, 662485
-// 4.88: 9331CD
-// 4.89: 49AF19, BA932F, 8394C4, EE23EF, F8B874, 49BEEB, 598136
-// 4.105: 727E60, 17EC80
-// 4.106: CCB181, E9B484
+// BB836B, B18BA1, F47F83, EE3E4A, B80856, 9E6080, E76124, BA7487, 662485, 9331CD, 49AF19, BA932F, 8394C4, EE23EF, F8B874, 49BEEB, 598136, 727E60, 17EC80, CCB181, E9B484
