@@ -53,7 +53,6 @@
 			authors: ['Александра Суматохина'],
 			preference: preference,
 		});
-		NAtask.modifiers.allDecimalsToStandard(true);
 		NAtask.modifiers.multiplyAnswerBySqrt(13);
 
 		NAtask.modifiers.addCanvasIllustration({
@@ -61,6 +60,7 @@
 			height: 400,
 			paint: paint1,
 		});
+		NAtask.modifiers.allDecimalsToStandard(true);
 
 	}, 2000);
 })();
