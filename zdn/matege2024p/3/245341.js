@@ -86,7 +86,6 @@
 			author: ['Суматохина Александра']
 		});
 		NAtask.modifiers.multiplyAnswerBySqrt(12);
-		NAtask.modifiers.allDecimalsToStandard(true);
 		NAtask.modifiers.assertSaneDecimals();
 		NAtask.modifiers.variativeABC(letter);
 
@@ -95,6 +94,7 @@
 			height: 400,
 			paint: paint1,
 		});
+		NAtask.modifiers.allDecimalsToStandard(true);
 	}, 100000);
 })();
 /*
