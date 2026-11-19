@@ -1,13 +1,15 @@
 (function() {
 	retryWhileError(function() {
 		NAinfo.requireApiVersion(0, 2);
+		let key = '630095';
+		let preference = ['two', 'three', 'four', 'five'];
+		let numberOfTarget = getSelectedPreferenceFromList(key, preference) + 2;
 		let numString = ['двух', 'трёх', 'четырёх', 'пяти'];
 		let probability = sl(0.1, 0.9, 0.01);
 		let antiProbability = 1 - probability;
-		let numberOfTarget = sl(2, 4);
 		let numberOfWin = sl(1, numberOfTarget - 1);
 		let answ = probability.pow(numberOfWin) * antiProbability.pow(numberOfTarget - numberOfWin);
-		genAssertZ1000(answ);
+		genAssertZ1000(answ*[1, 100][Number(numberOfTarget>3)]);
 		
 		let condition = ['последнюю', 'первую', 'вторую', 'третью', 'четвёртую'];
 		condition.splice(numberOfTarget+1,numberOfTarget);
@@ -55,6 +57,7 @@
 				'Найдите вероятность того, что стрелок попадёт только в' + condition + '.',
 			answers: answ,
 			analys: '',
+			preference: preference,
 		});
 	});
 })();
