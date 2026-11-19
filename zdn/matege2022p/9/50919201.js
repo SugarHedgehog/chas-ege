@@ -1,4 +1,4 @@
-retryWhileUndefined(function() {
+retryWhileUndefined(function () {
 	NAinfo.requireApiVersion(0, 2);
 
 	function fg(x) {
@@ -25,19 +25,19 @@ retryWhileUndefined(function() {
 	if (!k2 || k2 > 50)
 		return;
 	let pointsg = intPoints(fg, {
-		minX: -5,
-		maxX: 5,
-		minY: -5.5,
-		maxY: 5.5,
+		minX: -8,
+		maxX: 8,
+		minY: -9,
+		maxY: 7,
 		step: 1,
 	});
 	if (pointsg.length < 2)
 		return;
 	let pointsp = intPoints(fp, {
-		minX: -5,
-		maxX: 5,
-		minY: -5.5,
-		maxY: 5.5,
+		minX: -8,
+		maxX: 8,
+		minY: -9,
+		maxY: 7,
 		step: 1,
 	});
 	if (pointsp.length < 2)
@@ -48,40 +48,40 @@ retryWhileUndefined(function() {
 	let minX = [x1, x2].minE();
 	let minY = [y1, y2].minE();
 	switch (3) {
-	case 1:
-		let str = [
-			['большую', [maxX, maxY]],
-			['меньшую', [minX, minY]]
-		].iz();
-		find = [
-			['ординат', str[1].pop()],
-			['абсцисс', str[1].shift()]
-		].iz();
-		answ = find.pop();
-		find = str[0] + ' из ' + find;
-		break;
-	case 2:
-		find = 'сумму всех координат';
-		answ = x1 + x2 + y1 + y2;
-		break;
-	case 3:
-		let str1 = [
-			['большей', maxX],
-			['меньшей', minX]
-		].iz();
-		let str2 = [
-			['большей', maxY],
-			['меньшей', minY]
-		].iz();
-		find = 'сумму ' + str1[0] + ' абсциссы и ' + str2[0] + ' ординаты';
-		answ = str1[1] + str2[1];
-		break;
+		case 1:
+			let str = [
+				['большую', [maxX, maxY]],
+				['меньшую', [minX, minY]]
+			].iz();
+			find = [
+				['ординат', str[1].pop()],
+				['абсцисс', str[1].shift()]
+			].iz();
+			answ = find.pop();
+			find = str[0] + ' из ' + find;
+			break;
+		case 2:
+			find = 'сумму всех координат';
+			answ = x1 + x2 + y1 + y2;
+			break;
+		case 3:
+			let str1 = [
+				['большей', maxX],
+				['меньшей', minX]
+			].iz();
+			let str2 = [
+				['большей', maxY],
+				['меньшей', minY]
+			].iz();
+			find = 'сумму ' + str1[0] + ' абсциссы и ' + str2[0] + ' ординаты';
+			answ = str1[1] + str2[1];
+			break;
 	}
-	let paint1 = function(ct) {
-		let h = 300;
-		let w = 300;
+	let paint1 = function (ct) {
+		let h = 400;
+		let w = 400;
 		//Оси координат
-		ct.drawCoordinatePlane (w, h, {
+		ct.drawCoordinatePlane(w, h, {
 			hor: 1,
 			ver: 1
 		}, {
@@ -93,17 +93,17 @@ retryWhileUndefined(function() {
 		ct.scale(20, -20);
 		ct.lineWidth = 0.1;
 		graph9AdrawFunction(ct, fg, {
-			minX: -6.5,
-			maxX: 7,
-			minY: -7,
-			maxY: 6,
+			minX: -8.5,
+			maxX: 8.5,
+			minY: -9.5,
+			maxY: 7.7,
 			step: 0.05,
 		});
 		graph9AdrawFunction(ct, fp, {
-			minX: -6.5,
-			maxX: 7,
-			minY: -7,
-			maxY: 6,
+			minX: -8.5,
+			maxX: 8.5,
+			minY: -9.5,
+			maxY: 7.7,
 			step: 0.05,
 		});
 		//точки
@@ -122,9 +122,9 @@ retryWhileUndefined(function() {
 			'$A(' + x1 + ';' + y1 + ')$<br>' +
 			'$B(' + x2 + ';' + y2 + ')$',
 	});
-	chas2.task.modifiers.addCanvasIllustration({
-		width: 300,
-		height: 300,
+	NAtask.modifiers.addCanvasIllustration({
+		width: 400,
+		height: 400,
 		paint: paint1,
 	});
 	return true;
