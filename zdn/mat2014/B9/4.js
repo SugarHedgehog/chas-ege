@@ -1,9 +1,12 @@
 (function() {
+	let key = '4';
+	let preference = ['3', '4', '5', '6'];
+	let rand = getSelectedPreferenceFromList(key, preference);
 
 	var p;
 	for(p=-1;p<0;){
 		var t=sluchch(1,10);
-		var v1=sluchch(3,6);
+		var v1=Number(preference[rand])
 		var m=[];
 		for(var i=0;i<v1;i++){
 			m[i]={ch:sluchch(-10,10),zn:(t.pow((i-2).polozh())*10).sluchDel()};
@@ -16,6 +19,7 @@
 					'Материальная точка движется прямолинейно по закону $x(t)='+m.mn_txt('t')+'$, где $x$ — расстояние от точки отсчета в метрах, $t$ — время в секундах, измеренное с начала движения. Найдите ее скорость (в метрах в секунду) в момент времени $t='+t+'$ с.'
 					).plusminus();
 	window.vopr.ver=[p.ts()];
+	window.vopr.preference = preference;
 	
 	window.vopr.kat['log']=0;
 	window.vopr.kat['prz']=1;
