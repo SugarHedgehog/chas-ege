@@ -5,7 +5,7 @@
 		let angle = sl(2, 88);
 
 		let paint1 = function(ctx) {
-			ctx.lineWidth = 2;
+			ctx.lineWidth = om.primaryLineWidth;
 
 			let arc = Math.PI/2.9;
 			
@@ -26,7 +26,7 @@
 			ctx.drawLine(ver.x, ver.y,ver.x, 250);
 
 			//прямой угол
-			ctx.lineWidth = 1.2;
+			ctx.lineWidth = om.secondaryLineWidth;
 			ctx.drawLine(ver.x - 20, 250, ver.x - 20, 250 - 20);
 			ctx.drawLine(ver.x, 250 - 20, ver.x - 20, 250 - 20);
 
