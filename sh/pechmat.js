@@ -50,6 +50,9 @@ function readOptions() {
 	options.uniqueAnswersAndSolutions = $('#uniqueAnswersAndSolutions').is(':checked');
 	options.startTransitNumber = 1 * $('#start-transit-number').val();
 	options.prepareLaTeX = $('#prepareLaTeX').is(':checked');
+	options.prepareFillword = $('#prepareFillword').is(':checked');
+	options.fillwordShape = $('#fillwordShape').val();
+	options.fillwordDecoys = $('#fillwordDecoys').val();
 	options.forceIntegers = $('#forceIntegers').is(':checked');
 	options.onlyIntegers = $('#onlyIntegers').is(':checked');
 	options.randomSeed = $('#randomSeed').val();
@@ -142,6 +145,13 @@ function konecSozd() {
 		}
 	}
 
+	//Филворд из актуальных ответов (generatedTasks) — в HTML и в .tex
+	try {
+		refreshFillword();
+	} catch (e) {
+		console.error('Не удалось собрать филворд:', e);
+	}
+
 	refreshLaTeXarchive();
 	MathJax.Hub.Typeset(testGotov);
 	udalPanel();
@@ -183,9 +193,9 @@ function appendVariantTasksEnding() {
 
 function appendVariantAnswersCaption() {
 	strOtv +=
-		'<table '+
-			'class="normtabl tablpech pech-answers-table" ' +
-			'id="pech-answers-table-variant-' + variantNumber +
+		'<table ' +
+		'class="normtabl tablpech pech-answers-table" ' +
+		'id="pech-answers-table-variant-' + variantNumber +
 		'">';
 
 	if (!options.vanishVariants) {
@@ -208,6 +218,12 @@ function endCurrentVariant() {
 	nZ = 0;
 	appendVariantTasksEnding();
 	appendVariantAnswersEnding();
+	//Вариант дописан: добавляем ему собственные оболочки филворда
+	try {
+		appendFillwordVariantPlaceholders(variantNumber);
+	} catch (e) {
+		console.error('Не удалось добавить оболочки филворда:', e);
+	}
 	if(options.uniqueAnswersOnlyInOneVariant){
 		unqDict={};
 	}
@@ -421,12 +437,18 @@ function renewTask() {
 	dvig.zadan(function () {
 		console.log(wrapper);
 		var taskHtml = createHtmlForTask(nazvzad);
-		wrapper  .replaceWith(taskHtml.txt);
+		wrapper.replaceWith(taskHtml.txt);
 		answerRow.replaceWith(taskHtml.ver);
-		solution .replaceWith(taskHtml.rsh);
+		solution.replaceWith(taskHtml.rsh);
 		window.vopr.dey();
 		convertCanvasToImagesIfNeeded();
 		grabCurrentTask();
+		//Задание перегенерировано — ответы другие: пересобираем филворд ТОЛЬКО этого варианта
+		try {
+			refreshFillword(1 * variantNumber);
+		} catch (e) {
+			console.error('Не удалось пересобрать филворд:', e);
+		}
 		if (options.prepareLaTeX) {
 			tasksInLaTeX[taskId] = replaceCanvasWithImgInTask(getTaskTextContainerByTaskId(taskId), vopr.txt, window.vopr.taskCategory);
 			refreshLaTeXarchive();
@@ -442,16 +464,16 @@ function insertGridFields() {
 	$('#grid-svg-template')[0].style.minHeight = fieldHeight + 'cm';
 
 	var cellSize = $('#grid-cell-size').val();
-	$('#grid-pattern')[0].setAttribute('width' ,cellSize);
-	$('#grid-pattern')[0].setAttribute('height',cellSize);
+	$('#grid-pattern')[0].setAttribute('width', cellSize);
+	$('#grid-pattern')[0].setAttribute('height', cellSize);
 
-	$('#grid-pattern-line-1')[0].setAttribute('x1',cellSize/2);
-	$('#grid-pattern-line-1')[0].setAttribute('x2',cellSize/2);
-	$('#grid-pattern-line-1')[0].setAttribute('y2',cellSize  );
+	$('#grid-pattern-line-1')[0].setAttribute('x1', cellSize / 2);
+	$('#grid-pattern-line-1')[0].setAttribute('x2', cellSize / 2);
+	$('#grid-pattern-line-1')[0].setAttribute('y2', cellSize);
 
-	$('#grid-pattern-line-2')[0].setAttribute('y1',cellSize/2);
-	$('#grid-pattern-line-2')[0].setAttribute('y2',cellSize/2);
-	$('#grid-pattern-line-2')[0].setAttribute('x2',cellSize  );
+	$('#grid-pattern-line-2')[0].setAttribute('y1', cellSize / 2);
+	$('#grid-pattern-line-2')[0].setAttribute('y2', cellSize / 2);
+	$('#grid-pattern-line-2')[0].setAttribute('x2', cellSize);
 
 
 	var svg = $('#grid-svg-container').html();
@@ -459,12 +481,12 @@ function insertGridFields() {
 
 
 	$('#grid-style-placeholder').html(
-		'<style>'+
-			'.grid-for-writing { ' +
-				'display: block;' +
-				'min-height: ' + fieldHeight + 'cm;' +
-				'background-image: ' + 'url(data:image/svg+xml;base64,' + svgCode + ');' +
-			'}'+
+		'<style>' +
+		'.grid-for-writing { ' +
+		'display: block;' +
+		'min-height: ' + fieldHeight + 'cm;' +
+		'background-image: ' + 'url(data:image/svg+xml;base64,' + svgCode + ');' +
+		'}' +
 		'</style>'
 	);
 
@@ -480,7 +502,7 @@ function removeGridFields() {
 
 function getAnswersSubtableLaTeX(cellsInFirstRow, answersParsedToTeX) {
 	const maxRows = options.splitAnswersNumber || 60;
-	const hline = "\n\\\\\n\\hline\n";
+	const hline = "\n\n\\hline\n";
 	const colFormat = (new Array(cellsInFirstRow)).fill('|l').join('') + '|';
 
 	let res = '';
@@ -504,11 +526,15 @@ function createLaTeXbunchAnswers(variantN) {
 	var answersParsedToTeX = [];
 	// The first row may be the caption, so...
 	var cellsInFirstRow = (answerRows[2] || answerRows[1] || answerRows[0]).getElementsByTagName('td').length;
+	let count = 0;
 	for (var row of Array.from(answerRows)) {
+		count++;
 		var tdCells = row.getElementsByTagName('td');
 		if (tdCells.length) {
 			//TODO: reverse-decode LaTeX from MathJax
-			answersParsedToTeX.push(Array.from(tdCells).map(x => x.innerHTML).join(' & '));
+			answersParsedToTeX.push(Array.from(tdCells).map(x => x.innerHTML).join(' & ') + '\\\\');
+			if (count % 50 == 0 && count < kZ)
+				answersParsedToTeX.push('\\end{tabular}&\\begin{tabular}[t]{' + (new Array(cellsInFirstRow)).fill('|l').join('') + '|' + '}')
 		}
 	}
 	return getAnswersSubtableLaTeX(cellsInFirstRow, answersParsedToTeX);
@@ -553,7 +579,6 @@ function createLaTeXbunchTasks(variantN) {
 	return bunchText;
 }
 
-
 function refreshLaTeXarchive() {
 	if (!options.prepareLaTeX) {
 		return;
@@ -580,6 +605,19 @@ function refreshLaTeXarchive() {
 	bunchTasks += "\n\n%Random seed:" + options.randomSeed;
 
 	zip.file("tasks.tex", bunchTasks);
+	if (window.fillwordState && options.prepareFillword) {
+		// Самодостаточные LaTeX-файлы филвордов — туда же, где tasks.tex и answers.tex:
+		// по одному на вариант, в порядке следования вариантов в архиве.
+		// Наружу отдельной ссылкой филворд не отдаётся.
+		var fwIndex = 0;
+		for (var vvi = 0; vvi < variantsGenerated.length; vvi++) {
+			var fwRec = fillwordState.byVariant[variantsGenerated[vvi]];
+			if (fwRec && fwRec.tex) {
+				fwIndex++;
+				zip.file('fillword-variant-' + fwIndex + '.tex', fwRec.tex);
+			}
+		}
+	}
 	zip.file("answers.tex", "\\documentclass[a4paper]{article}\n\\usepackage[T2A]{fontenc}\n\\usepackage[utf8]{inputenc}\n\\usepackage[english,russian]{babel}\n\\usepackage{multicol}\n\n\\setlength{\\columnsep}{0pt}\n\\usepackage[\n\tleft = 0.5cm,\n\tright = 0.5cm,\n\ttop = 0.5cm,\n\tbottom = 0.5cm,\n]{geometry}" + answers);
 
 	var img = zip.folder("images");
@@ -634,3 +672,188 @@ function processArbitraryCodeFiles() {
 function clearArbitraryCodeInput() {
 	document.getElementById('arbitraryCodeInput').value = '';
 }
+
+// === АВТОМАТИЗАЦИЯ ПАКЕТНОЙ ГЕНЕРАЦИИ ===
+(function () {
+    var BATCH_PREFIX = 'batchGen_';
+    var BATCH_TOTAL_KEY = BATCH_PREFIX + 'total';
+    var BATCH_INDEX_KEY = BATCH_PREFIX + 'index';
+    var BATCH_CONST_KEY = BATCH_PREFIX + 'const';
+
+    window.addEventListener('load', function () {
+        var idx = parseInt(sessionStorage.getItem(BATCH_INDEX_KEY));
+        var total = parseInt(sessionStorage.getItem(BATCH_TOTAL_KEY));
+        var constText = sessionStorage.getItem(BATCH_CONST_KEY);
+
+        // 1. Добавляем кнопку на страницу, если её ещё нет
+        if (!document.getElementById('batch-start-btn')) {
+            var btn = document.createElement('button');
+            btn.id = 'batch-start-btn';
+            btn.textContent = '🚀 Пакетная генерация (выбрать файлы)';
+            btn.style.cssText = 'position: fixed; top: 10px; right: 10px; z-index: 9999; padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.3);';
+            
+            btn.onclick = async function () {
+                try {
+                    const input = document.createElement('input');
+                    input.type = 'file';
+                    input.multiple = true;
+                    input.accept = '.js';
+                    
+                    input.onchange = async function () {
+                        const files = Array.from(input.files);
+                        if (files.length < 2) {
+                            alert('Пожалуйста, выберите как минимум 2 файла (постоянный и переменные).');
+                            return;
+                        }
+
+                        // Ищем постоянный файл
+                        let constFile = files.find(f => f.name.includes('nabor-override-all.js'));
+                        
+                        // Фильтруем и сортируем переменные файлы по номеру (1, 2, 3... 10)
+                        let varFiles = files.filter(f => f.name.includes('nabor-override-') && f.name !== (constFile ? constFile.name : ''))
+                                            .sort((a, b) => {
+                                                const numA = parseInt(a.name.match(/nabor-override-(\d+)\.js/)?.[1] || 0);
+                                                const numB = parseInt(b.name.match(/nabor-override-(\d+)\.js/)?.[1] || 0);
+                                                return numA - numB;
+                                            });
+
+                        if (!constFile) {
+                            alert('Не найден файл nabor-override-all.js. Убедитесь, что он выбран вместе с остальными.');
+                            return;
+                        }
+
+                        console.log('💾 Чтение и сохранение файлов в память вкладки...');
+                        btn.textContent = '⏳ Чтение файлов...';
+                        btn.disabled = true;
+
+                        const constText = await constFile.text();
+                        sessionStorage.setItem(BATCH_CONST_KEY, constText);
+                        sessionStorage.setItem(BATCH_TOTAL_KEY, varFiles.length);
+                        sessionStorage.setItem(BATCH_INDEX_KEY, '1');
+
+                        for (let i = 0; i < varFiles.length; i++) {
+                            const text = await varFiles[i].text();
+                            sessionStorage.setItem(BATCH_PREFIX + 'var_' + (i + 1), text);
+                            sessionStorage.setItem(BATCH_PREFIX + 'varname_' + (i + 1), varFiles[i].name);
+                        }
+
+                        console.log('✅ Файлы сохранены. Перезагрузка для начала генерации...');
+                        setTimeout(() => location.reload(), 1000);
+                    };
+
+                    // Этот клик разрешён браузером, так как он внутри обработчика реального клика пользователя
+                    input.click(); 
+                } catch (err) {
+                    console.error('❌ Ошибка при выборе файлов:', err);
+                    alert('Ошибка: ' + err.message);
+                }
+            };
+
+            document.body.appendChild(btn);
+        }
+
+        // 2. Если есть данные в sessionStorage, запускаем автоматический цикл
+        if (idx && total && constText) {
+            var btn = document.getElementById('batch-start-btn');
+            if (btn) {
+                btn.textContent = '⏳ Идет генерация: ' + idx + ' из ' + total;
+                btn.style.background = '#FF9800';
+                btn.disabled = true;
+            }
+
+            if (idx > total) {
+                // Очистка памяти после завершения
+                for (let i = 1; i <= total; i++) {
+                    sessionStorage.removeItem(BATCH_PREFIX + 'var_' + i);
+                    sessionStorage.removeItem(BATCH_PREFIX + 'varname_' + i);
+                }
+                sessionStorage.removeItem(BATCH_INDEX_KEY);
+                sessionStorage.removeItem(BATCH_TOTAL_KEY);
+                sessionStorage.removeItem(BATCH_CONST_KEY);
+                
+                setTimeout(() => alert('🎉 Пакетная генерация полностью завершена! Обработано файлов: ' + total), 500);
+                if (btn) {
+                    btn.textContent = '🚀 Пакетная генерация (выбрать файлы)';
+                    btn.style.background = '#4CAF50';
+                    btn.disabled = false;
+                }
+                return;
+            }
+
+            console.log('🚀 Пакетная генерация: файл ' + idx + ' из ' + total);
+
+            (async function runBatchStep() {
+                // Ждем инициализации страницы (MathJax, startShell и т.д.)
+                await new Promise(r => setTimeout(r, 2000)); 
+
+                try {
+                    const varText = sessionStorage.getItem(BATCH_PREFIX + 'var_' + idx);
+                    const varName = sessionStorage.getItem(BATCH_PREFIX + 'varname_' + idx) || ('variant_' + idx + '.js');
+
+                    // Подставляем файлы в <input type="file">
+                    var inputEl = document.getElementById('arbitraryCodeInput');
+                    if (inputEl) {
+                        var dt = new DataTransfer();
+                        dt.items.add(new File([constText], 'nabor-override-all.js', { type: 'text/javascript' }));
+                        dt.items.add(new File([varText], varName, { type: 'text/javascript' }));
+                        inputEl.files = dt.files;
+                        console.log('📎 Файлы подставлены в поле загрузки.');
+                        inputEl.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
+
+                    // Перехватываем alert, чтобы отследить момент готовности
+                    var origAlert = window.alert;
+                    var generationDone = false;
+                    window.alert = function (msg) {
+                        if (msg && msg.indexOf('Тесты составлены') !== -1) {
+                            generationDone = true;
+                        }
+                    };
+
+                    // Запускаем вашу штатную функцию генерации
+                    await zapusk();
+
+                    // Ждем, пока testGotov() вызовет alert
+                    await new Promise(function (resolve) {
+                        var check = setInterval(function () {
+                            if (generationDone) {
+                                clearInterval(check);
+                                resolve();
+                            }
+                        }, 300);
+                    });
+                    console.log('✅ Генерация завершена.');
+
+                    // Ждем, пока JSZip сформирует архив и пропишет его в ссылку
+                    var link = document.getElementById('latex-archive-placeholder');
+                    if (link) {
+                        await new Promise(function (resolve) {
+                            var check = setInterval(function () {
+                                if (link.href && link.href.indexOf('data:application/zip') === 0) {
+                                    clearInterval(check);
+                                    resolve();
+                                }
+                            }, 300);
+                        });
+                        link.click();
+                        console.log('📦 Архив отправлен на скачивание.');
+                    }
+
+                    // Восстанавливаем alert
+                    window.alert = origAlert;
+
+                    // Переходим к следующему файлу
+                    var nextIdx = idx + 1;
+                    sessionStorage.setItem(BATCH_INDEX_KEY, String(nextIdx));
+                    console.log('⏳ Перезагрузка для файла ' + nextIdx + ' через 3 секунды...');
+                    setTimeout(function () { location.reload(); }, 3000);
+
+                } catch (err) {
+                    console.error('❌ Ошибка пакетной генерации:', err);
+                    sessionStorage.removeItem(BATCH_INDEX_KEY); // Остановить цикл при ошибке
+                    alert('Ошибка пакетной генерации: ' + err.message);
+                }
+            })();
+        }
+    });
+})();

@@ -1,5 +1,9 @@
 'use strict';
 
+// ============================================================================
+// ОСНОВНЫЕ ФУНКЦИИ ГЕНЕРАЦИИ ЗАДАНИЙ
+// ============================================================================
+
 /**
  * Генерирует HTML для задания.
  * @param {string} category - Категория задания.
@@ -138,7 +142,9 @@ function restoreVariantState(taskNumber, originalPreference) {
 // ============================================================================
 
 /**
- * Генерирует каталог заданий.
+ * Подготавливает окружение для генерации задания
+ * @param {string} category - Категория
+ * @param {string} taskNumber - Номер задания
  */
 function generateKatalog() {
 	var rez='';
@@ -180,34 +186,217 @@ function generateKatalog() {
 }
 
 /**
- * Генерирует HTML с дополнительными кнопками
- * @returns {string} HTML
+ * Получает варианты задания на основе предпочтений
+ * @param {string} taskNumber - Номер задания
+ * @returns {Array} Массив вариантов
  */
-function generateTaskControls() {
-	return `
-		<div>
-			<button class="copybutton" style="float:right;" title="Экспорт в РешуЕГЭ" data-task="${encodeURIComponent(JSON.stringify(vopr))}">&#x2398;</button>
-			<button class="renewbutton" style="float:right; margin-right:1.46em;" title="Заменить задание на похожее">&#x27F3;</button>
-			<button class="addbutton" style="float:right; margin-right:1.46em;" title="Добавить похожее задание">+</button>
-		</div>
-		<br/>
-	`;
+function getTaskVariants(taskNumber) {
+    let variants = [null];
+    const hasExplicitPreferences = window.nabor.preferences && window.nabor.preferences[taskNumber];
+    
+    if (vopr.preference && Array.isArray(vopr.preference) && vopr.preference.length > 0) {
+        if (hasExplicitPreferences) {
+            variants = [window.nabor.preferences[taskNumber]];
+        } else {
+            variants = generateVariations(vopr.preference);
+        }
+    }
+    return variants;
 }
 
 /**
- * Создает секцию с решением
+ * Генерирует HTML для одного варианта задания
+ * @param {string} category - Категория
+ * @param {string} taskNumber - Номер задания
+ * @param {any} variant - Текущий вариант
+ * @param {number} index - Индекс варианта
+ * @param {number} totalVariants - Общее количество вариантов
+ * @param {Array} actionsArray - Массив действий
+ * @returns {string} HTML варианта
+ */
+function generateVariantHtml(category, taskNumber, variant, index, totalVariants, actionsArray) {
+    const state = saveCurrentState(taskNumber);
+    
+    try {
+        applyVariantPreferences(taskNumber, variant);
+        regenerateTask(category, taskNumber);
+        
+        return buildVariantHtml(category, taskNumber, variant, index, totalVariants, actionsArray);
+    } finally {
+        restoreState(taskNumber, state);
+    }
+}
+
+/**
+ * Сохраняет текущее состояние перед генерацией варианта
+ * @param {string} taskNumber - Номер задания
+ * @returns {Object} Сохраненное состояние
+ */
+function saveCurrentState(taskNumber) {
+    return {
+        originalPreferences: window.nabor.preferences ? {...window.nabor.preferences} : {},
+        originalVopr: {...vopr}
+    };
+}
+
+/**
+ * Восстанавливает состояние после генерации варианта
+ * @param {string} taskNumber - Номер задания
+ * @param {Object} state - Ранее сохраненное состояние
+ */
+function restoreState(taskNumber, state) {
+    if (window.nabor.preferences) {
+        window.nabor.preferences[taskNumber] = state.originalPreferences[taskNumber];
+    }
+    
+    Object.keys(state.originalVopr).forEach(key => {
+        if (vopr[key] !== state.originalVopr[key]) {
+            vopr[key] = state.originalVopr[key];
+        }
+    });
+}
+
+/**
+ * Применяет предпочтения для конкретного варианта
+ * @param {string} taskNumber - Номер задания
+ * @param {any} variant - Предпочтения варианта
+ */
+function applyVariantPreferences(taskNumber, variant) {
+    if (variant !== null) {
+        window.nabor.preferences = window.nabor.preferences || {};
+        window.nabor.preferences[taskNumber] = variant;
+    }
+}
+
+/**
+ * Перегенерирует задание с текущими настройками
+ * @param {string} category - Категория
+ * @param {string} taskNumber - Номер задания
+ */
+function regenerateTask(category, taskNumber) {
+    nabor.upak[category][taskNumber]();
+}
+
+/**
+ * Собирает полный HTML для варианта
+ * @param {string} category - Категория
+ * @param {string} taskNumber - Номер задания
+ * @param {any} variant - Текущий вариант
+ * @param {number} index - Индекс варианта
+ * @param {number} totalVariants - Общее количество вариантов
+ * @param {Array} actionsArray - Массив действий
+ * @returns {string} Полный HTML варианта
+ */
+function buildVariantHtml(category, taskNumber, variant, index, totalVariants, actionsArray) {
+    let html = createTaskWrapperStart(category, taskNumber);
+    html += createTaskTitle(category, taskNumber);
+    html += createVariantInfoIfNeeded(taskNumber, variant, index, totalVariants);
+    html += createTaskContent(category, taskNumber);
+    html += createTaskFooter(actionsArray);
+    html += createSolutionSection();
+    html += createAuthorsSection();
+    html += closeTaskWrapper();
+    
+    return html;
+}
+
+/**
+ * Создает открывающий тег обертки задания
+ * @param {string} category - Категория
+ * @param {string} taskNumber - Номер задания
  * @returns {string} HTML
  */
+function createTaskWrapperStart(category, taskNumber) {
+    return `<div class="task-wrapper" data-category="${category}" data-tasknumber="${taskNumber}">`;
+}
+
+/**
+ * Создает заголовок задания
+ * @param {string} category - Категория
+ * @param {string} taskNumber - Номер задания
+ * @returns {string} HTML
+ */
+function createTaskTitle(category, taskNumber) {
+    const currentTaskPath = `${nabor.adres}${category}/${taskNumber}.js`;
+    return currentTaskPath.vTag('h2');
+}
+
+/**
+ * Создает информацию о варианте, если их несколько
+ * @param {string} taskNumber - Номер задания
+ * @param {any} variant - Текущий вариант
+ * @param {number} index - Индекс варианта
+ * @param {number} totalVariants - Общее количество вариантов
+ * @returns {string} HTML
+ */
+function createVariantInfoIfNeeded(taskNumber, variant, index, totalVariants) {
+    const hasExplicitPreferences = window.nabor.preferences && window.nabor.preferences[taskNumber];
+    
+    if (totalVariants > 1 || hasExplicitPreferences) {
+        const variation = formatVariantInfo(taskNumber, variant);
+        return `<div class="variant-info">Вариация: '${variation}'</div>`;
+    }
+    return '';
+}
+
+/**
+ * Форматирует информацию о варианте
+ * @param {string} taskNumber - Номер задания
+ * @param {any} variant - Текущий вариант
+ * @returns {string} Отформатированная строка
+ */
+function formatVariantInfo(taskNumber, variant) {
+    const parts = [taskNumber];
+    if (Array.isArray(variant)) {
+        parts.push(variant.join('_'), variant.join(' '));
+    } else {
+        parts.push(variant, variant);
+    }
+    return parts.join(' ');
+}
+
+/**
+ * Создает основное содержание задания
+ * @param {string} category - Категория
+ * @param {string} taskNumber - Номер задания
+ * @returns {string} HTML
+ */
+function createTaskContent(category, taskNumber) {
+    vopr.template = `${nabor.adres}${category}/${taskNumber}.js`.replace(/^(\.\.\/)+/, '');
+    vopr.taskNumber = category;
+    return `<br/>${vopr.txt.vTag('div')}<br/>`;
+}
+
+/**
+ * Создает футер задания с кнопками и ответом
+ * @param {Array} actionsArray - Массив действий
+ * @returns {string} HTML
+ */
+function createTaskFooter(actionsArray) {
+    if (vopr.dey) {
+        actionsArray.push(vopr.dey);
+    }
+    
+    return `
+        <div>
+            <button class="copybutton" style="float:right;" title="Экспорт в РешуЕГЭ" data-task="${encodeURIComponent(JSON.stringify(vopr))}">&#x2398;</button>
+            <button class="renewbutton" style="float:right; margin-right:1.46em;" title="Заменить задание на похожее">&#x27F3;</button>
+            <button class="addbutton" style="float:right; margin-right:1.46em;" title="Добавить похожее задание">+</button>
+            Ответ: ${vopr.ver.join('или')}
+        </div>
+        <br/>
+    `;
+}
+
+/**
+Создает секцию с решением
+@returns {string} HTML
+*/
 function createSolutionSection() {
 	if (!vopr.rsh) {
 		return '';
 	}
-
-	return `
-		<button class="spoiler-show">Показать решение</button>
-		<button class="spoiler-hide">Скрыть решение</button>
-		<div class="spoiler-body">Решение: <br/>${vopr.rsh}</div>
-	`;
+	return `<button class="spoiler-show">Показать решение</button> <button class="spoiler-hide">Скрыть решение</button> <div class="spoiler-body">Решение: <br/>${vopr.rsh}</div>`;
 }
 
 /**
@@ -215,18 +404,24 @@ function createSolutionSection() {
  * @returns {string} HTML
  */
 function createAuthorsSection() {
-	if (!vopr.authors || !vopr.authors.length) {
-		return '';
-	}
+    if (!vopr.authors || !vopr.authors.length) return '';
+    
+    const authorLabel = `Автор${'ы'.esli(vopr.authors.length > 1)}: &nbsp;`;
+    return `
+        <br/>
+        <div class="katalog-authors">
+            ${authorLabel}${vopr.authors.join(', ')}
+        </div>
+        <br/>
+    `;
+}
 
-	const authorLabel = `Автор${'ы'.esli(vopr.authors.length > 1)}: &nbsp;`;
-	return `
-		<br/>
-		<div class="katalog-authors">
-			${authorLabel}${vopr.authors.join(', ')}
-		</div>
-		<br/>
-	`;
+/**
+ * Закрывает обертку задания
+ * @returns {string} HTML
+ */
+function closeTaskWrapper() {
+    return '</div>';
 }
 
 /**
@@ -237,18 +432,62 @@ function createAuthorsSection() {
  * @returns {string} HTML с сообщением об ошибке
  */
 function handleTaskError(category, taskNumber, error) {
-	console.error(error);
-	return `<div class="task-wrapper error" data-category="${category}" data-tasknumber="${taskNumber}">
-		Error generating task: ${error.message}
-	</div>`;
+    console.error(error);
+    return `<div class="task-wrapper error" data-category="${category}" data-tasknumber="${taskNumber}">
+        Error generating task: ${error.message}
+    </div>`;
+}
+
+// ============================================================================
+// ОСНОВНЫЕ ФУНКЦИИ ГЕНЕРАЦИИ КАТАЛОГА
+// ============================================================================
+
+/**
+ * Генерирует каталог заданий.
+ */
+function generateKatalog() {
+    const state = initializeCatalogState();
+    
+    for (const category in nabor.upak) {
+        processCategory(category, state);
+    }
+
+    renderCatalog(state);
+    finalizeCatalogGeneration(state.actionsArray);
+}
+
+/**
+ * Инициализирует состояние для генерации каталога
+ * @returns {Object} Состояние каталога
+ */
+function initializeCatalogState() {
+    return {
+        htmlContent: '',
+        tableOfContents: '',
+        actionsArray: [],
+        lineBreak: '<br/>'
+    };
+}
+
+/**
+ * Обрабатывает одну категорию заданий
+ * @param {string} category - Категория
+ * @param {Object} state - Состояние каталога
+ */
+function processCategory(category, state) {
+    resetCategoryState();
+    executeCategoryScheduler(category);
+    addCategoryHeader(category, state);
+    addCategoryTasks(category, state);
+    closeCategory(state);
 }
 
 /**
  * Сбрасывает состояние для новой категории
  */
 function resetCategoryState() {
-	window.comment = '';
-	window.availableTaskNumbers = null;
+    window.comment = '';
+    window.availableTaskNumbers = null;
 }
 
 /**
@@ -256,13 +495,23 @@ function resetCategoryState() {
  * @param {string} category - Категория
  */
 function executeCategoryScheduler(category) {
-	try {
-		if (nabor.upak[category] && nabor.upak[category][nabor.scheduler]) {
-			nabor.upak[category][nabor.scheduler]();
-		}
-	} catch (e) {
-		console.error(`Ошибка в планировщике категории ${category}:`, e);
-	}
+    try {
+        if (nabor.upak[category] && nabor.upak[category][nabor.scheduler]) {
+            nabor.upak[category][nabor.scheduler]();
+        }
+    } catch (e) {
+        console.error(`Ошибка в планировщике категории ${category}:`, e);
+    }
+}
+
+/**
+ * Добавляет заголовок категории
+ * @param {string} category - Категория
+ * @param {Object} state - Состояние каталога
+ */
+function addCategoryHeader(category, state) {
+    state.htmlContent += buildCategoryHeader(category);
+    state.tableOfContents += buildCategoryTocLink(category, state.lineBreak);
 }
 
 /**
@@ -271,13 +520,13 @@ function executeCategoryScheduler(category) {
  * @returns {string} HTML
  */
 function buildCategoryHeader(category) {
-	return `
-		<button class="spoiler-show">Показать категорию ${category}</button>
-		<button class="spoiler-hide">Скрыть категорию ${category}</button>
-		<div class="spoiler-body">
-			<h1 id="${category}">Категория ${category}</h1>
-			${window.comment || ''}
-	`;
+    return `
+        <button class="spoiler-show">Показать категорию ${category}</button>
+        <button class="spoiler-hide">Скрыть категорию ${category}</button>
+        <div class="spoiler-body">
+            <h1 id="${category}">Категория ${category}</h1>
+            ${window.comment || ''}
+    `;
 }
 
 /**
@@ -287,17 +536,72 @@ function buildCategoryHeader(category) {
  * @returns {string} HTML ссылки
  */
 function buildCategoryTocLink(category, lineBreak) {
-	return `<a href="#${category}">${category}. ${window.comment || ''}</a>${lineBreak}`;
+    return `<a href="#${category}">${category}. ${window.comment || ''}</a>${lineBreak}`;
 }
 
 /**
- * Получает список заданий для категории, исключая служебные
+ * Добавляет все задания категории
  * @param {string} category - Категория
- * @returns {Array} Массив номеров заданий, готовых к включению
+ * @param {Object} state - Состояние каталога
  */
-function getIncludableTasksForCategory(category) {
-	const tasks = window.availableTaskNumbers || Object.keys(nabor.upak[category] || {});
-	return tasks.filter(taskNumber => taskNumber !== 'main' && taskNumber !== 'fipi');
+function addCategoryTasks(category, state) {
+    const tasksToList = getTasksForCategory(category);
+    
+    for (const taskNumber of tasksToList) {
+        if (isTaskIncludable(taskNumber)) {
+            state.htmlContent += generateHtmlForTask(category, taskNumber, state.actionsArray);
+        }
+    }
+}
+
+/**
+ * Получает список заданий для категории
+ * @param {string} category - Категория
+ * @returns {Array} Массив номеров заданий
+ */
+function getTasksForCategory(category) {
+    return window.availableTaskNumbers || Object.keys(nabor.upak[category] || {});
+}
+
+/**
+ * Проверяет, нужно ли включать задание
+ * @param {string} taskNumber - Номер задания
+ * @returns {boolean}
+ */
+function isTaskIncludable(taskNumber) {
+    return taskNumber !== 'main' && taskNumber !== 'fipi';
+}
+
+/**
+ * Закрывает блок категории
+ * @param {Object} state - Состояние каталога
+ */
+function closeCategory(state) {
+    state.htmlContent += '</div>';
+}
+
+/**
+ * Рендерит каталог в DOM
+ * @param {Object} state - Состояние каталога
+ */
+function renderCatalog(state) {
+    const element = $('#divrez');
+    if (!element.length) {
+        console.error('Элемент #divrez не найден');
+        return;
+    }
+    element.html(state.tableOfContents + state.lineBreak + state.htmlContent);
+}
+
+/**
+ * Завершает генерацию каталога
+ * @param {Array} actionsArray - Массив действий
+ */
+function finalizeCatalogGeneration(actionsArray) {
+    executeDeferredActions(actionsArray);
+    triggerMathJaxRendering();
+    afterTasksGenerated();
+    expandAllCategories();
 }
 
 /**
@@ -316,15 +620,44 @@ function executeDeferredActions(actionsArray) {
     });
 }
 
+/**
+ * Запускает рендеринг MathJax
+ */
+function triggerMathJaxRendering() {
+    if (window.MathJax && MathJax.Hub) {
+        MathJax.Hub.Typeset();
+    }
+}
+
+/**
+ * Разворачивает все категории
+ */
+function expandAllCategories() {
+    $('.spoiler-show').click();
+}
+
+
+// ============================================================================
+// ФУНКЦИИ ПОСТ-ГЕНЕРАЦИОННОЙ ОБРАБОТКИ
+// ============================================================================
 
 /**
  * Выполняет действия после генерации заданий.
  */
 function afterTasksGenerated() {
-	spoiler();
-	initializeButton('.copybutton', copyTask);
-	initializeButton('.renewbutton', renewTask);
-	initializeButton('.addbutton', addTask);
+    if (typeof spoiler === 'function') {
+        spoiler();
+    }
+    initializeAllButtons();
+}
+
+/**
+ * Инициализирует все кнопки
+ */
+function initializeAllButtons() {
+    initializeButton('.copybutton', copyTask);
+    initializeButton('.renewbutton', renewTask);
+    initializeButton('.addbutton', addTask);
 }
 
 /**
@@ -333,22 +666,29 @@ function afterTasksGenerated() {
  * @param {Function} handler - Обработчик события
  */
 function initializeButton(selector, handler) {
-	$(`${selector}[data-already-inited!=true]`)
-		.click(handler)
-		.attr('data-already-inited', true);
+    $(`${selector}[data-already-inited!=true]`)
+        .click(handler)
+        .attr('data-already-inited', true);
 }
 
-function copyTask() {
-	console.log(this);
-	//var theTask = this.getElementsByTagName('span')[0].innerHTML;
-	var theTask = decodeURIComponent(this.getAttribute('data-task'));
-	console.log(theTask);
-	theTask = JSON.parse(theTask);
-	console.log(theTask);
-	replaceCanvasWithImgInTaskAndHTML($(this).parents('div.task-wrapper')[0], theTask, function() {
-		var fillerCode = createFiller(theTask);
-		copyToClipboard(fillerCode)
-	});
+
+// ============================================================================
+// ОБРАБОТЧИКИ СОБЫТИЙ
+// ============================================================================
+
+/**
+ * Копирует задание в буфер обмена.
+ * @param {Event} event - Событие
+ */
+function copyTask(event) {
+    const button = event.currentTarget;
+    const taskData = parseTaskDataFromButton(button);
+    if (!taskData) return;
+
+    processTaskWithCanvas(button, taskData, (processedTaskData) => {
+        const fillerCode = createFiller(processedTaskData);
+        copyToClipboard(fillerCode);
+    });
 }
 
 /**
@@ -399,10 +739,11 @@ function addTask() {
 
 /**
  * Запускает рендеринг MathJax для элемента
- * @param {HTMLElement} element - элемент (необязательный параметр)
+ * @param {HTMLElement} element - Элемент
  */
-function triggerMathJaxRendering(element) {
-	if (window.MathJax && MathJax.Hub) {
-		MathJax.Hub.Typeset(element);
-	}
+function triggerMathJaxRenderingForElement(element) {
+    if (window.MathJax && MathJax.Hub) {
+        MathJax.Hub.Typeset(element);
+    }
 }
+
