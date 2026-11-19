@@ -1,53 +1,56 @@
-(function() {
-	retryWhileError(function() {
+(function () {
+	retryWhileError(function () {
 		NAinfo.requireApiVersion(0, 2);
+		let key = '27592';
+		let preference = ['ABCareaOfTriangleADF', 'ADFareaOfTriangleABC', 'ABCareaOfTrapezoidBCDF', 'BCDFareaOfTriangleABC', 'BCDFareaOfTriangleADF', 'ADFareaOfTriangleBCDF'];
+		let rand = getSelectedPreferenceFromList(key, preference);
 
 		let a = sl(2, 100);
 
-		let vertices = om.latbukv.iz(5);
+		let vertices = om.latbukv.slice(0, 5);
 
 		let question = {
 			data: 0,
 			find: 0,
 			answ: 0,
 		};
-		switch (sl(1, 6)) {
-		case 1:
-			question.data = vertices.slice(0, 3);
-			question.find = [vertices[0], vertices[3], vertices[4]];
-			question.answ = a * 0.25;
-			break;
-		case 2:
-			question.data = [vertices[0], vertices[3], vertices[4]];
-			question.find = vertices.slice(0, 3);
-			question.answ = a * 4;
-			break;
-		case 3:
-			question.data = vertices.slice(0, 3);
-			question.find = vertices.slice(1, 5);
-			question.answ = a * 0.75;
-			break;
-		case 4:
-			question.data = vertices.slice(1, 5);
-			question.find = vertices.slice(0, 3);
-			question.answ = a * 4 / 3;
-			genAssertZ1000(question.answ, 'Кривой ответ');
-			break;
-		case 5:
-			question.data = vertices.slice(1, 5);
-			question.find = [vertices[0], vertices[3], vertices[4]];
-			question.answ = a / 3;
-			genAssertZ1000(question.answ, 'Кривой ответ');
-			break;
-		case 6:
-			question.data = [vertices[0], vertices[3], vertices[4]];
-			question.find = vertices.slice(1, 5);
-			question.answ = a * 3;
-			break;
+		switch (rand + 1) {
+			case 1:
+				question.data = vertices.slice(0, 3);
+				question.find = [vertices[0], vertices[3], vertices[4]];
+				question.answ = a * 0.25;
+				break;
+			case 2:
+				question.data = [vertices[0], vertices[3], vertices[4]];
+				question.find = vertices.slice(0, 3);
+				question.answ = a * 4;
+				break;
+			case 3:
+				question.data = vertices.slice(0, 3);
+				question.find = vertices.slice(1, 5);
+				question.answ = a * 0.75;
+				break;
+			case 4:
+				question.data = vertices.slice(1, 5);
+				question.find = vertices.slice(0, 3);
+				question.answ = a * 4 / 3;
+				genAssertZ1000(question.answ, 'Кривой ответ');
+				break;
+			case 5:
+				question.data = vertices.slice(1, 5);
+				question.find = [vertices[0], vertices[3], vertices[4]];
+				question.answ = a / 3;
+				genAssertZ1000(question.answ, 'Кривой ответ');
+				break;
+			case 6:
+				question.data = [vertices[0], vertices[3], vertices[4]];
+				question.find = vertices.slice(1, 5);
+				question.answ = a * 3;
+				break;
 		}
 
-		let paint1 = function(ctx) {
-			ctx.lineWidth = 2;
+		let paint1 = function (ctx) {
+			ctx.lineWidth = om.primaryLineWidth;
 			ctx.strokeStyle = om.secondaryBrandColors.iz();
 
 			ctx.drawLine(10, 350, 390, 350);
@@ -58,7 +61,7 @@
 			ctx.drawLine(65, 200, 255, 200);
 
 			//штрихи
-			ctx.lineWidth = 1;
+			ctx.lineWidth = om.secondaryLineWidth;
 
 			ctx.strokeStyle = om.primaryBrandColors.iz();
 			ctx.strokeInMiddleOfSegment(10, 350, 65, 200, 10);
@@ -85,8 +88,10 @@
 				'Найдите площадь ' + ['треугольника', 'трапеции'][question.find.length - 3] + ' $' + question.find.permuteCyclic(
 					sl(1, 3)).join('') + '$.',
 			answers: question.answ,
+			preference: preference,
 			analys: '',
 		});
+		NAtask.modifiers.variativeABC(vertices);
 		NAtask.modifiers.addCanvasIllustration({
 			width: 400,
 			height: 400,
