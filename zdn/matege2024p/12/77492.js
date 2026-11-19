@@ -1,10 +1,14 @@
 (function() {
 	'use strict';
 
-	var arr1 = ['максимумa', 'минимумa'];
+	let key = "77492";
+	let preference = ['maximum', 'minimum'];
+	let rand = getSelectedPreferenceFromList(key, preference);
+
+	var arr1 = ['максимума', 'минимума'][rand];
 	var arr2 = ['положительный', 'отрицательный'];
-	var maxmin1 = sl(0, 1);
-	var maxmin2 = (maxmin1 + 1) % 2;
+	var maxmin1 = 1 - rand;
+	var maxmin2 = rand;
 
 	var ans = sl(2, 14, 2) / 10;
 	var b = sl(5, 50, 5);
@@ -29,10 +33,10 @@
 	}
 
 	chas2.task.setTask({
-		text: 'Найдите точку ' + arr1[maxmin1] + ' функции' +
+		text: 'Найдите точку ' + arr1 + ' функции' +
 			'$$ y=(' + plusmin(b + 'x-' + a) + ')' + '\\cos ' + plusmin('x-' + b) + '\\sin ' + plusmin('x+' + d) + ', $$' +
 			'принадлежащую промежутку $(0; \\frac{\\pi}{2} )$.',
-		analys: '$$ y^{\'}=(' + plusmin(b + 'x-' + a) + ')^{\'}\\cos x+(' + plusmin(b + 'x-' + a) +')'+
+		analys: '$$ y^{\'}=(' + plusmin(b + 'x-' + a) + ')^{\'}\\cos x+(' + plusmin(b + 'x-' + a) + ')' +
 			'(\\cos x)^{\'}+(' + -b + '\\sin x)^{\'}$$' +
 			'$$ y^{\'}=' + b + '\\cos x-(' + plusmin(b + 'x-' + a) + ')' + '\\sin ' + plusmin('x-' + b) + '\\cos x' +
 			' \\Rightarrow\\ ' +
@@ -47,11 +51,9 @@
 			' знак, а на промежутке $(' + ans + '; \\frac{\\pi}{2} )$ ' + arr2[maxmin2] +
 			'. Производная функции меняет знак с ' +
 			sklonlxkand(arr2[maxmin1]).re + ' на ' + arr2[maxmin2] + ',' + ' значит, $' + ans +
-			'$ - это искомая точка ' + arr1[maxmin1] + '.',
-
+			'$ - это искомая точка ' + arr1 + '.',
+		preference: preference,
 		answers: ans,
 	});
 })();
 //77492
-
-
