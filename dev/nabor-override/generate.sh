@@ -152,11 +152,11 @@ process_line() {
     fi
     
     # Специальные строки для конкретных задач
-    if [ "$index" -eq 9 ]; then
+    if [ "$index" -eq 8 ]; then
         echo "sluchch.onlyIntegers = true;" >> "$OUTPUT_FILE"
     fi
     
-    if [ "$index" -eq 11 ]; then
+    if [ "$index" -eq 10 ]; then
         echo "sluchch.onlyIntegers = false;" >> "$OUTPUT_FILE"
     fi
     
