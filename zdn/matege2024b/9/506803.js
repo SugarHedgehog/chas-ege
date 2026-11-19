@@ -64,4 +64,3 @@
 
 })();
 //https://mathb-ege.sdamgia.ru/problem?id=506803
-
