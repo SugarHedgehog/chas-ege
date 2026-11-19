@@ -4,10 +4,12 @@ set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 
 branch="$(git branch --show-current)"
-if [[ "$branch" != "all_task_now" ]]; then
-    echo "Ошибка: текущая ветка '$branch', нужна all_task_now."
+if [[ -z "$branch" ]]; then
+    echo "Ошибка: сначала переключись на ветку."
     exit 1
 fi
+
+echo "Коммитим в текущую ветку: $branch"
 
 # Чтобы чужие подготовленные изменения не попали в коммиты.
 if ! git diff --cached --quiet; then
