@@ -1,61 +1,80 @@
 (function() {
 	'use strict';
+	let key = '125';
+	let preference = ['centralAngle', 'inscribedAngle'];
+	let rand = getSelectedPreferenceFromList(key, preference);
 
-	let angle = sl(2, 89);
+	let angle = sl(10, 85);
+	let letters = om.latbukv.slice(0, 5);
 
-
-	let vertices = om.latbukv.iz(5);
-
-	let subangle1 = [vertices[4], vertices[0], vertices[3]];
-	let subangle2 = [
-		[vertices[1], vertices[2]],
-		[vertices[0], vertices[3]]
-	].iz();
-	subangle2.splice(1, 0, vertices[4]);
-
+	let subangle1 = [letters[4], letters[0], letters[3]];
 	if (sl1())
 		subangle1 = subangle1.permuteCyclic(2);
+		
+	let subangle2 = [
+		[letters[1], letters[2]],
+		[letters[0], letters[3]]
+	].iz();
+	subangle2.splice(1, 0, letters[4]);
+	
+	let condition = [[subangle1.join(''), 180 - angle * 2], [subangle2.join(''), angle]];
+	
+	if(rand){
+		condition = condition.reverse();
+	}
 
-	let paint1 = function(ctx) {
+	let circle = new Circle(new Point(0, 0), 180);
+
+	let startAngle = -sl(0, 79);
+	let AB = circle.diameter(startAngle, {
+		angleInDegrees: true
+	});
+	let CD = circle.diameter(startAngle + 2*angle, {
+		angleInDegrees: true
+	});
+
+	let connectionMatrix = [
+		[1],
+		[0, 0],
+		[1, 0, 1]
+	];
+
+	let points = [AB.pe, AB.ps, CD.pe, CD.ps, circle.pc];
+
+	let paint = function(ctx) {
+		let h = 400;
+		let w = 400;
+
+		ctx.translate(w / 2, h / 2);
+
+		ctx.scale(1, -1);
+		ctx.strokeStyle = om.secondaryBrandColors;
+
 		ctx.lineWidth = 2;
-
-		ctx.strokeStyle = om.secondaryBrandColors.iz();
-		ctx.drawArc(200, 200, 180, 0, 2 * Math.PI);
-
-		let deltaX = (angle > 90 ? 140 : 70);
-		let deltaY = (angle > 90 ? 111 : 165);
-
-		//центральный
+		ctx.drawArc(0, 0, 180, 0, 2 * Math.PI);
 		ctx.strokeStyle = om.primaryBrandColors.iz();
-		ctx.drawLine(200 - deltaX, 200 - deltaY, 200 + deltaX, 200 + deltaY);
-		ctx.drawLine(200 - deltaX, 200 + deltaY, 200 + deltaX, 200 - deltaY);
+		ctx.drawFigure(points, connectionMatrix);
+		ctx.drawFilledCircle(0, 0, 3);
 
-		ctx.drawLine(200 - deltaX, 200 - deltaY, 200 - deltaX, 200 + deltaY);
-		ctx.drawFilledCircle(200, 200, 3);
-
-		ctx.font = "23px liberation_sans";
-		ctx.fillText(vertices[0], 200 - deltaX - 10, 200 - deltaY - 15);
-		ctx.fillText(vertices[1], 200 + deltaX + 10, 200 + deltaY + 25);
-
-		ctx.fillText(vertices[2], 200 + deltaX, 200 - deltaY - 15);
-		ctx.fillText(vertices[3], 200 - deltaX - 10, 200 + deltaY + 25);
-
-		ctx.fillText(vertices[4], 200 - 7, 200 - 25);
-
+		ctx.scale(1, -1);
+		ctx.font = "20px liberation_sans";
+		ctx.textAlign = "center";
+		points.forEach((elem, i) => ctx.fillText(letters[i], elem.x, -elem.y + ((i % 2) ? 25 : -5)));
 	};
 
 	NAtask.setTask({
-		text: 'Отрезки $' + [vertices.slice(0, 2).shuffleJoin(), vertices.slice(2, 4).shuffleJoin()].shuffleJoin('$ и $') +
-			'$ – диаметры окружности с центром $' + vertices[4] +
-			'$. Угол $' + subangle1.join('') + '$ равен $' + angle + '^\\circ$. Найдите угол $' + subangle2.join('') +
-			'$. ' +
-			'Ответ дайте в градусах.',
-		answers: 180 - angle * 2,
+		text: 'Отрезки $' + [letters.slice(0, 2).shuffleJoin(), letters.slice(2, 4).shuffleJoin()].shuffleJoin('$ и $') +
+			'$ – диаметры окружности с центром $' + letters[4] +
+			'$. Угол $' + condition[0][0] + '$ равен $' + condition[1][1] + '^\\circ$. Найдите угол $' + condition[1][0] +
+			'$. Ответ дайте в градусах.',
+		answers: condition[0][1],
+		preference, 
 	});
+	NAtask.modifiers.variativeABC(letters);
 	NAtask.modifiers.addCanvasIllustration({
 		width: 400,
 		height: 400,
-		paint: paint1,
+		paint,
 	});
 
 })();
