@@ -1,6 +1,6 @@
 (function() { 'use strict'; retryWhileError(function() {
-    let a = sl(0.0001, 0.001, 0.0001);
-    let b = -sl(0.1, 0.9, 0.01);
+    let a = sl(1, 10)/10000;
+    let b = -sl(10, 90)/100;
     let c = sl(1, 100);
     let x = sl(5, 100, 5);
     genAssert(x < -b / a, 'Запрашиваемая ванта вообще находится в пределах пролёта');
