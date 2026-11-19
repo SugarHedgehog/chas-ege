@@ -1,59 +1,69 @@
 (function() {
 	retryWhileError(function() {
 			NAinfo.requireApiVersion(0, 2);
-
-			let rand1 = sl1();
-			let rand2 = sl1();
+			
+			let key = '27051';
+			let preference1 = ['volume', 'sideSurfaceArea'];
+			let preference2 = ['findValueInCone', 'findValueInCylinder'];
+			let randCondition = getSelectedPreferenceFromList(key, preference1);
+			let randCFind = getSelectedPreferenceFromList(key, preference2);
 
 			let radius = sl(1, 20);
 			let cyl = new Cylinder({
 				radius: radius,
-				height: [sl(1, 20), radius][rand2],
+				height: [sl(1, 20), radius][randCondition],
 			});
 			let cone = new Cone({
 				radius: cyl.radius,
-				height: [cyl.height, cyl.radius][rand2]
+				height: [cyl.height, cyl.radius][randCondition]
 			});
 
 			let nameFigura = [ //цилиндр,конус
 				['объём', cyl.volume / Math.PI, cone.volume / Math.PI],
 				['площадь боковой поверхности', cyl.sideSurfaceArea / Math.PI, cone.sideSurfaceArea / Math.PI]
-			][rand2];
+			][randCondition];
+			
+			let valueFigura = nameFigura[1 + randCFind];
+			if(!valueFigura.isZ()){
+				valueFigura = valueFigura.pow(2).texsqrt(1);
+			}
 
 			let paint1 = function(ctx) {
-				let drawRadius = 180;
-				let drawHeight = 300;
+				ctx.scale = (60, 60);
+				radius = 180;
+				height = 300;
 				ctx.translate(200, 200);
 				ctx.strokeStyle = om.secondaryBrandColors;
 
 				ctx.lineWidth = 2;
 				//цилиндр
-				ctx.drawEllipse(0, -drawHeight / 2, drawRadius, 40, 0, 0, 2 * Math.PI);
-				ctx.drawEllipse(0, drawHeight / 2, drawRadius, 40, 0, 0, Math.PI);
+				ctx.drawEllipse(0, -height / 2, radius, 40, 0, 0, 2 * Math.PI);
+				ctx.drawEllipse(0, height / 2, radius, 40, 0, 0, Math.PI);
 				
 				ctx.setLineDash([4, 5]);
-				ctx.drawEllipse(0, drawHeight / 2, drawRadius, 40, 0, Math.PI, 2 * Math.PI);
+				ctx.drawEllipse(0, height / 2, radius, 40, 0, Math.PI, 2 * Math.PI);
 
 				ctx.setLineDash([0, 0]);
-				ctx.drawLine(-drawRadius, drawHeight / 2, -drawRadius, -drawHeight / 2);
-				ctx.drawLine(drawRadius, drawHeight / 2, drawRadius, -drawHeight / 2);
+				ctx.drawLine(-radius, height / 2, -radius, -height / 2);
+				ctx.drawLine(radius, height / 2, radius, -height / 2);
 
 				//конус
 				ctx.strokeStyle = om.primaryBrandColors.iz();
 				ctx.setLineDash([4, 5]);
-				ctx.drawLine(-drawRadius, drawHeight / 2, 0, -drawHeight / 2);
-				ctx.drawLine(drawRadius, drawHeight / 2, 0, -drawHeight / 2);
+				ctx.drawLine(-radius, height / 2, 0, -height / 2);
+				ctx.drawLine(radius, height / 2, 0, -height / 2);
 
 				ctx.setLineDash([4, 5]);
-				ctx.drawLine(0, drawHeight / 2, 0, -drawHeight / 2);
-				ctx.drawLine(0, drawHeight / 2, drawRadius, drawHeight / 2);
+				ctx.drawLine(0, height / 2, 0, -height / 2);
+				ctx.drawLine(0, height / 2, radius, height / 2);
 			};
 
 			NAtask.setTask({
-				text: 'Цилиндр и конус имеют общие основание и высоту. ' + 'Высота цилиндра равна радиусу основания. '.esli(rand2) +
-					nameFigura[0].toZagl() + ' ' + ['цилиндра', 'конуса'][rand1] + ' ' + ['равен', 'равна'][rand2] +
-					' $' + nameFigura[1 + rand1].pow(2).texsqrt(1) + '$. Найдите ' + nameFigura[0] + ' ' + ['конуса', 'цилиндра'][rand1] + '.',
-				answers: nameFigura[2 - rand1],
+				text: 'Цилиндр и конус имеют общие основание и высоту. ' + 'Высота цилиндра равна радиусу основания. '.esli(randCondition) +
+					nameFigura[0].toZagl() + ' ' + ['цилиндра', 'конуса'][randCFind] + ' ' + ['равен', 'равна'][randCondition] +
+					' $' + valueFigura + '$. Найдите ' + nameFigura[0] + ' ' + ['конуса', 'цилиндра'][randCFind] + '.',
+				answers: nameFigura[2 - randCFind],
+				preference: [preference1, preference2],
 			});
 			NAtask.modifiers.multiplyAnswerBySqrt(13);
 			NAtask.modifiers.allDecimalsToStandard(true);
