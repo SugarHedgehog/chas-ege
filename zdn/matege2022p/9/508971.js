@@ -1,9 +1,10 @@
-(function() {
-	NAinfo.requireApiVersion(0, 2);
+(function () {
+	retryWhileError(function () {
+		NAinfo.requireApiVersion(0, 2);
 
-	function giperbl(k, x, a) {
-		return k / (x + a);
-	}
+		function f(x) {
+			return k / (x + a);
+		}
 
 		let key = '508971';
 		let preference = ['functionOfX', 'valueX'];
@@ -72,5 +73,6 @@
 			height: 400,
 			paint: paint1,
 		});
+	});
 })();
 //508971 508983
