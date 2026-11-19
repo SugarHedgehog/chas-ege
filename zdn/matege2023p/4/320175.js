@@ -1,13 +1,15 @@
 (function() {
     retryWhileError(function() {
         NAinfo.requireApiVersion(0, 2);
-        let numberOfLamps = sl(2, 6);
+        let key = '320175';
+		let preference = ['two', 'three', 'four', 'five', 'six'];
+        let numberOfLamps = getSelectedPreferenceFromList(key, preference) + 2;
         let totalCombinations = Math.pow(2, numberOfLamps);
         let eventMatrix = generateBinaryMatrix(numberOfLamps);
         
         let zeroCounts = eventMatrix.map(event => event.pop());
         let lampDescriptions = ['двумя', 'тремя', 'четырьмя', 'пятью', 'шестью'];
-        let failureProbability = sl(0.1, 0.5, 0.01);
+        let failureProbability = sl(10, 50)/100;
         let requiredFailures = sl(1, numberOfLamps);
         
         let probabilitySum = 0;
@@ -27,6 +29,7 @@
                   `Лампы перегорают независимо друг от друга. Найдите вероятность того, ` +
                   `что в течение года ${taskDescription} ${verb}.`,
             answers: probabilitySum,
+            preference: preference,
         });
     });
 })();
