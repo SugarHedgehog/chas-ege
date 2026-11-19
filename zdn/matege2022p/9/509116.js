@@ -1,4 +1,4 @@
-retryWhileUndefined(function() {
+retryWhileUndefined(function () {
 	NAinfo.requireApiVersion(0, 2);
 
 	function f(x) {
@@ -34,9 +34,9 @@ retryWhileUndefined(function() {
 	});
 	if (p.length < 2)
 		return;
-	let paint1 = function(ct) {
-		let h = 300;
-		let w = 500;
+	let paint1 = function (ct) {
+		let h = 400;
+		let w = 600;
 		//Оси координат
 		ct.translate(-200, 0);
 		ct.drawCoordPlane(w, h, {
@@ -68,9 +68,9 @@ retryWhileUndefined(function() {
 		analys: ('$f(x)=' + k.num.texfrac(k.det) + '\\sqrt{' + k.sq + '}' + '\\sqrt{x}$').plusminus().replace('\\sqrt{1}',
 			''),
 	});
-	chas2.task.modifiers.addCanvasIllustration({
-		width: 300,
-		height: 300,
+	NAtask.modifiers.addCanvasIllustration({
+		width: 400,
+		height: 400,
 		paint: paint1,
 	});
 	return true;
