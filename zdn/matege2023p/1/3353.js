@@ -20,7 +20,7 @@
 		vertices=(angle<90)?vertices.slice().permuteCyclic(1):vertices.slice();
 
 		let paint1 = function(ctx) {
-			ctx.lineWidth = 2;
+			ctx.lineWidth = om.primaryLineWidth;
 			ctx.strokeStyle = om.secondaryBrandColors.iz();
 			ctx.drawLine(100, 80, 350, 80);
 			ctx.drawLine(10, 320, 270, 320);
