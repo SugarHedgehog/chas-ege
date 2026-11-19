@@ -10,7 +10,7 @@
 		let vertices = window.latbukv.iz(4);
 
 		let paint1 = function(ctx) {
-			ctx.lineWidth = 2;
+			ctx.lineWidth = om.primaryLineWidth;
 			ctx.strokeStyle = om.primaryBrandColors.iz();
 			ctx.drawArc(180, 200, 150, 0, 2 * Math.PI);
 
