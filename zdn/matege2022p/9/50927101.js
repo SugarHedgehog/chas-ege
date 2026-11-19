@@ -1,4 +1,4 @@
-retryWhileUndefined(function() {
+retryWhileUndefined(function () {
 	NAinfo.requireApiVersion(0, 2);
 
 	function fp(x) {
@@ -26,32 +26,39 @@ retryWhileUndefined(function() {
 		return;
 	if (fs(x2) != y2)
 		return;
-	if((fs(0)-fp(0)).abs()<0.25)
+	if ((fs(0) - fp(0)).abs() < 0.25)
 		return;
 	let pointss = intPoints(fs, {
-		minX: -5,
-		maxX: 5,
-		minY: -5.5,
-		maxY: 5.5,
+		minX: -8,
+		maxX: 8,
+		minY: -9,
+		maxY: 7,
 		step: 1,
 	});
 	if (pointss.length < 2)
 		return;
 	let pointsp = intPoints(fp, {
-		minX: -5,
-		maxX: 5,
-		minY: -5.5,
-		maxY: 5.5,
+		minX: -8,
+		maxX: 8,
+		minY: -9,
+		maxY: 7,
 		step: 1,
 	});
 	if (pointsp.length < 2)
 		return;
-
-	let paint1 = function(ct) {
-		let h = 300;
-		let w = 300;
+	let find, answ;
+	if (sl1()) {
+		answ = x2;
+		find = 'абсциссу';
+	} else {
+		answ = y2;
+		find = 'ординату';
+	}
+	let paint1 = function (ct) {
+		let h = 400;
+		let w = 400;
 		//Оси координат
-		ct.drawCoordinatePlane (w, h, {
+		ct.drawCoordinatePlane(w, h, {
 			hor: 1,
 			ver: 1
 		}, {
@@ -63,17 +70,17 @@ retryWhileUndefined(function() {
 		ct.scale(20, -20);
 		ct.lineWidth = 0.1;
 		graph9AdrawFunction(ct, fs, {
-			minX: -6.5,
-			maxX: 7,
-			minY: -7,
-			maxY: 6,
+			minX: -8.5,
+			maxX: 8.5,
+			minY: -9.5,
+			maxY: 7.7,
 			step: 0.005,
 		});
 		graph9AdrawFunction(ct, fp, {
-			minX: -6.5,
-			maxX: 7,
-			minY: -7,
-			maxY: 6,
+			minX: -8.5,
+			maxX: 8.5,
+			minY: -9.5,
+			maxY: 7.7,
 			step: 0.05,
 		});
 		//точки
@@ -89,17 +96,17 @@ retryWhileUndefined(function() {
 		ct.fillText('A', 20 * x1 - 10, -20 * y1 - 10);
 	};
 	NAtask.setTask({
-		text: 'На рисунке изображены графики функций $f(x)=\\sqrt{x'+['+','-'].iz()+'c}'+['+','-'].iz()+'d$ и $g(x)=kx'+['+','-'].iz()+'b$,' +
+		text: 'На рисунке изображены графики функций $f(x)=\\sqrt{x' + ['+', '-'].iz() + 'c}' + ['+', '-'].iz() + 'd$ и $g(x)=kx' + ['+', '-'].iz() + 'b$,' +
 			' которые пересекаются в точках $A$ и $B$.',
 		analys: '$f(x)=' + ('\\sqrt{x+' + c + '}+' + d + '$').plusminus() + '<br>' +
 			'$g(x)=' + (k + 'x+' + b.ts()).plusminus() + '$<br>' +
 			'$A(' + x1 + ';' + y1 + ')$<br>' +
 			'$B(' + x2 + ';' + y2 + ')$',
 	});
-	chas2.task.modifiers.askAboutPoint('$B$',[x2,y2]);
-	chas2.task.modifiers.addCanvasIllustration({
-		width: 300,
-		height: 300,
+	NAtask.modifiers.askAboutPoint('$B$', [x2, y2]);
+	NAtask.modifiers.addCanvasIllustration({
+		width: 400,
+		height: 400,
 		paint: paint1,
 	});
 	return true;
