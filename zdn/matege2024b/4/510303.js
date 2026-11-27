@@ -30,7 +30,7 @@
 				'Пользуясь этой формулой, ' + the_orderToFind + ' ' + ['площадь $S$', 'величину $\\sin{\\alpha}$'][rand] + ', если $b = ' + b + '$, $c = ' + c + '$' +
 				' и ' + ['$\\sin{\\alpha} = \\frac{' + num + '}{' + deNum + '}$', '$S = ' + S + '$'][rand] + '.',
 			answers: [S, sinA][rand],
-			preference: preference,
+			preference: [preference],
 
 
 
@@ -42,3 +42,4 @@
 //https://mathb-ege.sdamgia.ru/problem?id=510303
 //https://mathb-ege.sdamgia.ru/problem?id=520532
 // F26545, 20F7F6, 031176, 456C15, 321E10, B08CD3, CF9AEF, 4FA43F, 3D9688, B8EF4A, 7F4C1F, 6E3B4E, 9897AE, 0C027D, 5C727C, 555CA6
+
