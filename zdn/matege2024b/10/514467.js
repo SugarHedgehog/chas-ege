@@ -22,7 +22,7 @@
 	        text: text,
 	        analys: 'Вдоль ' + water + ' забор не требуется. Поэтому длина забора равна $' + A + '+2\\cdot' + B + '=' + answer + '$ м.',
 	        answers: answer,
-	        preference,
+	        preference: [preference],
         });
 
         NAtask.modifiers.addCanvasIllustration({
@@ -62,3 +62,4 @@
 
 //https://mathb-ege.sdamgia.ru/problem?id=514467
 // 057DF6, 7A5105, 14DE59, E2F338, A5BD0E, 769EB9, F7AACC, 974B66, FB114D, 7475FC, 802B27, 292D5D, 1314AA
+
