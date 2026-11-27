@@ -30,8 +30,9 @@
 			text: 'Найдите ' + multiple + ', сумма цифр которого ' + relation +
 				'. В ответе запишите какое-нибудь одно такое число.',
 			answers,
-			preference,
+			preference: [preference],
 		});
 	}, 2000);
 })();
 // DE9DFB, 162EEB, BA2514, 32F0D9, 603305, B68642, DBE441, BA19B4, 7BB3EA
+
