@@ -18,8 +18,9 @@
 		roots: x,
 		enablePartsExchange: 0,
 		enablePartsDivision: 0,
-		preference: preference,
+		preference: [preference],
 	});
 })();
 
 // 6FEDF1, BD21B6, B35CF7, 714CB5, B5CC1A, 6B09AD, 1241D3, F1E4C3, E652DC, A16D64, 659171, 24A3B9, C423FA, 870F10
+
