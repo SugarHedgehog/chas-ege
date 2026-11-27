@@ -33,7 +33,8 @@
 			percentFirst + '\\cdot' + firstMass + '+' + percentSecond + 'x=' + percentMixture +
 			'(' + firstMass + '+x)$. Отсюда $x=' + secondMass + '$. Ответ равен $' +
 			secondMass + relation + firstMass + '=' + answer + '$ кг.',
-		preference: preference,
+		preference: [preference],
 	});
 })();
 // A0C504, AD1151, 0718AC, 2FD968, C50739, 90EE3A, BB2F87, F12249, 4EC409, 718685, 90194A, 040178, 83A97A, 0CC5B2, 1277BD, 5BE1CD, 4A1A9D, E0889B, E5F09D, 358F96
+
