@@ -36,8 +36,9 @@
 				', которое при делении ' + divisorsText + ' даёт в остатке $' + remainder + '$ и ' + digitCondition +
 				'. В ответе запишите какое-нибудь одно такое число.',
 			answers,
-			preference,
+			preference: [preference],
 		});
 	}, 2000);
 })();
 // 5A8350, D6BE05, BD33BF, 863241, 5BA905, F1EFD6, FC585B, 23E080, F65CB9, 67EFA4, C05023, 0D9989
+
