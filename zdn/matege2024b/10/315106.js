@@ -59,12 +59,13 @@
 			paint: function (ct) {
 				let groundY = 305;
 				let poleX = 85;
-				let wallX = 315;
+				const maxWallX = 315;
 
 				let topLimit = 75;
-				let kHorizontal = (wallX - poleX) / distance;
+				let kHorizontal = (maxWallX - poleX) / distance;
 				let kVertical = (groundY - topLimit) / poleHeight;
 				let k = Math.min(kHorizontal, kVertical);
+				let wallX = poleX + distance * k;
 
 				let poleTopY = groundY - poleHeight * k;
 				let wallAttachY = groundY - houseHeight * k;
