@@ -34,7 +34,8 @@
 		text: 'Расстояние между городами $A$ и $B$ равно $' + distance + '$ км. ' + movement,
 		answers: simultaneous ? speedA : fromA,
 		analys: solution,
-		preference: preference,
+		preference: [preference],
 	});
 })();
 // F531F4, D17201, A2D47D, 37CAB6, 2601D8, B7DCCE, 2D42C3, 4EDEED, D7CE50, 94175D, 0620F7, B474B0, 4F31F1, D5E347, 02BA69, 07A063
+
