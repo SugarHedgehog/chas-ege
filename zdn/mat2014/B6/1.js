@@ -7,19 +7,16 @@
 		let preference1 = ['two_tosses', 'three_tosses', 'four_tosses'];
 		let preference2 = ['equal', 'more', 'less', 'moreOrEqual', 'lessOrEqual'];
 		// Количество бросков (2-4)
-		let totalTosses = getListedPreference(key, preference1.map((pref, index) => ({
-			preference: pref,
-			preferenceValue: index + 2
-		})), sl(preference1.length - 1) + 2);
+		let totalTosses = getSelectedPreferenceFromList(key, preference1) + 2;
 
 		// Количество успешных исходов (включая 0)
 		let successfulTosses = sl(0, totalTosses);
 
 		// Тип сравнения
-		let comparisonType = getListedPreference(key, [...preference2.map((pref, index) => ({
-			preference: pref,
-			preferenceValue: index,
-		})), {preference: 'lesseOrEqual', preferenceValue: preference2.indexOf('lessOrEqual')}], (totalTosses == successfulTosses || successfulTosses == 0) ? 0 : sl(preference2.length-1));
+		// Сохраняем старое написание preference в сохранённых настройках.
+		const comparisonPreferences = preference2.map(pref =>
+			pref === 'lessOrEqual' && nabor.preferences?.[key]?.includes('lesseOrEqual') ? 'lesseOrEqual' : pref);
+		let comparisonType = getSelectedPreferenceFromList(key, comparisonPreferences);
 
 		// Варианты формулировки количества выпадений
 		const resultOptions = [
@@ -84,4 +81,5 @@
 // 6EF6E1
 // F07186
 // 99ADE8
+
 
