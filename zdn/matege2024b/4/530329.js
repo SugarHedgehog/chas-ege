@@ -15,7 +15,7 @@
 				'а $\\alpha$ и $\\beta$ — противолежащие им углы. Пользуясь этой формулой, найдите $' +
 				['\\sin\\alpha', 'a'][variant] + '$, если $b=' + b + '$, $\\sin\\beta=' + b.texfrac(denominator) + '$ и $' +
 				['a=' + a, '\\sin\\alpha=' + a.texfrac(denominator)][variant] + '$.',
-			answers: [sinA, a][variant], preference,
+			answers: [sinA, a][variant], preference: [preference],
 		});
 		NAtask.modifiers.allDecimalsToStandard();
 	}, 20000);
@@ -23,3 +23,4 @@
 //zer00player
 //https://mathb-ege.sdamgia.ru/problem?id=530329
 // D56049, F907F0, AA2104, 8E9100, 0CFD73, 95636F, 54EF31, 2F9781, 5A77BE, 6D671F, C5F1C6, B81F9F, 362DD6, 5E188B, 8A5AA3, FC96A3, DAA842, 2A63BF, 0FC6A7
+
