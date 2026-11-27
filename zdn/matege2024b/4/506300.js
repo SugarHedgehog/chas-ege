@@ -23,7 +23,7 @@
 				'Пользуясь этой формулой, ' + the_orderToFind + ' $' + ['R', 'a'][rand] + '$' +
 				', если $' + ['a =' + a, 'R =' + R][rand] + '$ и $\\sin{\\alpha} = \\frac{' + num + '}{' + deNum + '}$.',
 			answers: [R, a][rand],
-			preference: preference,
+			preference: [preference],
 		});
 		NAtask.modifiers.allDecimalsToStandard(true);
 	}, 2000);
@@ -36,3 +36,4 @@
 // 4.25: 567F10, 4C8420, 665F25, A04A64
 // 4.26: 337ECD, 08F704
 // 4.49: 5F1C4A, 330083
+
