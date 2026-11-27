@@ -23,7 +23,7 @@
             'Сколько потребуется кафельных плиток квадратной формы со стороной $' + aSidePart + '$ см,' +
             ' чтобы облицевать ими стену, имеющую форму прямоугольника со сторонами $' + aSideFloor + '$ м и $' + bSideFloor + '$ м?'][1 - rand],
             answers: result,
-            preference: preference,
+            preference: [preference],
         });
         NAtask.modifiers.allDecimalsToStandard();
     }, 20000);
@@ -31,3 +31,4 @@
 //zer00player
 //https://oge.sdamgia.ru/test?likes=325147
 // 4C7562, 5556F5, 0C3B1E, AC241E, 78BFD0, 43F754, 7DE1A2, 2948A4, 8A373E, F1BA86, BAD14F, D6D30E, 91A012, 53D257, 418B98, 3E1F9A, 0AC779, DBD950, BD02EC, D893DF
+
