@@ -70,7 +70,7 @@
 				let poleTopY = groundY - poleHeight * k;
 				let wallAttachY = groundY - houseHeight * k;
 
-				ct.strokeStyle = om.primaryBrandColors[0];
+				ct.strokeStyle = om.primaryBrandColors.iz();
 				ct.lineWidth = 2;
 
 				// Земля
@@ -90,7 +90,7 @@
 				// Провод
 				ct.drawLine(poleX, poleTopY, wallX, wallAttachY);
 
-				ct.fillStyle = om.secondaryBrandColors[0];
+				ct.fillStyle = om.secondaryBrandColors.iz();
 				ct.font = '16px liberation_sans';
 
 				// Высота столба
