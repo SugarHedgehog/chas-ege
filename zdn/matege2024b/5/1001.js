@@ -22,7 +22,7 @@
 				`Найдите вероятность того, что ему попадётся ${'не'.printIf(variant % 2)}выученный ${nameQuestion.ve}.`,
 			answers: answers,
 			authors: ['Суматохина Александра'],
-			preference,
+			preference: [preference],
 		});
 	}, 100);
 })();
@@ -42,4 +42,5 @@
 // F4BD62
 // 9FD7B4
 // 59998B
+
 
