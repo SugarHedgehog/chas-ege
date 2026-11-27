@@ -17,7 +17,7 @@
 				rows.join('').toTable() + ' Сколько ' + ['бронзовых медалей', 'серебряных медалей', 'всего медалей'][variant] +
 				' у страны, занявшей ' + rank + '-е место по числу золотых медалей?',
 			answers: [bronze[rank - 1], silver[rank - 1], gold[rank - 1] + silver[rank - 1] + bronze[rank - 1]][variant],
-			preference,
+			preference: [preference],
 		});
 	}, 1000);
 })();
@@ -25,3 +25,4 @@
 // 3.64: A9E9B5
 // 3.65: 201682
 // 3.66: 8D4A78
+
