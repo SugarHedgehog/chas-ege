@@ -18,7 +18,7 @@
 				'Какое наименьшее число оборотов в минуту должен поддерживать водитель, ' +
 				(variant ? 'чтобы автомобиль начал движение?' : 'чтобы крутящий момент был не меньше ' + target + ' Н·м?'),
 			answers: rpmStep * first,
-			preference,
+			preference: [preference],
 		});
 		NAtask.modifiers.addJqplot({
 			dataArray: [[rpm, values].T()],
@@ -45,3 +45,4 @@
 // ФИПИ, ЕГЭ база, задание 3.
 // 3.82: C7CA1C
 // 3.83: C2DB05, 8B773C
+
