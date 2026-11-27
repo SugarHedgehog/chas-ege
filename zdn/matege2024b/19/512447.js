@@ -62,7 +62,7 @@
 		NAtask.setTask({
 			text: textBody + '. В ответе ' + ['укажите', 'запишите'].iz() + ' какое-нибудь одно такое число.',
 			answers: validNumbers,
-			preference: preference,
+			preference: [preference],
 		});
 		NAtask.modifiers.allDecimalsToStandard();
 	}, 2000);
@@ -70,3 +70,4 @@
 //https://mathb-ege.sdamgia.ru/test?likes=512447
 //Selena
 // 21D3F4, FB4DA9, 69BEE9, A29BB4, 90224A, D15F13, D03FA5, CB1AAA, F5AD3A, EFEECE, 7C4FFB
+
