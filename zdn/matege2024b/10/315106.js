@@ -50,7 +50,7 @@
 			],
 			postquestion: `. Ответ дайте в метрах.`,
 			analys: analys,
-			preference: preference,
+			preference: [preference],
 		});
 
 		NAtask.modifiers.addCanvasIllustration({
@@ -121,3 +121,4 @@
 
 // https://oge.sdamgia.ru/problem?id=315106
 // 63209E, 711FE6, 2125D7, 98E931, CAFD85, 11BFFF, 4AEDF7, 0A9F22, 26CCCF, C6D0C9, AD43CD
+
