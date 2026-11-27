@@ -35,8 +35,8 @@
                 let top = (ct.canvas.height - B * scale) / 2;
                 let bottom = top + B * scale;
 
-                ct.strokeStyle = om.primaryBrandColors[0];
-                ct.fillStyle = om.secondaryBrandColors[0];
+                ct.strokeStyle = om.primaryBrandColors.iz();
+                ct.fillStyle = om.secondaryBrandColors.iz();
                 ct.lineWidth = 2;
 
                 // Прямоугольник как в исходном рисунке
