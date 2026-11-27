@@ -32,7 +32,8 @@
 			'}\\alpha=' + (sign < 0 ? '-' : '') + '\\frac{' + numerator + '}{' + denominator +
 			'}$ и $' + lower + '^\\circ<\\alpha<' + upper + '^\\circ$.',
 		answers: answer,
-		preference,
+		preference: [preference],
 	});
 })();
 // C6ECC3, E5C35F, 3F2A9B, 116188, EEDC72, DA58EE, B787FB, CF14AA, 12B2C8, 59B152, 2141D5, 2D55C7, 80DB83, EE6CDB, BA9184, 129451, B84143, 63874F, 72ACA3, EC2988
+
