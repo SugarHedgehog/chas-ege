@@ -7,18 +7,14 @@
 		let preference = ['findWireLength', 'findPoleHeight'];
 		let rand = getSelectedPreferenceFromList(key, preference);
 
-		let triples = [
-			{ x: 5, y: 12, L: 13 },
-			{ x: 9, y: 12, L: 15 },
-			{ x: 12, y: 5, L: 13 },
-			{ x: 12, y: 9, L: 15 },
-			{ x: 15, y: 8, L: 17 },
-			{ x: 16, y: 12, L: 20 },
-			{ x: 20, y: 15, L: 25 },
-			{ x: 6.4, y: 4.8, L: 8 },
-		];
-
-		let triple = triples.iz();
+		const sides = om.pifagtr.iz();
+		const legs = sides.slice(0, 2).iz(2);
+		const scale = sl(1, 25) / 5;
+		let triple = {
+			x: (legs[0] * scale).okrugldo(0.1),
+			y: (legs[1] * scale).okrugldo(0.1),
+			L: (sides[2] * scale).okrugldo(0.1),
+		};
 
 		let distance = triple.x;
 		let heightDifference = triple.y;
@@ -26,6 +22,7 @@
 
 		let houseHeight = sl(2, 6);
 		let poleHeight = (houseHeight + heightDifference).okrugldo(0.1);
+		genAssert(Math.max(distance, poleHeight) <= 5 * Math.min(distance, poleHeight), 'Чертёж слишком вытянут');
 
 		let answers = [
 			wireLength,
