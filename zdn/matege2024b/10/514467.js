@@ -29,10 +29,11 @@
             width: 400,
             height: 400,
             paint: function (ct) {
-                let left = 70;
-                let right = 330;
-                let top = 100;
-                let bottom = 300;
+                const scale = Math.min(260 / A, 200 / B);
+                let left = (ct.canvas.width - A * scale) / 2;
+                let right = left + A * scale;
+                let top = (ct.canvas.height - B * scale) / 2;
+                let bottom = top + B * scale;
 
                 ct.strokeStyle = om.primaryBrandColors[0];
                 ct.fillStyle = om.secondaryBrandColors[0];
