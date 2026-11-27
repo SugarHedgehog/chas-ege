@@ -23,7 +23,7 @@
                 text: 'В пенале лежат грифельные карандаши разной твёрдости: ' + countsWithKinds.joinLast(' и ') +
                     '. Какова вероятность того, что случайным образом достанут карандаш ' + kinds[selectedItem][2] + '?',
                 answers: answer,
-                preference,
+                preference: [preference],
             });
             return;
         }
@@ -54,3 +54,4 @@
 // 26AF97
 // B56EB0
 // C1CA1F
+
